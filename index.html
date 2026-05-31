@@ -276,6 +276,11 @@
   #controls.collapsed{transform:translateY(170%);opacity:0;pointer-events:none}
   .nav-grabber{width:38px;height:4px;border-radius:3px;background:var(--glass-edge);margin:-4px auto 11px;cursor:pointer;outline:none;transition:background .2s,width .2s}
   .nav-grabber:hover,.nav-grabber:focus-visible{background:var(--brass-soft);width:50px}
+  .nav-backbar{display:none;width:100%;align-items:center;gap:8px;background:rgba(226,189,114,.07);border:1px solid rgba(226,189,114,.22);border-radius:10px;cursor:pointer;color:var(--brass);font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;padding:9px 12px;margin-bottom:11px;transition:background .18s,border-color .18s}
+  .nav-backbar.show{display:flex}
+  .nav-backbar:hover{background:rgba(226,189,114,.13);border-color:rgba(226,189,114,.4)}
+  .nav-backbar .bb-chev{font-size:15px;line-height:1;margin-top:-1px}
+  .nav-backbar:active{transform:translateX(-2px)}
   .nav-open{position:fixed;left:18px;bottom:18px;z-index:1001;height:46px;border-radius:14px;padding:0 15px 0 12px;gap:8px;
     background:var(--glass);border:1px solid var(--glass-edge);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);
     box-shadow:0 24px 60px -20px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.04);
@@ -317,6 +322,7 @@
 
 <div id="controls" class="panel">
   <div class="nav-grabber" id="navHide" role="button" aria-label="Hide menu" title="Hide menu" tabindex="0"></div>
+  <button id="navBackBar" class="nav-backbar" aria-label="Back to all cruise lines"><span class="bb-chev">‹</span> All cruise lines</button>
   <div class="search">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
     <input id="q" type="text" placeholder="Search ships…" autocomplete="off" spellcheck="false"/>
@@ -381,7 +387,8 @@ const LINES = {
   "Royal Caribbean":"#4d8fdb","Carnival":"#ff5a4d","Norwegian":"#37b6a6",
   "MSC":"#e0b64a","Princess":"#7d8be6","Celebrity":"#8fb6c9","Disney":"#8b73f6",
   "Virgin Voyages":"#ff5a93","Holland America":"#5fb37a","Cunard":"#e0903a","Costa":"#f2c14e",
-  "Windstar":"#4fc3f7"
+  "Windstar":"#4fc3f7","Oceania":"#46c4b0","Regent":"#caa24a","Azamara":"#8fae3f",
+  "P&O Cruises":"#4a78c4","AIDA":"#e0457f","Viking":"#c0453b"
 };
 
 /* Curated fleet — [mmsi, name, line]. MMSIs verified (2+ public sources)
@@ -571,6 +578,52 @@ const FLEET = [
   ["311083000","Star Breeze","Windstar"],
   ["311085000","Star Legend","Windstar"],
   ["311084000","Star Pride","Windstar"],
+  // Oceania Cruises
+  ["538004353","Oceania Riviera","Oceania"],
+  ["538003668","Oceania Marina","Oceania"],
+  ["538001665","Oceania Nautica","Oceania"],
+  ["538006842","Oceania Sirena","Oceania"],
+  ["538001663","Oceania Insignia","Oceania"],
+  ["538001664","Oceania Regatta","Oceania"],
+  // Regent Seven Seas
+  ["538007673","Seven Seas Splendor","Regent"],
+  ["538006712","Seven Seas Explorer","Regent"],
+  ["311513000","Seven Seas Voyager","Regent"],
+  ["311622000","Seven Seas Mariner","Regent"],
+  ["311050600","Seven Seas Navigator","Regent"],
+  // Azamara
+  ["248762000","Azamara Pursuit","Azamara"],
+  ["256216000","Azamara Quest","Azamara"],
+  ["256204000","Azamara Journey","Azamara"],
+  ["229765000","Azamara Onward","Azamara"],
+  // P&O Cruises
+  ["232025845","Iona","P&O Cruises"],
+  ["232040520","Arvia","P&O Cruises"],
+  ["235106595","Britannia","P&O Cruises"],
+  ["310562000","Ventura","P&O Cruises"],
+  ["310610000","Azura","P&O Cruises"],
+  ["310556000","Aurora","P&O Cruises"],
+  ["310459000","Arcadia","P&O Cruises"],
+  // AIDA Cruises
+  ["247389200","AIDAnova","AIDA"],
+  ["247435300","AIDAcosma","AIDA"],
+  ["247353800","AIDAprima","AIDA"],
+  ["247385300","AIDAperla","AIDA"],
+  ["247229700","AIDAbella","AIDA"],
+  ["247187700","AIDAdiva","AIDA"],
+  ["247255400","AIDAluna","AIDA"],
+  ["247282500","AIDAblu","AIDA"],
+  ["247302900","AIDAsol","AIDA"],
+  ["247312900","AIDAmar","AIDA"],
+  ["247322800","AIDAstella","AIDA"],
+  // Viking
+  ["257903000","Viking Star","Viking"],
+  ["258215000","Viking Sea","Viking"],
+  ["257034130","Viking Sky","Viking"],
+  ["257058920","Viking Jupiter","Viking"],
+  ["257552000","Viking Venus","Viking"],
+  ["259070000","Viking Octantis","Viking"],
+  ["259144000","Viking Polaris","Viking"],
 ];
 
 /* ---------- helpers ---------- */
@@ -842,8 +895,6 @@ function buildLines(root){
 function buildShips(root){
   const line=nav.line;
   const hd=el("div","nav-head");
-  const back=el("button","nav-back","‹ Lines"); back.addEventListener("click",()=>goLines());
-  hd.appendChild(back);
   hd.appendChild(el("div","nav-title",`<i style="color:${LINES[line]};background:${LINES[line]}"></i><span>${line}</span>`));
   root.appendChild(hd);
   const list=el("div","nav-list"); list.setAttribute("role","list");
@@ -887,6 +938,7 @@ function renderNav(dir){
   const lvl=el("div","nav-level "+(dir==="l"?"enter-l":dir==="r"?"enter-r":""));
   if(nav.level===0) buildLines(lvl); else buildShips(lvl);
   navEl.appendChild(lvl);
+  byId("navBackBar").classList.toggle("show", nav.level>=1);   // "‹ All cruise lines" above search
 }
 function refreshNav(){ // light refresh of counts/meta without re-animating
   if(nav.level===0){
@@ -917,6 +969,7 @@ const controlsEl=byId("controls"), navOpenBtn=byId("navOpen");
 function collapseNav(){ controlsEl.classList.add("collapsed"); navOpenBtn.classList.add("show"); }
 function expandNav(){ controlsEl.classList.remove("collapsed"); navOpenBtn.classList.remove("show"); }
 navOpenBtn.addEventListener("click",expandNav);
+byId("navBackBar").addEventListener("click",()=>goLines());
 byId("navHide").addEventListener("click",collapseNav);
 byId("navHide").addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); collapseNav(); } });
 

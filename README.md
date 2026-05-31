@@ -8,9 +8,10 @@ ship → a cinematic focus on any vessel.
 
 ## What it does
 
-- **Live positions** for ~165 ships across 11 lines (Royal Caribbean, Carnival,
+- **Live positions** for ~210 ships across 18 lines (Royal Caribbean, Carnival,
   Norwegian, MSC, Princess, Celebrity, Disney, Virgin Voyages, Holland America,
-  Cunard, Costa), streamed over a WebSocket and filtered to a curated, verified
+  Cunard, Costa, Windstar, Oceania, Regent, Azamara, P&O Cruises, AIDA, Viking),
+  streamed over a WebSocket and filtered to a curated, verified
   list of cruise-ship MMSIs.
 - **Real zoomable map** (Leaflet + CARTO dark tiles): zoom right in to see the
   ship against real coastlines, ports and city names.
