@@ -375,7 +375,7 @@
     <div class="bstat"><span class="num port" id="s-port">0</span><span class="lab">In&nbsp;port</span></div>
     <button id="nearBtn" class="ports-btn" aria-haspopup="true" aria-expanded="false" title="Cruise ships near selected ship">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
-      <span>Near&nbsp;Me</span>
+      <span>Ships&nbsp;Nearby</span>
       <svg class="pb-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
     </button>
   </div>
@@ -976,7 +976,7 @@ function placeShips(){
     } else if(d._w){ wakeLayer.removeLayer(d._w); d._w=null; }
   }
   if(selPulse && selected && selected.lat!=null) selPulse.setLatLng([selected.lat,selected.lon]);
-  if(selected) fillDetail(selected);
+  if(selected) updateDetailLive(selected);
 }
 function positionLabels(){ if(hoverShip && hoverShip._m && hoverShip.lat!=null) hoverShip._m.openTooltip(); }
 
@@ -1093,6 +1093,19 @@ function fillDetail(d){
     itinEl.hidden=true;
   }
 }
+function updateDetailLive(d){
+  const sea=d.status!=="port";
+  const sc=d.status==="port"?"#e2bd72":"#5ad6a0";
+  const live=d.lat==null?"Awaiting signal":(d.live?(sea?"Underway":"Alongside / in port"):"Last known");
+  byId("dStatus").innerHTML=`<b style="background:${sc};box-shadow:0 0 8px ${sc}"></b>${live} · ${timeAgo(d.lastSeen)}`;
+  byId("dPlace").textContent=d.lat==null?"":(d.place||("Near "+(d.region||"open water")));
+  byId("dLat").innerHTML=d.lat==null?"—":Math.abs(d.lat).toFixed(3)+`<small>° ${d.lat>=0?"N":"S"}</small>`;
+  byId("dLon").innerHTML=d.lon==null?"—":Math.abs(d.lon).toFixed(3)+`<small>° ${d.lon>=0?"E":"W"}</small>`;
+  byId("dSpd").innerHTML=d.lat==null?"—":d.spd.toFixed(1)+`<small> kn</small>`;
+  byId("dHdg").innerHTML=(sea&&d.lat!=null)?Math.round(d.hdg)+`<small>°</small>`:"—";
+  byId("dNext").textContent="NEXT ▸ "+(d.next||"—");
+  byId("dRegion").textContent=(d.region||"—").toUpperCase();
+}
 function selectShip(d){
   clearItinPreview();
   selected=d;
@@ -1133,7 +1146,7 @@ function locShort(d){
   return (d.region && d.region!=="—" && d.region!=="At sea") ? d.region : "";
 }
 function afterGeo(d){
-  if(selected===d) fillDetail(d);
+  if(selected===d) updateDetailLive(d);
   if(d._m && d._m.isTooltipOpen && d._m.isTooltipOpen()) d._m.openTooltip();   // refresh tooltip with the location
 }
 function buildPlace(j,region){
