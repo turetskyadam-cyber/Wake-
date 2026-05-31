@@ -182,7 +182,7 @@
     .stat .num{font-size:25px}
     #controls{left:10px;right:10px;bottom:10px;width:auto}
     .chips{max-height:84px}
-    #detail{left:74px;right:10px;bottom:10px;width:auto}
+    #detail{left:auto;right:10px;width:calc(100% - 140px);bottom:10px}
     #zoom{display:none}
     .credit{display:none}
   }
@@ -258,6 +258,7 @@
   .leaflet-tooltip.ship-tt{background:rgba(4,14,20,.92);border:1px solid var(--glass-edge);color:var(--ink);
     border-radius:9px;padding:6px 10px;font-size:11.5px;box-shadow:0 8px 24px -10px rgba(0,0,0,.7);backdrop-filter:blur(6px)}
   .leaflet-tooltip.ship-tt b{font-family:'Fraunces',serif;font-size:13px}
+  .leaflet-tooltip.ship-tt .tt-loc{color:var(--brass-soft);font-size:10.5px}
   .leaflet-tooltip.ship-tt::before{display:none}
   /* selection pulse + arrival blip (divIcon overlays) */
   .sel-pulse{width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;border:2px solid #fff;opacity:.9;
@@ -732,10 +733,12 @@ function markerStyle(d){
 function ensureMarker(d){
   if(d._m) return d._m;
   const m=L.circleMarker([d.lat,d.lon], markerStyle(d));
-  m.bindTooltip(()=>`<b>${d.name}</b><br>${d.line} · ${d.status==='port'?'in port':d.spd.toFixed(0)+' kn'}`,
-    {direction:'top',offset:[0,-4],className:'ship-tt',opacity:1});
+  m.bindTooltip(()=>{
+    const loc=locShort(d);
+    return `<b>${d.name}</b><br>${d.line} · ${d.status==='port'?'in port':d.spd.toFixed(0)+' kn'}`+(loc?`<br><span class="tt-loc">${loc}</span>`:"");
+  },{direction:'top',offset:[0,-4],className:'ship-tt',opacity:1});
   m.on('click',ev=>{ L.DomEvent.stop(ev); goShip(d); });
-  m.on('mouseover',()=>{ hoverShip=d; });
+  m.on('mouseover',()=>{ hoverShip=d; reverseGeo(d); });
   m.on('mouseout',()=>{ if(hoverShip===d) hoverShip=null; });
   m.addTo(map); d._m=m; return m;
 }
@@ -828,10 +831,20 @@ byId("dToggle").addEventListener("click",()=>{
 
 /* ---- reverse geocode: human-readable "roughly where" ---- */
 const geoCache=new Map();
+// short location for the map tooltip (strip the "Near/Off/In the" prefix); falls back to region
+function locShort(d){
+  if(d.place) return d.place.replace(/^(Near|Off|In the)\s+/i,"");
+  return (d.region && d.region!=="—" && d.region!=="At sea") ? d.region : "";
+}
+function afterGeo(d){
+  if(selected===d) fillDetail(d);
+  if(d._m && d._m.isTooltipOpen && d._m.isTooltipOpen()) d._m.openTooltip();   // refresh tooltip with the location
+}
 async function reverseGeo(d){
   if(d.lat==null) return;
   const key=d.lat.toFixed(1)+","+d.lon.toFixed(1);
-  if(geoCache.has(key)){ d.place=geoCache.get(key); if(selected===d) fillDetail(d); return; }
+  if(geoCache.has(key)){ const v=geoCache.get(key); if(v){ d.place=v; afterGeo(d); } return; }
+  geoCache.set(key,null);   // mark in-flight so we don't double-fetch
   try{
     const r=await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${d.lat}&longitude=${d.lon}&localityLanguage=en`);
     const j=await r.json();
@@ -846,8 +859,8 @@ async function reverseGeo(d){
       place = water || ("In the "+(d.region||"open ocean"));
     }
     geoCache.set(key,place); d.place=place;
-    if(selected===d) fillDetail(d);
-  }catch(e){ /* keep region fallback already shown */ }
+    afterGeo(d);
+  }catch(e){ geoCache.delete(key); /* allow retry; region fallback already shown */ }
 }
 
 /* ---- resize ---- */
@@ -1032,54 +1045,74 @@ function setNum(id,target){
 const feedpill=byId("feedpill");
 function setPill(state,text){ feedpill.dataset.state=state; feedpill.innerHTML="<b></b>"+text; }
 
-let ws=null, retry=0, retryTimer=null, manualClose=false, keyBad=false, liveSeen=false, dirty=true;
+let manualClose=false, keyBad=false, liveSeen=false, dirty=true;
 
-// aisstream rejects a single full-globe box, so tile the world into
-// six 60°-wide longitude bands (verified to stream correctly).
+// aisstream rejects a single full-globe box (so we tile the world into six
+// bands) and caps the MMSI filter (~a couple hundred), so we split the fleet
+// across several parallel connections of <= MMSI_CHUNK ships each.
 const WORLD_BOXES=[
   [[-85,-180],[85,-120]],[[-85,-120],[85,-60]],[[-85,-60],[85,0]],
   [[-85,0],[85,60]],[[-85,60],[85,120]],[[-85,120],[85,180]]
 ];
-function subMessage(){
-  return JSON.stringify({
-    APIKey: CONFIG.AISSTREAM_KEY,
-    BoundingBoxes: WORLD_BOXES,
-    FiltersShipMMSI: [...new Set(fleet.map(d=>d.mmsi).filter(Boolean))],
-    FilterMessageTypes: ["PositionReport","ShipStaticData"]
-  });
+const MMSI_CHUNK=90;
+let conns=[];
+
+function mmsiChunks(){
+  const all=[...new Set(fleet.map(d=>d.mmsi).filter(Boolean))];
+  const out=[]; for(let i=0;i<all.length;i+=MMSI_CHUNK) out.push(all.slice(i,i+MMSI_CHUNK));
+  return out;
 }
-function connect(){
-  if(keyBad||manualClose) return;
-  if(!CONFIG.AISSTREAM_KEY || CONFIG.AISSTREAM_KEY.includes("…") || CONFIG.AISSTREAM_KEY.length<8){ startDemo(); return; }
-  setPill("connecting", retry?"Reconnecting…":"Connecting…");
-  try{ ws=new WebSocket(CONFIG.WS_URL); }catch(e){ scheduleReconnect(); return; }
-  ws.binaryType="arraybuffer";
-  ws.onopen=()=>{ retry=0; try{ ws.send(subMessage()); }catch(e){} };
-  ws.onmessage=ev=>{
-    const d=ev.data;                                  // aisstream sends binary frames
-    if(typeof d==="string") handleMessage(d);
-    else if(d && typeof d.text==="function") d.text().then(handleMessage).catch(()=>{}); // Blob
-    else if(d) try{ handleMessage(new TextDecoder().decode(d)); }catch(e){}              // ArrayBuffer / typed array
+function subFor(chunk){
+  return JSON.stringify({ APIKey:CONFIG.AISSTREAM_KEY, BoundingBoxes:WORLD_BOXES,
+    FiltersShipMMSI:chunk, FilterMessageTypes:["PositionReport","ShipStaticData"] });
+}
+function makeConn(chunk){
+  const c={ chunk, ws:null, retry:0, timer:null };
+  c.connect=()=>{
+    if(keyBad||manualClose) return;
+    if(c.ws && (c.ws.readyState===0||c.ws.readyState===1)) return;   // already connecting/open
+    clearTimeout(c.timer);
+    try{ c.ws=new WebSocket(CONFIG.WS_URL); }catch(e){ c.schedule(); return; }
+    c.ws.binaryType="arraybuffer";
+    c.ws.onopen=()=>{ try{ c.ws.send(subFor(c.chunk)); }catch(e){} };
+    c.ws.onmessage=ev=>{ c.retry=0; const d=ev.data;        // first frame proves it works
+      if(typeof d==="string") handleMessage(d);
+      else if(d && typeof d.text==="function") d.text().then(handleMessage).catch(()=>{});
+      else if(d) try{ handleMessage(new TextDecoder().decode(d)); }catch(e){} };
+    c.ws.onerror=()=>{ try{ c.ws.close(); }catch(e){} };
+    c.ws.onclose=()=>{ if(!manualClose) c.schedule(); };
   };
-  ws.onerror=()=>{ try{ws.close();}catch(e){} };
-  ws.onclose=()=>{ if(!manualClose) scheduleReconnect(); };
+  c.schedule=()=>{
+    if(keyBad||manualClose) return;
+    const delay=Math.min(15000,1000*Math.pow(2,c.retry))+Math.random()*700; c.retry++;
+    clearTimeout(c.timer); c.timer=setTimeout(c.connect,delay);
+  };
+  c.close=()=>{ clearTimeout(c.timer); if(c.ws){ try{ c.ws.close(); }catch(e){} } };
+  return c;
 }
-function scheduleReconnect(){
-  if(keyBad||manualClose) return;
-  const delay=Math.min(15000,1000*Math.pow(2,retry))+Math.random()*700; retry++;
-  setPill(liveSeen?"reconnect":"connecting", liveSeen?"Reconnecting…":"Connecting…");
-  clearTimeout(retryTimer); retryTimer=setTimeout(connect,delay);
+function anyConnected(){ return conns.some(c=>c.ws && c.ws.readyState===1); }
+function connect(){
+  if(keyBad) return;
+  if(!CONFIG.AISSTREAM_KEY || CONFIG.AISSTREAM_KEY.includes("…") || CONFIG.AISSTREAM_KEY.length<8){ startDemo(); return; }
+  manualClose=false;
+  const chunks=mmsiChunks();
+  if(!chunks.length){ startDemo(); return; }
+  if(conns.length!==chunks.length){ conns.forEach(c=>c.close()); conns=chunks.map(makeConn); }
+  else conns.forEach((c,i)=>c.chunk=chunks[i]);
+  conns.forEach(c=>c.connect());
 }
+function closeAll(){ manualClose=true; conns.forEach(c=>c.close()); }
 let resubT=null;
-function resubscribe(){
-  clearTimeout(resubT);
-  resubT=setTimeout(()=>{ if(ws&&ws.readyState===1){ try{ ws.send(subMessage()); }catch(e){} } },1500);
-}
+function resubscribe(){ clearTimeout(resubT); resubT=setTimeout(()=>{
+  const chunks=mmsiChunks();
+  if(conns.length===chunks.length) conns.forEach((c,i)=>{ c.chunk=chunks[i]; if(c.ws&&c.ws.readyState===1){ try{ c.ws.send(subFor(c.chunk)); }catch(e){} } });
+  else { closeAll(); connect(); }
+}, 1500); }
 function handleMessage(raw){
   let msg; try{ msg=JSON.parse(raw); }catch(e){ return; }
   if(msg.error||msg.Error){
     const err=String(msg.error||msg.Error);
-    if(/key|auth|token/i.test(err)){ keyBad=true; setPill("error","Check API key"); try{ws.close();}catch(e){} }
+    if(/key|auth|token/i.test(err)){ keyBad=true; setPill("error","Check API key"); conns.forEach(c=>c.close()); }
     else setPill("error","Feed error");
     return;
   }
@@ -1149,7 +1182,12 @@ function tick(ts){
     // arrival blips for newly-appeared ships (after positions are projected)
     placeShips();
     fleet.forEach(d=>{ if(d.lat!=null && !d._appeared){ d._appeared=true; blip(d); } });
-    if(liveSeen){ const n=fleet.filter(d=>d.lat!=null).length; setPill("live",`Live · ${n} ${n===1?"ship":"ships"}`); }
+    if(!keyBad && feedpill.dataset.state!=="demo"){    // one stable pill update per second
+      const connected=anyConnected(), n=fleet.filter(d=>d.lat!=null).length;
+      if(liveSeen && connected) setPill("live",`Live · ${n} ${n===1?"ship":"ships"}`);
+      else if(connected) setPill("connecting","Connecting…");
+      else setPill(liveSeen?"reconnect":"connecting", liveSeen?"Reconnecting…":"Connecting…");
+    }
     updateStats(); refreshNav();
     if(selected) fillDetail(selected);
     dirty=false; lastTick=ts;
@@ -1159,8 +1197,8 @@ function tick(ts){
 
 /* ---- lifecycle ---- */
 document.addEventListener("visibilitychange",()=>{
-  if(document.hidden){ manualClose=true; clearTimeout(retryTimer); if(ws){ try{ws.close();}catch(e){} } }
-  else { manualClose=false; if(!keyBad && (!ws||ws.readyState>1)) { retry=0; connect(); } }
+  if(document.hidden){ closeAll(); }
+  else if(!keyBad){ connect(); }   // connect() guards against duplicate sockets
 });
 setInterval(()=>{ // staleness sweep + persistence
   const now=Date.now(); let changed=false;
