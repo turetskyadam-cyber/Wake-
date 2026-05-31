@@ -1100,7 +1100,13 @@ function selectShip(d){
   fillDetail(d); detail.classList.add("show","collapsed");   // appears as a slim "Cruise info" bar; tap to expand
   byId("dToggle").setAttribute("aria-expanded","false");
   clearPing();
-  if(d.lat!=null){ spawnPing(d); flyToPoint(d,CONFIG.FOCUS_ZOOM); reverseGeo(d); if(d._m){ d._m.setStyle(markerStyle(d)); d._m.openTooltip(); } }
+  if(d.lat!=null){
+    spawnPing(d);
+    const z=Math.max(map.getZoom(), CONFIG.FOCUS_ZOOM);
+    if(!map.getBounds().contains([d.lat,d.lon])) map.flyTo([d.lat,d.lon],z,{duration:CAM_DUR});
+    else if(map.getZoom()<CONFIG.FOCUS_ZOOM) map.flyTo([d.lat,d.lon],z,{duration:CAM_DUR});
+    reverseGeo(d); if(d._m){ d._m.setStyle(markerStyle(d)); d._m.openTooltip(); }
+  }
   applyVisibility();
 }
 function clearSelection(){
