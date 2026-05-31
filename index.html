@@ -204,6 +204,9 @@
   .d-itin-today .d-itin-date{color:var(--brass)}
   .d-itin-today .d-itin-port{color:var(--ink);font-weight:600}
   .d-itin-row[data-port]:hover .d-itin-port{text-decoration:underline;text-underline-offset:2px}
+  .d-itin-row.sea{cursor:default;opacity:0.42}
+  .d-itin-row.sea:hover{color:var(--muted)}
+  .d-itin-sea{font-style:italic;color:var(--faint)!important;font-weight:400!important}
   /* itinerary route preview overlay */
   .ipm-outer{pointer-events:none}
   .ipm-card{position:absolute;left:12px;top:-20px;background:rgba(6,18,28,.9);border:1px solid rgba(255,255,255,.16);border-radius:9px;padding:8px 12px;white-space:nowrap;backdrop-filter:blur(10px);box-shadow:0 4px 20px rgba(0,0,0,.55);pointer-events:none}
@@ -1034,17 +1037,18 @@ function fillDetail(d){
   byId("dBarName").textContent=d.name;
   // upcoming itinerary
   const itinEl=byId("dItin");
-  const today=new Date().toISOString().slice(0,10);
-  const calls=(_itinShip[normShip(d.name)]||[]).filter(c=>c.date>=today);
-  if(calls.length){
+  const todayStr=new Date().toISOString().slice(0,10);
+  const days=buildVoyageDays(normShip(d.name));
+  if(days.length){
     itinEl.hidden=false;
-    itinEl.innerHTML=`<div class="d-itin-hd">Upcoming Ports<span class="d-itin-cnt">${calls.length}</span></div>`+
-      `<div class="d-itin-list">`+calls.map(c=>{
-        const isToday=c.date===today;
-        const dt=new Date(c.date+"T12:00:00Z");
+    itinEl.innerHTML=`<div class="d-itin-hd">Voyage · Day by Day<span class="d-itin-cnt">${days.length} days</span></div>`+
+      `<div class="d-itin-list">`+days.map(x=>{
+        const isToday=x.date===todayStr;
+        const dt=new Date(x.date+"T12:00:00Z");
         const label=isToday?"Today":dt.toLocaleDateString("en-US",{month:"short",day:"numeric"});
-        const times=[c.arr&&"Arr "+c.arr,c.dep&&"Dep "+c.dep].filter(Boolean).join(" · ");
-        return `<div class="d-itin-row${isToday?" d-itin-today":""}" data-port="${c.port}" data-date="${c.date}" data-arr="${c.arr||""}" data-dep="${c.dep||""}"><span class="d-itin-date">${label}</span><span class="d-itin-port">${c.port}</span>${times?`<span class="d-itin-times">${times}</span>`:""}</div>`;
+        if(x.type==="sea") return `<div class="d-itin-row sea${isToday?" d-itin-today":""}"><span class="d-itin-date">${label}</span><span class="d-itin-port d-itin-sea">At Sea</span></div>`;
+        const times=[x.arr&&"Arr "+x.arr,x.dep&&"Dep "+x.dep].filter(Boolean).join(" · ");
+        return `<div class="d-itin-row${isToday?" d-itin-today":""}" data-port="${x.port}" data-date="${x.date}" data-arr="${x.arr||""}" data-dep="${x.dep||""}"><span class="d-itin-date">${label}</span><span class="d-itin-port">${x.port}</span>${times?`<span class="d-itin-times">${times}</span>`:""}</div>`;
       }).join("")+`</div>`;
     itinEl.querySelectorAll(".d-itin-row[data-port]").forEach(row=>{
       row.addEventListener("click",e=>{
@@ -1576,6 +1580,56 @@ fetch(SNAP_URL,{cache:"no-store"}).then(r=>r.ok?r.json():Promise.reject())
 // port schedule itineraries — scraped daily from CruiseMapper by GitHub Actions
 let _itin={};     // portCity -> Map(normShip -> {a,e})
 let _itinShip={}; // normShip  -> [{port,date,arr,dep}] sorted by date
+
+// Major embarkation/debarkation ports — used to detect voyage boundaries
+const HOMEPORTS=new Set([
+  "PortMiami","Port Everglades","Port Canaveral","Port Tampa Bay",
+  "Galveston","Port of New Orleans","Port of Mobile",
+  "New York","Port of Baltimore","Port of Boston",
+  "San Francisco","Los Angeles","Honolulu",
+  "Vancouver","Seattle",
+  "Southampton","Copenhagen","Amsterdam",
+  "Barcelona","Piraeus","Singapore"
+]);
+
+function fillSeaDays(calls){
+  if(!calls.length) return [];
+  const byDate=new Map(calls.map(c=>[c.date,c]));
+  const result=[];
+  const start=new Date(calls[0].date+"T12:00:00Z");
+  const end=new Date(calls[calls.length-1].date+"T12:00:00Z");
+  for(let dt=new Date(start);dt<=end;dt.setUTCDate(dt.getUTCDate()+1)){
+    const ds=dt.toISOString().slice(0,10);
+    result.push(byDate.has(ds)?{type:"port",...byDate.get(ds)}:{type:"sea",date:ds});
+  }
+  return result;
+}
+function buildVoyageDays(shipKey){
+  const all=_itinShip[shipKey]||[];
+  if(!all.length) return [];
+  const todayStr=new Date().toISOString().slice(0,10);
+  // Find most recent homeport ≤ today → voyage start
+  let startIdx=-1;
+  for(let i=all.length-1;i>=0;i--){
+    if(all[i].date>todayStr) continue;
+    if(HOMEPORTS.has(all[i].port)){startIdx=i;break;}
+  }
+  // If not found, look for next upcoming homeport as voyage start
+  if(startIdx<0){
+    startIdx=all.findIndex(c=>c.date>=todayStr&&HOMEPORTS.has(c.port));
+    if(startIdx<0){
+      const fi=all.findIndex(c=>c.date>=todayStr);
+      return fi<0?[]:fillSeaDays(all.slice(fi,fi+14));
+    }
+  }
+  // Find next homeport after startIdx → voyage end
+  let endIdx=-1;
+  for(let i=startIdx+1;i<all.length;i++){
+    if(HOMEPORTS.has(all[i].port)){endIdx=i;break;}
+  }
+  const slice=endIdx>startIdx?all.slice(startIdx,endIdx+1):all.slice(startIdx,Math.min(startIdx+21,all.length));
+  return fillSeaDays(slice);
+}
 function normShip(s){ return s.toLowerCase().replace(/[^a-z0-9]/g,""); }
 function itinFor(d){
   const m=_itin[d.portCity]; if(!m) return null;
