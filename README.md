@@ -12,11 +12,12 @@ ship → a cinematic focus on any vessel.
   Norwegian, MSC, Princess, Celebrity, Disney, Virgin Voyages, Holland America,
   Cunard, Costa), streamed over a WebSocket and filtered to a curated, verified
   list of cruise-ship MMSIs.
+- **Real zoomable map** (Leaflet + CARTO dark tiles): zoom right in to see the
+  ship against real coastlines, ports and city names.
 - **Drill-down navigator:** pick a line to fly the camera to its ships, then a
-  ship to zoom in with live latitude/longitude, heading, speed, status and AIS
-  destination ("next port").
-- **Wake trails**, breathing markers, staggered reveals and reduced-motion
-  support.
+  ship to zoom in with live latitude/longitude, heading, speed, status, AIS
+  destination ("next port"), and a reverse-geocoded "roughly where it is" line.
+- **Wake trails**, staggered reveals and reduced-motion support.
 - **Resilient:** auto-reconnect, tab-hidden pause, last-known positions cached
   to `localStorage` (the map is never blank on reload), and a clearly-labelled
   demo fallback if the feed is unreachable.
