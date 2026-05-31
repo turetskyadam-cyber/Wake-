@@ -8,7 +8,7 @@ ship → a cinematic focus on any vessel.
 
 ## What it does
 
-- **Live positions** for ~69 ships across 11 lines (Royal Caribbean, Carnival,
+- **Live positions** for ~165 ships across 11 lines (Royal Caribbean, Carnival,
   Norwegian, MSC, Princess, Celebrity, Disney, Virgin Voyages, Holland America,
   Cunard, Costa), streamed over a WebSocket and filtered to a curated, verified
   list of cruise-ship MMSIs.
