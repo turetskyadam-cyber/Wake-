@@ -252,6 +252,25 @@
   .d-place::before{content:"◉";color:var(--accent,#4d8fdb);font-size:11px}
   .d-place:empty{display:none}
 
+  /* ---- collapsible controls (full-screen map) + full-fleet row ---- */
+  #controls{transition:transform .5s cubic-bezier(.34,1.32,.62,1),opacity .28s ease}
+  #controls.collapsed{transform:translateY(170%);opacity:0;pointer-events:none}
+  .nav-grabber{width:38px;height:4px;border-radius:3px;background:var(--glass-edge);margin:-4px auto 11px;cursor:pointer;outline:none;transition:background .2s,width .2s}
+  .nav-grabber:hover,.nav-grabber:focus-visible{background:var(--brass-soft);width:50px}
+  .nav-open{position:fixed;left:18px;bottom:18px;z-index:1001;width:48px;height:48px;border-radius:15px;
+    background:var(--glass);border:1px solid var(--glass-edge);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);
+    box-shadow:0 24px 60px -20px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.04);
+    color:var(--brass);cursor:pointer;display:none;align-items:center;justify-content:center;
+    transform:translateY(20px) scale(.9);opacity:0;transition:transform .5s cubic-bezier(.34,1.4,.6,1),opacity .3s ease,background .2s,color .2s}
+  .nav-open.show{display:flex;transform:none;opacity:1}
+  .nav-open:hover{background:rgba(255,255,255,.07);color:var(--ink)}
+  .nav-open:active{transform:scale(.9)}
+  .row.fullfleet{background:rgba(226,189,114,.06);border-color:rgba(226,189,114,.22)}
+  .row.fullfleet:hover,.row.fullfleet:focus-visible{background:rgba(226,189,114,.12);border-color:rgba(226,189,114,.42)}
+  .row.fullfleet .swatch{box-shadow:0 0 8px currentColor}
+  .row.fullfleet .chev{font-size:13px}
+  @media (max-width:760px){ .nav-open{left:10px;bottom:10px} }
+
   @media (prefers-reduced-motion:reduce){
     *{animation-duration:.001ms!important;transition-duration:.08s!important}
     .wordmark .dot::after,.sel-pulse,.blip{animation:none}
@@ -277,6 +296,7 @@
 </div>
 
 <div id="controls" class="panel">
+  <div class="nav-grabber" id="navHide" role="button" aria-label="Hide menu" title="Hide menu" tabindex="0"></div>
   <div class="search">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
     <input id="q" type="text" placeholder="Search ships…" autocomplete="off" spellcheck="false"/>
@@ -308,6 +328,9 @@
 </div>
 
 <div id="tip"><div class="t-name"></div><div class="t-meta"></div></div>
+<button id="navOpen" class="nav-open" aria-label="Show fleet menu" title="Show fleet menu">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg>
+</button>
 <div class="credit" id="credit">positions © aisstream.io · map © OpenStreetMap, © CARTO</div>
 
 <script>
@@ -783,6 +806,15 @@ function buildShips(root){
   hd.appendChild(el("div","nav-title",`<i style="color:${LINES[line]};background:${LINES[line]}"></i><span>${line}</span>`));
   root.appendChild(hd);
   const list=el("div","nav-list"); list.setAttribute("role","list");
+  const c=lineCounts(line);
+  const full=el("div","row fullfleet");
+  full.tabIndex=0; full.setAttribute("role","button"); full.setAttribute("aria-label","Show full fleet on the map");
+  full.innerHTML=`<i class="swatch" style="color:${LINES[line]};background:${LINES[line]}"></i>
+    <div class="body"><div class="title">Full fleet</div><div class="meta">${c.shown} of ${c.total} on map${c.sea?` · ${c.sea} at sea`:""}</div></div>
+    <span class="chev">⤢</span>`;
+  full.addEventListener("click",()=>fullFleet(line));
+  full.addEventListener("keydown",e=>navKey(e,full));
+  list.appendChild(full);
   const ships=(byLine[line]||[]).slice().sort((a,b)=>{
     const ra=a.lat!=null?0:1, rb=b.lat!=null?0:1; return ra!==rb?ra-rb:a.name.localeCompare(b.name);
   });
@@ -832,8 +864,17 @@ function refreshNav(){ // light refresh of counts/meta without re-animating
 /* ---- navigation actions ---- */
 function goLines(){ nav={level:0,line:null,ship:null}; hoverLine=null; clearSelection(); renderNav("l"); applyVisibility(); resetCamera(); }
 function goLine(line){ const deeper=nav.level<1; nav={level:1,line,ship:null}; hoverLine=null; clearSelection(); renderNav(deeper?"r":"l"); applyVisibility(); flyToShips(byLine[line]); }
-function goShip(d){ nav={level:2,line:d.line,ship:d}; renderNav("r"); selectShip(d); }
+function goShip(d){ nav={level:2,line:d.line,ship:d}; renderNav("r"); selectShip(d); collapseNav(); }
+function fullFleet(line){ nav={level:1,line,ship:null}; clearSelection(); renderNav(); applyVisibility(); flyToShips(byLine[line]); collapseNav(); }
 function navBack(){ if(nav.level===2) goLine(nav.line); else if(nav.level===1) goLines(); }
+
+/* ---- collapsible controls (full-screen map) ---- */
+const controlsEl=byId("controls"), navOpenBtn=byId("navOpen");
+function collapseNav(){ controlsEl.classList.add("collapsed"); navOpenBtn.classList.add("show"); }
+function expandNav(){ controlsEl.classList.remove("collapsed"); navOpenBtn.classList.remove("show"); }
+navOpenBtn.addEventListener("click",expandNav);
+byId("navHide").addEventListener("click",collapseNav);
+byId("navHide").addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); collapseNav(); } });
 
 /* ---- keyboard ---- */
 function navKey(e,row){
