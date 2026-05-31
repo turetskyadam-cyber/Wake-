@@ -85,6 +85,13 @@
     padding:4px 9px;border-radius:999px;cursor:help;
   }
   .feedpill b{width:5px;height:5px;border-radius:50%;background:var(--brass);display:inline-block}
+  .brandstats{display:flex;margin-top:14px}
+  .bstat{padding-right:15px;margin-right:15px;border-right:1px solid var(--glass-edge)}
+  .bstat:last-child{padding-right:0;margin-right:0;border-right:none}
+  .bstat .num{font-family:'Fraunces',serif;font-weight:600;font-size:22px;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums;display:block}
+  .bstat .num.sea{color:#7fd0c4}
+  .bstat .num.port{color:var(--brass)}
+  .bstat .lab{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-top:6px;display:block}
 
   #stats{top:18px;right:18px;display:flex;gap:0;padding:14px 6px;overflow:hidden}
   .stat{padding:2px 20px;text-align:center;position:relative}
@@ -301,12 +308,11 @@
   <div class="wordmark"><h1>WAKE</h1><span class="dot"></span></div>
   <div class="sub">Live Cruise Fleet Tracker</div>
   <span class="feedpill" id="feedpill" data-state="connecting" title="Live AIS broadcasts via aisstream.io"><b></b>Connecting…</span>
-</div>
-
-<div id="stats" class="panel">
-  <div class="stat"><div class="num" id="s-total">0</div><div class="lab">Tracked</div></div>
-  <div class="stat"><div class="num sea" id="s-sea">0</div><div class="lab">At&nbsp;sea</div></div>
-  <div class="stat"><div class="num port" id="s-port">0</div><div class="lab">In&nbsp;port</div></div>
+  <div class="brandstats">
+    <div class="bstat"><span class="num" id="s-total">0</span><span class="lab">Tracked</span></div>
+    <div class="bstat"><span class="num sea" id="s-sea">0</span><span class="lab">At&nbsp;sea</span></div>
+    <div class="bstat"><span class="num port" id="s-port">0</span><span class="lab">In&nbsp;port</span></div>
+  </div>
 </div>
 
 <div id="controls" class="panel">
@@ -760,7 +766,8 @@ function clearSelection(){
   if(prev&&prev._m) prev._m.setStyle(markerStyle(prev));
   detail.classList.remove("show"); detail.classList.add("collapsed"); clearPing(); applyVisibility();
 }
-byId("dClose").addEventListener("click",e=>{ e.stopPropagation(); navBack(); });
+function collapseDetail(){ detail.classList.add("collapsed"); byId("dToggle").setAttribute("aria-expanded","false"); }
+byId("dClose").addEventListener("click",e=>{ e.stopPropagation(); collapseDetail(); });   // ✕ just folds the bar back down (keeps ship selected)
 byId("dToggle").addEventListener("click",()=>{
   const open=detail.classList.toggle("collapsed")===false;
   byId("dToggle").setAttribute("aria-expanded", open?"true":"false");
