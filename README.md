@@ -23,11 +23,14 @@ ship → a cinematic focus on any vessel.
 
 ## Run it
 
-It's one file. Open `wake.html` in a browser, or serve it:
+It's one file. Open `index.html` in a browser, or serve it:
 
 ```bash
-python3 -m http.server 8000   # then visit http://localhost:8000/wake.html
+python3 -m http.server 8000   # then visit http://localhost:8000/
 ```
+
+Deployed on static hosts (Vercel, GitHub Pages, Netlify) it serves at the root
+automatically, since the file is named `index.html`.
 
 Ships appear as their AIS broadcasts arrive (seconds to a couple of minutes).
 
@@ -35,7 +38,7 @@ Ships appear as their AIS broadcasts arrive (seconds to a couple of minutes).
 
 Positions come from the free [aisstream.io](https://aisstream.io) global AIS
 WebSocket. The key lives in the `CONFIG` block near the top of the `<script>`
-in `wake.html`:
+in `index.html`:
 
 ```js
 const CONFIG = { AISSTREAM_KEY: "…", … };
