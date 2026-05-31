@@ -120,8 +120,19 @@
   .chip.off i{box-shadow:none}
   .chip.on{color:var(--ink);background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.18)}
 
-  #detail{right:18px;bottom:18px;width:312px;padding:0;overflow:hidden;opacity:0;transform:translateY(14px) scale(.98);pointer-events:none;transition:opacity .16s var(--ease-out),transform .16s var(--ease-out)}
-  #detail.show{opacity:1;transform:none;pointer-events:auto;transition:opacity .24s var(--ease-out),transform .24s var(--ease-out)}
+  #detail{right:18px;bottom:18px;width:330px;padding:0;overflow:hidden;opacity:0;transform:translateY(16px);pointer-events:none;transition:opacity .22s var(--ease-out),transform .3s var(--ease-out)}
+  #detail.show{opacity:1;transform:none;pointer-events:auto}
+  .d-body{max-height:62vh;overflow:hidden;opacity:1;transition:max-height .42s var(--ease-io),opacity .28s ease}
+  #detail.collapsed .d-body{max-height:0;opacity:0}
+  .d-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(8,26,36,.45);border:none;border-top:1px solid var(--glass-edge);color:var(--ink);cursor:pointer;padding:13px 15px;text-align:left;transition:background .2s}
+  #detail.collapsed .d-toggle{border-top:none}
+  .d-toggle:hover{background:rgba(255,255,255,.05)}
+  .d-toggle-l{display:flex;align-items:center;gap:9px;min-width:0;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+  .d-toggle-l .d-dot{width:7px;height:7px;border-radius:50%;background:var(--accent,#4d8fdb);box-shadow:0 0 8px var(--accent,#4d8fdb);flex:none}
+  .d-toggle-l em{font-style:normal;text-transform:none;letter-spacing:0;font-family:'Hanken Grotesk';font-size:12.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .d-chev{flex:none;color:var(--brass-soft);transition:transform .32s var(--ease-out),color .2s}
+  #detail:not(.collapsed) .d-chev{transform:rotate(180deg)}
+  .d-toggle:hover .d-chev{color:var(--brass)}
   .d-top{padding:17px 18px 14px;position:relative;overflow:hidden}
   .d-top::before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,var(--accent,#4d8fdb) 0%,transparent 65%);opacity:.16}
   .d-line{display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent,#4d8fdb)}
@@ -163,7 +174,7 @@
     .stat .num{font-size:25px}
     #controls{left:10px;right:10px;bottom:10px;width:auto}
     .chips{max-height:84px}
-    #detail{left:10px;right:10px;bottom:10px;width:auto}
+    #detail{left:74px;right:10px;bottom:10px;width:auto}
     #zoom{display:none}
     .credit{display:none}
   }
@@ -257,14 +268,16 @@
   #controls.collapsed{transform:translateY(170%);opacity:0;pointer-events:none}
   .nav-grabber{width:38px;height:4px;border-radius:3px;background:var(--glass-edge);margin:-4px auto 11px;cursor:pointer;outline:none;transition:background .2s,width .2s}
   .nav-grabber:hover,.nav-grabber:focus-visible{background:var(--brass-soft);width:50px}
-  .nav-open{position:fixed;left:18px;bottom:18px;z-index:1001;width:48px;height:48px;border-radius:15px;
+  .nav-open{position:fixed;left:18px;bottom:18px;z-index:1001;height:46px;border-radius:14px;padding:0 15px 0 12px;gap:8px;
     background:var(--glass);border:1px solid var(--glass-edge);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);
     box-shadow:0 24px 60px -20px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.04);
     color:var(--brass);cursor:pointer;display:none;align-items:center;justify-content:center;
     transform:translateY(20px) scale(.9);opacity:0;transition:transform .5s cubic-bezier(.34,1.4,.6,1),opacity .3s ease,background .2s,color .2s}
+  .nav-open span{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
   .nav-open.show{display:flex;transform:none;opacity:1}
-  .nav-open:hover{background:rgba(255,255,255,.07);color:var(--ink)}
-  .nav-open:active{transform:scale(.9)}
+  .nav-open:hover{background:rgba(255,255,255,.07)}
+  .nav-open:hover span{color:var(--brass)}
+  .nav-open:active{transform:scale(.95)}
   .row.fullfleet{background:rgba(226,189,114,.06);border-color:rgba(226,189,114,.22)}
   .row.fullfleet:hover,.row.fullfleet:focus-visible{background:rgba(226,189,114,.12);border-color:rgba(226,189,114,.42)}
   .row.fullfleet .swatch{box-shadow:0 0 8px currentColor}
@@ -304,21 +317,27 @@
   <div id="nav" role="navigation" aria-label="Fleet browser"></div>
 </div>
 
-<div id="detail" class="panel">
-  <div class="d-top">
-    <button class="d-close" id="dClose">✕</button>
-    <span class="d-line"><i></i><span id="dLine"></span></span>
-    <h2 class="d-name" id="dName"></h2>
-    <div class="d-status" id="dStatus"></div>
-    <div class="d-place" id="dPlace"></div>
+<div id="detail" class="panel collapsed">
+  <div class="d-body">
+    <div class="d-top">
+      <button class="d-close" id="dClose">✕</button>
+      <span class="d-line"><i></i><span id="dLine"></span></span>
+      <h2 class="d-name" id="dName"></h2>
+      <div class="d-status" id="dStatus"></div>
+      <div class="d-place" id="dPlace"></div>
+    </div>
+    <div class="d-grid">
+      <div class="cell"><div class="k">Latitude</div><div class="v" id="dLat"></div></div>
+      <div class="cell"><div class="k">Longitude</div><div class="v" id="dLon"></div></div>
+      <div class="cell"><div class="k">Speed</div><div class="v" id="dSpd"></div></div>
+      <div class="cell"><div class="k">Heading</div><div class="v" id="dHdg"></div></div>
+    </div>
+    <div class="d-foot"><span id="dNext"></span><span id="dRegion"></span></div>
   </div>
-  <div class="d-grid">
-    <div class="cell"><div class="k">Latitude</div><div class="v" id="dLat"></div></div>
-    <div class="cell"><div class="k">Longitude</div><div class="v" id="dLon"></div></div>
-    <div class="cell"><div class="k">Speed</div><div class="v" id="dSpd"></div></div>
-    <div class="cell"><div class="k">Heading</div><div class="v" id="dHdg"></div></div>
-  </div>
-  <div class="d-foot"><span id="dNext"></span><span id="dRegion"></span></div>
+  <button class="d-toggle" id="dToggle" aria-label="Show cruise info" aria-expanded="false">
+    <span class="d-toggle-l"><b class="d-dot"></b>Cruise info<em id="dBarName"></em></span>
+    <svg class="d-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg>
+  </button>
 </div>
 
 <div id="zoom" class="panel">
@@ -329,7 +348,7 @@
 
 <div id="tip"><div class="t-name"></div><div class="t-meta"></div></div>
 <button id="navOpen" class="nav-open" aria-label="Show fleet menu" title="Show fleet menu">
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg>
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg><span>Fleet</span>
 </button>
 <div class="credit" id="credit">positions © aisstream.io · map © OpenStreetMap, © CARTO</div>
 
@@ -354,7 +373,8 @@ const REDUCED = CONFIG.REDUCED_MOTION;
 const LINES = {
   "Royal Caribbean":"#4d8fdb","Carnival":"#ff5a4d","Norwegian":"#37b6a6",
   "MSC":"#e0b64a","Princess":"#7d8be6","Celebrity":"#8fb6c9","Disney":"#8b73f6",
-  "Virgin Voyages":"#ff5a93","Holland America":"#5fb37a","Cunard":"#e0903a","Costa":"#f2c14e"
+  "Virgin Voyages":"#ff5a93","Holland America":"#5fb37a","Cunard":"#e0903a","Costa":"#f2c14e",
+  "Windstar":"#4fc3f7"
 };
 
 /* Curated fleet — [mmsi, name, line]. MMSIs verified (2+ public sources)
@@ -537,6 +557,13 @@ const FLEET = [
   ["247311100","Costa Favolosa","Costa"],
   ["247313500","Costa Fascinosa","Costa"],
   ["247325300","Costa Luminosa","Costa"],
+  // Windstar
+  ["309242000","Wind Surf","Windstar"],
+  ["309056000","Wind Spirit","Windstar"],
+  ["309163000","Wind Star","Windstar"],
+  ["311083000","Star Breeze","Windstar"],
+  ["311085000","Star Legend","Windstar"],
+  ["311084000","Star Pride","Windstar"],
 ];
 
 /* ---------- helpers ---------- */
@@ -716,10 +743,12 @@ function fillDetail(d){
   byId("dHdg").innerHTML = (sea&&d.lat!=null)?Math.round(d.hdg)+`<small>°</small>`:"—";
   byId("dNext").textContent="NEXT ▸ "+(d.next||"—");
   byId("dRegion").textContent=(d.region||"—").toUpperCase();
+  byId("dBarName").textContent=d.name;
 }
 function selectShip(d){
   selected=d;
-  fillDetail(d); detail.classList.add("show");
+  fillDetail(d); detail.classList.add("show","collapsed");   // appears as a slim "Cruise info" bar; tap to expand
+  byId("dToggle").setAttribute("aria-expanded","false");
   clearPing();
   if(d.lat!=null){ spawnPing(d); flyToPoint(d,CONFIG.FOCUS_ZOOM); reverseGeo(d); if(d._m){ d._m.setStyle(markerStyle(d)); d._m.openTooltip(); } }
   applyVisibility();
@@ -728,9 +757,13 @@ function clearSelection(){
   if(selected&&selected._m){ selected._m.closeTooltip(); }
   const prev=selected; selected=null;
   if(prev&&prev._m) prev._m.setStyle(markerStyle(prev));
-  detail.classList.remove("show"); clearPing(); applyVisibility();
+  detail.classList.remove("show"); detail.classList.add("collapsed"); clearPing(); applyVisibility();
 }
 byId("dClose").addEventListener("click",e=>{ e.stopPropagation(); navBack(); });
+byId("dToggle").addEventListener("click",()=>{
+  const open=detail.classList.toggle("collapsed")===false;
+  byId("dToggle").setAttribute("aria-expanded", open?"true":"false");
+});
 
 /* ---- reverse geocode: human-readable "roughly where" ---- */
 const geoCache=new Map();
@@ -822,6 +855,7 @@ function buildShips(root){
   ships.forEach((d,i)=>{
     const awaiting=d.lat==null;
     const row=el("div","row"+(awaiting?" awaiting":"")); row.style.animationDelay=(i*18)+"ms";
+    row._d=d;
     row.tabIndex=awaiting?-1:0; row.setAttribute("role","button"); row.setAttribute("aria-label",d.name);
     if(d===selected) row.style.borderColor=d.color+"66";
     row.innerHTML=`<i class="swatch" style="color:${d.color};background:${d.color}"></i>
@@ -853,11 +887,13 @@ function refreshNav(){ // light refresh of counts/meta without re-animating
       const m=row.querySelector(".meta"); if(m) m.textContent=`${c.shown}/${c.total} tracked${c.sea?` · ${c.sea} at sea`:""}`;
     });
   } else if(nav.level===1){
-    const ships=(byLine[nav.line]||[]).slice().sort((a,b)=>{const ra=a.lat!=null?0:1,rb=b.lat!=null?0:1;return ra!==rb?ra-rb:a.name.localeCompare(b.name);});
-    const rows=navEl.querySelectorAll(".nav-list .row");
-    // structure may change as ships appear; re-render fully if counts changed
-    if(rows.length!==ships.length){ renderNav(); return; }
-    rows.forEach((row,i)=>{ const d=ships[i]; if(!d) return; const m=row.querySelector(".meta"); if(m) m.innerHTML=shipMeta(d); });
+    // update each row's meta in place (no re-render → no flicker)
+    const c=lineCounts(nav.line);
+    navEl.querySelectorAll(".nav-list .row").forEach(row=>{
+      const m=row.querySelector(".meta"); if(!m) return;
+      if(row.classList.contains("fullfleet")) m.textContent=`${c.shown} of ${c.total} on map${c.sea?` · ${c.sea} at sea`:""}`;
+      else if(row._d) m.innerHTML=shipMeta(row._d);
+    });
   }
 }
 
