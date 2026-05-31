@@ -1045,53 +1045,48 @@ function fillDetail(d){
   byId("dNext").textContent="NEXT ▸ "+(d.next||"—");
   byId("dRegion").textContent=(d.region||"—").toUpperCase();
   byId("dBarName").textContent=d.name;
-  // upcoming itinerary
+  // upcoming itinerary — delegate to fillDetailItin so it can be called separately
+  fillDetailItin(d);
+}
+function fillDetailItin(d){
   const itinEl=byId("dItin");
   const today=new Date().toISOString().slice(0,10);
   const calls=(_itinShip[normShip(d.name)]||[]).filter(c=>c.date>=today);
-  if(calls.length){
-    itinEl.hidden=false;
-    itinEl.innerHTML=`<div class="d-itin-hd">Upcoming Ports<span class="d-itin-cnt">${calls.length}</span></div>`+
-      `<div class="d-itin-list">`+calls.map(c=>{
-        const isToday=c.date===today;
-        const dt=new Date(c.date+"T12:00:00Z");
-        const label=isToday?"Today":dt.toLocaleDateString("en-US",{month:"short",day:"numeric"});
-        const times=[c.arr&&"Arr "+c.arr,c.dep&&"Dep "+c.dep].filter(Boolean).join(" · ");
-        return `<div class="d-itin-row${isToday?" d-itin-today":""}" data-port="${c.port}" data-date="${c.date}" data-arr="${c.arr||""}" data-dep="${c.dep||""}"><span class="d-itin-date">${label}</span><span class="d-itin-port">${c.port}</span>${times?`<span class="d-itin-times">${times}</span>`:""}</div>`;
-      }).join("")+`</div>`;
-    itinEl.querySelectorAll(".d-itin-row[data-port]").forEach(row=>{
-      row.addEventListener("click",e=>{
-        e.stopPropagation();
-        const portEntry=CRUISE_PORTS.find(p=>p.name===row.dataset.port);
-        if(!portEntry) return;
-        // collapse the detail bar so the map is unobstructed
-        collapseDetail();
-        clearItinPreview();
-        if(d.lat==null){ map.flyTo([portEntry.lat,portEntry.lon],8,{duration:CAM_DUR}); return; }
-        // dashed route line ship → port
-        _itinLine=L.polyline([[d.lat,d.lon],[portEntry.lat,portEntry.lon]],
-          {color:d.color,weight:2,dashArray:"8 10",opacity:0.65,interactive:false}).addTo(map);
-        // destination dot
-        _itinDot=L.circleMarker([portEntry.lat,portEntry.lon],
-          {renderer:canvasR,radius:5,color:"#fff",weight:1.5,fillColor:d.color,fillOpacity:0.9,interactive:false}).addTo(map);
-        // label card
-        const isToday=row.dataset.date===new Date().toISOString().slice(0,10);
-        const dt=new Date(row.dataset.date+"T12:00:00Z");
-        const dateLabel=isToday?"Today":dt.toLocaleDateString("en-US",{month:"short",day:"numeric"});
-        const timeParts=[row.dataset.arr&&"Arr "+row.dataset.arr,row.dataset.dep&&"Dep "+row.dataset.dep].filter(Boolean).join(" · ");
-        _itinMark=L.marker([portEntry.lat,portEntry.lon],{
-          icon:L.divIcon({className:"ipm-outer",iconSize:[0,0],iconAnchor:[0,8],
-            html:`<div class="ipm-card"><b>${portEntry.name}</b><span>${dateLabel}${timeParts?" · "+timeParts:""}</span></div>`}),
-          interactive:false,keyboard:false
-        }).addTo(map);
-        // fit both ship and port in view
-        map.flyToBounds(L.latLngBounds([[d.lat,d.lon],[portEntry.lat,portEntry.lon]]),
-          {padding:[80,120],maxZoom:8,duration:CAM_DUR});
-      });
+  if(!calls.length){ itinEl.hidden=true; return; }
+  itinEl.hidden=false;
+  itinEl.innerHTML=`<div class="d-itin-hd">Upcoming Ports<span class="d-itin-cnt">${calls.length}</span></div>`+
+    `<div class="d-itin-list">`+calls.map(c=>{
+      const isToday=c.date===today;
+      const dt=new Date(c.date+"T12:00:00Z");
+      const label=isToday?"Today":dt.toLocaleDateString("en-US",{month:"short",day:"numeric"});
+      const times=[c.arr&&"Arr "+c.arr,c.dep&&"Dep "+c.dep].filter(Boolean).join(" · ");
+      return `<div class="d-itin-row${isToday?" d-itin-today":""}" data-port="${c.port}" data-date="${c.date}" data-arr="${c.arr||""}" data-dep="${c.dep||""}"><span class="d-itin-date">${label}</span><span class="d-itin-port">${c.port}</span>${times?`<span class="d-itin-times">${times}</span>`:""}</div>`;
+    }).join("")+`</div>`;
+  itinEl.querySelectorAll(".d-itin-row[data-port]").forEach(row=>{
+    row.addEventListener("click",e=>{
+      e.stopPropagation();
+      const portEntry=CRUISE_PORTS.find(p=>p.name===row.dataset.port);
+      if(!portEntry) return;
+      collapseDetail();
+      clearItinPreview();
+      if(d.lat==null){ map.flyTo([portEntry.lat,portEntry.lon],8,{duration:CAM_DUR}); return; }
+      _itinLine=L.polyline([[d.lat,d.lon],[portEntry.lat,portEntry.lon]],
+        {color:d.color,weight:2,dashArray:"8 10",opacity:0.65,interactive:false}).addTo(map);
+      _itinDot=L.circleMarker([portEntry.lat,portEntry.lon],
+        {renderer:canvasR,radius:5,color:"#fff",weight:1.5,fillColor:d.color,fillOpacity:0.9,interactive:false}).addTo(map);
+      const isToday=row.dataset.date===new Date().toISOString().slice(0,10);
+      const dt=new Date(row.dataset.date+"T12:00:00Z");
+      const dateLabel=isToday?"Today":dt.toLocaleDateString("en-US",{month:"short",day:"numeric"});
+      const timeParts=[row.dataset.arr&&"Arr "+row.dataset.arr,row.dataset.dep&&"Dep "+row.dataset.dep].filter(Boolean).join(" · ");
+      _itinMark=L.marker([portEntry.lat,portEntry.lon],{
+        icon:L.divIcon({className:"ipm-outer",iconSize:[0,0],iconAnchor:[0,8],
+          html:`<div class="ipm-card"><b>${portEntry.name}</b><span>${dateLabel}${timeParts?" · "+timeParts:""}</span></div>`}),
+        interactive:false,keyboard:false
+      }).addTo(map);
+      map.flyToBounds(L.latLngBounds([[d.lat,d.lon],[portEntry.lat,portEntry.lon]]),
+        {padding:[80,120],maxZoom:8,duration:CAM_DUR});
     });
-  } else {
-    itinEl.hidden=true;
-  }
+  });
 }
 function updateDetailLive(d){
   const sea=d.status!=="port";
@@ -1566,7 +1561,6 @@ function tick(ts){
       else setPill(liveSeen?"reconnect":"connecting", liveSeen?"Reconnecting…":"Connecting…");
     }
     updateStats(); refreshNav();
-    if(selected) fillDetail(selected);
     dirty=false; lastTick=ts;
   }
   requestAnimationFrame(tick);
@@ -1637,7 +1631,7 @@ fetch(ITIN_URL,{cache:"no-store"}).then(r=>r.ok?r.json():Promise.reject())
     });
     Object.values(_itinShip).forEach(arr=>arr.sort((a,b)=>a.date.localeCompare(b.date)));
     if(nearOpen) renderNear();
-    if(selected) fillDetail(selected);
+    if(selected) fillDetailItin(selected);
   }).catch(()=>{});
 
 /* ---- boot ---- */
