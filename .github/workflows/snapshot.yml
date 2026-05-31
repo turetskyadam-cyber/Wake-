@@ -1,0 +1,44 @@
+name: fleet-snapshot
+
+# Periodically capture live AIS positions and accumulate them into positions.json,
+# so the tracker can pre-load every ship that has broadcast recently. Commits use
+# [skip ci] so they don't trigger a Vercel redeploy — the app reads positions.json
+# from GitHub raw, which reflects the latest commit immediately.
+
+on:
+  schedule:
+    - cron: "0 */3 * * *"   # every 3 hours
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fleet-snapshot
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm install ws@8 --no-save
+      - name: Collect positions
+        env:
+          AISSTREAM_KEY: ${{ secrets.AISSTREAM_KEY }}
+          COLLECT_SECONDS: "240"
+        run: node tools/collect.mjs
+      - name: Commit snapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add positions.json
+          if git diff --staged --quiet; then
+            echo "No snapshot changes."
+          else
+            git commit -m "chore: update fleet snapshot [skip ci]"
+            git push
+          fi
