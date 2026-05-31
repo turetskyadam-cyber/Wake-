@@ -990,7 +990,20 @@ function flyToShips(ships){
   map.flyToBounds(L.latLngBounds(pts), {padding:[70,70], maxZoom:7, duration:CAM_DUR});
 }
 function resetCamera(){ map.flyTo([28,-45], 3, {duration:CAM_DUR}); }
-map.on('click',()=>{ if(_markerClicked){ _markerClicked=false; return; } if(nav.level===2) goLines(); });
+map.on('click',e=>{
+  if(_markerClicked){ _markerClicked=false; return; }
+  // Fat-finger tolerance: select nearest ship within 24px before dismissing
+  const pt=e.containerPoint;
+  let best=null, bestDist=24;
+  for(const d of fleet){
+    if(d.lat==null) continue;
+    const mp=map.latLngToContainerPoint([d.lat,d.lon]);
+    const dist=Math.hypot(mp.x-pt.x,mp.y-pt.y);
+    if(dist<bestDist){ bestDist=dist; best=d; }
+  }
+  if(best){ goShip(best); return; }
+  if(nav.level===2) goLines();
+});
 byId("zIn").addEventListener("click",()=>map.zoomIn());
 byId("zOut").addEventListener("click",()=>map.zoomOut());
 byId("zReset").addEventListener("click",()=>goLines());
