@@ -199,6 +199,12 @@
   .d-itin-times{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);white-space:nowrap}
   .d-itin-today .d-itin-date{color:var(--brass)}
   .d-itin-today .d-itin-port{color:var(--ink);font-weight:600}
+  .d-itin-row[data-port]:hover .d-itin-port{text-decoration:underline;text-underline-offset:2px}
+  /* itinerary route preview overlay */
+  .ipm-outer{pointer-events:none}
+  .ipm-card{position:absolute;left:12px;top:-20px;background:rgba(6,18,28,.9);border:1px solid rgba(255,255,255,.16);border-radius:9px;padding:8px 12px;white-space:nowrap;backdrop-filter:blur(10px);box-shadow:0 4px 20px rgba(0,0,0,.55);pointer-events:none}
+  .ipm-card b{display:block;font-size:13px;font-weight:600;color:#eef4f7;margin-bottom:3px}
+  .ipm-card span{font-family:'JetBrains Mono',monospace;font-size:9px;color:#8aabb8;letter-spacing:.04em}
   .d-close{position:absolute;top:13px;right:13px;width:24px;height:24px;border-radius:50%;border:1px solid var(--glass-edge);background:rgba(4,16,24,.5);color:var(--muted);cursor:pointer;font-size:13px;line-height:1;display:flex;align-items:center;justify-content:center;z-index:2;transition:transform .12s var(--ease-out),color .2s}
   .d-close:hover{color:var(--ink)}.d-close:active{transform:scale(.9)}
 
@@ -987,6 +993,12 @@ byId("zReset").addEventListener("click",()=>goLines());
 
 /* ---- selection pulse + arrival blip ---- */
 let selPulse=null;
+let _itinLine=null, _itinDot=null, _itinMark=null;
+function clearItinPreview(){
+  if(_itinLine){ map.removeLayer(_itinLine); _itinLine=null; }
+  if(_itinDot){  map.removeLayer(_itinDot);  _itinDot=null;  }
+  if(_itinMark){ map.removeLayer(_itinMark); _itinMark=null; }
+}
 function spawnPing(d){
   clearPing();
   if(REDUCED) return;
@@ -1028,12 +1040,36 @@ function fillDetail(d){
         const dt=new Date(c.date+"T12:00:00Z");
         const label=isToday?"Today":dt.toLocaleDateString("en-US",{month:"short",day:"numeric"});
         const times=[c.arr&&"Arr "+c.arr,c.dep&&"Dep "+c.dep].filter(Boolean).join(" · ");
-        return `<div class="d-itin-row${isToday?" d-itin-today":""}" data-port="${c.port}"><span class="d-itin-date">${label}</span><span class="d-itin-port">${c.port}</span>${times?`<span class="d-itin-times">${times}</span>`:""}</div>`;
+        return `<div class="d-itin-row${isToday?" d-itin-today":""}" data-port="${c.port}" data-date="${c.date}" data-arr="${c.arr||""}" data-dep="${c.dep||""}"><span class="d-itin-date">${label}</span><span class="d-itin-port">${c.port}</span>${times?`<span class="d-itin-times">${times}</span>`:""}</div>`;
       }).join("")+`</div>`;
     itinEl.querySelectorAll(".d-itin-row[data-port]").forEach(row=>{
-      row.addEventListener("click",()=>{
-        const p=CRUISE_PORTS.find(p=>p.name===row.dataset.port);
-        if(p) map.flyTo([p.lat,p.lon],10,{duration:CAM_DUR});
+      row.addEventListener("click",e=>{
+        e.stopPropagation();
+        const portEntry=CRUISE_PORTS.find(p=>p.name===row.dataset.port);
+        if(!portEntry) return;
+        // collapse the detail bar so the map is unobstructed
+        collapseDetail();
+        clearItinPreview();
+        if(d.lat==null){ map.flyTo([portEntry.lat,portEntry.lon],8,{duration:CAM_DUR}); return; }
+        // dashed route line ship → port
+        _itinLine=L.polyline([[d.lat,d.lon],[portEntry.lat,portEntry.lon]],
+          {color:d.color,weight:2,dashArray:"8 10",opacity:0.65,interactive:false}).addTo(map);
+        // destination dot
+        _itinDot=L.circleMarker([portEntry.lat,portEntry.lon],
+          {renderer:canvasR,radius:5,color:"#fff",weight:1.5,fillColor:d.color,fillOpacity:0.9,interactive:false}).addTo(map);
+        // label card
+        const isToday=row.dataset.date===new Date().toISOString().slice(0,10);
+        const dt=new Date(row.dataset.date+"T12:00:00Z");
+        const dateLabel=isToday?"Today":dt.toLocaleDateString("en-US",{month:"short",day:"numeric"});
+        const timeParts=[row.dataset.arr&&"Arr "+row.dataset.arr,row.dataset.dep&&"Dep "+row.dataset.dep].filter(Boolean).join(" · ");
+        _itinMark=L.marker([portEntry.lat,portEntry.lon],{
+          icon:L.divIcon({className:"ipm-outer",iconSize:[0,0],iconAnchor:[0,8],
+            html:`<div class="ipm-card"><b>${portEntry.name}</b><span>${dateLabel}${timeParts?" · "+timeParts:""}</span></div>`}),
+          interactive:false,keyboard:false
+        }).addTo(map);
+        // fit both ship and port in view
+        map.flyToBounds(L.latLngBounds([[d.lat,d.lon],[portEntry.lat,portEntry.lon]]),
+          {padding:[80,120],maxZoom:8,duration:CAM_DUR});
       });
     });
   } else {
@@ -1041,6 +1077,7 @@ function fillDetail(d){
   }
 }
 function selectShip(d){
+  clearItinPreview();
   selected=d;
   fillDetail(d); detail.classList.add("show","collapsed");   // appears as a slim "Cruise info" bar; tap to expand
   byId("dToggle").setAttribute("aria-expanded","false");
@@ -1052,7 +1089,7 @@ function clearSelection(){
   if(selected&&selected._m){ selected._m.closeTooltip(); }
   const prev=selected; selected=null;
   if(prev&&prev._m) prev._m.setStyle(markerStyle(prev));
-  detail.classList.remove("show"); detail.classList.add("collapsed"); clearPing(); applyVisibility();
+  detail.classList.remove("show"); detail.classList.add("collapsed"); clearPing(); clearItinPreview(); applyVisibility();
 }
 function collapseDetail(){ detail.classList.add("collapsed"); byId("dToggle").setAttribute("aria-expanded","false"); }
 byId("dClose").addEventListener("click",e=>{ e.stopPropagation(); collapseDetail(); });   // ✕ just folds the bar back down (keeps ship selected)
