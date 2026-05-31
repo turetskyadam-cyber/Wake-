@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>WAKE — Live Cruise Fleet Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  :root{
+    --ink:#eaf1f3;
+    --muted:#8aa0ab;
+    --faint:#56707c;
+    --ocean-0:#04101a;
+    --ocean-1:#07202f;
+    --ocean-2:#0a2d3f;
+    --land:#13242e;
+    --land-edge:#27434f;
+    --brass:#e2bd72;
+    --brass-soft:#caa860;
+    --glass:rgba(8,26,36,0.62);
+    --glass-edge:rgba(120,170,185,0.16);
+    --ease-out:cubic-bezier(0.23,1,0.32,1);
+    --ease-io:cubic-bezier(0.77,0,0.175,1);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;margin:0}
+  body{
+    font-family:'Hanken Grotesk',system-ui,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(120% 90% at 72% -10%, #0d3346 0%, rgba(13,51,70,0) 55%),
+      radial-gradient(120% 120% at 12% 110%, #06222f 0%, rgba(6,34,47,0) 50%),
+      linear-gradient(180deg,#04101a 0%,#061c28 60%,#04131c 100%);
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* film grain */
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.045;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode:overlay;
+  }
+  #stage{position:fixed;inset:0}
+  .search svg{width:15px;height:15px}
+  .d-chev{width:18px;height:18px}
+  .nav-open svg{width:18px;height:18px}
+  .graticule{fill:none;stroke:rgba(120,180,195,0.06);stroke-width:0.6}
+  .sphere{fill:none;stroke:rgba(120,180,195,0.12);stroke-width:1}
+  .land{fill:var(--land);stroke:var(--land-edge);stroke-width:0.5;stroke-linejoin:round}
+  .ship{cursor:pointer}
+  .ship .halo{transition:opacity .25s var(--ease-out)}
+  .ship .core{stroke:rgba(255,255,255,.85);stroke-width:.5}
+  .ship .hdg{stroke-width:1.1;opacity:.65}
+  .ship.dim{opacity:.12;transition:opacity .3s var(--ease-out)}
+  .ship.sel .core{stroke:#fff;stroke-width:1}
+  .ping{fill:none;pointer-events:none}
+
+  /* ---- floating UI ---- */
+  .panel{
+    position:fixed;background:var(--glass);
+    border:1px solid var(--glass-edge);
+    border-radius:16px;
+    backdrop-filter:blur(18px) saturate(140%);
+    -webkit-backdrop-filter:blur(18px) saturate(140%);
+    box-shadow:0 24px 60px -20px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.04);
+  }
+  #brand{top:18px;left:18px;padding:16px 20px 15px;max-width:300px}
+  .wordmark{display:flex;align-items:baseline;gap:10px}
+  .wordmark h1{
+    font-family:'Fraunces',serif;font-weight:600;font-size:30px;letter-spacing:.04em;
+    margin:0;line-height:1;color:var(--ink);
+  }
+  .wordmark .dot{width:8px;height:8px;border-radius:50%;background:#5ad6a0;position:relative;align-self:center;box-shadow:0 0 10px #5ad6a0}
+  .wordmark .dot::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid #5ad6a0;animation:pulse 2.4s var(--ease-out) infinite}
+  @keyframes pulse{0%{transform:scale(.6);opacity:.9}100%{transform:scale(2.4);opacity:0}}
+  .sub{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);margin-top:8px}
+  .feedpill{
+    display:inline-flex;align-items:center;gap:6px;margin-top:11px;
+    font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--brass);background:rgba(226,189,114,.08);border:1px solid rgba(226,189,114,.28);
+    padding:4px 9px;border-radius:999px;cursor:help;
+  }
+  .feedpill b{width:5px;height:5px;border-radius:50%;background:var(--brass);display:inline-block}
+  .brandstats{display:flex;margin-top:14px}
+  .bstat{padding-right:15px;margin-right:15px;border-right:1px solid var(--glass-edge)}
+  .bstat:last-child{padding-right:0;margin-right:0;border-right:none}
+  .bstat .num{font-family:'Fraunces',serif;font-weight:600;font-size:22px;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums;display:block}
+  .bstat .num.sea{color:#7fd0c4}
+  .bstat .num.port{color:var(--brass)}
+  .bstat .lab{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-top:6px;display:block}
+
+  #stats{top:18px;right:18px;display:flex;gap:0;padding:14px 6px;overflow:hidden}
+  .stat{padding:2px 20px;text-align:center;position:relative}
+  .stat+.stat::before{content:"";position:absolute;left:0;top:14%;height:72%;width:1px;background:var(--glass-edge)}
+  .stat .num{font-family:'Fraunces',serif;font-weight:600;font-size:30px;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
+  .stat .lab{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-top:7px}
+  .stat .num.sea{color:#7fd0c4}
+  .stat .num.port{color:var(--brass)}
+
+  #controls{left:18px;bottom:18px;width:300px;padding:16px 16px 14px;display:flex;flex-direction:column;gap:13px}
+  .search{position:relative}
+  .search input{
+    width:100%;background:rgba(4,16,24,.6);border:1px solid var(--glass-edge);border-radius:10px;
+    color:var(--ink);font-family:'Hanken Grotesk';font-size:13.5px;padding:10px 12px 10px 34px;outline:none;
+    transition:border-color .2s var(--ease-out),box-shadow .2s var(--ease-out);
+  }
+  .search input::placeholder{color:var(--faint)}
+  .search input:focus{border-color:rgba(226,189,114,.5);box-shadow:0 0 0 3px rgba(226,189,114,.1)}
+  .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);stroke:var(--faint)}
+  .grouphd{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);display:flex;justify-content:space-between;align-items:center}
+  .grouphd button{background:none;border:none;color:var(--brass-soft);font-family:inherit;font-size:9px;letter-spacing:.12em;cursor:pointer;padding:0}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;max-height:148px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(120,170,185,.25) transparent}
+  .chips::-webkit-scrollbar{width:6px}.chips::-webkit-scrollbar-thumb{background:rgba(120,170,185,.22);border-radius:3px}
+  .chip{
+    display:inline-flex;align-items:center;gap:6px;cursor:pointer;
+    font-size:11.5px;font-weight:500;color:var(--muted);
+    background:rgba(255,255,255,.03);border:1px solid var(--glass-edge);
+    padding:5px 9px;border-radius:999px;user-select:none;
+    transition:color .2s var(--ease-out),background .2s var(--ease-out),border-color .2s var(--ease-out),transform .12s var(--ease-out);
+  }
+  .chip:active{transform:scale(.96)}
+  .chip i{width:8px;height:8px;border-radius:50%;flex:none;box-shadow:0 0 8px currentColor}
+  .chip.off{opacity:.4}
+  .chip.off i{box-shadow:none}
+  .chip.on{color:var(--ink);background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.18)}
+
+  #detail{right:18px;bottom:18px;width:330px;padding:0;overflow:hidden;opacity:0;transform:translateY(16px);pointer-events:none;transition:opacity .22s var(--ease-out),transform .3s var(--ease-out)}
+  #detail.show{opacity:1;transform:none;pointer-events:auto}
+  .d-body{max-height:62vh;overflow:hidden;opacity:1;transition:max-height .42s var(--ease-io),opacity .28s ease}
+  #detail.collapsed .d-body{max-height:0;opacity:0}
+  .d-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(8,26,36,.45);border:none;border-top:1px solid var(--glass-edge);color:var(--ink);cursor:pointer;padding:13px 15px;text-align:left;transition:background .2s}
+  #detail.collapsed .d-toggle{border-top:none}
+  .d-toggle:hover{background:rgba(255,255,255,.05)}
+  .d-toggle-l{display:flex;align-items:center;gap:9px;min-width:0;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+  .d-toggle-l .d-dot{width:7px;height:7px;border-radius:50%;background:var(--accent,#4d8fdb);box-shadow:0 0 8px var(--accent,#4d8fdb);flex:none}
+  .d-toggle-l em{font-style:normal;text-transform:none;letter-spacing:0;font-family:'Hanken Grotesk';font-size:12.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .d-chev{flex:none;color:var(--brass-soft);transition:transform .32s var(--ease-out),color .2s}
+  #detail:not(.collapsed) .d-chev{transform:rotate(180deg)}
+  .d-toggle:hover .d-chev{color:var(--brass)}
+  .d-top{padding:17px 18px 14px;position:relative;overflow:hidden}
+  .d-top::before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,var(--accent,#4d8fdb) 0%,transparent 65%);opacity:.16}
+  .d-line{display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent,#4d8fdb)}
+  .d-line i{width:7px;height:7px;border-radius:50%;background:var(--accent,#4d8fdb);box-shadow:0 0 9px var(--accent,#4d8fdb)}
+  .d-name{font-family:'Fraunces',serif;font-weight:600;font-size:25px;line-height:1.08;margin:9px 0 0;letter-spacing:.005em}
+  .d-status{margin-top:8px;font-size:11.5px;color:var(--muted);display:flex;align-items:center;gap:7px}
+  .d-status b{width:6px;height:6px;border-radius:50%;display:inline-block}
+  .d-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--glass-edge);border-top:1px solid var(--glass-edge)}
+  .cell{background:var(--glass);padding:12px 16px}
+  .cell .k{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+  .cell .v{font-family:'JetBrains Mono',monospace;font-size:15px;color:var(--ink);margin-top:5px;font-weight:500}
+  .cell .v small{color:var(--faint);font-size:10px;font-weight:400}
+  .d-foot{padding:10px 16px;font-size:10px;color:var(--faint);font-family:'JetBrains Mono',monospace;letter-spacing:.05em;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--glass-edge)}
+  .d-close{position:absolute;top:13px;right:13px;width:24px;height:24px;border-radius:50%;border:1px solid var(--glass-edge);background:rgba(4,16,24,.5);color:var(--muted);cursor:pointer;font-size:13px;line-height:1;display:flex;align-items:center;justify-content:center;z-index:2;transition:transform .12s var(--ease-out),color .2s}
+  .d-close:hover{color:var(--ink)}.d-close:active{transform:scale(.9)}
+
+  #tip{position:fixed;pointer-events:none;z-index:40;background:rgba(4,14,20,.92);border:1px solid var(--glass-edge);border-radius:9px;padding:7px 11px;opacity:0;transform:translateY(4px);transition:opacity .14s var(--ease-out),transform .14s var(--ease-out);backdrop-filter:blur(6px)}
+  #tip.show{opacity:1;transform:none}
+  #tip .t-name{font-family:'Fraunces',serif;font-size:14px;font-weight:600;line-height:1}
+  #tip .t-meta{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted);margin-top:5px;letter-spacing:.04em}
+
+  #zoom{right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;padding:5px;gap:4px}
+  #zoom button{width:34px;height:34px;border:none;background:transparent;color:var(--muted);font-size:17px;cursor:pointer;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Hanken Grotesk';transition:background .18s var(--ease-out),color .18s var(--ease-out),transform .1s}
+  #zoom button:hover{background:rgba(255,255,255,.06);color:var(--ink)}
+  #zoom button:active{transform:scale(.9)}
+  #zoom .rs{font-family:'JetBrains Mono';font-size:9px;letter-spacing:.1em}
+
+  .credit{position:fixed;bottom:6px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(120,160,175,.32);z-index:10;text-align:center}
+
+  /* entrance stagger */
+  .panel{animation:rise .6s var(--ease-out) both}
+  #stats{animation-delay:.06s}#controls{animation-delay:.12s}.credit{animation:fade .8s ease both;animation-delay:.5s}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}}
+  #stats{transform:none}@keyframes fade{from{opacity:0}}
+
+  @media (max-width:760px){
+    #brand{max-width:none;left:10px;right:10px;top:10px;padding:12px 15px}
+    #stats{top:auto;bottom:118px;right:10px;left:10px;justify-content:space-around;padding:11px 4px}
+    .stat .num{font-size:25px}
+    #controls{left:10px;right:10px;bottom:10px;width:auto}
+    .chips{max-height:84px}
+    #detail{left:auto;right:10px;width:calc(100% - 140px);bottom:10px}
+    #zoom{display:none}
+    .credit{display:none}
+  }
+  /* ---- feed pill states ---- */
+  .feedpill[data-state="connecting"]{color:var(--brass);background:rgba(226,189,114,.08);border-color:rgba(226,189,114,.28)}
+  .feedpill[data-state="connecting"] b{background:var(--brass);animation:blink 1s steps(2) infinite}
+  .feedpill[data-state="live"]{color:#5ad6a0;background:rgba(90,214,160,.08);border-color:rgba(90,214,160,.30)}
+  .feedpill[data-state="live"] b{background:#5ad6a0;box-shadow:0 0 8px #5ad6a0}
+  .feedpill[data-state="reconnect"]{color:#e0b64a;background:rgba(224,182,74,.08);border-color:rgba(224,182,74,.30)}
+  .feedpill[data-state="reconnect"] b{background:#e0b64a;animation:blink .7s steps(2) infinite}
+  .feedpill[data-state="error"]{color:#ff7a6b;background:rgba(255,122,107,.08);border-color:rgba(255,122,107,.30)}
+  .feedpill[data-state="error"] b{background:#ff7a6b}
+  .feedpill[data-state="demo"]{color:var(--muted);background:rgba(255,255,255,.04);border-color:var(--glass-edge)}
+  .feedpill[data-state="demo"] b{background:var(--muted)}
+  @keyframes blink{0%{opacity:1}50%{opacity:.25}100%{opacity:1}}
+
+  /* ---- ship wake trails + markers ---- */
+  .wake{fill:none;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+  .ship .core{transition:opacity .3s var(--ease-out)}
+  .ship.breathe .halo{animation:breathe 3.4s var(--ease-io) infinite}
+  @keyframes breathe{0%,100%{opacity:.42;transform:scale(.92)}50%{opacity:.62;transform:scale(1.12)}}
+  .ship.stale{opacity:.32}
+  .ship.stale .halo{animation:none;opacity:.2}
+  .ship-label{font-family:'Fraunces',serif;font-weight:600;font-size:12px;fill:var(--ink);paint-order:stroke;stroke:rgba(4,14,20,.85);stroke-width:3px;pointer-events:none;opacity:0;transition:opacity .3s var(--ease-out)}
+  .ship-label.show{opacity:1}
+
+  /* ---- navigator (replaces flat chips) ---- */
+  #nav{position:relative;min-height:178px}
+  .nav-level{display:flex;flex-direction:column;gap:8px}
+  .nav-level.enter-r{animation:slideR .42s var(--ease-out) both}
+  .nav-level.enter-l{animation:slideL .42s var(--ease-out) both}
+  @keyframes slideR{from{opacity:0;transform:translateX(22px)}}
+  @keyframes slideL{from{opacity:0;transform:translateX(-22px)}}
+  .nav-head{display:flex;align-items:center;gap:9px;min-height:20px}
+  .nav-back{background:none;border:none;color:var(--brass-soft);cursor:pointer;padding:3px 5px 3px 0;display:flex;align-items:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;border-radius:7px;transition:color .18s var(--ease-out),transform .1s}
+  .nav-back:hover{color:var(--brass)}.nav-back:active{transform:translateX(-2px)}
+  .nav-title{font-family:'Fraunces',serif;font-weight:600;font-size:16px;letter-spacing:.01em;display:flex;align-items:center;gap:8px;min-width:0}
+  .nav-title i{width:9px;height:9px;border-radius:50%;flex:none;box-shadow:0 0 9px currentColor}
+  .nav-title span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .nav-list{display:flex;flex-direction:column;gap:5px;max-height:240px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(120,170,185,.25) transparent;margin:0 -4px;padding:2px 4px}
+  .nav-list::-webkit-scrollbar{width:6px}.nav-list::-webkit-scrollbar-thumb{background:rgba(120,170,185,.22);border-radius:3px}
+  .row{display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:11px;border:1px solid transparent;background:rgba(255,255,255,.02);cursor:pointer;user-select:none;outline:none;transition:background .2s var(--ease-out),border-color .2s var(--ease-out),transform .12s var(--ease-out),box-shadow .2s var(--ease-out);animation:rowIn .4s var(--ease-out) both}
+  @keyframes rowIn{from{opacity:0;transform:translateY(6px)}}
+  .row:hover,.row:focus-visible{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14)}
+  .row:focus-visible{box-shadow:0 0 0 2px rgba(226,189,114,.45)}
+  .row:active{transform:scale(.985)}
+  .row .swatch{width:10px;height:10px;border-radius:50%;flex:none;box-shadow:0 0 8px currentColor}
+  .row .body{flex:1;min-width:0}
+  .row .title{font-size:13.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.15}
+  .row .meta{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.04em;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .row .chev{color:var(--faint);font-size:14px;flex:none;transition:transform .18s var(--ease-out),color .18s}
+  .row:hover .chev{color:var(--brass-soft);transform:translateX(2px)}
+  .row .cnt{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--faint);flex:none;font-variant-numeric:tabular-nums}
+  .pill{display:inline-flex;align-items:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase}
+  .pill b{width:5px;height:5px;border-radius:50%;display:inline-block}
+  .pill.sea{color:#7fd0c4}.pill.sea b{background:#5ad6a0;box-shadow:0 0 6px #5ad6a0}
+  .pill.port{color:var(--brass)}.pill.port b{background:var(--brass)}
+  .pill.wait{color:var(--faint)}.pill.wait b{background:var(--faint)}
+  .row.awaiting{cursor:default;opacity:.62}
+  .row.awaiting .swatch{box-shadow:none;opacity:.5;animation:shimmer 1.8s var(--ease-io) infinite}
+  @keyframes shimmer{0%,100%{opacity:.3}50%{opacity:.7}}
+  .nav-empty{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;color:var(--faint);text-align:center;padding:20px 8px;line-height:1.7}
+  .nav-empty .spin{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--brass);margin:0 3px;animation:shimmer 1.4s var(--ease-io) infinite}
+  .nav-empty .spin:nth-child(2){animation-delay:.2s}.nav-empty .spin:nth-child(3){animation-delay:.4s}
+
+  /* ---- real map (Leaflet) ---- */
+  #map{position:absolute;inset:0;background:#04101a;z-index:0}
+  .leaflet-container{background:#04101a;font-family:'Hanken Grotesk',system-ui,sans-serif}
+  .leaflet-control-attribution{display:none}
+  /* keep all glass panels above the map */
+  #brand,#stats,#controls,#detail,#zoom,#tip,.credit{z-index:1000}
+  /* dark hover tooltip */
+  .leaflet-tooltip.ship-tt{background:rgba(4,14,20,.92);border:1px solid var(--glass-edge);color:var(--ink);
+    border-radius:9px;padding:6px 10px;font-size:11.5px;box-shadow:0 8px 24px -10px rgba(0,0,0,.7);backdrop-filter:blur(6px)}
+  .leaflet-tooltip.ship-tt b{font-family:'Fraunces',serif;font-size:13px}
+  .leaflet-tooltip.ship-tt .tt-loc{color:var(--brass-soft);font-size:10.5px}
+  .leaflet-tooltip.ship-tt::before{display:none}
+  /* selection pulse + arrival blip (divIcon overlays) */
+  .sel-pulse{width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;border:2px solid #fff;opacity:.9;
+    animation:selPulse 1.6s var(--ease-out) infinite}
+  @keyframes selPulse{0%{transform:scale(.5);opacity:.9}100%{transform:scale(3.4);opacity:0}}
+  .blip{width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;border:2px solid var(--c,#fff);
+    animation:blipExpand 1.3s var(--ease-out) forwards}
+  @keyframes blipExpand{0%{transform:scale(.3);opacity:.85}100%{transform:scale(3);opacity:0}}
+  /* "roughly where" line in detail panel */
+  .d-place{margin-top:7px;font-size:12.5px;color:var(--ink);display:flex;align-items:center;gap:7px;line-height:1.25}
+  .d-place::before{content:"◉";color:var(--accent,#4d8fdb);font-size:11px}
+  .d-place:empty{display:none}
+
+  /* ---- collapsible controls (full-screen map) + full-fleet row ---- */
+  #controls{transition:transform .5s cubic-bezier(.34,1.32,.62,1),opacity .28s ease}
+  #controls.collapsed{transform:translateY(170%);opacity:0;pointer-events:none}
+  .nav-grabber{width:38px;height:4px;border-radius:3px;background:var(--glass-edge);margin:-4px auto 11px;cursor:pointer;outline:none;transition:background .2s,width .2s}
+  .nav-grabber:hover,.nav-grabber:focus-visible{background:var(--brass-soft);width:50px}
+  .nav-backbar{display:none;width:100%;align-items:center;gap:8px;background:rgba(226,189,114,.07);border:1px solid rgba(226,189,114,.22);border-radius:10px;cursor:pointer;color:var(--brass);font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;padding:9px 12px;margin-bottom:11px;transition:background .18s,border-color .18s}
+  .nav-backbar.show{display:flex}
+  .nav-backbar:hover{background:rgba(226,189,114,.13);border-color:rgba(226,189,114,.4)}
+  .nav-backbar .bb-chev{font-size:15px;line-height:1;margin-top:-1px}
+  .nav-backbar:active{transform:translateX(-2px)}
+  .nav-open{position:fixed;left:18px;bottom:18px;z-index:1001;height:46px;border-radius:14px;padding:0 15px 0 12px;gap:8px;
+    background:var(--glass);border:1px solid var(--glass-edge);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);
+    box-shadow:0 24px 60px -20px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.04);
+    color:var(--brass);cursor:pointer;display:none;align-items:center;justify-content:center;
+    transform:translateY(20px) scale(.9);opacity:0;transition:transform .5s cubic-bezier(.34,1.4,.6,1),opacity .3s ease,background .2s,color .2s}
+  .nav-open span{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
+  .nav-open.show{display:flex;transform:none;opacity:1}
+  .nav-open:hover{background:rgba(255,255,255,.07)}
+  .nav-open:hover span{color:var(--brass)}
+  .nav-open:active{transform:scale(.95)}
+  .row.fullfleet{background:rgba(226,189,114,.06);border-color:rgba(226,189,114,.22)}
+  .row.fullfleet:hover,.row.fullfleet:focus-visible{background:rgba(226,189,114,.12);border-color:rgba(226,189,114,.42)}
+  .row.fullfleet .swatch{box-shadow:0 0 8px currentColor}
+  .row.fullfleet .chev{font-size:13px}
+  @media (max-width:760px){ .nav-open{left:10px;bottom:10px} }
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.001ms!important;transition-duration:.08s!important}
+    .wordmark .dot::after,.sel-pulse,.blip{animation:none}
+    .ship.breathe .halo,.row.awaiting .swatch{animation:none}
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="map"></div>
+</div>
+
+<div id="brand" class="panel">
+  <div class="wordmark"><h1>WAKE</h1><span class="dot"></span></div>
+  <div class="sub">Live Cruise Fleet Tracker</div>
+  <span class="feedpill" id="feedpill" data-state="connecting" title="Live AIS broadcasts via aisstream.io"><b></b>Connecting…</span>
+  <div class="brandstats">
+    <div class="bstat"><span class="num" id="s-total">0</span><span class="lab">Tracked</span></div>
+    <div class="bstat"><span class="num sea" id="s-sea">0</span><span class="lab">At&nbsp;sea</span></div>
+    <div class="bstat"><span class="num port" id="s-port">0</span><span class="lab">In&nbsp;port</span></div>
+  </div>
+</div>
+
+<div id="controls" class="panel">
+  <div class="nav-grabber" id="navHide" role="button" aria-label="Hide menu" title="Hide menu" tabindex="0"></div>
+  <button id="navBackBar" class="nav-backbar" aria-label="Back to all cruise lines"><span class="bb-chev">‹</span> All cruise lines</button>
+  <div class="search">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="q" type="text" placeholder="Search ships…" autocomplete="off" spellcheck="false"/>
+  </div>
+  <div id="nav" role="navigation" aria-label="Fleet browser"></div>
+</div>
+
+<div id="detail" class="panel collapsed">
+  <div class="d-body">
+    <div class="d-top">
+      <button class="d-close" id="dClose">✕</button>
+      <span class="d-line"><i></i><span id="dLine"></span></span>
+      <h2 class="d-name" id="dName"></h2>
+      <div class="d-status" id="dStatus"></div>
+      <div class="d-place" id="dPlace"></div>
+    </div>
+    <div class="d-grid">
+      <div class="cell"><div class="k">Latitude</div><div class="v" id="dLat"></div></div>
+      <div class="cell"><div class="k">Longitude</div><div class="v" id="dLon"></div></div>
+      <div class="cell"><div class="k">Speed</div><div class="v" id="dSpd"></div></div>
+      <div class="cell"><div class="k">Heading</div><div class="v" id="dHdg"></div></div>
+    </div>
+    <div class="d-foot"><span id="dNext"></span><span id="dRegion"></span></div>
+  </div>
+  <button class="d-toggle" id="dToggle" aria-label="Show cruise info" aria-expanded="false">
+    <span class="d-toggle-l"><b class="d-dot"></b>Cruise info<em id="dBarName"></em></span>
+    <svg class="d-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg>
+  </button>
+</div>
+
+<div id="zoom" class="panel">
+  <button id="zIn">+</button>
+  <button id="zOut">−</button>
+  <button id="zReset" class="rs">RST</button>
+</div>
+
+<div id="tip"><div class="t-name"></div><div class="t-meta"></div></div>
+<button id="navOpen" class="nav-open" aria-label="Show fleet menu" title="Show fleet menu">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg><span>Fleet</span>
+</button>
+<div class="credit" id="credit">positions © aisstream.io · map © OpenStreetMap, © CARTO</div>
+
+<script>
+/* ============================================================
+   WAKE — live cruise-fleet tracker
+   Data: aisstream.io free global AIS WebSocket, filtered to a
+   curated list of cruise-ship MMSIs (verified against public AIS
+   records). Positions, speed, heading and destination are live.
+   ============================================================ */
+const CONFIG = {
+  AISSTREAM_KEY: "54bc041923cc2216c2c25e250cfd61cf34946712", // free key; visible in source by design — rotate anytime at aisstream.io
+  WS_URL: "wss://stream.aisstream.io/v0/stream",
+  STALE_MS: 30 * 60 * 1000,   // mark a ship "stale" if unheard this long
+  FOCUS_ZOOM: 9,              // map zoom level when focusing one ship (see the port/coast)
+  TRAIL_MAX: 32,              // wake length (positions kept per ship)
+  DISCOVERY: false,           // also adopt name-matched ships outside the MMSI filter
+  REDUCED_MOTION: matchMedia("(prefers-reduced-motion: reduce)").matches,
+};
+const REDUCED = CONFIG.REDUCED_MOTION;
+
+const LINES = {
+  "Royal Caribbean":"#4d8fdb","Carnival":"#ff5a4d","Norwegian":"#37b6a6",
+  "MSC":"#e0b64a","Princess":"#7d8be6","Celebrity":"#8fb6c9","Disney":"#8b73f6",
+  "Virgin Voyages":"#ff5a93","Holland America":"#5fb37a","Cunard":"#e0903a","Costa":"#f2c14e",
+  "Windstar":"#4fc3f7","Oceania":"#46c4b0","Regent":"#caa24a","Azamara":"#8fae3f",
+  "P&O Cruises":"#4a78c4","AIDA":"#e0457f","Viking":"#c0453b"
+};
+
+/* Curated fleet — [mmsi, name, line]. MMSIs verified (2+ public sources)
+   with IMO cross-check. MMSI can change on reflagging; if a ship goes
+   silent, look it up by name/IMO and update here. */
+const FLEET = [
+  // Royal Caribbean
+  ["311001178","Icon of the Seas","Royal Caribbean"],
+  ["311001551","Star of the Seas","Royal Caribbean"],
+  ["311001259","Utopia of the Seas","Royal Caribbean"],
+  ["311001033","Wonder of the Seas","Royal Caribbean"],
+  ["311000660","Symphony of the Seas","Royal Caribbean"],
+  ["311020600","Oasis of the Seas","Royal Caribbean"],
+  ["311020700","Allure of the Seas","Royal Caribbean"],
+  ["311000396","Harmony of the Seas","Royal Caribbean"],
+  ["311000267","Quantum of the Seas","Royal Caribbean"],
+  ["311000274","Anthem of the Seas","Royal Caribbean"],
+  ["311000397","Ovation of the Seas","Royal Caribbean"],
+  ["210563000","Spectrum of the Seas","Royal Caribbean"],
+  ["311000912","Odyssey of the Seas","Royal Caribbean"],
+  ["311317000","Voyager of the Seas","Royal Caribbean"],
+  ["311316000","Explorer of the Seas","Royal Caribbean"],
+  ["311263000","Adventure of the Seas","Royal Caribbean"],
+  ["311478000","Navigator of the Seas","Royal Caribbean"],
+  ["311493000","Mariner of the Seas","Royal Caribbean"],
+  ["309906000","Freedom of the Seas","Royal Caribbean"],
+  ["309436000","Liberty of the Seas","Royal Caribbean"],
+  ["309374000","Independence of the Seas","Royal Caribbean"],
+  ["311319000","Radiance of the Seas","Royal Caribbean"],
+  ["311361000","Brilliance of the Seas","Royal Caribbean"],
+  ["311492000","Serenade of the Seas","Royal Caribbean"],
+  ["311583000","Jewel of the Seas","Royal Caribbean"],
+  ["311315000","Grandeur of the Seas","Royal Caribbean"],
+  ["311805000","Rhapsody of the Seas","Royal Caribbean"],
+  ["311733000","Enchantment of the Seas","Royal Caribbean"],
+  ["311321000","Vision of the Seas","Royal Caribbean"],
+  // Carnival
+  ["311001049","Mardi Gras","Carnival"],
+  ["311001223","Carnival Celebration","Carnival"],
+  ["311001390","Carnival Jubilee","Carnival"],
+  ["311001253","Carnival Venezia","Carnival"],
+  ["352003546","Carnival Firenze","Carnival"],
+  ["374527000","Carnival Panorama","Carnival"],
+  ["370039000","Carnival Horizon","Carnival"],
+  ["356883000","Carnival Vista","Carnival"],
+  ["370490000","Carnival Dream","Carnival"],
+  ["370491000","Carnival Magic","Carnival"],
+  ["354842000","Carnival Breeze","Carnival"],
+  ["357657000","Carnival Conquest","Carnival"],
+  ["357659000","Carnival Glory","Carnival"],
+  ["354298000","Carnival Valor","Carnival"],
+  ["371083000","Carnival Liberty","Carnival"],
+  ["371154000","Carnival Freedom","Carnival"],
+  ["229136000","Carnival Spirit","Carnival"],
+  ["354215000","Carnival Pride","Carnival"],
+  ["229857000","Carnival Legend","Carnival"],
+  ["354277000","Carnival Miracle","Carnival"],
+  ["308017000","Carnival Sunshine","Carnival"],
+  ["308045000","Carnival Sunrise","Carnival"],
+  ["355263000","Carnival Radiance","Carnival"],
+  ["372808000","Carnival Splendor","Carnival"],
+  ["355831000","Carnival Elation","Carnival"],
+  ["355833000","Carnival Paradise","Carnival"],
+  // Norwegian
+  ["311001059","Norwegian Prima","Norwegian"],
+  ["311001127","Norwegian Viva","Norwegian"],
+  ["311001559","Norwegian Aqua","Norwegian"],
+  ["311000710","Norwegian Bliss","Norwegian"],
+  ["311000879","Norwegian Encore","Norwegian"],
+  ["311000599","Norwegian Joy","Norwegian"],
+  ["311000341","Norwegian Escape","Norwegian"],
+  ["311050900","Norwegian Getaway","Norwegian"],
+  ["311050800","Norwegian Breakaway","Norwegian"],
+  ["311018500","Norwegian Epic","Norwegian"],
+  ["309951000","Norwegian Gem","Norwegian"],
+  ["308416000","Norwegian Jade","Norwegian"],
+  ["309653000","Norwegian Pearl","Norwegian"],
+  ["311827000","Norwegian Jewel","Norwegian"],
+  ["311307000","Norwegian Dawn","Norwegian"],
+  ["311082000","Norwegian Star","Norwegian"],
+  ["311109000","Norwegian Sun","Norwegian"],
+  ["308865000","Norwegian Sky","Norwegian"],
+  ["311746000","Norwegian Spirit","Norwegian"],
+  ["366994450","Pride of America","Norwegian"],
+  // MSC
+  ["256070000","MSC World Europa","MSC"],
+  ["249193000","MSC World America","MSC"],
+  ["256059000","MSC Seascape","MSC"],
+  ["215920000","MSC Seashore","MSC"],
+  ["248392000","MSC Seaside","MSC"],
+  ["248717000","MSC Seaview","MSC"],
+  ["215325000","MSC Grandiosa","MSC"],
+  ["249973000","MSC Meraviglia","MSC"],
+  ["248992000","MSC Bellissima","MSC"],
+  ["215610000","MSC Virtuosa","MSC"],
+  ["256281000","MSC Euribia","MSC"],
+  ["373178000","MSC Divina","MSC"],
+  ["357698000","MSC Splendida","MSC"],
+  ["370648000","MSC Fantasia","MSC"],
+  ["371861000","MSC Preziosa","MSC"],
+  ["352594000","MSC Magnifica","MSC"],
+  ["352003000","MSC Musica","MSC"],
+  ["372497000","MSC Orchestra","MSC"],
+  ["355931000","MSC Poesia","MSC"],
+  ["356042000","MSC Lirica","MSC"],
+  ["356716000","MSC Sinfonia","MSC"],
+  ["357627000","MSC Opera","MSC"],
+  ["357281000","MSC Armonia","MSC"],
+  // Princess
+  ["310841000","Sun Princess","Princess"],
+  ["310780000","Sky Princess","Princess"],
+  ["310812000","Discovery Princess","Princess"],
+  ["310865000","Majestic Princess","Princess"],
+  ["310791000","Enchanted Princess","Princess"],
+  ["310674000","Regal Princess","Princess"],
+  ["310661000","Royal Princess","Princess"],
+  ["310567000","Ruby Princess","Princess"],
+  ["310531000","Emerald Princess","Princess"],
+  ["310500000","Crown Princess","Princess"],
+  ["310423000","Caribbean Princess","Princess"],
+  ["310327000","Grand Princess","Princess"],
+  ["310384000","Island Princess","Princess"],
+  ["310376000","Coral Princess","Princess"],
+  ["235103359","Diamond Princess","Princess"],
+  ["235103357","Sapphire Princess","Princess"],
+  // Celebrity
+  ["215808000","Celebrity Beyond","Celebrity"],
+  ["215105000","Celebrity Apex","Celebrity"],
+  ["248325000","Celebrity Edge","Celebrity"],
+  ["256191000","Celebrity Ascent","Celebrity"],
+  ["229074000","Celebrity Reflection","Celebrity"],
+  ["248939000","Celebrity Silhouette","Celebrity"],
+  ["249409000","Celebrity Solstice","Celebrity"],
+  ["249666000","Celebrity Eclipse","Celebrity"],
+  ["249667000","Celebrity Equinox","Celebrity"],
+  ["249055000","Celebrity Millennium","Celebrity"],
+  ["249047000","Celebrity Summit","Celebrity"],
+  ["249048000","Celebrity Infinity","Celebrity"],
+  ["249046000","Celebrity Constellation","Celebrity"],
+  // Disney
+  ["311001098","Disney Wish","Disney"],
+  ["311001221","Disney Treasure","Disney"],
+  ["311058700","Disney Fantasy","Disney"],
+  ["311000934","Disney Adventure","Disney"],
+  ["311042900","Disney Dream","Disney"],
+  ["308516000","Disney Magic","Disney"],
+  ["308457000","Disney Wonder","Disney"],
+  // Virgin Voyages
+  ["311000807","Scarlet Lady","Virgin Voyages"],
+  ["311001056","Resilient Lady","Virgin Voyages"],
+  ["311001167","Brilliant Lady","Virgin Voyages"],
+  ["311000983","Valiant Lady","Virgin Voyages"],
+  // Holland America
+  ["245464000","Rotterdam","Holland America"],
+  ["244830547","Koningsdam","Holland America"],
+  ["244140580","Nieuw Statendam","Holland America"],
+  ["246648000","Nieuw Amsterdam","Holland America"],
+  ["245206000","Eurodam","Holland America"],
+  ["245417000","Oosterdam","Holland America"],
+  ["244128000","Westerdam","Holland America"],
+  ["245304000","Zuiderdam","Holland America"],
+  ["246028000","Noordam","Holland America"],
+  ["246442000","Zaandam","Holland America"],
+  ["245968000","Volendam","Holland America"],
+  // Cunard
+  ["310627000","Queen Mary 2","Cunard"],
+  ["310835000","Queen Anne","Cunard"],
+  ["310624000","Queen Victoria","Cunard"],
+  ["310625000","Queen Elizabeth","Cunard"],
+  // Costa
+  ["247391900","Costa Smeralda","Costa"],
+  ["247431200","Costa Toscana","Costa"],
+  ["247353700","Costa Diadema","Costa"],
+  ["247258100","Costa Pacifica","Costa"],
+  ["247187600","Costa Serena","Costa"],
+  ["247113300","Costa Magica","Costa"],
+  ["247094800","Costa Fortuna","Costa"],
+  ["247282900","Costa Deliziosa","Costa"],
+  ["247088200","Costa Mediterranea","Costa"],
+  ["247311100","Costa Favolosa","Costa"],
+  ["247313500","Costa Fascinosa","Costa"],
+  ["247325300","Costa Luminosa","Costa"],
+  // Windstar
+  ["309242000","Wind Surf","Windstar"],
+  ["309056000","Wind Spirit","Windstar"],
+  ["309163000","Wind Star","Windstar"],
+  ["311083000","Star Breeze","Windstar"],
+  ["311085000","Star Legend","Windstar"],
+  ["311084000","Star Pride","Windstar"],
+  // Oceania Cruises
+  ["538004353","Oceania Riviera","Oceania"],
+  ["538003668","Oceania Marina","Oceania"],
+  ["538001665","Oceania Nautica","Oceania"],
+  ["538006842","Oceania Sirena","Oceania"],
+  ["538001663","Oceania Insignia","Oceania"],
+  ["538001664","Oceania Regatta","Oceania"],
+  // Regent Seven Seas
+  ["538007673","Seven Seas Splendor","Regent"],
+  ["538006712","Seven Seas Explorer","Regent"],
+  ["311513000","Seven Seas Voyager","Regent"],
+  ["311622000","Seven Seas Mariner","Regent"],
+  ["311050600","Seven Seas Navigator","Regent"],
+  // Azamara
+  ["248762000","Azamara Pursuit","Azamara"],
+  ["256216000","Azamara Quest","Azamara"],
+  ["256204000","Azamara Journey","Azamara"],
+  ["229765000","Azamara Onward","Azamara"],
+  // P&O Cruises
+  ["232025845","Iona","P&O Cruises"],
+  ["232040520","Arvia","P&O Cruises"],
+  ["235106595","Britannia","P&O Cruises"],
+  ["310562000","Ventura","P&O Cruises"],
+  ["310610000","Azura","P&O Cruises"],
+  ["310556000","Aurora","P&O Cruises"],
+  ["310459000","Arcadia","P&O Cruises"],
+  // AIDA Cruises
+  ["247389200","AIDAnova","AIDA"],
+  ["247435300","AIDAcosma","AIDA"],
+  ["247353800","AIDAprima","AIDA"],
+  ["247385300","AIDAperla","AIDA"],
+  ["247229700","AIDAbella","AIDA"],
+  ["247187700","AIDAdiva","AIDA"],
+  ["247255400","AIDAluna","AIDA"],
+  ["247282500","AIDAblu","AIDA"],
+  ["247302900","AIDAsol","AIDA"],
+  ["247312900","AIDAmar","AIDA"],
+  ["247322800","AIDAstella","AIDA"],
+  // Viking
+  ["257903000","Viking Star","Viking"],
+  ["258215000","Viking Sea","Viking"],
+  ["257034130","Viking Sky","Viking"],
+  ["257058920","Viking Jupiter","Viking"],
+  ["257552000","Viking Venus","Viking"],
+  ["259070000","Viking Octantis","Viking"],
+  ["259144000","Viking Polaris","Viking"],
+];
+
+/* ---------- helpers ---------- */
+const byId = id => document.getElementById(id);
+const normName = s => (s||"").toUpperCase().replace(/[^A-Z0-9]/g,"");
+function lerpAngle(a,b,t){ const d=((b-a+540)%360)-180; return (a+d*t+360)%360; }
+function angleClose(a,b){ return Math.abs(((b-a+540)%360)-180) < 0.4; }
+function timeAgo(t){
+  if(!t) return "no signal";
+  const s=Math.max(0,(Date.now()-t)/1000);
+  if(s<60) return Math.round(s)+"s ago";
+  if(s<3600) return Math.round(s/60)+"m ago";
+  if(s<86400) return Math.round(s/3600)+"h ago";
+  return Math.round(s/86400)+"d ago";
+}
+function prettyDest(s){
+  if(!s) return "—";
+  let d=String(s).trim().split(/[>\/|]/)[0].replace(/\s+/g," ").trim(); // first leg only
+  if(d.length<2) return "—";
+  // Title-case multi-word names; leave short all-caps codes (e.g. USMIA) intact
+  if(/\s/.test(d)) d=d.replace(/[^\s]+/g, w => w[0]+w.slice(1).toLowerCase());
+  return d;
+}
+function regionFor(lat,lon){
+  if(lat==null) return "—";
+  const R=[
+    ["Alaska",         54,72,-170,-128],
+    ["Mexican Riviera",16,30,-118,-104],
+    ["Bahamas",        23,29, -81, -72],
+    ["Caribbean",       8,23, -89, -59],
+    ["Bermuda / Atlantic",24,42,-72,-40],
+    ["Mediterranean",  30,46,  -6,  37],
+    ["Baltic / N. Europe",53,72,  3,  31],
+    ["British Isles",  49,61, -11,   2],
+    ["SE Asia",       -10,25,  95, 135],
+    ["Australia / NZ",-48,-10,110, 180],
+  ];
+  for(const [name,la,lb,oa,ob] of R) if(lat>=la&&lat<=lb&&lon>=oa&&lon<=ob) return name;
+  if(lon<-40 && lat>15 && lat<60) return "Transatlantic";
+  return "At sea";
+}
+
+/* ---------- persistence (last-known + healed MMSIs) ---------- */
+const STORE_KEY="wake:v1";
+function loadStore(){ try{ return JSON.parse(localStorage.getItem(STORE_KEY))||{}; }catch(e){ return {}; } }
+let saveQueued=false;
+function saveStore(){
+  if(saveQueued) return; saveQueued=true;
+  setTimeout(()=>{ saveQueued=false;
+    try{
+      const o={};
+      fleet.forEach(d=>{ if(d.lat!=null) o[d.name]={mmsi:d.mmsi,lat:d.lat,lon:d.lon,hdg:d.hdg,spd:d.spd,status:d.status,next:d.next,t:d.lastSeen}; });
+      localStorage.setItem(STORE_KEY, JSON.stringify(o));
+    }catch(e){}
+  }, 4000);
+}
+const store=loadStore();
+
+/* ---------- fleet model ---------- */
+function getFleet(){
+  return FLEET.map((r,i)=>{
+    const [mmsi,name,line]=r, c=store[name]||{};
+    const has = typeof c.lat==="number";
+    return {
+      id:i, mmsi:String(c.mmsi||mmsi), name, line, color:LINES[line]||"#9fb4bf",
+      lat: has?c.lat:null, lon: has?c.lon:null,
+      hdg: c.hdg||0, rhdg: c.hdg||0, cog: c.hdg||0, spd: c.spd||0,
+      status: c.status||"sea", next: c.next||"—",
+      region: has?regionFor(c.lat,c.lon):"—",
+      live:false, lastSeen:c.t||0, trail: has?[[c.lon,c.lat]]:[],
+      _appeared: has, _x:0,_y:0,_g:null,_hl:null
+    };
+  });
+}
+const fleet=getFleet();
+const byMmsi=new Map(); fleet.forEach(d=>{ if(d.mmsi) byMmsi.set(d.mmsi,d); });
+const byName=new Map(); fleet.forEach(d=> byName.set(normName(d.name),d));
+const byLine={}; Object.keys(LINES).forEach(l=>byLine[l]=[]); fleet.forEach(d=> (byLine[d.line]||(byLine[d.line]=[])).push(d));
+
+/* ===================== MAP (Leaflet, real tiles) ===================== */
+const map = L.map('map', {
+  zoomControl:false, attributionControl:false, worldCopyJump:true,
+  minZoom:2, maxZoom:18, zoomSnap:0.25, preferCanvas:true,
+  fadeAnimation:!REDUCED, zoomAnimation:!REDUCED, markerZoomAnimation:!REDUCED
+}).setView([28,-45], 3);
+
+// CARTO dark basemap — keeps the dark look but shows real coastlines, ports & city labels
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  subdomains:'abcd', maxZoom:20, crossOrigin:true
+}).addTo(map);
+
+const canvasR = L.canvas({ padding:0.5 });
+const wakeLayer = L.layerGroup().addTo(map);
+
+let selected=null, hoverShip=null;
+const detail=byId("detail");
+
+function markerStyle(d){
+  const sel = d===selected;
+  return {
+    renderer:canvasR, radius: sel?7:5,
+    color: sel?'#ffffff':'rgba(255,255,255,.75)', weight: sel?1.8:0.7,
+    fillColor:d.color, fillOpacity: d._dim?0.16:(d.live?0.95:0.5)
+  };
+}
+function ensureMarker(d){
+  if(d._m) return d._m;
+  const m=L.circleMarker([d.lat,d.lon], markerStyle(d));
+  m.bindTooltip(()=>{
+    const loc=locShort(d);
+    return `<b>${d.name}</b><br>${d.line} · ${d.status==='port'?'in port':d.spd.toFixed(0)+' kn'}`+(loc?`<br><span class="tt-loc">${loc}</span>`:"");
+  },{direction:'top',offset:[0,-4],className:'ship-tt',opacity:1});
+  m.on('click',ev=>{ L.DomEvent.stop(ev); goShip(d); });
+  m.on('mouseover',()=>{ hoverShip=d; reverseGeo(d); });
+  m.on('mouseout',()=>{ if(hoverShip===d) hoverShip=null; });
+  m.addTo(map); d._m=m; return m;
+}
+
+function placeShips(){
+  for(const d of fleet){
+    if(d.lat==null){ if(d._m){ map.removeLayer(d._m); d._m=null; } if(d._w){ wakeLayer.removeLayer(d._w); d._w=null; } continue; }
+    const m=ensureMarker(d);
+    m.setLatLng([d.lat,d.lon]);
+    m.setStyle(markerStyle(d));
+    if(d.trail.length>1){
+      const ll=d.trail.map(p=>[p[1],p[0]]);
+      if(d._w) d._w.setLatLngs(ll);
+      else d._w=L.polyline(ll,{renderer:canvasR,color:d.color,weight:1.6,opacity:0.45,interactive:false}).addTo(wakeLayer);
+      d._w.setStyle({opacity: d===selected?0.8:(d._dim?0.1:0.4)});
+    } else if(d._w){ wakeLayer.removeLayer(d._w); d._w=null; }
+  }
+  if(selPulse && selected && selected.lat!=null) selPulse.setLatLng([selected.lat,selected.lon]);
+  if(selected) fillDetail(selected);
+}
+function positionLabels(){ if(hoverShip && hoverShip._m && hoverShip.lat!=null) hoverShip._m.openTooltip(); }
+
+/* ---- camera ---- */
+const CAM_DUR = REDUCED?0:0.85;
+function flyToPoint(d,z){ if(d.lat==null) return; map.flyTo([d.lat,d.lon], z||CONFIG.FOCUS_ZOOM, {duration:CAM_DUR}); }
+function flyToShips(ships){
+  const pts=ships.filter(d=>d.lat!=null).map(d=>[d.lat,d.lon]);
+  if(!pts.length){ resetCamera(); return; }
+  if(pts.length===1){ map.flyTo(pts[0], 6, {duration:CAM_DUR}); return; }
+  map.flyToBounds(L.latLngBounds(pts), {padding:[70,70], maxZoom:7, duration:CAM_DUR});
+}
+function resetCamera(){ map.flyTo([28,-45], 3, {duration:CAM_DUR}); }
+map.on('click',()=>{ if(nav.level===2) navBack(); });
+byId("zIn").addEventListener("click",()=>map.zoomIn());
+byId("zOut").addEventListener("click",()=>map.zoomOut());
+byId("zReset").addEventListener("click",()=>goLines());
+
+/* ---- selection pulse + arrival blip ---- */
+let selPulse=null;
+function spawnPing(d){
+  clearPing();
+  if(REDUCED) return;
+  selPulse=L.marker([d.lat,d.lon],{icon:L.divIcon({className:'sel-pulse-wrap',html:'<div class="sel-pulse"></div>',iconSize:[0,0]}),interactive:false,keyboard:false}).addTo(map);
+}
+function clearPing(){ if(selPulse){ map.removeLayer(selPulse); selPulse=null; } }
+function blip(d){
+  if(REDUCED||d.lat==null) return;
+  const mk=L.marker([d.lat,d.lon],{icon:L.divIcon({className:'blip-wrap',html:`<div class="blip" style="--c:${d.color}"></div>`,iconSize:[0,0]}),interactive:false,keyboard:false}).addTo(map);
+  setTimeout(()=>map.removeLayer(mk),1400);
+}
+
+/* ---- detail panel ---- */
+function fillDetail(d){
+  detail.style.setProperty("--accent",d.color);
+  byId("dLine").textContent=d.line;
+  byId("dName").textContent=d.name;
+  const sea=d.status!=="port";
+  const sc=d.status==="port"?"#e2bd72":"#5ad6a0";
+  const live = d.lat==null ? "Awaiting signal" : (d.live? (sea?"Underway":"Alongside / in port") : "Last known");
+  byId("dStatus").innerHTML=`<b style="background:${sc};box-shadow:0 0 8px ${sc}"></b>${live} · ${timeAgo(d.lastSeen)}`;
+  byId("dPlace").textContent = d.lat==null ? "" : (d.place || ("Near "+(d.region||"open water")));
+  byId("dLat").innerHTML = d.lat==null?"—":Math.abs(d.lat).toFixed(3)+`<small>° ${d.lat>=0?"N":"S"}</small>`;
+  byId("dLon").innerHTML = d.lon==null?"—":Math.abs(d.lon).toFixed(3)+`<small>° ${d.lon>=0?"E":"W"}</small>`;
+  byId("dSpd").innerHTML = d.lat==null?"—":d.spd.toFixed(1)+`<small> kn</small>`;
+  byId("dHdg").innerHTML = (sea&&d.lat!=null)?Math.round(d.hdg)+`<small>°</small>`:"—";
+  byId("dNext").textContent="NEXT ▸ "+(d.next||"—");
+  byId("dRegion").textContent=(d.region||"—").toUpperCase();
+  byId("dBarName").textContent=d.name;
+}
+function selectShip(d){
+  selected=d;
+  fillDetail(d); detail.classList.add("show","collapsed");   // appears as a slim "Cruise info" bar; tap to expand
+  byId("dToggle").setAttribute("aria-expanded","false");
+  clearPing();
+  if(d.lat!=null){ spawnPing(d); flyToPoint(d,CONFIG.FOCUS_ZOOM); reverseGeo(d); if(d._m){ d._m.setStyle(markerStyle(d)); d._m.openTooltip(); } }
+  applyVisibility();
+}
+function clearSelection(){
+  if(selected&&selected._m){ selected._m.closeTooltip(); }
+  const prev=selected; selected=null;
+  if(prev&&prev._m) prev._m.setStyle(markerStyle(prev));
+  detail.classList.remove("show"); detail.classList.add("collapsed"); clearPing(); applyVisibility();
+}
+function collapseDetail(){ detail.classList.add("collapsed"); byId("dToggle").setAttribute("aria-expanded","false"); }
+byId("dClose").addEventListener("click",e=>{ e.stopPropagation(); collapseDetail(); });   // ✕ just folds the bar back down (keeps ship selected)
+byId("dToggle").addEventListener("click",()=>{
+  const open=detail.classList.toggle("collapsed")===false;
+  byId("dToggle").setAttribute("aria-expanded", open?"true":"false");
+});
+
+/* ---- reverse geocode: human-readable "roughly where" ---- */
+const geoCache=new Map();
+// short location for the map tooltip (strip the "Near/Off/In the" prefix); falls back to region
+function locShort(d){
+  if(d.place) return d.place.replace(/^(Near|Off|In the)\s+/i,"");
+  return (d.region && d.region!=="—" && d.region!=="At sea") ? d.region : "";
+}
+function afterGeo(d){
+  if(selected===d) fillDetail(d);
+  if(d._m && d._m.isTooltipOpen && d._m.isTooltipOpen()) d._m.openTooltip();   // refresh tooltip with the location
+}
+async function reverseGeo(d){
+  if(d.lat==null) return;
+  const key=d.lat.toFixed(1)+","+d.lon.toFixed(1);
+  if(geoCache.has(key)){ const v=geoCache.get(key); if(v){ d.place=v; afterGeo(d); } return; }
+  geoCache.set(key,null);   // mark in-flight so we don't double-fetch
+  try{
+    const r=await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${d.lat}&longitude=${d.lon}&localityLanguage=en`);
+    const j=await r.json();
+    let place="";
+    const town=j.city||j.locality;
+    if(town && j.countryName) place="Near "+town+", "+j.countryName;
+    else if(j.principalSubdivision && j.countryName) place="Off "+j.principalSubdivision+", "+j.countryName;
+    else if(j.countryName) place="Off "+j.countryName;
+    else {
+      const inf=(j.localityInfo&&j.localityInfo.informative)||[];
+      const water=inf.map(x=>x.name||"").find(n=>/ocean|sea|gulf|channel|strait|bay/i.test(n));
+      place = water || ("In the "+(d.region||"open ocean"));
+    }
+    geoCache.set(key,place); d.place=place;
+    afterGeo(d);
+  }catch(e){ geoCache.delete(key); /* allow retry; region fallback already shown */ }
+}
+
+/* ---- resize ---- */
+function fit(){ map.invalidateSize(); }
+
+/* ===================== NAVIGATOR ===================== */
+const navEl=byId("nav");
+let nav={level:0,line:null,ship:null};
+let hoverLine=null, query="";
+
+function el(tag,cls,html){ const e=document.createElement(tag); if(cls)e.className=cls; if(html!=null)e.innerHTML=html; return e; }
+function lineCounts(line){
+  const ships=byLine[line]||[]; let shown=0,sea=0;
+  ships.forEach(d=>{ if(d.lat!=null){ shown++; if(d.live&&d.status!=="port") sea++; } });
+  return {total:ships.length,shown,sea};
+}
+function shipMeta(d){
+  if(d.lat==null) return `<span class="pill wait"><b></b>awaiting signal</span>`;
+  if(!d.live)     return `<span class="pill wait"><b></b>last known</span> · ${timeAgo(d.lastSeen)}`;
+  if(d.status==="port") return `<span class="pill port"><b></b>in port</span> · NEXT ▸ ${d.next}`;
+  return `<span class="pill sea"><b></b>${d.spd.toFixed(0)} kn</span> · ${d.region}`;
+}
+
+function buildLines(root){
+  root.appendChild(el("div","grouphd","<span>Cruise lines</span><span style='color:var(--faint)'>tap to explore</span>"));
+  const list=el("div","nav-list"); list.setAttribute("role","list");
+  Object.keys(LINES).forEach((line,i)=>{
+    const c=lineCounts(line);
+    const row=el("div","row"); row.style.animationDelay=(i*24)+"ms";
+    row.tabIndex=0; row.setAttribute("role","button");
+    row.setAttribute("aria-label",`${line}: ${c.shown} of ${c.total} ships tracked, ${c.sea} at sea`);
+    row.innerHTML=`<i class="swatch" style="color:${LINES[line]};background:${LINES[line]}"></i>
+      <div class="body"><div class="title">${line}</div>
+      <div class="meta">${c.shown}/${c.total} tracked${c.sea?` · ${c.sea} at sea`:""}</div></div>
+      <span class="chev">›</span>`;
+    row.addEventListener("click",()=>goLine(line));
+    row.addEventListener("mouseenter",()=>{ hoverLine=line; applyVisibility(); });
+    row.addEventListener("mouseleave",()=>{ if(hoverLine===line){ hoverLine=null; applyVisibility(); } });
+    row.addEventListener("keydown",e=>navKey(e,row));
+    list.appendChild(row);
+  });
+  root.appendChild(list);
+}
+
+function buildShips(root){
+  const line=nav.line;
+  const hd=el("div","nav-head");
+  hd.appendChild(el("div","nav-title",`<i style="color:${LINES[line]};background:${LINES[line]}"></i><span>${line}</span>`));
+  root.appendChild(hd);
+  const list=el("div","nav-list"); list.setAttribute("role","list");
+  const c=lineCounts(line);
+  const full=el("div","row fullfleet");
+  full.tabIndex=0; full.setAttribute("role","button"); full.setAttribute("aria-label","Show full fleet on the map");
+  full.innerHTML=`<i class="swatch" style="color:${LINES[line]};background:${LINES[line]}"></i>
+    <div class="body"><div class="title">Full fleet</div><div class="meta">${c.shown} of ${c.total} on map${c.sea?` · ${c.sea} at sea`:""}</div></div>
+    <span class="chev">⤢</span>`;
+  full.addEventListener("click",()=>fullFleet(line));
+  full.addEventListener("keydown",e=>navKey(e,full));
+  list.appendChild(full);
+  const ships=(byLine[line]||[]).slice().sort((a,b)=>{
+    const ra=a.lat!=null?0:1, rb=b.lat!=null?0:1; return ra!==rb?ra-rb:a.name.localeCompare(b.name);
+  });
+  let any=false;
+  ships.forEach((d,i)=>{
+    const awaiting=d.lat==null;
+    const row=el("div","row"+(awaiting?" awaiting":"")); row.style.animationDelay=(i*18)+"ms";
+    row._d=d;
+    row.tabIndex=awaiting?-1:0; row.setAttribute("role","button"); row.setAttribute("aria-label",d.name);
+    if(d===selected) row.style.borderColor=d.color+"66";
+    row.innerHTML=`<i class="swatch" style="color:${d.color};background:${d.color}"></i>
+      <div class="body"><div class="title">${d.name}</div><div class="meta">${shipMeta(d)}</div></div>
+      ${awaiting?"":'<span class="chev">›</span>'}`;
+    if(!awaiting){
+      any=true;
+      row.addEventListener("click",()=>goShip(d));
+      row.addEventListener("mouseenter",()=>{ hoverShip=d; positionLabels(); });
+      row.addEventListener("mouseleave",()=>{ if(hoverShip===d){ hoverShip=null; positionLabels(); } });
+      row.addEventListener("keydown",e=>navKey(e,row));
+    }
+    list.appendChild(row);
+  });
+  if(!any) list.appendChild(el("div","nav-empty",`Listening for AIS broadcasts<span class="spin"></span><span class="spin"></span><span class="spin"></span>`));
+  root.appendChild(list);
+}
+
+function renderNav(dir){
+  navEl.innerHTML="";
+  const lvl=el("div","nav-level "+(dir==="l"?"enter-l":dir==="r"?"enter-r":""));
+  if(nav.level===0) buildLines(lvl); else buildShips(lvl);
+  navEl.appendChild(lvl);
+  byId("navBackBar").classList.toggle("show", nav.level>=1);   // "‹ All cruise lines" above search
+}
+function refreshNav(){ // light refresh of counts/meta without re-animating
+  if(nav.level===0){
+    navEl.querySelectorAll(".nav-list .row").forEach((row,i)=>{
+      const line=Object.keys(LINES)[i]; if(!line) return; const c=lineCounts(line);
+      const m=row.querySelector(".meta"); if(m) m.textContent=`${c.shown}/${c.total} tracked${c.sea?` · ${c.sea} at sea`:""}`;
+    });
+  } else if(nav.level===1){
+    // update each row's meta in place (no re-render → no flicker)
+    const c=lineCounts(nav.line);
+    navEl.querySelectorAll(".nav-list .row").forEach(row=>{
+      const m=row.querySelector(".meta"); if(!m) return;
+      if(row.classList.contains("fullfleet")) m.textContent=`${c.shown} of ${c.total} on map${c.sea?` · ${c.sea} at sea`:""}`;
+      else if(row._d) m.innerHTML=shipMeta(row._d);
+    });
+  }
+}
+
+/* ---- navigation actions ---- */
+function goLines(){ nav={level:0,line:null,ship:null}; hoverLine=null; clearSelection(); renderNav("l"); applyVisibility(); resetCamera(); }
+function goLine(line){ const deeper=nav.level<1; nav={level:1,line,ship:null}; hoverLine=null; clearSelection(); renderNav(deeper?"r":"l"); applyVisibility(); flyToShips(byLine[line]); }
+function goShip(d){ nav={level:2,line:d.line,ship:d}; renderNav("r"); selectShip(d); collapseNav(); }
+function fullFleet(line){ nav={level:1,line,ship:null}; clearSelection(); renderNav(); applyVisibility(); flyToShips(byLine[line]); collapseNav(); }
+function navBack(){ if(nav.level===2) goLine(nav.line); else if(nav.level===1) goLines(); }
+
+/* ---- collapsible controls (full-screen map) ---- */
+const controlsEl=byId("controls"), navOpenBtn=byId("navOpen");
+function collapseNav(){ controlsEl.classList.add("collapsed"); navOpenBtn.classList.add("show"); }
+function expandNav(){ controlsEl.classList.remove("collapsed"); navOpenBtn.classList.remove("show"); }
+navOpenBtn.addEventListener("click",expandNav);
+byId("navBackBar").addEventListener("click",()=>goLines());
+byId("navHide").addEventListener("click",collapseNav);
+byId("navHide").addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); collapseNav(); } });
+
+/* ---- keyboard ---- */
+function navKey(e,row){
+  if(e.key==="Enter"||e.key===" "){ e.preventDefault(); row.click(); }
+  else if(e.key==="ArrowDown"){ e.preventDefault(); focusSibling(row,1); }
+  else if(e.key==="ArrowUp"){ e.preventDefault(); focusSibling(row,-1); }
+}
+function focusSibling(row,dir){
+  const rows=[...row.parentElement.querySelectorAll('.row[tabindex="0"]')];
+  const n=rows[rows.indexOf(row)+dir]; if(n) n.focus();
+}
+
+/* ---- search ---- */
+const qInput=byId("q");
+qInput.addEventListener("input",e=>{ query=e.target.value.trim().toLowerCase(); applyVisibility(); });
+qInput.addEventListener("keydown",e=>{
+  if(e.key==="Enter"){
+    const m=fleet.filter(d=>d.lat!=null && d.name.toLowerCase().includes(query));
+    if(m.length){ query=""; qInput.value=""; goShip(m[0]); }
+  } else if(e.key==="Escape"){ qInput.value=""; query=""; applyVisibility(); qInput.blur(); }
+});
+
+/* ---- visibility (dim ships out of current context) ---- */
+function activeSet(){
+  if(query) return new Set(fleet.filter(d=>d.name.toLowerCase().includes(query)));
+  if(nav.level>=1 && nav.line) return new Set(byLine[nav.line]);
+  if(hoverLine) return new Set(byLine[hoverLine]);
+  return null; // all visible
+}
+function applyVisibility(){
+  const act=activeSet();
+  fleet.forEach(d=>{
+    let on = !act || act.has(d);
+    if(nav.level===2 && selected) on = d===selected;
+    d._dim = d.lat!=null && !on;
+    if(d._m) d._m.setStyle(markerStyle(d));
+    if(d._w) d._w.setStyle({opacity: d===selected?0.8:(d._dim?0.1:0.4)});
+  });
+  updateStats();
+}
+
+/* ---- stats ---- */
+function updateStats(){
+  let shown=0,sea=0;
+  fleet.forEach(d=>{ if(d.lat!=null){ shown++; if(d.live&&d.status!=="port") sea++; } });
+  setNum("s-total",shown); setNum("s-sea",sea); setNum("s-port",shown-sea);
+}
+function setNum(id,target){
+  const e=byId(id); const from=+e.textContent||0;
+  if(from===target) return;
+  if(REDUCED){ e.textContent=target; return; }
+  const t0=performance.now(),dur=520;
+  (function step(t){ const k=Math.min(1,(t-t0)/dur), ee=1-Math.pow(1-k,3);
+    e.textContent=Math.round(from+(target-from)*ee); if(k<1)requestAnimationFrame(step); })(t0);
+}
+
+/* ===================== LIVE FEED ===================== */
+const feedpill=byId("feedpill");
+function setPill(state,text){ feedpill.dataset.state=state; feedpill.innerHTML="<b></b>"+text; }
+
+let manualClose=false, keyBad=false, liveSeen=false, dirty=true;
+
+// aisstream rejects a single full-globe box (so we tile the world into six
+// bands) and caps the MMSI filter (~a couple hundred), so we split the fleet
+// across several parallel connections of <= MMSI_CHUNK ships each.
+const WORLD_BOXES=[
+  [[-85,-180],[85,-120]],[[-85,-120],[85,-60]],[[-85,-60],[85,0]],
+  [[-85,0],[85,60]],[[-85,60],[85,120]],[[-85,120],[85,180]]
+];
+const MMSI_CHUNK=90;
+let conns=[];
+
+function mmsiChunks(){
+  const all=[...new Set(fleet.map(d=>d.mmsi).filter(Boolean))];
+  const out=[]; for(let i=0;i<all.length;i+=MMSI_CHUNK) out.push(all.slice(i,i+MMSI_CHUNK));
+  return out;
+}
+function subFor(chunk){
+  return JSON.stringify({ APIKey:CONFIG.AISSTREAM_KEY, BoundingBoxes:WORLD_BOXES,
+    FiltersShipMMSI:chunk, FilterMessageTypes:["PositionReport","ShipStaticData"] });
+}
+function makeConn(chunk){
+  const c={ chunk, ws:null, retry:0, timer:null };
+  c.connect=()=>{
+    if(keyBad||manualClose) return;
+    if(c.ws && (c.ws.readyState===0||c.ws.readyState===1)) return;   // already connecting/open
+    clearTimeout(c.timer);
+    try{ c.ws=new WebSocket(CONFIG.WS_URL); }catch(e){ c.schedule(); return; }
+    c.ws.binaryType="arraybuffer";
+    c.ws.onopen=()=>{ try{ c.ws.send(subFor(c.chunk)); }catch(e){} };
+    c.ws.onmessage=ev=>{ c.retry=0; const d=ev.data;        // first frame proves it works
+      if(typeof d==="string") handleMessage(d);
+      else if(d && typeof d.text==="function") d.text().then(handleMessage).catch(()=>{});
+      else if(d) try{ handleMessage(new TextDecoder().decode(d)); }catch(e){} };
+    c.ws.onerror=()=>{ try{ c.ws.close(); }catch(e){} };
+    c.ws.onclose=()=>{ if(!manualClose) c.schedule(); };
+  };
+  c.schedule=()=>{
+    if(keyBad||manualClose) return;
+    const delay=Math.min(15000,1000*Math.pow(2,c.retry))+Math.random()*700; c.retry++;
+    clearTimeout(c.timer); c.timer=setTimeout(c.connect,delay);
+  };
+  c.close=()=>{ clearTimeout(c.timer); if(c.ws){ try{ c.ws.close(); }catch(e){} } };
+  return c;
+}
+function anyConnected(){ return conns.some(c=>c.ws && c.ws.readyState===1); }
+function connect(){
+  if(keyBad) return;
+  if(!CONFIG.AISSTREAM_KEY || CONFIG.AISSTREAM_KEY.includes("…") || CONFIG.AISSTREAM_KEY.length<8){ startDemo(); return; }
+  manualClose=false;
+  const chunks=mmsiChunks();
+  if(!chunks.length){ startDemo(); return; }
+  if(conns.length!==chunks.length){ conns.forEach(c=>c.close()); conns=chunks.map(makeConn); }
+  else conns.forEach((c,i)=>c.chunk=chunks[i]);
+  conns.forEach(c=>c.connect());
+}
+function closeAll(){ manualClose=true; conns.forEach(c=>c.close()); }
+let resubT=null;
+function resubscribe(){ clearTimeout(resubT); resubT=setTimeout(()=>{
+  const chunks=mmsiChunks();
+  if(conns.length===chunks.length) conns.forEach((c,i)=>{ c.chunk=chunks[i]; if(c.ws&&c.ws.readyState===1){ try{ c.ws.send(subFor(c.chunk)); }catch(e){} } });
+  else { closeAll(); connect(); }
+}, 1500); }
+function handleMessage(raw){
+  let msg; try{ msg=JSON.parse(raw); }catch(e){ return; }
+  if(msg.error||msg.Error){
+    const err=String(msg.error||msg.Error);
+    if(/key|auth|token/i.test(err)){ keyBad=true; setPill("error","Check API key"); conns.forEach(c=>c.close()); }
+    else setPill("error","Feed error");
+    return;
+  }
+  const type=msg.MessageType, meta=msg.MetaData||{};
+  const m=msg.Message&&msg.Message[type];
+  const mmsi=String(meta.MMSI || (m&&m.UserID) || "");
+  if(!mmsi) return;
+  if(type==="PositionReport" && m){
+    let d=byMmsi.get(mmsi) || (CONFIG.DISCOVERY?adopt(mmsi,meta.ShipName):null);
+    if(d) applyPosition(d,m);
+  } else if(type==="ShipStaticData" && m){
+    heal(mmsi, m.Name||meta.ShipName);
+    const d=byMmsi.get(mmsi);
+    if(d){ const nd=prettyDest(m.Destination); if(nd!=="—"){ d.next=nd; dirty=true; } }
+  }
+  if(!liveSeen){ liveSeen=true; }
+}
+function applyPosition(d,pr){
+  if(typeof pr.Latitude!=="number"||typeof pr.Longitude!=="number") return;
+  if(Math.abs(pr.Latitude)>90||Math.abs(pr.Longitude)>180) return;
+  const firstFix=d.lat==null;
+  d.lat=pr.Latitude; d.lon=pr.Longitude;
+  d.spd=(typeof pr.Sog==="number"&&pr.Sog<102.3)?pr.Sog:0;
+  d.cog=(typeof pr.Cog==="number"&&pr.Cog<360)?pr.Cog:d.cog;
+  d.hdg=(typeof pr.TrueHeading==="number"&&pr.TrueHeading!==511)?pr.TrueHeading:d.cog;
+  if(firstFix) d.rhdg=d.hdg;       // appear pointing the right way, no spin-up
+  const ns=pr.NavigationalStatus;
+  d.status=(ns===1||ns===5||d.spd<0.5)?"port":"sea";
+  d.region=regionFor(d.lat,d.lon);
+  d.live=true; d.lastSeen=Date.now();
+  d.trail.push([d.lon,d.lat]); if(d.trail.length>CONFIG.TRAIL_MAX) d.trail.shift();
+  dirty=true; saveStore();
+}
+function heal(mmsi,name){ // ShipStaticData name reveals a different live MMSI → rebind
+  if(!name||!mmsi) return;
+  const d=byName.get(normName(name));
+  if(d && d.mmsi!==mmsi){ byMmsi.delete(d.mmsi); d.mmsi=mmsi; byMmsi.set(mmsi,d); resubscribe(); }
+}
+function adopt(mmsi,name){ // DISCOVERY: bind an unknown MMSI to a known ship by name
+  const d=name?byName.get(normName(name)):null;
+  if(d && d.mmsi!==mmsi){ byMmsi.delete(d.mmsi); d.mmsi=mmsi; byMmsi.set(mmsi,d); }
+  return d||null;
+}
+
+/* ---- demo fallback (no key / cannot connect) ---- */
+function startDemo(){
+  setPill("demo","Demo · no live feed");
+  const spots=[[-78,25.4],[-85,19.5],[1.2,41],[14.3,40.6],[-134.4,58.3],[12.3,44.4],[-66,18.4],[24.7,59.4],[-114.5,28],[103.8,1.3],[-32,47],[18.9,69.7]];
+  fleet.forEach((d,i)=>{
+    const s=spots[i%spots.length];
+    d.lon=s[0]+(((i*37)%20)-10)*0.55; d.lat=s[1]+(((i*53)%16)-8)*0.4;
+    d.spd=11+(i%12); d.hdg=d.rhdg=d.cog=(i*47)%360; d.status="sea";
+    d.region=regionFor(d.lat,d.lon); d.live=true; d.lastSeen=Date.now(); d.trail=[[d.lon,d.lat]]; d._appeared=true;
+  });
+  placeShips(); updateStats(); refreshNav();
+  setInterval(()=>{
+    fleet.forEach(d=>{ const r=d.hdg*Math.PI/180; d.lat+=Math.cos(r)*d.spd*0.0008; d.lon+=Math.sin(r)*d.spd*0.0008/Math.cos(d.lat*Math.PI/180);
+      if(d.lon>180)d.lon-=360; if(d.lon<-180)d.lon+=360; d.trail.push([d.lon,d.lat]); if(d.trail.length>20)d.trail.shift(); });
+    dirty=true;
+  },1500);
+}
+
+/* ---- render tick: smooth heading + throttled redraw ---- */
+let lastTick=0;
+function tick(ts){
+  if(dirty || ts-lastTick>1000){
+    // arrival blips for newly-appeared ships (after positions are projected)
+    placeShips();
+    fleet.forEach(d=>{ if(d.lat!=null && !d._appeared){ d._appeared=true; blip(d); } });
+    if(!keyBad && feedpill.dataset.state!=="demo"){    // one stable pill update per second
+      const connected=anyConnected(), n=fleet.filter(d=>d.lat!=null).length;
+      if(liveSeen && connected) setPill("live",`Live · ${n} ${n===1?"ship":"ships"}`);
+      else if(connected) setPill("connecting","Connecting…");
+      else setPill(liveSeen?"reconnect":"connecting", liveSeen?"Reconnecting…":"Connecting…");
+    }
+    updateStats(); refreshNav();
+    if(selected) fillDetail(selected);
+    dirty=false; lastTick=ts;
+  }
+  requestAnimationFrame(tick);
+}
+
+/* ---- lifecycle ---- */
+document.addEventListener("visibilitychange",()=>{
+  if(document.hidden){ closeAll(); }
+  else if(!keyBad){ connect(); }   // connect() guards against duplicate sockets
+});
+setInterval(()=>{ // staleness sweep + persistence
+  const now=Date.now(); let changed=false;
+  fleet.forEach(d=>{ if(d.live && now-d.lastSeen>CONFIG.STALE_MS){ d.live=false; changed=true; } });
+  if(changed){ dirty=true; } saveStore();
+},60000);
+addEventListener("beforeunload",saveStore);
+addEventListener("resize",fit);
+
+/* ---- boot ---- */
+fit();
+renderNav();
+applyVisibility();
+updateStats();
+requestAnimationFrame(tick);
+connect();
+</script>
+</body>
+</html>
