@@ -116,10 +116,11 @@
   .port-row.open .port-chev{transform:rotate(90deg);color:var(--brass-soft)}
   .port-ships{max-height:0;overflow:hidden;transition:max-height .32s var(--ease-io)}
   .port-row.open .port-ships{max-height:70vh}
-  .port-ship{display:flex;align-items:center;gap:9px;padding:9px 12px 9px 14px;cursor:pointer;font-size:12.5px;color:var(--muted);border-top:1px solid var(--glass-edge);transition:background .15s,color .15s}
+  .port-ship{display:flex;flex-wrap:wrap;align-items:center;gap:9px;padding:9px 12px 9px 14px;cursor:pointer;font-size:12.5px;color:var(--muted);border-top:1px solid var(--glass-edge);transition:background .15s,color .15s}
   .port-ship:hover{background:rgba(255,255,255,.05);color:var(--ink)}
   .port-ship i{width:8px;height:8px;border-radius:50%;flex:none;box-shadow:0 0 8px currentColor}
   .port-ship em{font-style:normal;margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.05em;color:var(--faint);text-transform:uppercase;white-space:nowrap}
+  .port-times{flex:0 0 100%;padding-left:17px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.04em;color:var(--faint);margin-top:-4px;padding-bottom:1px}
   .ports-empty{padding:22px 10px;text-align:center;color:var(--faint);font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;line-height:1.7}
   .ports-empty .spin{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--brass);margin:0 3px;animation:shimmer 1.4s var(--ease-io) infinite}
   .ports-empty .spin:nth-child(2){animation-delay:.2s}.ports-empty .spin:nth-child(3){animation-delay:.4s}
@@ -1097,7 +1098,8 @@ function renderPorts(){
     const ships=row.querySelector(".port-ships");
     g.ships.slice().sort((a,b)=>a.name.localeCompare(b.name)).forEach(d=>{
       const s=el("div","port-ship");
-      s.innerHTML=`<i style="background:${d.color};color:${d.color}"></i>${d.name}<em>${d.line}</em>`;
+      const sched=itinFor(d);
+      s.innerHTML=`<i style="background:${d.color};color:${d.color}"></i>${d.name}<em>${d.line}</em>${sched?`<span class="port-times">${sched}</span>`:""}`;
       s.addEventListener("click",()=>{ closePorts(); goShip(d); });
       ships.appendChild(s);
     });
@@ -1494,9 +1496,33 @@ function applySnapshot(snap){
 // latest accumulating snapshot (updated by the scheduled Action, served via GitHub raw so
 // it refreshes without a redeploy); falls back to the bundled copy, then the embedded SEED.
 const SNAP_URL="https://raw.githubusercontent.com/turetskyadam-cyber/Wake-/main/positions.json";
+const ITIN_URL="https://raw.githubusercontent.com/turetskyadam-cyber/Wake-/main/itineraries.json";
 fetch(SNAP_URL,{cache:"no-store"}).then(r=>r.ok?r.json():Promise.reject())
   .catch(()=>fetch("positions.json",{cache:"no-store"}).then(r=>r.ok?r.json():null))
   .then(j=>{ if(j) applySnapshot(j); }).catch(()=>{});
+
+// port schedule itineraries — scraped daily from CruiseMapper by GitHub Actions
+let _itin={}; // portCity -> Map(normShip -> {arr,dep})
+function normShip(s){ return s.toLowerCase().replace(/[^a-z0-9]/g,""); }
+function itinFor(d){
+  const m=_itin[d.portCity]; if(!m) return null;
+  const t=m.get(normShip(d.name)); if(!t) return null;
+  const parts=[]; if(t.a) parts.push("Arr "+t.a); if(t.e) parts.push("Dep "+t.e);
+  return parts.length?parts.join(" · "):null;
+}
+fetch(ITIN_URL,{cache:"no-store"}).then(r=>r.ok?r.json():Promise.reject())
+  .catch(()=>fetch("itineraries.json",{cache:"no-store"}).then(r=>r.ok?r.json():null))
+  .then(j=>{
+    if(!j||!j.ports) return;
+    const today=new Date().toISOString().slice(0,10);
+    _itin={};
+    Object.entries(j.ports).forEach(([port,calls])=>{
+      const m=new Map();
+      calls.filter(c=>c.d===today).forEach(c=>m.set(normShip(c.s),{a:c.a,e:c.e}));
+      if(m.size) _itin[port]=m;
+    });
+    if(portsOpen) renderPorts();
+  }).catch(()=>{});
 
 /* ---- boot ---- */
 fit();
