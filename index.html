@@ -186,6 +186,15 @@
   .cell .v{font-family:'JetBrains Mono',monospace;font-size:15px;color:var(--ink);margin-top:5px;font-weight:500}
   .cell .v small{color:var(--faint);font-size:10px;font-weight:400}
   .d-foot{padding:10px 16px;font-size:10px;color:var(--faint);font-family:'JetBrains Mono',monospace;letter-spacing:.05em;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--glass-edge)}
+  .d-itin{border-top:1px solid var(--glass-edge);padding:10px 16px 14px}
+  .d-itin-hd{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:7px}
+  .d-itin-row{display:flex;align-items:baseline;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:var(--muted)}
+  .d-itin-row:last-child{border-bottom:none}
+  .d-itin-date{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);flex:none;width:42px}
+  .d-itin-port{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .d-itin-times{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);white-space:nowrap}
+  .d-itin-today .d-itin-date{color:var(--brass)}
+  .d-itin-today .d-itin-port{color:var(--ink);font-weight:600}
   .d-close{position:absolute;top:13px;right:13px;width:24px;height:24px;border-radius:50%;border:1px solid var(--glass-edge);background:rgba(4,16,24,.5);color:var(--muted);cursor:pointer;font-size:13px;line-height:1;display:flex;align-items:center;justify-content:center;z-index:2;transition:transform .12s var(--ease-out),color .2s}
   .d-close:hover{color:var(--ink)}.d-close:active{transform:scale(.9)}
 
@@ -389,6 +398,7 @@
       <div class="cell"><div class="k">Heading</div><div class="v" id="dHdg"></div></div>
     </div>
     <div class="d-foot"><span id="dNext"></span><span id="dRegion"></span></div>
+    <div class="d-itin" id="dItin" hidden></div>
   </div>
   <button class="d-toggle" id="dToggle" aria-label="Show cruise info" aria-expanded="false">
     <span class="d-toggle-l"><b class="d-dot"></b>Cruise info<em id="dBarName"></em></span>
@@ -1001,6 +1011,22 @@ function fillDetail(d){
   byId("dNext").textContent="NEXT ▸ "+(d.next||"—");
   byId("dRegion").textContent=(d.region||"—").toUpperCase();
   byId("dBarName").textContent=d.name;
+  // upcoming itinerary
+  const itinEl=byId("dItin");
+  const today=new Date().toISOString().slice(0,10);
+  const calls=(_itinShip[normShip(d.name)]||[]).filter(c=>c.date>=today).slice(0,8);
+  if(calls.length){
+    itinEl.hidden=false;
+    itinEl.innerHTML='<div class="d-itin-hd">Upcoming Ports</div>'+calls.map(c=>{
+      const isToday=c.date===today;
+      const dt=new Date(c.date+"T12:00:00Z");
+      const label=isToday?"Today":dt.toLocaleDateString("en-US",{month:"short",day:"numeric"});
+      const times=[c.arr&&"Arr "+c.arr,c.dep&&"Dep "+c.dep].filter(Boolean).join(" · ");
+      return `<div class="d-itin-row${isToday?" d-itin-today":""}"><span class="d-itin-date">${label}</span><span class="d-itin-port">${c.port}</span>${times?`<span class="d-itin-times">${times}</span>`:""}</div>`;
+    }).join("");
+  } else {
+    itinEl.hidden=true;
+  }
 }
 function selectShip(d){
   selected=d;
@@ -1502,7 +1528,8 @@ fetch(SNAP_URL,{cache:"no-store"}).then(r=>r.ok?r.json():Promise.reject())
   .then(j=>{ if(j) applySnapshot(j); }).catch(()=>{});
 
 // port schedule itineraries — scraped daily from CruiseMapper by GitHub Actions
-let _itin={}; // portCity -> Map(normShip -> {arr,dep})
+let _itin={};     // portCity -> Map(normShip -> {a,e})
+let _itinShip={}; // normShip  -> [{port,date,arr,dep}] sorted by date
 function normShip(s){ return s.toLowerCase().replace(/[^a-z0-9]/g,""); }
 function itinFor(d){
   const m=_itin[d.portCity]; if(!m) return null;
@@ -1515,13 +1542,20 @@ fetch(ITIN_URL,{cache:"no-store"}).then(r=>r.ok?r.json():Promise.reject())
   .then(j=>{
     if(!j||!j.ports) return;
     const today=new Date().toISOString().slice(0,10);
-    _itin={};
+    _itin={}; _itinShip={};
     Object.entries(j.ports).forEach(([port,calls])=>{
-      const m=new Map();
-      calls.filter(c=>c.d===today).forEach(c=>m.set(normShip(c.s),{a:c.a,e:c.e}));
-      if(m.size) _itin[port]=m;
+      const todayMap=new Map();
+      calls.forEach(c=>{
+        if(c.d===today) todayMap.set(normShip(c.s),{a:c.a,e:c.e});
+        const key=normShip(c.s);
+        if(!_itinShip[key]) _itinShip[key]=[];
+        _itinShip[key].push({port,date:c.d,arr:c.a,dep:c.e});
+      });
+      if(todayMap.size) _itin[port]=todayMap;
     });
+    Object.values(_itinShip).forEach(arr=>arr.sort((a,b)=>a.date.localeCompare(b.date)));
     if(portsOpen) renderPorts();
+    if(selected) fillDetail(selected);
   }).catch(()=>{});
 
 /* ---- boot ---- */
