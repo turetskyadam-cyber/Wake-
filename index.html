@@ -188,10 +188,14 @@
   .d-foot{padding:10px 16px;font-size:10px;color:var(--faint);font-family:'JetBrains Mono',monospace;letter-spacing:.05em;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--glass-edge)}
   .d-itin{border-top:1px solid var(--glass-edge);padding:10px 16px 14px}
   .d-itin-hd{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:7px}
-  .d-itin-row{display:flex;align-items:baseline;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:var(--muted)}
+  .d-itin-list{max-height:168px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(120,170,185,.25) transparent}
+  .d-itin-list::-webkit-scrollbar{width:4px}.d-itin-list::-webkit-scrollbar-thumb{background:rgba(120,170,185,.22);border-radius:2px}
+  .d-itin-cnt{float:right;font-variant-numeric:tabular-nums;opacity:.5}
+  .d-itin-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:var(--muted);cursor:pointer;transition:color .15s}
   .d-itin-row:last-child{border-bottom:none}
+  .d-itin-row:hover{color:var(--ink)}
   .d-itin-date{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);flex:none;width:42px}
-  .d-itin-port{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .d-itin-port{flex:1;min-width:0}
   .d-itin-times{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);white-space:nowrap}
   .d-itin-today .d-itin-date{color:var(--brass)}
   .d-itin-today .d-itin-port{color:var(--ink);font-weight:600}
@@ -736,6 +740,7 @@ const CRUISE_PORTS=[
   {name:"Galveston",             country:"US", lat:29.3139, lon:-94.7977},
   // Caribbean
   {name:"Nassau",                country:"BS", lat:25.0847, lon:-77.3388},
+  {name:"Coco Cay",              country:"BS", lat:25.8302, lon:-77.7393},
   {name:"Freeport",              country:"BS", lat:26.5333, lon:-78.6972},
   {name:"Labadee",               country:"HT", lat:19.7606, lon:-72.2355},
   {name:"Amber Cove",            country:"DO", lat:19.8534, lon:-70.6986},
@@ -1014,16 +1019,23 @@ function fillDetail(d){
   // upcoming itinerary
   const itinEl=byId("dItin");
   const today=new Date().toISOString().slice(0,10);
-  const calls=(_itinShip[normShip(d.name)]||[]).filter(c=>c.date>=today).slice(0,8);
+  const calls=(_itinShip[normShip(d.name)]||[]).filter(c=>c.date>=today);
   if(calls.length){
     itinEl.hidden=false;
-    itinEl.innerHTML='<div class="d-itin-hd">Upcoming Ports</div>'+calls.map(c=>{
-      const isToday=c.date===today;
-      const dt=new Date(c.date+"T12:00:00Z");
-      const label=isToday?"Today":dt.toLocaleDateString("en-US",{month:"short",day:"numeric"});
-      const times=[c.arr&&"Arr "+c.arr,c.dep&&"Dep "+c.dep].filter(Boolean).join(" · ");
-      return `<div class="d-itin-row${isToday?" d-itin-today":""}"><span class="d-itin-date">${label}</span><span class="d-itin-port">${c.port}</span>${times?`<span class="d-itin-times">${times}</span>`:""}</div>`;
-    }).join("");
+    itinEl.innerHTML=`<div class="d-itin-hd">Upcoming Ports<span class="d-itin-cnt">${calls.length}</span></div>`+
+      `<div class="d-itin-list">`+calls.map(c=>{
+        const isToday=c.date===today;
+        const dt=new Date(c.date+"T12:00:00Z");
+        const label=isToday?"Today":dt.toLocaleDateString("en-US",{month:"short",day:"numeric"});
+        const times=[c.arr&&"Arr "+c.arr,c.dep&&"Dep "+c.dep].filter(Boolean).join(" · ");
+        return `<div class="d-itin-row${isToday?" d-itin-today":""}" data-port="${c.port}"><span class="d-itin-date">${label}</span><span class="d-itin-port">${c.port}</span>${times?`<span class="d-itin-times">${times}</span>`:""}</div>`;
+      }).join("")+`</div>`;
+    itinEl.querySelectorAll(".d-itin-row[data-port]").forEach(row=>{
+      row.addEventListener("click",()=>{
+        const p=CRUISE_PORTS.find(p=>p.name===row.dataset.port);
+        if(p) map.flyTo([p.lat,p.lon],10,{duration:CAM_DUR});
+      });
+    });
   } else {
     itinEl.hidden=true;
   }

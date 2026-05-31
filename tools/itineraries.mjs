@@ -27,9 +27,20 @@ const PORTS = [
   {name:"Seattle",              slug:"seattle-port-6"},
   // Alaska
   {name:"Juneau",               slug:"juneau-port-407"},
-  // Caribbean
+  // Caribbean — private islands & ports of call
   {name:"Nassau",               slug:"nassau-port-27"},
+  {name:"Coco Cay",             slug:"coco-cay-port-392"},
   {name:"Cozumel",              slug:"cozumel-port-26"},
+  {name:"Grand Cayman",         slug:"grand-cayman-island-port-25"},
+  {name:"Roatan",               slug:"roatan-island-port-29"},
+  {name:"Labadee",              slug:"labadee-haiti-port-824"},
+  {name:"Amber Cove",           slug:"puerto-plata-amber-cove-port-1936"},
+  {name:"Falmouth",             slug:"falmouth-jamaica-port-667"},
+  {name:"Ocho Rios",            slug:"ocho-rios-port-708"},
+  {name:"St. Thomas",           slug:"st-thomas-island-usvi-port-604"},
+  {name:"St. Maarten",          slug:"philipsburg-st-maarten-port-594"},
+  {name:"Aruba",                slug:"oranjestad-aruba-port-452"},
+  {name:"Curaçao",              slug:"willemstad-curacao-port-31"},
   {name:"San Juan",             slug:"san-juan-port-39"},
   // Mediterranean
   {name:"Barcelona",            slug:"barcelona-port-82"},
@@ -45,6 +56,7 @@ const PORTS = [
 
 function monthStr(offsetMonths = 0) {
   const d = new Date();
+  d.setDate(1); // prevent day-of-month overflow (e.g. May 31 + 1 month = July 1)
   d.setMonth(d.getMonth() + offsetMonths);
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
 }
@@ -138,7 +150,7 @@ function parseSchedule(html) {
 }
 
 async function main() {
-  const months = [monthStr(0), monthStr(1)];
+  const months = [monthStr(0), monthStr(1), monthStr(2)];
   const out = { generated: Date.now(), ports: {} };
 
   for (const port of PORTS) {
