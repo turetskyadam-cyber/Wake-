@@ -708,6 +708,149 @@ function regionFor(lat,lon){
   return "At sea";
 }
 
+/* ---- known cruise port database (name, country, coords) ---- */
+const CRUISE_PORTS=[
+  // Florida / US East Coast
+  {name:"PortMiami",             country:"US", lat:25.7742, lon:-80.1728},
+  {name:"Port Everglades",       country:"US", lat:26.0934, lon:-80.1165},
+  {name:"Port Canaveral",        country:"US", lat:28.4157, lon:-80.6297},
+  {name:"Port Tampa Bay",        country:"US", lat:27.9313, lon:-82.4459},
+  {name:"Port of Jacksonville",  country:"US", lat:30.3335, lon:-81.6565},
+  {name:"Port of Baltimore",     country:"US", lat:39.2627, lon:-76.5700},
+  {name:"New York",              country:"US", lat:40.6960, lon:-74.0440},
+  {name:"Port of Boston",        country:"US", lat:42.3536, lon:-71.0447},
+  {name:"Port of Charleston",    country:"US", lat:32.7765, lon:-79.9390},
+  {name:"Port of Mobile",        country:"US", lat:30.6954, lon:-88.0431},
+  {name:"Port of New Orleans",   country:"US", lat:29.9380, lon:-90.0626},
+  {name:"Galveston",             country:"US", lat:29.3139, lon:-94.7977},
+  // Caribbean
+  {name:"Nassau",                country:"BS", lat:25.0847, lon:-77.3388},
+  {name:"Freeport",              country:"BS", lat:26.5333, lon:-78.6972},
+  {name:"Labadee",               country:"HT", lat:19.7606, lon:-72.2355},
+  {name:"Amber Cove",            country:"DO", lat:19.8534, lon:-70.6986},
+  {name:"San Juan",              country:"PR", lat:18.4657, lon:-66.1185},
+  {name:"St. Thomas",            country:"VI", lat:18.3426, lon:-64.9306},
+  {name:"St. Croix",             country:"VI", lat:17.7491, lon:-64.7046},
+  {name:"St. Maarten",           country:"SX", lat:18.0237, lon:-63.0458},
+  {name:"St. Kitts",             country:"KN", lat:17.3026, lon:-62.7305},
+  {name:"Antigua",               country:"AG", lat:17.1271, lon:-61.8468},
+  {name:"St. Lucia",             country:"LC", lat:13.9957, lon:-61.0081},
+  {name:"Barbados",              country:"BB", lat:13.1050, lon:-59.6213},
+  {name:"Aruba",                 country:"AW", lat:12.5186, lon:-70.0358},
+  {name:"Curaçao",               country:"CW", lat:12.1024, lon:-68.9335},
+  {name:"Grand Cayman",          country:"KY", lat:19.3000, lon:-81.3794},
+  {name:"Roatan",                country:"HN", lat:16.3178, lon:-86.5358},
+  {name:"Belize City",           country:"BZ", lat:17.4965, lon:-88.1888},
+  {name:"Cozumel",               country:"MX", lat:20.5072, lon:-86.9571},
+  {name:"Ocho Rios",             country:"JM", lat:18.4041, lon:-77.1085},
+  {name:"Falmouth",              country:"JM", lat:18.4958, lon:-77.6588},
+  {name:"Turks & Caicos",        country:"TC", lat:21.4612, lon:-71.1390},
+  {name:"Dominica",              country:"DM", lat:15.3017, lon:-61.3879},
+  // Pacific / US West Coast
+  {name:"Vancouver",             country:"CA", lat:49.2877, lon:-123.1077},
+  {name:"Victoria",              country:"CA", lat:48.4175, lon:-123.3720},
+  {name:"Seattle",               country:"US", lat:47.6205, lon:-122.3493},
+  {name:"San Francisco",         country:"US", lat:37.8044, lon:-122.4007},
+  {name:"Los Angeles",           country:"US", lat:33.7454, lon:-118.2653},
+  {name:"San Diego",             country:"US", lat:32.7157, lon:-117.1734},
+  {name:"Honolulu",              country:"US", lat:21.3069, lon:-157.8583},
+  // Alaska
+  {name:"Juneau",                country:"US", lat:58.3005, lon:-134.4197},
+  {name:"Skagway",               country:"US", lat:59.4572, lon:-135.3144},
+  {name:"Ketchikan",             country:"US", lat:55.3422, lon:-131.6461},
+  {name:"Sitka",                 country:"US", lat:57.0531, lon:-135.3300},
+  {name:"Haines",                country:"US", lat:59.2358, lon:-135.4453},
+  {name:"Icy Strait Point",      country:"US", lat:58.0977, lon:-135.4490},
+  // Mexico / Central America
+  {name:"Ensenada",              country:"MX", lat:31.8667, lon:-116.6000},
+  {name:"Puerto Vallarta",       country:"MX", lat:20.6296, lon:-105.2253},
+  {name:"Cabo San Lucas",        country:"MX", lat:22.8897, lon:-109.9139},
+  {name:"Mazatlán",              country:"MX", lat:23.2494, lon:-106.4111},
+  {name:"Huatulco",              country:"MX", lat:15.7510, lon:-96.1370},
+  {name:"Puerto Chiapas",        country:"MX", lat:14.7224, lon:-92.4066},
+  // Mediterranean
+  {name:"Barcelona",             country:"ES", lat:41.3631, lon:2.1734},
+  {name:"Palma de Mallorca",     country:"ES", lat:39.5697, lon:2.6476},
+  {name:"Civitavecchia",         country:"IT", lat:42.0913, lon:11.7938},
+  {name:"Naples",                country:"IT", lat:40.8398, lon:14.2641},
+  {name:"Palermo",               country:"IT", lat:38.1157, lon:13.3615},
+  {name:"Genoa",                 country:"IT", lat:44.4049, lon:8.9294},
+  {name:"La Spezia",             country:"IT", lat:44.1039, lon:9.8203},
+  {name:"Venice",                country:"IT", lat:45.4408, lon:12.3155},
+  {name:"Trieste",               country:"IT", lat:45.6495, lon:13.7768},
+  {name:"Valletta",              country:"MT", lat:35.8997, lon:14.5147},
+  {name:"Piraeus",               country:"GR", lat:37.9413, lon:23.6478},
+  {name:"Santorini",             country:"GR", lat:36.4168, lon:25.4297},
+  {name:"Mykonos",               country:"GR", lat:37.4467, lon:25.3289},
+  {name:"Rhodes",                country:"GR", lat:36.4497, lon:28.2241},
+  {name:"Corfu",                 country:"GR", lat:39.6236, lon:19.9232},
+  {name:"Katakolon",             country:"GR", lat:37.6465, lon:21.3202},
+  {name:"Heraklion",             country:"GR", lat:35.3387, lon:25.1442},
+  {name:"Kusadasi",              country:"TR", lat:37.8564, lon:27.2630},
+  {name:"Istanbul",              country:"TR", lat:41.0082, lon:28.9784},
+  {name:"Dubrovnik",             country:"HR", lat:42.6507, lon:18.0944},
+  {name:"Split",                 country:"HR", lat:43.5047, lon:16.4435},
+  {name:"Kotor",                 country:"ME", lat:42.4247, lon:18.7712},
+  {name:"Marseille",             country:"FR", lat:43.2965, lon:5.3698},
+  {name:"Nice / Villefranche",   country:"FR", lat:43.7102, lon:7.2620},
+  {name:"Monte Carlo",           country:"MC", lat:43.7384, lon:7.4246},
+  // Northern Europe
+  {name:"Southampton",           country:"GB", lat:50.9097, lon:-1.4044},
+  {name:"Dover",                 country:"GB", lat:51.1279, lon:1.3134},
+  {name:"Tilbury",               country:"GB", lat:51.4600, lon:0.3519},
+  {name:"Leith (Edinburgh)",     country:"GB", lat:55.9857, lon:-3.1744},
+  {name:"Amsterdam",             country:"NL", lat:52.3906, lon:4.9220},
+  {name:"Zeebrugge",             country:"BE", lat:51.3423, lon:3.1975},
+  {name:"Hamburg",               country:"DE", lat:53.5461, lon:9.9965},
+  {name:"Kiel",                  country:"DE", lat:54.3233, lon:10.1394},
+  {name:"Warnemünde",            country:"DE", lat:54.1833, lon:12.0833},
+  {name:"Copenhagen",            country:"DK", lat:55.6761, lon:12.5683},
+  {name:"Oslo",                  country:"NO", lat:59.9139, lon:10.7522},
+  {name:"Bergen",                country:"NO", lat:60.3913, lon:5.3221},
+  {name:"Stavanger",             country:"NO", lat:58.9700, lon:5.7331},
+  {name:"Ålesund",               country:"NO", lat:62.4724, lon:6.1549},
+  {name:"Geiranger",             country:"NO", lat:62.1008, lon:7.2059},
+  {name:"Flåm",                  country:"NO", lat:60.8631, lon:7.1139},
+  {name:"Stockholm",             country:"SE", lat:59.3293, lon:18.0686},
+  {name:"Nynäshamn",             country:"SE", lat:58.9046, lon:17.9491},
+  {name:"Helsinki",              country:"FI", lat:60.1699, lon:24.9384},
+  {name:"Tallinn",               country:"EE", lat:59.4370, lon:24.7536},
+  {name:"Riga",                  country:"LV", lat:56.9460, lon:24.1059},
+  {name:"St. Petersburg",        country:"RU", lat:59.9311, lon:30.3609},
+  // Asia / Pacific
+  {name:"Singapore",             country:"SG", lat:1.2655,  lon:103.8198},
+  {name:"Hong Kong",             country:"HK", lat:22.2956, lon:114.1722},
+  {name:"Yokohama",              country:"JP", lat:35.4437, lon:139.6380},
+  {name:"Tokyo",                 country:"JP", lat:35.6486, lon:139.7750},
+  {name:"Sydney",                country:"AU", lat:-33.8688,lon:151.2093},
+  {name:"Melbourne",             country:"AU", lat:-37.8136,lon:144.9631},
+  {name:"Auckland",              country:"NZ", lat:-36.8485,lon:174.7633},
+  {name:"Bali (Benoa)",          country:"ID", lat:-8.7494, lon:115.2167},
+  {name:"Phuket",                country:"TH", lat:7.8804,  lon:98.3923},
+  // Middle East / Africa
+  {name:"Dubai",                 country:"AE", lat:25.2697, lon:55.3095},
+  {name:"Abu Dhabi",             country:"AE", lat:24.4539, lon:54.3773},
+  {name:"Cape Town",             country:"ZA", lat:-33.9249,lon:18.4241},
+  // South America
+  {name:"Buenos Aires",          country:"AR", lat:-34.6037,lon:-58.3816},
+  {name:"Santos",                country:"BR", lat:-23.9618,lon:-46.3322},
+];
+const PORT_SNAP_KM=30;
+function haverKm(la1,lo1,la2,lo2){
+  const R=6371,dLa=(la2-la1)*Math.PI/180,dLo=(lo2-lo1)*Math.PI/180;
+  const a=Math.sin(dLa/2)**2+Math.cos(la1*Math.PI/180)*Math.cos(la2*Math.PI/180)*Math.sin(dLo/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+function snapToPort(d){
+  if(d.lat==null) return;
+  let best=null,bestKm=PORT_SNAP_KM;
+  for(const p of CRUISE_PORTS){
+    const km=haverKm(d.lat,d.lon,p.lat,p.lon);
+    if(km<bestKm){ bestKm=km; best=p; }
+  }
+  if(best){ d.portCity=best.name; d.portCountry=best.country; }
+}
+
 /* ---------- persistence (last-known + healed MMSIs) ---------- */
 const STORE_KEY="wake:v1";
 function loadStore(){ try{ return JSON.parse(localStorage.getItem(STORE_KEY))||{}; }catch(e){ return {}; } }
@@ -737,13 +880,16 @@ function getFleet(){
     if(typeof c.lat==="number"){ lat=c.lat; lon=c.lon; hdg=c.hdg||0; spd=c.spd||0; status=c.status||"sea"; }
     else if(s){ lat=s[0]; lon=s[1]; status=s[2]?"port":"sea"; hdg=s[3]||0; spd=s[4]||0; }
     const has = lat!=null;
-    return {
+    const d={
       id:i, mmsi:String(c.mmsi||mmsi), name, line, color:LINES[line]||"#9fb4bf",
       lat, lon, hdg, rhdg:hdg, cog:hdg, spd, status, next: c.next||"—",
       region: has?regionFor(lat,lon):"—",
+      portCity:null, portCountry:null,
       live:false, lastSeen:c.t||0, trail: has?[[lon,lat]]:[],
       _appeared: has, _x:0,_y:0,_g:null,_hl:null
     };
+    if(status==="port") snapToPort(d);
+    return d;
   });
 }
 const fleet=getFleet();
@@ -908,7 +1054,7 @@ async function reverseGeo(d){
         .then(r=>r.json()).then(j=>buildPlace(j,d.region));
     geoCache.set(key,p); p.catch(()=>geoCache.delete(key));
   }
-  try{ const rec=await p; if(rec){ d.place=rec.place; d.portCity=rec.city||""; d.portCountry=rec.country; afterGeo(d); } }
+  try{ const rec=await p; if(rec){ d.place=rec.place; if(d.portCity===null){ d.portCity=rec.city||null; d.portCountry=rec.country; } afterGeo(d); } }
   catch(e){ /* region fallback already shown */ }
 }
 
@@ -927,7 +1073,7 @@ function portGroups(){
   return [...g.values()].sort((a,b)=> b.ships.length-a.ships.length || a.name.localeCompare(b.name));
 }
 async function ensurePortGeocodes(onProgress){
-  const todo=inPortShips().filter(d=>d.portCity===undefined);
+  const todo=inPortShips().filter(d=>d.portCity===null);
   let n=0;
   await Promise.all(todo.map(d=>reverseGeo(d).then(()=>{ if(onProgress && (++n)%3===0) onProgress(); })));
 }
@@ -1260,7 +1406,9 @@ function applyPosition(d,pr){
   d.hdg=(typeof pr.TrueHeading==="number"&&pr.TrueHeading!==511)?pr.TrueHeading:d.cog;
   if(firstFix) d.rhdg=d.hdg;       // appear pointing the right way, no spin-up
   const ns=pr.NavigationalStatus;
-  d.status=(ns===1||ns===5||d.spd<0.5)?"port":"sea";
+  d.status=(ns===1||ns===5||d.spd<2.0)?"port":"sea";
+  if(d.status==="port") snapToPort(d);
+  else { d.portCity=null; d.portCountry=null; }
   d.region=regionFor(d.lat,d.lon);
   d.live=true; d.lastSeen=Date.now();
   d.trail.push([d.lon,d.lat]); if(d.trail.length>CONFIG.TRAIL_MAX) d.trail.shift();
