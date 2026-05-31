@@ -68,7 +68,7 @@
     -webkit-backdrop-filter:blur(18px) saturate(140%);
     box-shadow:0 24px 60px -20px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.04);
   }
-  #brand{top:18px;left:18px;padding:16px 20px 15px;max-width:300px}
+  #brand{top:18px;left:18px;padding:16px 20px 15px;max-width:368px}
   .wordmark{display:flex;align-items:baseline;gap:10px}
   .wordmark h1{
     font-family:'Fraunces',serif;font-weight:600;font-size:30px;letter-spacing:.04em;
@@ -85,13 +85,44 @@
     padding:4px 9px;border-radius:999px;cursor:help;
   }
   .feedpill b{width:5px;height:5px;border-radius:50%;background:var(--brass);display:inline-block}
-  .brandstats{display:flex;margin-top:14px}
+  .brandstats{display:flex;align-items:center;margin-top:14px}
   .bstat{padding-right:15px;margin-right:15px;border-right:1px solid var(--glass-edge)}
   .bstat:last-child{padding-right:0;margin-right:0;border-right:none}
   .bstat .num{font-family:'Fraunces',serif;font-weight:600;font-size:22px;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums;display:block}
   .bstat .num.sea{color:#7fd0c4}
   .bstat .num.port{color:var(--brass)}
   .bstat .lab{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-top:6px;display:block}
+
+  /* ---- Ports button + dropdown (overlay, no map space) ---- */
+  .ports-btn{margin-left:auto;align-self:center;display:inline-flex;align-items:center;gap:6px;cursor:pointer;background:rgba(255,255,255,.04);border:1px solid var(--glass-edge);border-radius:999px;color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.13em;text-transform:uppercase;padding:8px 11px;transition:background .2s,border-color .2s,transform .1s,color .2s}
+  .ports-btn:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18)}
+  .ports-btn.on{background:rgba(226,189,114,.13);border-color:rgba(226,189,114,.42);color:var(--brass)}
+  .ports-btn:active{transform:scale(.95)}
+  .ports-btn svg{width:13px;height:13px;flex:none}
+  .ports-btn .pb-chev{width:11px;height:11px;transition:transform .26s var(--ease-out)}
+  .ports-btn.on .pb-chev{transform:rotate(180deg)}
+  #ports{position:fixed;z-index:1001;max-height:52vh;overflow-y:auto;padding:8px;opacity:0;transform:translateY(-8px) scale(.99);pointer-events:none;transform-origin:top center;transition:opacity .22s var(--ease-out),transform .32s var(--ease-out);scrollbar-width:thin;scrollbar-color:rgba(120,170,185,.25) transparent}
+  #ports.show{opacity:1;transform:none;pointer-events:auto}
+  #ports::-webkit-scrollbar{width:6px}#ports::-webkit-scrollbar-thumb{background:rgba(120,170,185,.22);border-radius:3px}
+  .ports-hd{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);padding:6px 8px 9px;display:flex;justify-content:space-between;align-items:center}
+  .port-row{border-radius:11px;overflow:hidden;margin-bottom:5px;background:rgba(255,255,255,.02);animation:rowIn .4s var(--ease-out) both}
+  .port-row:last-child{margin-bottom:0}
+  .port-head{display:flex;align-items:center;gap:10px;padding:11px 12px;cursor:pointer;user-select:none;outline:none;transition:background .18s}
+  .port-head:hover,.port-head:focus-visible{background:rgba(255,255,255,.05)}
+  .port-name{flex:1;min-width:0;font-size:13.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .port-name em{font-style:normal;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.05em;color:var(--faint);margin-left:7px;text-transform:uppercase}
+  .port-cnt{flex:none;font-family:'Fraunces',serif;font-weight:600;font-size:15px;color:var(--brass);font-variant-numeric:tabular-nums}
+  .port-chev{flex:none;color:var(--faint);font-size:15px;line-height:1;transition:transform .2s var(--ease-out),color .2s}
+  .port-row.open .port-chev{transform:rotate(90deg);color:var(--brass-soft)}
+  .port-ships{max-height:0;overflow:hidden;transition:max-height .32s var(--ease-io)}
+  .port-row.open .port-ships{max-height:70vh}
+  .port-ship{display:flex;align-items:center;gap:9px;padding:9px 12px 9px 14px;cursor:pointer;font-size:12.5px;color:var(--muted);border-top:1px solid var(--glass-edge);transition:background .15s,color .15s}
+  .port-ship:hover{background:rgba(255,255,255,.05);color:var(--ink)}
+  .port-ship i{width:8px;height:8px;border-radius:50%;flex:none;box-shadow:0 0 8px currentColor}
+  .port-ship em{font-style:normal;margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.05em;color:var(--faint);text-transform:uppercase;white-space:nowrap}
+  .ports-empty{padding:22px 10px;text-align:center;color:var(--faint);font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;line-height:1.7}
+  .ports-empty .spin{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--brass);margin:0 3px;animation:shimmer 1.4s var(--ease-io) infinite}
+  .ports-empty .spin:nth-child(2){animation-delay:.2s}.ports-empty .spin:nth-child(3){animation-delay:.4s}
 
   #stats{top:18px;right:18px;display:flex;gap:0;padding:14px 6px;overflow:hidden}
   .stat{padding:2px 20px;text-align:center;position:relative}
@@ -318,7 +349,17 @@
     <div class="bstat"><span class="num" id="s-total">0</span><span class="lab">Tracked</span></div>
     <div class="bstat"><span class="num sea" id="s-sea">0</span><span class="lab">At&nbsp;sea</span></div>
     <div class="bstat"><span class="num port" id="s-port">0</span><span class="lab">In&nbsp;port</span></div>
+    <button id="portsBtn" class="ports-btn" aria-haspopup="true" aria-expanded="false" title="Ships in port, by location">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+      <span>Ports</span>
+      <svg class="pb-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
   </div>
+</div>
+
+<div id="ports" class="panel" role="dialog" aria-label="Ports with ships in port">
+  <div class="ports-hd"><span>In&nbsp;port&nbsp;·&nbsp;by&nbsp;location</span><span id="portsCount"></span></div>
+  <div id="portsBody"></div>
 </div>
 
 <div id="controls" class="panel">
@@ -829,9 +870,8 @@ byId("dToggle").addEventListener("click",()=>{
   byId("dToggle").setAttribute("aria-expanded", open?"true":"false");
 });
 
-/* ---- reverse geocode: human-readable "roughly where" ---- */
-const geoCache=new Map();
-// short location for the map tooltip (strip the "Near/Off/In the" prefix); falls back to region
+/* ---- reverse geocode: human-readable "roughly where" + port city ---- */
+const geoCache=new Map(); // key -> Promise<{place,city,country}>  (one lookup per ~location)
 function locShort(d){
   if(d.place) return d.place.replace(/^(Near|Off|In the)\s+/i,"");
   return (d.region && d.region!=="—" && d.region!=="At sea") ? d.region : "";
@@ -840,28 +880,102 @@ function afterGeo(d){
   if(selected===d) fillDetail(d);
   if(d._m && d._m.isTooltipOpen && d._m.isTooltipOpen()) d._m.openTooltip();   // refresh tooltip with the location
 }
+function buildPlace(j,region){
+  const city=j.city||j.locality||"";
+  let place;
+  if(city && j.countryName) place="Near "+city+", "+j.countryName;
+  else if(j.principalSubdivision && j.countryName) place="Off "+j.principalSubdivision+", "+j.countryName;
+  else if(j.countryName) place="Off "+j.countryName;
+  else {
+    const inf=(j.localityInfo&&j.localityInfo.informative)||[];
+    const water=inf.map(x=>x.name||"").find(n=>/ocean|sea|gulf|channel|strait|bay/i.test(n));
+    place = water || ("In the "+(region||"open ocean"));
+  }
+  return { place, city: city||j.principalSubdivision||"", country: j.countryName||"" };
+}
 async function reverseGeo(d){
   if(d.lat==null) return;
   const key=d.lat.toFixed(1)+","+d.lon.toFixed(1);
-  if(geoCache.has(key)){ const v=geoCache.get(key); if(v){ d.place=v; afterGeo(d); } return; }
-  geoCache.set(key,null);   // mark in-flight so we don't double-fetch
-  try{
-    const r=await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${d.lat}&longitude=${d.lon}&localityLanguage=en`);
-    const j=await r.json();
-    let place="";
-    const town=j.city||j.locality;
-    if(town && j.countryName) place="Near "+town+", "+j.countryName;
-    else if(j.principalSubdivision && j.countryName) place="Off "+j.principalSubdivision+", "+j.countryName;
-    else if(j.countryName) place="Off "+j.countryName;
-    else {
-      const inf=(j.localityInfo&&j.localityInfo.informative)||[];
-      const water=inf.map(x=>x.name||"").find(n=>/ocean|sea|gulf|channel|strait|bay/i.test(n));
-      place = water || ("In the "+(d.region||"open ocean"));
-    }
-    geoCache.set(key,place); d.place=place;
-    afterGeo(d);
-  }catch(e){ geoCache.delete(key); /* allow retry; region fallback already shown */ }
+  let p=geoCache.get(key);
+  if(!p){
+    p=fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${d.lat}&longitude=${d.lon}&localityLanguage=en`)
+        .then(r=>r.json()).then(j=>buildPlace(j,d.region));
+    geoCache.set(key,p); p.catch(()=>geoCache.delete(key));
+  }
+  try{ const rec=await p; if(rec){ d.place=rec.place; d.portCity=rec.city||""; d.portCountry=rec.country; afterGeo(d); } }
+  catch(e){ /* region fallback already shown */ }
 }
+
+/* ===================== PORTS DROPDOWN ===================== */
+const portsEl=byId("ports"), portsBtn=byId("portsBtn");
+let portsOpen=false, portsLoading=false;
+
+function inPortShips(){ return fleet.filter(d=>d.lat!=null && d.status==="port"); }
+function portGroups(){
+  const g=new Map();
+  inPortShips().forEach(d=>{
+    if(!d.portCity) return;
+    if(!g.has(d.portCity)) g.set(d.portCity,{name:d.portCity, country:d.portCountry||"", ships:[]});
+    g.get(d.portCity).ships.push(d);
+  });
+  return [...g.values()].sort((a,b)=> b.ships.length-a.ships.length || a.name.localeCompare(b.name));
+}
+async function ensurePortGeocodes(onProgress){
+  const todo=inPortShips().filter(d=>d.portCity===undefined);
+  let n=0;
+  await Promise.all(todo.map(d=>reverseGeo(d).then(()=>{ if(onProgress && (++n)%3===0) onProgress(); })));
+}
+function renderPorts(){
+  const groups=portGroups();
+  byId("portsCount").textContent = groups.length ? groups.length+(groups.length===1?" port":" ports") : "";
+  const body=byId("portsBody");
+  if(!groups.length){
+    body.innerHTML = portsLoading
+      ? `<div class="ports-empty">Locating ships in port<span class="spin"></span><span class="spin"></span><span class="spin"></span></div>`
+      : `<div class="ports-empty">No ships in port right now</div>`;
+    return;
+  }
+  body.innerHTML="";
+  groups.forEach((g,i)=>{
+    const row=el("div","port-row"); row.style.animationDelay=(i*22)+"ms";
+    row.innerHTML=`<div class="port-head" tabindex="0" role="button" aria-label="${g.name}, ${g.ships.length} ships">
+        <span class="port-name">${g.name}${g.country?`<em>${g.country}</em>`:""}</span>
+        <span class="port-cnt">${g.ships.length}</span><span class="port-chev">›</span>
+      </div><div class="port-ships"></div>`;
+    const ships=row.querySelector(".port-ships");
+    g.ships.slice().sort((a,b)=>a.name.localeCompare(b.name)).forEach(d=>{
+      const s=el("div","port-ship");
+      s.innerHTML=`<i style="background:${d.color};color:${d.color}"></i>${d.name}<em>${d.line}</em>`;
+      s.addEventListener("click",()=>{ closePorts(); goShip(d); });
+      ships.appendChild(s);
+    });
+    const head=row.querySelector(".port-head");
+    const toggle=()=>{ const wasOpen=row.classList.contains("open");
+      body.querySelectorAll(".port-row.open").forEach(r=>r.classList.remove("open"));
+      if(!wasOpen) row.classList.add("open"); };
+    head.addEventListener("click",toggle);
+    head.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); toggle(); } });
+    body.appendChild(row);
+  });
+}
+function positionPorts(){
+  const b=byId("brand").getBoundingClientRect();
+  portsEl.style.top=(b.bottom+10)+"px";
+  portsEl.style.left=b.left+"px";
+  portsEl.style.width=b.width+"px";
+}
+function openPorts(){
+  portsOpen=true; portsBtn.classList.add("on"); portsBtn.setAttribute("aria-expanded","true");
+  positionPorts(); portsEl.classList.add("show");
+  portsLoading=true; renderPorts();
+  ensurePortGeocodes(()=>{ if(portsOpen) renderPorts(); }).then(()=>{ portsLoading=false; if(portsOpen) renderPorts(); });
+}
+function closePorts(){ portsOpen=false; portsBtn.classList.remove("on"); portsBtn.setAttribute("aria-expanded","false"); portsEl.classList.remove("show"); }
+portsBtn.addEventListener("click",e=>{ e.stopPropagation(); portsOpen?closePorts():openPorts(); });
+portsEl.addEventListener("click",e=>e.stopPropagation());
+document.addEventListener("click",()=>{ if(portsOpen) closePorts(); });
+addEventListener("resize",()=>{ if(portsOpen) positionPorts(); });
+addEventListener("keydown",e=>{ if(e.key==="Escape" && portsOpen) closePorts(); });
 
 /* ---- resize ---- */
 function fit(){ map.invalidateSize(); }
