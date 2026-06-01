@@ -2336,13 +2336,26 @@ function _whenYT(fn){ if(window._ytReady) fn(); else window._ytCbs.push(fn); }
 
   function injectIframe(card, wrap, feed){
     let done = false;
+    let _ytPlayer = null; // reference set in onReady, used for retry after animation
     const startedAt = Date.now();
     const MIN_SHIP_MS = 2200; // minimum ms to show the ship loading animation
     const hardTimeout = setTimeout(()=>{ if(!done) markOffline(card); }, 20000);
     function markLoaded(){
       if(done) return; done=true; clearTimeout(hardTimeout);
       const wait = Math.max(0, MIN_SHIP_MS - (Date.now() - startedAt));
-      setTimeout(()=>card.classList.add('loaded'), wait);
+      setTimeout(()=>{
+        card.classList.add('loaded');
+        // Animation is gone — retry play + unmute right as the video is revealed.
+        // Also focus + click the iframe center so mobile treats it as intentional.
+        const ifr = wrap.querySelector('iframe');
+        if(ifr && !card.classList.contains('offline')){
+          ifr.focus();
+          ifr.click();
+        }
+        if(_ytPlayer){
+          try { _ytPlayer.playVideo(); _ytPlayer.unMute(); _ytPlayer.setVolume(100); } catch(_){}
+        }
+      }, wait);
     }
 
     if(feed.windyId){
@@ -2386,6 +2399,7 @@ function _whenYT(fn){ if(window._ytReady) fn(); else window._ytCbs.push(fn); }
           playerVars: { autoplay:1, mute:1, playsinline:1, controls:1, rel:0, modestbranding:1 },
           events: {
             onReady(e){
+              _ytPlayer = e.target;
               e.target.playVideo();
               try { e.target.unMute(); e.target.setVolume(100); } catch(_){}
               markLoaded();
