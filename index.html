@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
 <style>
   :root{
     --ink:#eaf1f3;
@@ -586,6 +587,71 @@
     75%{content:'...'}
     100%{content:''}
   }
+
+  /* ========== STREAM MODAL ========== */
+  #streamModal{
+    position:fixed;inset:0;z-index:4000;
+    background:#000;
+    display:flex;flex-direction:column;
+  }
+  #streamModal[hidden]{display:none}
+  .sm-header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:10px 16px;
+    background:rgba(4,14,20,.92);
+    border-bottom:1px solid var(--glass-edge);
+    flex:none;gap:12px;
+  }
+  .sm-title{
+    font-family:'Fraunces',serif;font-size:16px;font-weight:600;
+    color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .sm-badge{
+    font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.18em;
+    text-transform:uppercase;color:#5ad6a0;
+    border:1px solid rgba(90,214,160,.3);padding:3px 8px;border-radius:999px;
+    white-space:nowrap;flex:none;
+    display:flex;align-items:center;gap:5px;
+  }
+  .sm-badge b{width:5px;height:5px;border-radius:50%;background:#5ad6a0;
+    box-shadow:0 0 8px #5ad6a0;display:inline-block;flex:none}
+  .sm-close{
+    width:34px;height:34px;border-radius:50%;
+    background:rgba(255,255,255,.06);border:1px solid var(--glass-edge);
+    color:var(--ink);font-size:14px;display:flex;align-items:center;
+    justify-content:center;cursor:pointer;flex:none;
+    transition:background .16s;
+  }
+  .sm-close:hover{background:rgba(255,255,255,.14)}
+  .sm-player-wrap{
+    flex:1;position:relative;min-height:0;
+  }
+  .sm-player-wrap iframe,
+  .sm-player-wrap #ytPlayerEl{
+    position:absolute;inset:0;width:100%;height:100%;border:none;
+  }
+  /* stream loading overlay - reuses ldr- animations */
+  #streamLoader{
+    position:absolute;inset:0;z-index:10;
+    background:linear-gradient(180deg,#04101a 0%,#061c2c 55%,#082535 100%);
+    overflow:hidden;
+    transition:opacity .7s ease;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+  #streamLoader.sl-hide{opacity:0;pointer-events:none}
+  /* camera button in profile links */
+  .profile-cam-btn{
+    font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;
+    text-transform:uppercase;color:#5ad6a0;
+    background:rgba(90,214,160,.06);
+    text-decoration:none;border:1px solid rgba(90,214,160,.3);
+    padding:5px 10px;border-radius:999px;
+    transition:background .18s;cursor:pointer;
+    display:inline-flex;align-items:center;gap:5px;
+  }
+  .profile-cam-btn:hover{background:rgba(90,214,160,.14)}
+  .profile-cam-btn b{width:5px;height:5px;border-radius:50%;background:#5ad6a0;
+    box-shadow:0 0 6px #5ad6a0;display:inline-block}
 </style>
 </head>
 <body>
@@ -813,6 +879,79 @@
     </div>
   </div>
 </div>
+
+<!-- ========== STREAM MODAL ========== -->
+<div id="streamModal" hidden>
+  <div class="sm-header">
+    <span class="sm-title" id="smTitle"></span>
+    <span class="sm-badge"><b></b>Live</span>
+    <button class="sm-close" id="smClose" aria-label="Close stream">✕</button>
+  </div>
+  <div class="sm-player-wrap">
+    <!-- YouTube player mounts here -->
+    <div id="ytPlayerEl"></div>
+    <!-- Loading overlay (ship animation, shown until stream plays) -->
+    <div id="streamLoader">
+      <div class="ldr-stars"></div>
+      <div class="ldr-moon"></div>
+      <div class="ldr-text">
+        <div class="ldr-logo">WAKE</div>
+        <div class="ldr-tagline">Live Camera</div>
+        <div class="ldr-status">Loading stream<span class="ldr-dots"></span></div>
+      </div>
+      <div class="ldr-ship-wrap">
+        <div class="ldr-smoke">
+          <div class="ldr-puff"></div>
+          <div class="ldr-puff"></div>
+          <div class="ldr-puff"></div>
+          <div class="ldr-puff"></div>
+        </div>
+        <div class="ldr-trail"></div>
+        <svg class="ldr-ship-svg" viewBox="0 0 320 82" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 57 L292 57 C302 57 312 61 315 67 L311 73 L10 73 Q4 69 12 57Z" fill="#E8D9A0"/>
+          <path d="M11 64 L298 64 L311 68 L308 73 L10 73 Q5 70 11 64Z" fill="#8B2525" opacity="0.75"/>
+          <rect x="22" y="37" width="268" height="22" rx="2" fill="#DFD090"/>
+          <rect x="42" y="23" width="228" height="16" rx="2" fill="#D6C680"/>
+          <rect x="62" y="13" width="188" height="12" rx="2" fill="#CEBC70"/>
+          <rect x="82" y="5" width="148" height="10" rx="2" fill="#C6B260"/>
+          <rect x="210" y="1" width="62" height="13" rx="2" fill="#BCA850"/>
+          <rect x="205" y="7" width="6" height="5" fill="#BCA850"/>
+          <rect x="271" y="7" width="6" height="5" fill="#BCA850"/>
+          <rect x="148" y="-8" width="30" height="24" rx="5" fill="#E07020"/>
+          <ellipse cx="163" cy="-8" rx="18" ry="5" fill="#111"/>
+          <rect x="108" y="-3" width="22" height="18" rx="4" fill="#E07020"/>
+          <ellipse cx="119" cy="-3" rx="13" ry="4" fill="#111"/>
+          <g fill="rgba(255,245,195,0.55)">
+            <rect x="32" y="42" width="4" height="4" rx="1"/><rect x="48" y="42" width="4" height="4" rx="1"/>
+            <rect x="64" y="42" width="4" height="4" rx="1"/><rect x="80" y="42" width="4" height="4" rx="1"/>
+            <rect x="96" y="42" width="4" height="4" rx="1"/><rect x="112" y="42" width="4" height="4" rx="1"/>
+            <rect x="180" y="42" width="4" height="4" rx="1"/><rect x="196" y="42" width="4" height="4" rx="1"/>
+            <rect x="212" y="42" width="4" height="4" rx="1"/><rect x="228" y="42" width="4" height="4" rx="1"/>
+            <rect x="244" y="42" width="4" height="4" rx="1"/><rect x="260" y="42" width="4" height="4" rx="1"/>
+          </g>
+          <g fill="#0a1c28" opacity="0.7">
+            <circle cx="50" cy="62" r="2.5"/><circle cx="90" cy="62" r="2.5"/>
+            <circle cx="130" cy="62" r="2.5"/><circle cx="170" cy="62" r="2.5"/>
+            <circle cx="210" cy="62" r="2.5"/><circle cx="250" cy="62" r="2.5"/>
+          </g>
+        </svg>
+      </div>
+      <div class="ldr-ocean">
+        <svg class="ldr-waves-svg ldr-wave1" viewBox="0 0 1440 70" preserveAspectRatio="none">
+          <path d="M0,30 C120,10 240,50 360,30 C480,10 600,50 720,30 C840,10 960,50 1080,30 C1200,10 1320,50 1440,30 L1440,70 L0,70Z" fill="rgba(10,45,65,0.9)"/>
+        </svg>
+        <svg class="ldr-waves-svg ldr-wave2" viewBox="0 0 1440 70" preserveAspectRatio="none">
+          <path d="M0,38 C100,18 200,52 360,36 C520,20 640,54 800,36 C960,18 1080,54 1200,36 C1300,22 1380,46 1440,38 L1440,70 L0,70Z" fill="rgba(8,35,55,0.7)"/>
+        </svg>
+        <svg class="ldr-waves-svg ldr-wave3" viewBox="0 0 1440 70" preserveAspectRatio="none">
+          <path d="M0,42 C180,22 360,58 540,40 C720,22 900,58 1080,40 C1260,22 1380,52 1440,42 L1440,70 L0,70Z" fill="rgba(6,25,40,0.5)"/>
+        </svg>
+      </div>
+      <div class="ldr-horizon"></div>
+    </div>
+  </div>
+</div>
+
 <button id="navOpen" class="nav-open" aria-label="Show fleet menu" title="Show fleet menu">
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg><span>Fleet</span>
 </button>
@@ -2165,9 +2304,16 @@ function openProfile(d){
       return `<div class="profile-itin-row"><span class="profile-itin-date" style="${isToday?"color:var(--brass)":""}">${label}</span><span class="profile-itin-port">${c.port}</span>${times?`<span class="profile-itin-times">${times}</span>`:""}</div>`;
     }).join("")
     :`<div style="color:var(--faint);font-size:12px;padding:6px 0">No itinerary data available</div>`;
-  byId("profileLinks").innerHTML=spec.wiki
-    ?`<a class="profile-wiki-link" href="${spec.wiki}" target="_blank" rel="noopener">Wikipedia ↗</a>`:
-    "";
+  {
+    const links=[];
+    if(spec.wiki) links.push(`<a class="profile-wiki-link" href="${spec.wiki}" target="_blank" rel="noopener">Wikipedia ↗</a>`);
+    if(spec.cam){
+      const safeId=spec.cam.replace(/[^a-zA-Z0-9_\-]/g,"");
+      const safeName=d.name.replace(/'/g,"\\'");
+      links.push(`<button class="profile-cam-btn" onclick="openStream('${safeId}','${safeName}')"><b></b>Live Camera</button>`);
+    }
+    byId("profileLinks").innerHTML=links.join("");
+  }
   profileEl.hidden=false;
   requestAnimationFrame(()=>requestAnimationFrame(()=>profileEl.classList.add("show")));
   document.body.style.overflow="hidden";
@@ -2180,6 +2326,54 @@ byId("profileBtn").addEventListener("click",()=>{ if(selected) openProfile(selec
 byId("profileClose").addEventListener("click",closeProfile);
 profileEl.addEventListener("click",e=>{ if(e.target===profileEl) closeProfile(); });
 addEventListener("keydown",e=>{ if(e.key==="Escape"&&!profileEl.hidden) closeProfile(); });
+
+/* ---- stream / live camera ---- */
+let _ytReady = false;
+let _ytPlayer = null;
+let _ytPending = null;
+
+function onYouTubeIframeAPIReady(){
+  _ytReady = true;
+  if(_ytPending){ _createYTPlayer(_ytPending); _ytPending = null; }
+}
+
+function _createYTPlayer(videoId){
+  if(_ytPlayer){ try{ _ytPlayer.destroy(); }catch(e){} _ytPlayer = null; }
+  // Reset the target div (YouTube SDK replaces it entirely)
+  const wrap = byId("ytPlayerEl");
+  wrap.innerHTML = "";
+  _ytPlayer = new YT.Player("ytPlayerEl",{
+    videoId,
+    playerVars:{ autoplay:1, mute:0, controls:1, rel:0, modestbranding:1, playsinline:1 },
+    events:{
+      onReady(e){ e.target.unMute(); e.target.setVolume(100); },
+      onStateChange(e){
+        if(e.data === YT.PlayerState.PLAYING){
+          byId("streamLoader").classList.add("sl-hide");
+        }
+      }
+    }
+  });
+}
+
+function openStream(videoId, shipName){
+  byId("smTitle").textContent = shipName || "";
+  byId("streamLoader").classList.remove("sl-hide");
+  byId("streamModal").hidden = false;
+  document.body.style.overflow = "hidden";
+  if(_ytReady) _createYTPlayer(videoId);
+  else _ytPending = videoId;
+}
+
+function closeStream(){
+  if(_ytPlayer){ try{ _ytPlayer.stopVideo(); _ytPlayer.destroy(); }catch(e){} _ytPlayer = null; }
+  byId("streamModal").hidden = true;
+  byId("streamLoader").classList.remove("sl-hide");
+  document.body.style.overflow = "";
+}
+
+byId("smClose").addEventListener("click", closeStream);
+addEventListener("keydown", e=>{ if(e.key==="Escape" && !byId("streamModal").hidden) closeStream(); });
 
 /* ---- brand panel collapse ---- */
 const brandEl=byId("brand");
