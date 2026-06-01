@@ -1877,7 +1877,6 @@ function openProfile(d){
     <div class="spec-cell"><div class="spec-k">Decks</div><div class="spec-v">${spec.decks||"—"}</div></div>
     <div class="spec-cell"><div class="spec-k">Cruise Critic</div><div class="spec-v" style="font-size:0;padding-top:6px">${spec.critic?`<span style="font-size:18px;letter-spacing:1px">${renderStars(spec.critic)}</span><span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--brass);margin-top:4px;font-weight:400">${spec.critic} / 5</span>`:"<span style='font-size:14px;color:var(--faint)'>—</span>"}</div></div>
   `;
-  byId("profileCritic").innerHTML="";
   const statusIcon=d.status==="port"?"🚢":"⛵";
   const loc=d.place||d.region||"Open Ocean";
   byId("profileVoyage").innerHTML=`
