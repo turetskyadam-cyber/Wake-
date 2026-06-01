@@ -256,18 +256,33 @@
   #brand.mini .brand-right{display:none!important}
   #brand.mini .brand-expand-btn{display:inline-flex;align-items:center}
 
-  /* ---- weather strip inside detail card ---- */
-  .d-weather{display:flex;align-items:center;gap:10px;padding:10px 18px;border-top:1px solid var(--glass-edge);background:rgba(255,255,255,.015)}
-  .d-wx-icon{font-size:20px;line-height:1;flex:none}
-  .d-wx-temp{font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:var(--ink);line-height:1;flex:none}
-  .d-wx-sep{color:var(--glass-edge);flex:none}
-  .d-wx-wind{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.05em;color:var(--brass);flex:none}
-  .d-wx-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-left:auto}
+  /* ---- ship side panel (weather + deep dive) ---- */
+  #shipSide{position:fixed;bottom:18px;right:calc(18px + 330px + 10px);width:140px;padding:0;opacity:0;pointer-events:none;transform:translateX(10px);transition:opacity .28s var(--ease-out),transform .28s var(--ease-out);z-index:1000}
+  #shipSide.show{opacity:1;pointer-events:auto;transform:none}
+  .ss-wx{padding:20px 14px 16px;display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center}
+  .ss-wx-icon{font-size:40px;line-height:1;display:block}
+  .ss-wx-temp{font-family:'Fraunces',serif;font-size:30px;font-weight:600;color:var(--ink);line-height:1.1;margin-top:6px}
+  .ss-wx-wind{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.06em;color:var(--brass);margin-top:6px}
+  .ss-wx-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-top:3px}
+  .ss-wx-loading{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);letter-spacing:.06em;text-transform:uppercase;padding:28px 0;display:block;text-align:center}
+  .ss-div{height:1px;background:var(--glass-edge)}
+  .ss-dive-btn{display:flex;flex-direction:column;align-items:center;gap:7px;padding:15px 10px 17px;cursor:pointer;background:none;border:none;color:var(--brass);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;border-radius:0 0 16px 16px;transition:background .2s,color .2s;width:100%}
+  .ss-dive-btn:hover{background:rgba(226,189,114,.09);color:var(--ink)}
+  .ss-dive-btn svg{transition:transform .22s var(--ease-out)}
+  .ss-dive-btn:hover svg{transform:scale(1.12)}
+  @media(max-width:760px){
+    #shipSide{right:auto;left:10px;bottom:74px;width:120px}
+  }
 
-  /* ---- deep dive button inside d-top ---- */
-  .d-deep-btn{position:absolute;top:13px;right:44px;display:flex;align-items:center;gap:5px;padding:4px 9px;background:rgba(226,189,114,.1);border:1px solid rgba(226,189,114,.3);border-radius:999px;color:var(--brass);cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;transition:background .18s,border-color .18s;z-index:2}
-  .d-deep-btn:hover{background:rgba(226,189,114,.2);border-color:rgba(226,189,114,.55)}
-  .d-deep-btn svg{flex:none;width:12px;height:12px}
+  /* ---- cruise critic stars ---- */
+  .s-full{color:var(--brass)}
+  .s-half{color:var(--brass);opacity:.5}
+  .s-empty{color:var(--faint)}
+  .profile-critic{padding:18px 20px 14px;border-top:1px solid var(--glass-edge);display:flex;flex-direction:column;align-items:center;gap:5px}
+  .profile-critic-stars{display:flex;gap:2px;font-size:22px;line-height:1}
+  .profile-critic-row{display:flex;align-items:center;gap:10px}
+  .profile-critic-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+  .profile-critic-score{font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--brass)}
 
   /* ---- ship profile modal ---- */
   .profile-modal{position:fixed;inset:0;z-index:2000;background:rgba(4,14,20,.86);backdrop-filter:blur(16px) saturate(130%);-webkit-backdrop-filter:blur(16px) saturate(130%);opacity:0;transition:opacity .25s var(--ease-out);overflow:hidden}
@@ -468,21 +483,10 @@
   <div class="d-body">
     <div class="d-top">
       <button class="d-close" id="dClose">✕</button>
-      <button class="d-deep-btn" id="profileBtn" title="Ship profile">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-        Deep&nbsp;Dive
-      </button>
       <span class="d-line"><i></i><span id="dLine"></span></span>
       <h2 class="d-name" id="dName"></h2>
       <div class="d-status" id="dStatus"></div>
       <div class="d-place" id="dPlace"></div>
-    </div>
-    <div class="d-weather" id="dWeather" hidden>
-      <span class="d-wx-icon" id="dWxIcon">🌊</span>
-      <span class="d-wx-temp" id="dWxTemp">—</span>
-      <span class="d-wx-sep">·</span>
-      <span class="d-wx-wind" id="dWxWind">—</span>
-      <span class="d-wx-label" id="dWxLabel">—</span>
     </div>
     <div class="d-grid">
       <div class="cell"><div class="k">Latitude</div><div class="v" id="dLat"></div></div>
@@ -507,6 +511,19 @@
 
 <div id="tip"><div class="t-name"></div><div class="t-meta"></div></div>
 
+<div id="shipSide" class="panel">
+  <div class="ss-wx">
+    <span class="ss-wx-icon" id="ssWxIcon">🌊</span>
+    <div class="ss-wx-temp" id="ssWxTemp">—</div>
+    <div class="ss-wx-wind" id="ssWxWind">— kt —</div>
+    <div class="ss-wx-label" id="ssWxLabel">—</div>
+  </div>
+  <div class="ss-div"></div>
+  <button class="ss-dive-btn" id="profileBtn">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    Deep Dive
+  </button>
+</div>
 
 <div id="profile" class="profile-modal" aria-modal="true" hidden>
   <button class="profile-close" id="profileClose">✕</button>
@@ -520,6 +537,7 @@
     </div>
     <div class="profile-body">
       <div class="profile-specs" id="profileSpecs"></div>
+      <div class="profile-critic" id="profileCritic"></div>
       <div class="profile-section">
         <div class="profile-section-hd">Current Voyage</div>
         <div id="profileVoyage"></div>
@@ -1801,12 +1819,14 @@ const WMO={
   95:{e:"⛈",l:"Thunderstorm"},96:{e:"⛈",l:"Thunderstorm"},99:{e:"⛈",l:"Thunderstorm"},
 };
 const _wxCache={};
-function showShipSide(){ if(selected) byId("dWeather").removeAttribute("hidden"); }
-function hideShipSide(){ byId("dWeather").setAttribute("hidden",""); }
+const shipSideEl=byId("shipSide");
+function showShipSide(){ if(selected) shipSideEl.classList.add("show"); }
+function hideShipSide(){ shipSideEl.classList.remove("show"); }
 async function fetchWeather(d){
   if(!d||d.lat==null) return;
-  byId("dWxTemp").textContent="…";
-  byId("dWxLabel").textContent="loading";
+  byId("ssWxIcon").textContent="🌊";
+  byId("ssWxTemp").textContent="…";
+  byId("ssWxLabel").textContent="loading";
   const key=`${d.lat.toFixed(1)},${d.lon.toFixed(1)}`;
   if(_wxCache[key]&&Date.now()-_wxCache[key].ts<10*60*1000){ renderWeather(_wxCache[key].data); return; }
   try{
@@ -1814,41 +1834,62 @@ async function fetchWeather(d){
     const r=await fetch(url).then(r=>r.json());
     _wxCache[key]={ts:Date.now(),data:r.current};
     renderWeather(r.current);
-  }catch(e){ byId("dWxLabel").textContent="no data"; byId("dWxTemp").textContent="—"; }
+  }catch(e){ byId("ssWxLabel").textContent="—"; }
 }
 function renderWeather(c){
   const w=WMO[c.weather_code]||{e:"🌊",l:"At Sea"};
   const dirs=["N","NE","E","SE","S","SW","W","NW"];
   const dir=dirs[Math.round(c.wind_direction_10m/45)%8];
-  byId("dWxIcon").textContent=w.e;
-  byId("dWxTemp").textContent=Math.round(c.temperature_2m)+"°F";
-  byId("dWxWind").textContent=Math.round(c.wind_speed_10m)+" kt "+dir;
-  byId("dWxLabel").textContent=w.l;
+  byId("ssWxIcon").textContent=w.e;
+  byId("ssWxTemp").textContent=Math.round(c.temperature_2m)+"°F";
+  byId("ssWxWind").textContent=Math.round(c.wind_speed_10m)+" kt "+dir;
+  byId("ssWxLabel").textContent=w.l;
 }
 
 /* ---- ship profile modal ---- */
 const profileEl=byId("profile");
+function renderStars(n){
+  if(!n&&n!==0) return '<span style="color:var(--faint)">—</span>';
+  let h='';
+  for(let i=1;i<=5;i++){
+    if(n>=i) h+=`<span class="s-full">★</span>`;
+    else if(n>=i-0.5) h+=`<span class="s-half">★</span>`;
+    else h+=`<span class="s-empty">☆</span>`;
+  }
+  return h;
+}
 function openProfile(d){
   const spec=_ships[d.name]||{};
   const hero=byId("profileHero");
   if(spec.photo){
     hero.style.backgroundImage=`url(${spec.photo})`;
+    hero.style.background=`center/cover url(${spec.photo})`;
   }else{
     hero.style.backgroundImage="none";
     hero.style.background=`linear-gradient(135deg,${d.color}22 0%,var(--glass) 100%)`;
   }
-  byId("profileLineBadge").textContent=d.line;
-  byId("profileLineBadge").style.color=d.color;
+  byId("profileLineBadge").textContent=d.line||spec.line||"";
+  byId("profileLineBadge").style.color=d.color||"var(--brass)";
   byId("profileShipName").textContent=d.name;
   const fmt=n=>n?Number(n).toLocaleString():"—";
+  const ren=spec.renovated?`<span style="color:var(--brass)">${spec.renovated}</span>`:"<span style=\"color:var(--faint)\">—</span>";
   byId("profileSpecs").innerHTML=`
     <div class="spec-cell"><div class="spec-k">Built</div><div class="spec-v">${spec.built||"—"}</div></div>
-    <div class="spec-cell"><div class="spec-k">Gross Tonnage</div><div class="spec-v">${fmt(spec.ton)}<small> GT</small></div></div>
+    <div class="spec-cell"><div class="spec-k">Renovated</div><div class="spec-v" style="font-size:18px">${ren}</div></div>
     <div class="spec-cell"><div class="spec-k">Guests</div><div class="spec-v">${fmt(spec.pax)}</div></div>
     <div class="spec-cell"><div class="spec-k">Crew</div><div class="spec-v">${fmt(spec.crew)}</div></div>
+    <div class="spec-cell"><div class="spec-k">Gross Tons</div><div class="spec-v" style="font-size:16px">${fmt(spec.ton)}<small> GT</small></div></div>
     <div class="spec-cell"><div class="spec-k">Length</div><div class="spec-v">${spec.length||"—"}<small>${spec.length?" m":""}</small></div></div>
-    <div class="spec-cell"><div class="spec-k">Shipyard</div><div class="spec-v" style="font-size:13px;padding-top:4px">${spec.shipyard||"—"}</div></div>
+    <div class="spec-cell"><div class="spec-k">Decks</div><div class="spec-v">${spec.decks||"—"}</div></div>
+    <div class="spec-cell"><div class="spec-k">Shipyard</div><div class="spec-v" style="font-size:12px;padding-top:6px;line-height:1.3">${spec.shipyard||"—"}</div></div>
   `;
+  byId("profileCritic").innerHTML=spec.critic?`
+    <div class="profile-critic-stars">${renderStars(spec.critic)}</div>
+    <div class="profile-critic-row">
+      <span class="profile-critic-label">Cruise Critic</span>
+      <span class="profile-critic-score">${spec.critic} / 5</span>
+    </div>
+  `:`<div style="color:var(--faint);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em">No rating available</div>`;
   const statusIcon=d.status==="port"?"🚢":"⛵";
   const loc=d.place||d.region||"Open Ocean";
   byId("profileVoyage").innerHTML=`
