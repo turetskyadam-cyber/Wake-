@@ -2274,7 +2274,10 @@ const CAM_FEEDS = [
     if(feed.windyId){
       src = `https://webcams.windy.com/webcams/public/embed/player?webcamId=${feed.windyId}&playerType=day&loop=false&interactive=true&forceFullScreenOnOverlayPlay=false`;
     } else if(feed.ytId){
-      src = `https://www.youtube-nocookie.com/embed/${feed.ytId}?autoplay=1&mute=0&enablejsapi=1&rel=0&modestbranding=1`;
+      // playsinline=1 — prevents iOS/Android from redirecting to YouTube app
+      // mute=1 — required for autoplay to actually fire on mobile browsers
+      // We unmute via postMessage once the player signals it's playing (state=1)
+      src = `https://www.youtube-nocookie.com/embed/${feed.ytId}?autoplay=1&mute=1&enablejsapi=1&playsinline=1&rel=0&modestbranding=1`;
     }
     if(!src){ markOffline(card); return; }
 
@@ -2292,27 +2295,37 @@ const CAM_FEEDS = [
       card.classList.add('loaded');
     }
 
+    function tryUnmute(){
+      // Send unmute + full volume via YouTube IFrame API postMessage.
+      // Works on desktop and Android; iOS Safari ignores programmatic unmute
+      // (browser policy) but the player will still be visible and playable.
+      try {
+        ifr.contentWindow.postMessage(JSON.stringify({event:'command', func:'unMute', args:''}), '*');
+        ifr.contentWindow.postMessage(JSON.stringify({event:'command', func:'setVolume', args:[100]}), '*');
+      } catch(_){}
+    }
+
     if(isYT){
-      // YouTube IFrame API sends postMessage when player state changes.
-      // State 1 = playing — that's the real signal the video is visible.
-      // State 3 = buffering — video has started but is buffering, also good to show.
       const onMsg = e => {
         try {
           const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
           const state = (data.event === 'onStateChange') ? data.info :
                         (data.event === 'infoDelivery' && data.info) ? data.info.playerState : null;
-          if(state === 1 || state === 3){
+          if(state === 1){
+            // Playing — unmute now that autoplay fired
+            tryUnmute();
             markLoaded();
             window.removeEventListener('message', onMsg);
+          } else if(state === 3){
+            // Buffering — skeleton can come down, unmute will fire when state hits 1
+            markLoaded();
           }
         } catch(_){}
       };
       window.addEventListener('message', onMsg);
-      // Fallback: if YT API never fires (e.g. blocked), remove skeleton after iframe load + 3s
-      ifr.addEventListener('load', ()=>{ setTimeout(()=>{ markLoaded(); window.removeEventListener('message', onMsg); }, 3000); });
+      ifr.addEventListener('load', ()=>{ setTimeout(()=>{ tryUnmute(); markLoaded(); window.removeEventListener('message', onMsg); }, 3000); });
       ifr.addEventListener('error', ()=>{ clearTimeout(hardTimeout); markOffline(card); window.removeEventListener('message', onMsg); });
     } else {
-      // Windy: iframe load event is reliable enough
       ifr.addEventListener('load', ()=>{ markLoaded(); });
       ifr.addEventListener('error', ()=>{ clearTimeout(hardTimeout); markOffline(card); });
     }
