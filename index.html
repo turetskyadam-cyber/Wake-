@@ -440,14 +440,14 @@
   /* ── Trigger button ── */
   /* PORT CAMS — right-edge side tab */
   #camsBtn{
-    position:fixed;right:0;top:calc(50% - 110px);transform:translateY(-50%);
+    position:fixed;left:0;top:calc(50% - 110px);transform:translateY(-50%);
     z-index:1001;
-    /* side tab shape — rounds on left only */
+    /* side tab shape — rounds on right only */
     background:rgba(8,22,36,.82);
     backdrop-filter:blur(18px) saturate(160%);
-    border:1px solid rgba(226,189,114,.28);border-right:none;
-    border-radius:16px 0 0 16px;
-    box-shadow:-4px 0 28px rgba(0,0,0,.45), inset 1px 0 0 rgba(226,189,114,.08);
+    border:1px solid rgba(226,189,114,.28);border-left:none;
+    border-radius:0 16px 16px 0;
+    box-shadow:4px 0 28px rgba(0,0,0,.45), inset -1px 0 0 rgba(226,189,114,.08);
     /* vertical layout */
     display:flex;flex-direction:column;align-items:center;gap:7px;
     padding:16px 11px 14px;
@@ -456,8 +456,8 @@
     font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);
     transition:background .22s,box-shadow .22s,transform .12s;
   }
-  #camsBtn:hover{background:rgba(14,32,50,.92);box-shadow:-6px 0 36px rgba(0,0,0,.55),inset 1px 0 0 rgba(226,189,114,.18)}
-  #camsBtn:active{transform:translateY(-50%) translateX(2px)}
+  #camsBtn:hover{background:rgba(14,32,50,.92);box-shadow:6px 0 36px rgba(0,0,0,.55),inset -1px 0 0 rgba(226,189,114,.18)}
+  #camsBtn:active{transform:translateY(-50%) translateX(-2px)}
   #camsBtn .cb-icon{color:var(--brass);opacity:.95;flex-shrink:0}
   #camsBtn .cb-label{writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);letter-spacing:.2em;font-size:8px;line-height:1}
   #camsBtn .cb-dot{width:5px;height:5px;border-radius:50%;background:#5ad6a0;box-shadow:0 0 7px #5ad6a0;animation:pulse 2.4s var(--ease-out) infinite;flex-shrink:0}
@@ -584,7 +584,7 @@
 
   /* ── Responsive ── */
   @media (max-width:760px){
-    #camsBtn{top:calc(50% - 110px);transform:translateY(-50%);right:0;bottom:auto}
+    #camsBtn{top:calc(50% - 110px);transform:translateY(-50%);left:0;right:auto;bottom:auto}
   }
   @media (max-width:700px){
     #cams{align-items:flex-end}
