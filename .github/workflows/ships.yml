@@ -1,0 +1,39 @@
+name: ship-profiles
+
+# Scrapes Wikipedia for ship specs (built year, tonnage, capacity, crew, length, shipyard, photo)
+# and accumulates them into ships.json. Runs monthly since ship specs rarely change.
+# Uses [skip ci] so Vercel doesn't redeploy — the app reads ships.json from GitHub raw.
+
+on:
+  schedule:
+    - cron: "0 4 1 * *"  # 4 AM UTC on the 1st of every month
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ship-profiles
+  cancel-in-progress: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Scrape ship profiles
+        run: node tools/scrape-ships.mjs
+      - name: Commit ships.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ships.json
+          if git diff --staged --quiet; then
+            echo "No changes to ship profiles."
+          else
+            git commit -m "chore: update ship profiles [skip ci]"
+            git push
+          fi
