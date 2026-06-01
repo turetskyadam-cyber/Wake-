@@ -1185,6 +1185,31 @@ function snapToPort(d){
   if(best){ d.portCity=best.name; d.portCountry=best.country; }
 }
 
+// Spread multiple ships at the same port into a visible circle so they
+// don't stack on top of each other. Assigns _dispLat/_dispLon per ship.
+function spreadPortShips(){
+  const groups={};
+  for(const d of fleet){
+    if(d.status!=='port'||!d.portCity||d.lat==null) continue;
+    (groups[d.portCity]||(groups[d.portCity]=[])).push(d);
+  }
+  fleet.forEach(d=>{ d._dispLat=null; d._dispLon=null; });
+  for(const [city,ships] of Object.entries(groups)){
+    if(ships.length<2) continue;
+    const port=CRUISE_PORTS.find(p=>p.name===city);
+    const cLat=port?port.lat:ships.reduce((s,d)=>s+d.lat,0)/ships.length;
+    const cLon=port?port.lon:ships.reduce((s,d)=>s+d.lon,0)/ships.length;
+    const R=0.012; // ~1.3 km spread radius — visible at port zoom levels
+    const cosLat=Math.cos(cLat*Math.PI/180)||1;
+    ships.forEach((d,i)=>{
+      const angle=(i/ships.length)*2*Math.PI-Math.PI/2;
+      d._dispLat=cLat+R*Math.cos(angle);
+      d._dispLon=cLon+(R/cosLat)*Math.sin(angle);
+    });
+  }
+}
+function dispLL(d){ return [d._dispLat??d.lat, d._dispLon??d.lon]; }
+
 /* ---------- persistence (last-known + healed MMSIs) ---------- */
 const STORE_KEY="wake:v1";
 function loadStore(){ try{ return JSON.parse(localStorage.getItem(STORE_KEY))||{}; }catch(e){ return {}; } }
@@ -1266,7 +1291,7 @@ function markerStyle(d){
 }
 function ensureMarker(d){
   if(d._m) return d._m;
-  const m=L.circleMarker([d.lat,d.lon], markerStyle(d));
+  const m=L.circleMarker(dispLL(d), markerStyle(d));
   m.bindTooltip(()=>{
     const loc=locShort(d);
     return `<b>${d.name}</b><br>${d.line} · ${d.status==='port'?'in port':d.spd.toFixed(0)+' kn'}`+(loc?`<br><span class="tt-loc">${loc}</span>`:"");
@@ -1281,7 +1306,7 @@ function placeShips(){
   for(const d of fleet){
     if(d.lat==null){ if(d._m){ map.removeLayer(d._m); d._m=null; } if(d._w){ wakeLayer.removeLayer(d._w); d._w=null; } continue; }
     const m=ensureMarker(d);
-    m.setLatLng([d.lat,d.lon]);
+    m.setLatLng(dispLL(d));
     m.setStyle(markerStyle(d));
     if(d.trail.length>1){
       const ll=d.trail.map(p=>[p[1],p[0]]);
@@ -1892,7 +1917,7 @@ function startDemo(){
     d.spd=11+(i%12); d.hdg=d.rhdg=d.cog=(i*47)%360; d.status="sea";
     d.region=regionFor(d.lat,d.lon); d.live=true; d.lastSeen=Date.now(); d.trail=[[d.lon,d.lat]]; d._appeared=true;
   });
-  placeShips(); updateStats(); refreshNav();
+  spreadPortShips(); placeShips(); updateStats(); refreshNav();
   setInterval(()=>{
     fleet.forEach(d=>{ const r=d.hdg*Math.PI/180; d.lat+=Math.cos(r)*d.spd*0.0008; d.lon+=Math.sin(r)*d.spd*0.0008/Math.cos(d.lat*Math.PI/180);
       if(d.lon>180)d.lon-=360; if(d.lon<-180)d.lon+=360; d.trail.push([d.lon,d.lat]); if(d.trail.length>20)d.trail.shift(); });
@@ -1905,7 +1930,7 @@ let lastTick=0;
 function tick(ts){
   if(dirty || ts-lastTick>1000){
     // arrival blips for newly-appeared ships (after positions are projected)
-    placeShips();
+    spreadPortShips(); placeShips();
     fleet.forEach(d=>{ if(d.lat!=null && !d._appeared){ d._appeared=true; blip(d); } });
     if(!keyBad && feedpill.dataset.state!=="demo"){    // one stable pill update per second
       const connected=anyConnected(), n=fleet.filter(d=>d.lat!=null).length;
