@@ -482,6 +482,13 @@
   .cam-ifr-wrap{position:relative;aspect-ratio:16/9;background:#030d16;overflow:hidden;flex-shrink:0}
   .cam-ifr-wrap iframe{width:100%;height:100%;border:none;display:block}
 
+  /* click-to-expand overlay (covers iframe in grid view, removed in expanded view) */
+  .cam-click-overlay{position:absolute;inset:0;z-index:2;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .22s}
+  .cam-click-overlay:hover{background:rgba(0,0,0,.18)}
+  .cam-click-overlay::after{content:'⛶';font-size:28px;color:rgba(255,255,255,0);transition:color .22s;text-shadow:0 2px 12px rgba(0,0,0,.6)}
+  .cam-click-overlay:hover::after{color:rgba(255,255,255,.75)}
+  .cam-card.offline .cam-click-overlay{display:none}
+
   /* skeleton shimmer */
   .cam-skel{position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.015) 0%,rgba(255,255,255,.055) 50%,rgba(255,255,255,.015) 100%);background-size:200% 100%;animation:cam-shimmer 1.8s ease-in-out infinite}
   @keyframes cam-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
@@ -493,12 +500,6 @@
   .cam-card.loaded .cam-live{opacity:1}
   .cam-card.offline .cam-live{border-color:rgba(255,255,255,.12);color:var(--faint)}
   .cam-card.offline .ld{background:var(--faint);box-shadow:none}
-
-  /* action buttons (top-right, show on hover) */
-  .cam-actions{position:absolute;top:8px;right:8px;display:flex;gap:5px;opacity:0;transition:opacity .18s}
-  .cam-card:hover .cam-actions{opacity:1}
-  .cam-action-btn{width:26px;height:26px;background:rgba(4,13,22,.68);border:1px solid var(--glass-edge);border-radius:7px;color:var(--muted);font-size:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .15s,color .15s;font-family:inherit}
-  .cam-action-btn:hover{background:rgba(255,255,255,.1);color:var(--ink)}
 
   /* offline overlay */
   .cam-offline{position:absolute;inset:0;background:rgba(4,14,22,.9);display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px}
@@ -2137,7 +2138,7 @@ const CAM_FEEDS = [
     CAM_FEEDS.forEach((feed, i)=>{ grid.appendChild(buildCard(feed, i)); });
   }
 
-  function buildCard(feed, animIdx){
+  function buildCard(feed, animIdx, isExpanded){
     const card = document.createElement('div');
     card.className = 'cam-card';
     card.dataset.fid = feed.id;
@@ -2150,40 +2151,29 @@ const CAM_FEEDS = [
     wrap.className = 'cam-ifr-wrap';
 
     if(hasEmbed){
-      // skeleton shimmer while iframe loads
       const skel = document.createElement('div'); skel.className = 'cam-skel'; wrap.appendChild(skel);
 
-      // source badge  (WINDY teal | LIVE green)
       const badge = document.createElement('div');
       badge.className = 'cam-live' + (feed.windyId ? ' cam-src-windy' : '');
       badge.innerHTML = `<span class="ld"></span>${feed.windyId ? 'WEBCAM' : 'LIVE'}`;
       wrap.appendChild(badge);
 
-      // offline overlay (shown on load failure)
       const offlay = document.createElement('div');
       offlay.className = 'cam-offline';
       offlay.innerHTML = `<span class="cam-offline-lbl">Stream unavailable</span><a class="cam-offline-btn" href="${feed.srcUrl}" target="_blank" rel="noopener noreferrer">View webcam ↗</a>`;
       wrap.appendChild(offlay);
-    } else {
-      // No embed — skip skeleton, show clean "View Live Cam" placeholder immediately
-      card.classList.add('loaded');
-      wrap.innerHTML = `<div class="cam-no-embed"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="color:var(--faint);opacity:.35"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3Z"/><circle cx="12" cy="13" r="3"/></svg><span class="cam-no-embed-lbl">No live embed</span><a class="cam-view-btn" href="${feed.srcUrl}" target="_blank" rel="noopener noreferrer">View live cam ↗</a></div>`;
+
+      // In grid view: transparent overlay so clicking anywhere expands the feed
+      // In expanded view: no overlay — iframe is fully interactive
+      if(!isExpanded){
+        const overlay = document.createElement('div');
+        overlay.className = 'cam-click-overlay';
+        overlay.title = 'Click to play full size';
+        overlay.addEventListener('click', ()=>{ expandFeed(feed.id); });
+        wrap.appendChild(overlay);
+      }
     }
 
-    // action buttons (↗ always shown, expand only for embeds)
-    const acts = document.createElement('div'); acts.className = 'cam-actions';
-    const extA = document.createElement('a');
-    extA.className = 'cam-action-btn'; extA.href = feed.srcUrl;
-    extA.target = '_blank'; extA.rel = 'noopener noreferrer'; extA.title = 'Open in new tab';
-    extA.innerHTML = '↗'; acts.appendChild(extA);
-    if(hasEmbed){
-      const expBtn = document.createElement('button');
-      expBtn.className = 'cam-action-btn'; expBtn.title = 'Expand feed';
-      expBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>';
-      expBtn.addEventListener('click', e=>{ e.stopPropagation(); expandFeed(feed.id); });
-      acts.appendChild(expBtn);
-    }
-    wrap.appendChild(acts);
     card.appendChild(wrap);
 
     // ── port info ──────────────────────────────────────────
@@ -2246,7 +2236,7 @@ const CAM_FEEDS = [
     byId('camsBack').style.display = 'flex';
     const grid = byId('camsGrid');
     grid.innerHTML = '';
-    grid.appendChild(buildCard(feed, 0));
+    grid.appendChild(buildCard(feed, 0, true));
   }
 
   function updateBadge(){
