@@ -438,7 +438,7 @@
   ═══════════════════════════════════════════ */
 
   /* ── Trigger button ── */
-  #camsBtn{top:18px;right:18px;padding:8px 15px;display:flex;align-items:center;gap:8px;cursor:pointer;border:none;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);transition:background .2s,color .2s,transform .1s}
+  #camsBtn{top:18px;right:18px;z-index:1001;padding:8px 15px;display:flex;align-items:center;gap:8px;cursor:pointer;border:none;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);transition:background .2s,color .2s,transform .1s}
   #camsBtn:hover{background:rgba(226,189,114,.1);color:var(--ink)}
   #camsBtn:active{transform:scale(.95)}
   #camsBtn .cb-dot{width:6px;height:6px;border-radius:50%;background:#5ad6a0;box-shadow:0 0 8px #5ad6a0;animation:pulse 2.4s var(--ease-out) infinite;flex-shrink:0}
@@ -542,6 +542,9 @@
 
   /* ── Responsive ── */
   @media (min-width:601px) and (max-width:900px){.cam-grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:760px){
+    #camsBtn{top:auto;bottom:74px;right:10px}
+  }
   @media (max-width:600px){
     #cams{align-items:flex-end}
     #camsPanel{width:100%;max-height:88vh;border-radius:20px 20px 0 0;transform:translateY(60px)}
