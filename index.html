@@ -2116,9 +2116,28 @@ const CAM_FEEDS = [
   {id:13, port:'Malta',           flag:'🇲🇹', country:'Malta',             camView:'Valletta Grand Harbour live feed',   ytId:'NOXNBK3hbI4', srcUrl:'https://www.youtube.com/live/NOXNBK3hbI4',  itinKey:null},
 ];
 
+// ── YouTube IFrame API ─────────────────────────────────────────────────────
+// Load once; fire callbacks when ready. Fallback to direct embed if blocked.
+(function(){
+  if(window._ytLoaded) return;
+  window._ytLoaded = true;
+  window._ytReady = false;
+  window._ytCbs = [];
+  window.onYouTubeIframeAPIReady = function(){
+    window._ytReady = true;
+    window._ytCbs.forEach(f=>f()); window._ytCbs=[];
+  };
+  const s=document.createElement('script');
+  s.src='https://www.youtube.com/iframe_api';
+  s.onerror=function(){ window._ytReady='err'; window._ytCbs.forEach(f=>f()); window._ytCbs=[]; };
+  document.head.appendChild(s);
+})();
+function _whenYT(fn){ if(window._ytReady) fn(); else window._ytCbs.push(fn); }
+
 (function initCams(){
   let _open = false;
   let _expanded = null;
+  let _players = []; // active YT.Player instances — destroyed on close
 
   function shipsAt(itinKey){
     if(!itinKey) return [];
@@ -2138,6 +2157,7 @@ const CAM_FEEDS = [
   function closeCams(){
     if(!_open) return;
     _open = false;
+    _players.forEach(p=>{ try{ p.destroy(); }catch(_){} }); _players=[];
     const el = byId('cams');
     el.classList.remove('open');
     el.addEventListener('transitionend', ()=>{
@@ -2296,75 +2316,67 @@ const CAM_FEEDS = [
   }
 
   function injectIframe(card, wrap, feed){
-    let src = null;
-    const isYT = !!feed.ytId;
-    if(feed.windyId){
-      src = `https://webcams.windy.com/webcams/public/embed/player?webcamId=${feed.windyId}&playerType=day&loop=false&interactive=true&forceFullScreenOnOverlayPlay=false`;
-    } else if(feed.ytId){
-      // mute=1 needed for mobile autoplay policy; we unmute via API once playing
-      // playsinline=1 keeps it in-page on iOS instead of opening YouTube app
-      // origin= tells YouTube which domain is embedding (required for IFrame API on some browsers)
-      const origin = encodeURIComponent(location.origin);
-      src = `https://www.youtube-nocookie.com/embed/${feed.ytId}?autoplay=1&mute=1&enablejsapi=1&playsinline=1&rel=0&modestbranding=1&origin=${origin}`;
-    }
-    if(!src){ markOffline(card); return; }
-
-    const ifr = document.createElement('iframe');
-    ifr.src = src;
-    ifr.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-    ifr.allowFullscreen = true;
     let done = false;
-    const hardTimeout = setTimeout(()=>{ if(!done) markOffline(card); }, 18000);
+    const hardTimeout = setTimeout(()=>{ if(!done) markOffline(card); }, 20000);
+    function markLoaded(){ if(done) return; done=true; clearTimeout(hardTimeout); card.classList.add('loaded'); }
 
-    function markLoaded(){
-      if(done) return;
-      done = true;
-      clearTimeout(hardTimeout);
-      card.classList.add('loaded');
-    }
-
-    function sendCmd(func, args){
-      try { ifr.contentWindow.postMessage(JSON.stringify({event:'command', func, args: args||''}), '*'); } catch(_){}
-    }
-
-    function tryPlay(){
-      // Explicitly trigger playback + unmute via IFrame API postMessage.
-      // playVideo() here is the key fix: autoplay=1 URL param can be blocked
-      // by mobile browsers for live streams, but a postMessage play command
-      // called close to the user's tap is treated as intentional.
-      sendCmd('playVideo');
-      sendCmd('unMute');
-      sendCmd('setVolume', [100]);
-    }
-
-    if(isYT){
-      const onMsg = e => {
-        try {
-          const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
-          // onReady fires when the player is initialized — best moment to call play
-          if(data.event === 'onReady'){ tryPlay(); }
-          const state = (data.event === 'onStateChange') ? data.info :
-                        (data.event === 'infoDelivery' && data.info) ? data.info.playerState : null;
-          if(state === 1){
-            // Confirmed playing — ensure unmuted
-            sendCmd('unMute'); sendCmd('setVolume', [100]);
-            markLoaded();
-            window.removeEventListener('message', onMsg);
-          } else if(state === 3){
-            // Buffering — skeleton can come down, unmute will fire when state hits 1
-            markLoaded();
-          }
-        } catch(_){}
-      };
-      window.addEventListener('message', onMsg);
-      ifr.addEventListener('load', ()=>{ setTimeout(()=>{ tryPlay(); markLoaded(); window.removeEventListener('message', onMsg); }, 2500); });
-      ifr.addEventListener('error', ()=>{ clearTimeout(hardTimeout); markOffline(card); window.removeEventListener('message', onMsg); });
-    } else {
-      ifr.addEventListener('load', ()=>{ markLoaded(); });
+    if(feed.windyId){
+      const ifr = document.createElement('iframe');
+      ifr.src = `https://webcams.windy.com/webcams/public/embed/player?webcamId=${feed.windyId}&playerType=day&loop=false&interactive=true&forceFullScreenOnOverlayPlay=false`;
+      ifr.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      ifr.allowFullscreen = true;
+      ifr.addEventListener('load', ()=>markLoaded());
       ifr.addEventListener('error', ()=>{ clearTimeout(hardTimeout); markOffline(card); });
+      wrap.insertBefore(ifr, wrap.querySelector('.cam-skel'));
+      return;
     }
 
-    wrap.insertBefore(ifr, wrap.querySelector('.cam-skel'));
+    if(!feed.ytId){ clearTimeout(hardTimeout); markOffline(card); return; }
+
+    // Use official YT.Player API — most reliable way to call playVideo()
+    // The div gets replaced by an iframe created by YT.Player
+    const pid = 'ytp' + feed.id + Date.now();
+    const div = document.createElement('div');
+    div.id = pid;
+    div.style.cssText = 'position:absolute;inset:0;width:100%;height:100%';
+    wrap.insertBefore(div, wrap.querySelector('.cam-skel'));
+
+    _whenYT(()=>{
+      if(window._ytReady === 'err'){
+        // YT API blocked (ad blocker etc.) — fall back to plain iframe
+        div.remove();
+        const ifr = document.createElement('iframe');
+        ifr.src = `https://www.youtube-nocookie.com/embed/${feed.ytId}?autoplay=1&mute=1&playsinline=1&rel=0`;
+        ifr.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+        ifr.allowFullscreen = true;
+        ifr.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:none';
+        wrap.insertBefore(ifr, wrap.querySelector('.cam-skel'));
+        ifr.addEventListener('load', ()=>setTimeout(markLoaded, 2000));
+        return;
+      }
+      try {
+        const player = new YT.Player(pid, {
+          videoId: feed.ytId,
+          width: '100%', height: '100%',
+          playerVars: { autoplay:1, mute:1, playsinline:1, controls:1, rel:0, modestbranding:1 },
+          events: {
+            onReady(e){
+              e.target.playVideo();
+              try { e.target.unMute(); e.target.setVolume(100); } catch(_){}
+              markLoaded();
+            },
+            onStateChange(e){
+              if(e.data===1){ // playing
+                try { e.target.unMute(); e.target.setVolume(100); } catch(_){}
+                markLoaded();
+              }
+            },
+            onError(){ clearTimeout(hardTimeout); markOffline(card); }
+          }
+        });
+        _players.push(player);
+      } catch(err){ clearTimeout(hardTimeout); markOffline(card); }
+    });
   }
 
   function markOffline(card){ card.classList.add('offline','loaded'); }
