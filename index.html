@@ -256,22 +256,18 @@
   #brand.mini .brand-right{display:none!important}
   #brand.mini .brand-expand-btn{display:inline-flex;align-items:center}
 
-  /* ---- ship side panel (weather + deep dive) ---- */
-  #shipSide{position:fixed;bottom:18px;right:calc(18px + 330px + 10px);width:128px;padding:0;opacity:0;pointer-events:none;transform:translateY(8px);transition:opacity .28s var(--ease-out),transform .28s var(--ease-out);z-index:1000}
-  #shipSide.show{opacity:1;pointer-events:auto;transform:none}
-  .ss-wx{padding:16px 12px 12px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
-  .ss-wx-icon{font-size:32px;line-height:1;display:block}
-  .ss-wx-temp{font-family:'Fraunces',serif;font-size:24px;font-weight:600;color:var(--ink);line-height:1.1;margin-top:4px}
-  .ss-wx-wind{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.05em;color:var(--brass);margin-top:2px}
-  .ss-wx-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-top:1px}
-  .ss-wx-loading{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);letter-spacing:.06em;text-transform:uppercase;padding:20px 0}
-  .ss-div{height:1px;background:var(--glass-edge);margin:0 0}
-  .ss-profile-btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:13px 10px;cursor:pointer;background:none;border:none;color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;border-radius:0 0 16px 16px;transition:background .18s,color .18s;width:100%}
-  .ss-profile-btn:hover{background:rgba(255,255,255,.07);color:var(--brass)}
-  .ss-profile-btn svg{width:12px;height:12px;color:var(--brass);flex:none}
-  @media(max-width:760px){
-    #shipSide{right:auto;left:10px;bottom:10px;width:120px}
-  }
+  /* ---- weather strip inside detail card ---- */
+  .d-weather{display:flex;align-items:center;gap:10px;padding:10px 18px;border-top:1px solid var(--glass-edge);background:rgba(255,255,255,.015)}
+  .d-wx-icon{font-size:20px;line-height:1;flex:none}
+  .d-wx-temp{font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:var(--ink);line-height:1;flex:none}
+  .d-wx-sep{color:var(--glass-edge);flex:none}
+  .d-wx-wind{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.05em;color:var(--brass);flex:none}
+  .d-wx-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-left:auto}
+
+  /* ---- deep dive button inside d-top ---- */
+  .d-deep-btn{position:absolute;top:13px;right:44px;display:flex;align-items:center;gap:5px;padding:4px 9px;background:rgba(226,189,114,.1);border:1px solid rgba(226,189,114,.3);border-radius:999px;color:var(--brass);cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;transition:background .18s,border-color .18s;z-index:2}
+  .d-deep-btn:hover{background:rgba(226,189,114,.2);border-color:rgba(226,189,114,.55)}
+  .d-deep-btn svg{flex:none;width:12px;height:12px}
 
   /* ---- ship profile modal ---- */
   .profile-modal{position:fixed;inset:0;z-index:2000;background:rgba(4,14,20,.86);backdrop-filter:blur(16px) saturate(130%);-webkit-backdrop-filter:blur(16px) saturate(130%);opacity:0;transition:opacity .25s var(--ease-out);overflow:hidden}
@@ -472,10 +468,21 @@
   <div class="d-body">
     <div class="d-top">
       <button class="d-close" id="dClose">✕</button>
+      <button class="d-deep-btn" id="profileBtn" title="Ship profile">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Deep&nbsp;Dive
+      </button>
       <span class="d-line"><i></i><span id="dLine"></span></span>
       <h2 class="d-name" id="dName"></h2>
       <div class="d-status" id="dStatus"></div>
       <div class="d-place" id="dPlace"></div>
+    </div>
+    <div class="d-weather" id="dWeather" hidden>
+      <span class="d-wx-icon" id="dWxIcon">🌊</span>
+      <span class="d-wx-temp" id="dWxTemp">—</span>
+      <span class="d-wx-sep">·</span>
+      <span class="d-wx-wind" id="dWxWind">—</span>
+      <span class="d-wx-label" id="dWxLabel">—</span>
     </div>
     <div class="d-grid">
       <div class="cell"><div class="k">Latitude</div><div class="v" id="dLat"></div></div>
@@ -500,16 +507,6 @@
 
 <div id="tip"><div class="t-name"></div><div class="t-meta"></div></div>
 
-<div id="shipSide" class="panel">
-  <div class="ss-wx" id="ssWx">
-    <span class="ss-wx-loading">Loading…</span>
-  </div>
-  <div class="ss-div"></div>
-  <button class="ss-profile-btn" id="profileBtn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 1 0 0 14A7 7 0 0 0 12 2Z"/><path d="M4.5 20a8.5 8.5 0 0 1 15 0"/></svg>
-    Deep Dive
-  </button>
-</div>
 
 <div id="profile" class="profile-modal" aria-modal="true" hidden>
   <button class="profile-close" id="profileClose">✕</button>
@@ -1804,12 +1801,12 @@ const WMO={
   95:{e:"⛈",l:"Thunderstorm"},96:{e:"⛈",l:"Thunderstorm"},99:{e:"⛈",l:"Thunderstorm"},
 };
 const _wxCache={};
-const shipSideEl=byId("shipSide"), ssWxEl=byId("ssWx");
-function showShipSide(){ if(selected) shipSideEl.classList.add("show"); }
-function hideShipSide(){ shipSideEl.classList.remove("show"); }
+function showShipSide(){ if(selected) byId("dWeather").removeAttribute("hidden"); }
+function hideShipSide(){ byId("dWeather").setAttribute("hidden",""); }
 async function fetchWeather(d){
   if(!d||d.lat==null) return;
-  ssWxEl.innerHTML=`<span class="ss-wx-loading">Loading…</span>`;
+  byId("dWxTemp").textContent="…";
+  byId("dWxLabel").textContent="loading";
   const key=`${d.lat.toFixed(1)},${d.lon.toFixed(1)}`;
   if(_wxCache[key]&&Date.now()-_wxCache[key].ts<10*60*1000){ renderWeather(_wxCache[key].data); return; }
   try{
@@ -1817,17 +1814,16 @@ async function fetchWeather(d){
     const r=await fetch(url).then(r=>r.json());
     _wxCache[key]={ts:Date.now(),data:r.current};
     renderWeather(r.current);
-  }catch(e){ ssWxEl.innerHTML=`<span class="ss-wx-label">No data</span>`; }
+  }catch(e){ byId("dWxLabel").textContent="no data"; byId("dWxTemp").textContent="—"; }
 }
 function renderWeather(c){
   const w=WMO[c.weather_code]||{e:"🌊",l:"At Sea"};
   const dirs=["N","NE","E","SE","S","SW","W","NW"];
   const dir=dirs[Math.round(c.wind_direction_10m/45)%8];
-  ssWxEl.innerHTML=`
-    <span class="ss-wx-icon">${w.e}</span>
-    <div class="ss-wx-temp">${Math.round(c.temperature_2m)}°F</div>
-    <div class="ss-wx-wind">${Math.round(c.wind_speed_10m)} kt ${dir}</div>
-    <div class="ss-wx-label">${w.l}</div>`;
+  byId("dWxIcon").textContent=w.e;
+  byId("dWxTemp").textContent=Math.round(c.temperature_2m)+"°F";
+  byId("dWxWind").textContent=Math.round(c.wind_speed_10m)+" kt "+dir;
+  byId("dWxLabel").textContent=w.l;
 }
 
 /* ---- ship profile modal ---- */
