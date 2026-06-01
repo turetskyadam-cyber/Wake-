@@ -473,6 +473,18 @@
   /* ── Grid ── */
   .cam-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;padding:20px 24px;overflow-y:auto;flex:1;overscroll-behavior:contain}
 
+  /* ── Feed select buttons (shown before a feed is chosen) ── */
+  .cam-grid.btn-mode{grid-template-columns:repeat(2,1fr);gap:10px;padding:16px 18px}
+  @media(min-width:560px){.cam-grid.btn-mode{grid-template-columns:repeat(3,1fr)}}
+  .cam-feed-btn{background:rgba(255,255,255,.04);border:1px solid var(--glass-edge);border-radius:14px;padding:14px 12px 12px;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:5px;transition:background .18s,border-color .18s,transform .12s;animation:cfb-in .28s var(--ease-out) both}
+  .cam-feed-btn:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.16);transform:translateY(-1px)}
+  .cam-feed-btn:active{transform:none}
+  .cfb-flag{font-size:18px;line-height:1}
+  .cfb-name{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--brass);line-height:1.35;margin-top:2px}
+  .cfb-live{display:flex;align-items:center;gap:4px;font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.1em;color:#5ad6a0;margin-top:1px}
+  .cfb-dot{width:4px;height:4px;border-radius:50%;background:#5ad6a0;animation:pulse 2.4s var(--ease-out) infinite}
+  @keyframes cfb-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
   /* ── Card ── */
   .cam-card{border-radius:14px;overflow:hidden;background:rgba(255,255,255,.03);border:1px solid var(--glass-edge);display:flex;flex-direction:column;transition:border-color .22s,box-shadow .22s;animation:cam-in .32s var(--ease-out) both}
   .cam-card:hover{border-color:rgba(255,255,255,.14);box-shadow:0 8px 32px -8px rgba(0,0,0,.6)}
@@ -695,7 +707,7 @@
     <div class="cam-hdr">
       <svg class="cam-hdr-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3Z"/><circle cx="12" cy="13" r="3"/></svg>
       <span class="cam-hdr-title">Live Port Cams</span>
-      <span class="cam-hdr-meta" id="camsHdrMeta">6 LIVE FEEDS</span>
+      <span class="cam-hdr-meta" id="camsHdrMeta">13 LIVE FEEDS</span>
       <button class="cam-close" id="camsClose" aria-label="Close cameras">✕</button>
     </div>
     <button class="cam-back" id="camsBack">‹ Back to all feeds</button>
@@ -2089,12 +2101,19 @@ if(localStorage.getItem("brandMini")) brandEl.classList.add("mini");
    ============================================================ */
 // Only ports with verified, inline-playing embeds (Windy or YouTube)
 const CAM_FEEDS = [
-  {id:1, port:'Miami',            flag:'🇺🇸', country:'Florida, USA',       camView:'Dodge Island · cruise terminal',     windyId:null, ytId:'PeYZZinH1wI', srcUrl:'https://www.youtube.com/live/PeYZZinH1wI',          itinKey:'PortMiami'},
-  {id:2, port:'Fort Lauderdale',  flag:'🇺🇸', country:'Port Everglades, FL', camView:'Terminal 2 · cruise piers',          windyId:'1285077871', ytId:null, srcUrl:'https://www.windy.com/webcams/1285077871',          itinKey:'Port Everglades'},
-  {id:3, port:'Port Canaveral',   flag:'🇺🇸', country:'Florida, USA',       camView:'Harbor entrance & cruise piers',     windyId:'1656280774', ytId:null, srcUrl:'https://www.windy.com/webcams/1656280774',          itinKey:'Port Canaveral'},
-  {id:4, port:'Barcelona',        flag:'🇪🇸', country:'Catalonia, Spain',   camView:'Port Olímpic · cruise terminals',    windyId:'1450823411', ytId:null, srcUrl:'https://www.windy.com/webcams/1450823411',          itinKey:'Barcelona'},
-  {id:5, port:'Venice',           flag:'🇮🇹', country:'Veneto, Italy',      camView:'Grand Canal & passenger terminal',   windyId:'1279401088', ytId:null, srcUrl:'https://www.windy.com/webcams/1279401088',          itinKey:null},
-  {id:6, port:'Southampton',      flag:'🇬🇧', country:'Hampshire, UK',      camView:'Ocean Terminal · 24/7 live stream',  windyId:null,         ytId:'WxdeHH9T7Yk', srcUrl:'https://www.youtube.com/watch?v=WxdeHH9T7Yk', itinKey:'Southampton'},
+  {id:1,  port:'Miami',           flag:'🇺🇸', country:'Florida, USA',      camView:'Port of Miami · cruise terminal',    ytId:'PeYZZinH1wI', srcUrl:'https://www.youtube.com/live/PeYZZinH1wI',  itinKey:'PortMiami'},
+  {id:2,  port:'Key West',        flag:'🇺🇸', country:'Florida, USA',      camView:'Historic harbor live cam',           ytId:'8Rw-tZTeBjU', srcUrl:'https://www.youtube.com/live/8Rw-tZTeBjU',  itinKey:'Key West'},
+  {id:3,  port:'Geirangerfjord',  flag:'🇳🇴', country:'Norway',            camView:'UNESCO fjord panorama',              ytId:'S4aJlRY39fo', srcUrl:'https://www.youtube.com/live/S4aJlRY39fo',  itinKey:null},
+  {id:4,  port:'Galveston',       flag:'🇺🇸', country:'Texas, USA',        camView:'Port of Galveston · cruise piers',   ytId:'Mnj84qrUbXc', srcUrl:'https://www.youtube.com/live/Mnj84qrUbXc',  itinKey:'Galveston'},
+  {id:5,  port:'Port Canaveral',  flag:'🇺🇸', country:'Florida, USA',      camView:'Cape Canaveral harbor live feed',    ytId:'vnmHo7TF6xg', srcUrl:'https://www.youtube.com/live/vnmHo7TF6xg',  itinKey:'Port Canaveral'},
+  {id:6,  port:'Canary Islands',  flag:'🇪🇸', country:'Spain',             camView:'Gran Canaria live cam',              ytId:'U2hp0tRcOUU', srcUrl:'https://www.youtube.com/live/U2hp0tRcOUU',  itinKey:null},
+  {id:7,  port:'Dublin',          flag:'🇮🇪', country:'Ireland',           camView:'Dublin port & city live stream',     ytId:'K_ye7QHXosQ', srcUrl:'https://www.youtube.com/live/K_ye7QHXosQ',  itinKey:null},
+  {id:8,  port:'Mallorca',        flag:'🇪🇸', country:'Spain',             camView:'Palma de Mallorca harbor',           ytId:'hRw1_JQMQoE', srcUrl:'https://www.youtube.com/live/hRw1_JQMQoE',  itinKey:null},
+  {id:9,  port:'Vancouver',       flag:'🇨🇦', country:'Canada',            camView:'Canada Place cruise terminal',       ytId:'LHDbXPo5jYk', srcUrl:'https://www.youtube.com/live/LHDbXPo5jYk',  itinKey:'Vancouver'},
+  {id:10, port:'San Diego',       flag:'🇺🇸', country:'California, USA',   camView:'San Diego Bay live cam',             ytId:'iaBfYxbmwXA', srcUrl:'https://www.youtube.com/live/iaBfYxbmwXA',  itinKey:'San Diego'},
+  {id:11, port:'Singapore',       flag:'🇸🇬', country:'Singapore',         camView:'Marina Bay cruise centre',           ytId:'iaBfYxbmwXA', srcUrl:'https://www.youtube.com/live/iaBfYxbmwXA',  itinKey:'Singapore'},
+  {id:12, port:'Sydney',          flag:'🇦🇺', country:'Australia',         camView:'Overseas Passenger Terminal',        ytId:'jshwkG1ZpP8', srcUrl:'https://www.youtube.com/live/jshwkG1ZpP8',  itinKey:null},
+  {id:13, port:'Malta',           flag:'🇲🇹', country:'Malta',             camView:'Valletta Grand Harbour live feed',   ytId:'NOXNBK3hbI4', srcUrl:'https://www.youtube.com/live/NOXNBK3hbI4',  itinKey:null},
 ];
 
 (function initCams(){
@@ -2135,7 +2154,15 @@ const CAM_FEEDS = [
     byId('camsBack').style.display = 'none';
     const grid = byId('camsGrid');
     grid.innerHTML = '';
-    CAM_FEEDS.forEach((feed, i)=>{ grid.appendChild(buildCard(feed, i)); });
+    grid.classList.add('btn-mode');
+    CAM_FEEDS.forEach((feed, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'cam-feed-btn';
+      btn.style.animationDelay = (i * 38) + 'ms';
+      btn.innerHTML = `<span class="cfb-flag">${feed.flag}</span><span class="cfb-name">${feed.port}</span><span class="cfb-live"><span class="cfb-dot"></span>LIVE</span>`;
+      btn.addEventListener('click', () => expandFeed(feed.id));
+      grid.appendChild(btn);
+    });
   }
 
   // ── Ship loading scene ──────────────────────────────────────────────────
@@ -2343,6 +2370,7 @@ const CAM_FEEDS = [
     byId('camsBack').style.display = 'flex';
     const grid = byId('camsGrid');
     grid.innerHTML = '';
+    grid.classList.remove('btn-mode');
     grid.appendChild(buildCard(feed, 0, true));
   }
 
