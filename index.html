@@ -2145,19 +2145,20 @@ if(localStorage.getItem("brandMini")) brandEl.classList.add("mini");
    ============================================================ */
 // Only ports with verified, inline-playing embeds (Windy or YouTube)
 const CAM_FEEDS = [
-  {id:1,  port:'Miami',           flag:'🇺🇸', country:'Florida, USA',      camView:'Port of Miami · cruise terminal',    ytId:'PeYZZinH1wI', srcUrl:'https://www.youtube.com/live/PeYZZinH1wI',  itinKey:'PortMiami'},
-  {id:2,  port:'Key West',        flag:'🇺🇸', country:'Florida, USA',      camView:'Historic harbor live cam',           ytId:'8Rw-tZTeBjU', srcUrl:'https://www.youtube.com/live/8Rw-tZTeBjU',  itinKey:'Key West'},
-  {id:3,  port:'Geirangerfjord',  flag:'🇳🇴', country:'Norway',            camView:'UNESCO fjord panorama',              ytId:'S4aJlRY39fo', srcUrl:'https://www.youtube.com/live/S4aJlRY39fo',  itinKey:null},
-  {id:4,  port:'Galveston',       flag:'🇺🇸', country:'Texas, USA',        camView:'Port of Galveston · cruise piers',   ytId:'Mnj84qrUbXc', srcUrl:'https://www.youtube.com/live/Mnj84qrUbXc',  itinKey:'Galveston'},
-  {id:5,  port:'Port Canaveral',  flag:'🇺🇸', country:'Florida, USA',      camView:'Cape Canaveral harbor live feed',    ytId:'vnmHo7TF6xg', srcUrl:'https://www.youtube.com/live/vnmHo7TF6xg',  itinKey:'Port Canaveral'},
-  {id:6,  port:'Canary Islands',  flag:'🇪🇸', country:'Spain',             camView:'Gran Canaria live cam',              ytId:'U2hp0tRcOUU', srcUrl:'https://www.youtube.com/live/U2hp0tRcOUU',  itinKey:null},
-  {id:7,  port:'Dublin',          flag:'🇮🇪', country:'Ireland',           camView:'Dublin port & city live stream',     ytId:'K_ye7QHXosQ', srcUrl:'https://www.youtube.com/live/K_ye7QHXosQ',  itinKey:null},
-  {id:8,  port:'Mallorca',        flag:'🇪🇸', country:'Spain',             camView:'Palma de Mallorca harbor',           ytId:'hRw1_JQMQoE', srcUrl:'https://www.youtube.com/live/hRw1_JQMQoE',  itinKey:null},
-  {id:9,  port:'Vancouver',       flag:'🇨🇦', country:'Canada',            camView:'Canada Place cruise terminal',       ytId:'LHDbXPo5jYk', srcUrl:'https://www.youtube.com/live/LHDbXPo5jYk',  itinKey:'Vancouver'},
-  {id:10, port:'San Diego',       flag:'🇺🇸', country:'California, USA',   camView:'San Diego Bay live cam',             ytId:'iaBfYxbmwXA', srcUrl:'https://www.youtube.com/live/iaBfYxbmwXA',  itinKey:'San Diego'},
-  {id:11, port:'Singapore',       flag:'🇸🇬', country:'Singapore',         camView:'Marina Bay cruise centre',           ytId:'iaBfYxbmwXA', srcUrl:'https://www.youtube.com/live/iaBfYxbmwXA',  itinKey:'Singapore'},
-  {id:12, port:'Sydney',          flag:'🇦🇺', country:'Australia',         camView:'Overseas Passenger Terminal',        ytId:'jshwkG1ZpP8', srcUrl:'https://www.youtube.com/live/jshwkG1ZpP8',  itinKey:null},
-  {id:13, port:'Malta',           flag:'🇲🇹', country:'Malta',             camView:'Valletta Grand Harbour live feed',   ytId:'NOXNBK3hbI4', srcUrl:'https://www.youtube.com/live/NOXNBK3hbI4',  itinKey:null},
+  // pLat/pLon = actual port coordinates used for geographic ship cross-reference
+  {id:1,  port:'Miami',           flag:'🇺🇸', country:'Florida, USA',      camView:'Port of Miami · cruise terminal',    ytId:'PeYZZinH1wI', srcUrl:'https://www.youtube.com/live/PeYZZinH1wI',  pLat:25.7742, pLon:-80.1728},
+  {id:2,  port:'Key West',        flag:'🇺🇸', country:'Florida, USA',      camView:'Historic harbor live cam',           ytId:'8Rw-tZTeBjU', srcUrl:'https://www.youtube.com/live/8Rw-tZTeBjU',  pLat:24.5551, pLon:-81.8034},
+  {id:3,  port:'Geirangerfjord',  flag:'🇳🇴', country:'Norway',            camView:'UNESCO fjord panorama',              ytId:'S4aJlRY39fo', srcUrl:'https://www.youtube.com/live/S4aJlRY39fo',  pLat:62.1008, pLon:7.2049},
+  {id:4,  port:'Galveston',       flag:'🇺🇸', country:'Texas, USA',        camView:'Port of Galveston · cruise piers',   ytId:'Mnj84qrUbXc', srcUrl:'https://www.youtube.com/live/Mnj84qrUbXc',  pLat:29.3013, pLon:-94.7977},
+  {id:5,  port:'Port Canaveral',  flag:'🇺🇸', country:'Florida, USA',      camView:'Cape Canaveral harbor live feed',    ytId:'vnmHo7TF6xg', srcUrl:'https://www.youtube.com/live/vnmHo7TF6xg',  pLat:28.4157, pLon:-80.6297},
+  {id:6,  port:'Canary Islands',  flag:'🇪🇸', country:'Spain',             camView:'Gran Canaria live cam',              ytId:'U2hp0tRcOUU', srcUrl:'https://www.youtube.com/live/U2hp0tRcOUU',  pLat:28.0997, pLon:-15.4167},
+  {id:7,  port:'Dublin',          flag:'🇮🇪', country:'Ireland',           camView:'Dublin port & city live stream',     ytId:'K_ye7QHXosQ', srcUrl:'https://www.youtube.com/live/K_ye7QHXosQ',  pLat:53.3473, pLon:-6.2297},
+  {id:8,  port:'Mallorca',        flag:'🇪🇸', country:'Spain',             camView:'Palma de Mallorca harbor',           ytId:'hRw1_JQMQoE', srcUrl:'https://www.youtube.com/live/hRw1_JQMQoE',  pLat:39.5670, pLon:2.6483},
+  {id:9,  port:'Vancouver',       flag:'🇨🇦', country:'Canada',            camView:'Canada Place cruise terminal',       ytId:'LHDbXPo5jYk', srcUrl:'https://www.youtube.com/live/LHDbXPo5jYk',  pLat:49.2829, pLon:-123.1133},
+  {id:10, port:'San Diego',       flag:'🇺🇸', country:'California, USA',   camView:'San Diego Bay live cam',             ytId:'iaBfYxbmwXA', srcUrl:'https://www.youtube.com/live/iaBfYxbmwXA',  pLat:32.7224, pLon:-117.1705},
+  {id:11, port:'Singapore',       flag:'🇸🇬', country:'Singapore',         camView:'Marina Bay cruise centre',           ytId:'iaBfYxbmwXA', srcUrl:'https://www.youtube.com/live/iaBfYxbmwXA',  pLat:1.2646,  pLon:103.8198},
+  {id:12, port:'Sydney',          flag:'🇦🇺', country:'Australia',         camView:'Overseas Passenger Terminal',        ytId:'jshwkG1ZpP8', srcUrl:'https://www.youtube.com/live/jshwkG1ZpP8',  pLat:-33.8568,pLon:151.2153},
+  {id:13, port:'Malta',           flag:'🇲🇹', country:'Malta',             camView:'Valletta Grand Harbour live feed',   ytId:'NOXNBK3hbI4', srcUrl:'https://www.youtube.com/live/NOXNBK3hbI4',  pLat:35.8980, pLon:14.5125},
 ];
 
 // ── YouTube IFrame API ─────────────────────────────────────────────────────
@@ -2183,11 +2184,15 @@ function _whenYT(fn){ if(window._ytReady) fn(); else window._ytCbs.push(fn); }
   let _expanded = null;
   let _players = []; // active YT.Player instances — destroyed on close
 
-  function shipsAt(itinKey){
-    if(!itinKey) return [];
-    const k = itinKey.toLowerCase().replace(/[^a-z0-9]/g,'');
-    return fleet.filter(d => d.status==='port' && d.portCity &&
-      (d.portCity===itinKey || d.portCity.toLowerCase().replace(/[^a-z0-9]/g,'')=== k));
+  // Find all fleet ships currently at or near a feed's port.
+  // Uses geographic distance (40 km radius) so string-name mismatches don't hide ships.
+  const CAMS_RADIUS_KM = 40;
+  function shipsAt(feed){
+    if(!feed || feed.pLat == null) return [];
+    return fleet.filter(d =>
+      d.status === 'port' && d.lat != null &&
+      haverKm(d.lat, d.lon, feed.pLat, feed.pLon) <= CAMS_RADIUS_KM
+    );
   }
 
   function openCams(){
@@ -2338,7 +2343,7 @@ function _whenYT(fn){ if(window._ytReady) fn(); else window._ytCbs.push(fn); }
     card.appendChild(info);
 
     // ── ships at this port ─────────────────────────────────
-    const ships = shipsAt(feed.itinKey);
+    const ships = shipsAt(feed);
     if(ships.length){
       const sd = document.createElement('div'); sd.className = 'cam-ships';
       ships.slice(0,5).forEach(s=>{
@@ -2460,8 +2465,10 @@ function _whenYT(fn){ if(window._ytReady) fn(); else window._ytCbs.push(fn); }
   function updateBadge(){
     const badge = byId('camsBadge');
     if(!badge) return;
-    const keys = CAM_FEEDS.filter(f=>f.itinKey).map(f=>f.itinKey.toLowerCase().replace(/[^a-z0-9]/g,''));
-    const n = fleet.filter(d=>d.status==='port'&&d.portCity&&keys.includes(d.portCity.toLowerCase().replace(/[^a-z0-9]/g,''))).length;
+    // Count distinct ships near any camera port (geographic, same logic as shipsAt)
+    const seen = new Set();
+    CAM_FEEDS.forEach(f=>{ shipsAt(f).forEach(d=>seen.add(d.name)); });
+    const n = seen.size;
     badge.textContent = n;
     badge.style.display = n>0?'flex':'none';
   }
