@@ -1002,7 +1002,7 @@ map.on('click',e=>{
     if(dist<bestDist){ bestDist=dist; best=d; }
   }
   if(best){ goShip(best); return; }
-  if(nav.level===2) goLines();
+  if(nav.level===2){ nav={level:0,line:null,ship:null}; hoverLine=null; clearSelection(); renderNav("l"); applyVisibility(); }
 });
 byId("zIn").addEventListener("click",()=>map.zoomIn());
 byId("zOut").addEventListener("click",()=>map.zoomOut());
@@ -1124,7 +1124,7 @@ function clearSelection(){
   detail.classList.remove("show"); detail.classList.add("collapsed"); clearPing(); clearItinPreview(); if(nearOpen) closeNear(); applyVisibility();
 }
 function collapseDetail(){ detail.classList.add("collapsed"); byId("dToggle").setAttribute("aria-expanded","false"); }
-byId("dClose").addEventListener("click",e=>{ e.stopPropagation(); goLines(); });
+byId("dClose").addEventListener("click",e=>{ e.stopPropagation(); nav={level:0,line:null,ship:null}; hoverLine=null; clearSelection(); renderNav("l"); applyVisibility(); });
 // Stop touch events from reaching Leaflet so the panel scrolls natively
 ["touchstart","touchmove","touchend","touchcancel"].forEach(ev=>{
   detail.addEventListener(ev,e=>e.stopPropagation(),{passive:true});
