@@ -670,7 +670,7 @@
     "length": 292,
     "renovated": "2019",
     "decks": 12,
-    "critic": 3.0
+    "critic": 3
   },
   "Costa Diadema": {
     "line": "Costa",
@@ -682,7 +682,7 @@
     "length": 306,
     "renovated": "2023",
     "decks": 15,
-    "critic": 3.0
+    "critic": 3
   },
   "Costa Fascinosa": {
     "line": "Costa",
@@ -706,7 +706,7 @@
     "length": 290,
     "renovated": "2021",
     "decks": 13,
-    "critic": 3.0
+    "critic": 3
   },
   "Costa Fortuna": {
     "line": "Costa",
@@ -742,7 +742,7 @@
     "length": 272,
     "renovated": "2017",
     "decks": 13,
-    "critic": 3.0
+    "critic": 3
   },
   "Costa Mediterranea": {
     "line": "Costa",
@@ -853,7 +853,7 @@
     "length": 294,
     "renovated": "2022",
     "decks": 12,
-    "critic": 4.0,
+    "critic": 4,
     "flag": "See also",
     "wiki": "https://en.wikipedia.org/wiki/Queen_Victoria_(ship)"
   },
@@ -1015,7 +1015,7 @@
     "length": 285,
     "renovated": "2024",
     "decks": 11,
-    "critic": 4.0,
+    "critic": 4,
     "wiki": "https://en.wikipedia.org/wiki/Oosterdam"
   },
   "Rotterdam": {
@@ -1079,7 +1079,7 @@
     "length": 285,
     "renovated": "2022",
     "decks": 11,
-    "critic": 4.0
+    "critic": 4
   },
   "MSC Armonia": {
     "line": "MSC",
@@ -1419,7 +1419,7 @@
     "length": 333,
     "renovated": "2024",
     "decks": 20,
-    "critic": 4.0,
+    "critic": 4,
     "shipyard": "Meyer Werft",
     "photo": "https://upload.wikimedia.org/wikipedia/commons/8/8c/NCLEncoreJuneau.jpg",
     "wiki": "https://en.wikipedia.org/wiki/Norwegian_Encore"
@@ -1852,7 +1852,7 @@
     "length": 290,
     "renovated": "2022",
     "decks": 15,
-    "critic": 4.0
+    "critic": 4
   },
   "Enchanted Princess": {
     "line": "Princess",
@@ -1879,7 +1879,7 @@
     "length": 290,
     "renovated": "2024",
     "decks": 14,
-    "critic": 4.0
+    "critic": 4
   },
   "Island Princess": {
     "line": "Princess",
@@ -1945,7 +1945,7 @@
     "length": 290,
     "renovated": "2023",
     "decks": 15,
-    "critic": 4.0,
+    "critic": 4,
     "shipyard": "Fincantieri",
     "flag": "Bermuda",
     "photo": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Ruby_Princess_beim_Durchfahren_der_Agua_Clara_Schleusen_des_Panamakanals_240304.jpg",
@@ -1961,7 +1961,7 @@
     "length": 290,
     "renovated": "2023",
     "decks": 13,
-    "critic": 4.0
+    "critic": 4
   },
   "Sky Princess": {
     "line": "Princess",
@@ -2024,7 +2024,7 @@
     "renovated": "2019",
     "decks": 8,
     "critic": 4.6,
-    "flag": "2011\u2013present: Nassau,",
+    "flag": "2011–present: Nassau,",
     "photo": "https://upload.wikimedia.org/wikipedia/commons/5/5a/Seven_Seas_Navigator%2C_Fremantle%2C_2018_%2806%29.jpg",
     "wiki": "https://en.wikipedia.org/wiki/Seven_Seas_Navigator"
   },
@@ -2062,8 +2062,8 @@
     "length": 311,
     "renovated": "2018",
     "decks": 15,
-    "critic": 4.0,
-    "shipyard": "Kv\u00e6rner Masa-Yards",
+    "critic": 4,
+    "shipyard": "Kværner Masa-Yards",
     "photo": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Adventure_of_the_Seas_at_Grand_Turk.jpg",
     "wiki": "https://en.wikipedia.org/wiki/Adventure_of_the_Seas"
   },
@@ -2113,7 +2113,7 @@
     "length": 301,
     "renovated": "2019",
     "decks": 11,
-    "critic": 4.0
+    "critic": 4
   },
   "Explorer of the Seas": {
     "line": "Royal Caribbean",
@@ -2126,7 +2126,7 @@
     "renovated": "2023",
     "decks": 15,
     "critic": 3.8,
-    "shipyard": "Kv\u00e6rner Masa-Yards",
+    "shipyard": "Kværner Masa-Yards",
     "flag": "Liberia",
     "photo": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Explorer_of_the_Seas_%28ship%2C_2000%29_Departs_Port_Canaveral_%28February_2026%29.jpg",
     "wiki": "https://en.wikipedia.org/wiki/Explorer_of_the_Seas"
@@ -2141,7 +2141,7 @@
     "length": 339,
     "renovated": "2020",
     "decks": 15,
-    "critic": 4.0,
+    "critic": 4,
     "wiki": "https://en.wikipedia.org/wiki/Freedom_of_the_Seas"
   },
   "Grandeur of the Seas": {
@@ -2213,7 +2213,7 @@
     "length": 339,
     "renovated": "2021",
     "decks": 15,
-    "critic": 4.0,
+    "critic": 4,
     "shipyard": "Aker Yards",
     "flag": "Royal Caribbean International",
     "photo": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Liberty_of_the_Seas_%28ship%2C_2006%29_in_Halifax%2C_Nova_Scotia%2C_Canada_on_August_18%2C_2025.jpg",
@@ -2230,7 +2230,7 @@
     "renovated": "2018",
     "decks": 15,
     "critic": 4.1,
-    "shipyard": "Kv\u00e6rner Masa-Yards",
+    "shipyard": "Kværner Masa-Yards",
     "flag": "Royal Caribbean International",
     "photo": "https://upload.wikimedia.org/wikipedia/commons/3/31/Bahamas_Cruise_-_ship_exterior_-_June_2018_%283303%29.jpg",
     "wiki": "https://en.wikipedia.org/wiki/Mariner_of_the_Seas"
@@ -2246,7 +2246,7 @@
     "renovated": "2019",
     "decks": 15,
     "critic": 3.8,
-    "shipyard": "Kv\u00e6rner Masa-Yards",
+    "shipyard": "Kværner Masa-Yards",
     "flag": "Royal Caribbean International",
     "photo": "https://upload.wikimedia.org/wikipedia/commons/1/10/Navigator_of_the_Seas_%28ship%2C_2002%29_in_Ensenada%2C_Mexico_%28August_2024%29_1.jpg",
     "wiki": "https://en.wikipedia.org/wiki/Navigator_of_the_Seas"
@@ -2261,7 +2261,7 @@
     "length": 360,
     "renovated": "2019",
     "decks": 18,
-    "critic": 4.0
+    "critic": 4
   },
   "Odyssey of the Seas": {
     "line": "Royal Caribbean",
@@ -2288,7 +2288,7 @@
     "length": 347,
     "renovated": "2021",
     "decks": 16,
-    "critic": 4.0,
+    "critic": 4,
     "shipyard": "Meyer Werft",
     "flag": "Royal Caribbean International",
     "photo": "https://upload.wikimedia.org/wikipedia/commons/4/49/Ovation_of_the_Seas_%2826417060696%29_%28cropped%29.jpg",
@@ -2316,7 +2316,7 @@
     "length": 293,
     "renovated": "2021",
     "decks": 13,
-    "critic": 4.0
+    "critic": 4
   },
   "Rhapsody of the Seas": {
     "line": "Royal Caribbean",
@@ -2351,7 +2351,7 @@
     "crew": 1551,
     "length": 347,
     "decks": 16,
-    "critic": 4.0,
+    "critic": 4,
     "shipyard": "Meyer Werft",
     "flag": "Cyprus",
     "photo": "https://upload.wikimedia.org/wikipedia/commons/6/61/SPECTRUM_OF_THE_SEAS_20190608-2_%28cropped%29.jpg",
@@ -2366,7 +2366,7 @@
     "crew": 2350,
     "length": 365,
     "decks": 20,
-    "critic": 4.0
+    "critic": 4
   },
   "Symphony of the Seas": {
     "line": "Royal Caribbean",
@@ -2378,7 +2378,7 @@
     "length": 362,
     "renovated": "2023",
     "decks": 18,
-    "critic": 4.0
+    "critic": 4
   },
   "Utopia of the Seas": {
     "line": "Royal Caribbean",
@@ -2414,7 +2414,7 @@
     "renovated": "2019",
     "decks": 15,
     "critic": 4.2,
-    "shipyard": "Kv\u00e6rner Masa-Yards",
+    "shipyard": "Kværner Masa-Yards",
     "flag": "Royal Caribbean International",
     "photo": "https://upload.wikimedia.org/wikipedia/en/1/19/Voyager_of_the_seas_santorini.png",
     "wiki": "https://en.wikipedia.org/wiki/Voyager_of_the_Seas"
@@ -2542,7 +2542,7 @@
     "length": 277,
     "renovated": "2024",
     "decks": 17,
-    "critic": 4.0
+    "critic": 4
   },
   "Valiant Lady": {
     "line": "Virgin Voyages",
@@ -2578,5 +2578,35 @@
     "renovated": "2021",
     "decks": 6,
     "critic": 3.8
+  },
+  "Noordam": {
+    "wiki": "https://en.wikipedia.org/wiki/Noordam"
+  },
+  "Wind Surf": {
+    "ton": 1654,
+    "built": 1989,
+    "pax": 386,
+    "crew": 214,
+    "shipyard": "Yard number",
+    "flag": "France",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/7/72/Wind_Surf_%28ship%2C_1989%29.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Wind_Surf"
+  },
+  "Wind Spirit": {
+    "wiki": "https://en.wikipedia.org/wiki/Wind_Spirit"
+  },
+  "Wind Star": {
+    "wiki": "https://en.wikipedia.org/wiki/Wind_Star"
+  },
+  "Star Pride": {
+    "ton": 95,
+    "built": 1988,
+    "pax": 312,
+    "crew": 188,
+    "length": 159,
+    "shipyard": "Schichau-Seebeckwerft",
+    "flag": "Norway",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/d/d4/Star_Pride%2C_8_January_2016.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Star_Pride"
   }
 }
