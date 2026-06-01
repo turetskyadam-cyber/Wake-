@@ -432,6 +432,137 @@
     .wordmark .dot::after,.sel-pulse,.blip{animation:none}
     .ship.breathe .halo,.row.awaiting .swatch{animation:none}
   }
+
+  /* ═══════════════════════════════════════════
+     LIVE PORT CAMS
+  ═══════════════════════════════════════════ */
+
+  /* ── Trigger button ── */
+  #camsBtn{top:18px;right:18px;z-index:1001;padding:8px 15px;display:flex;align-items:center;gap:8px;cursor:pointer;border:none;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);transition:background .2s,color .2s,transform .1s}
+  #camsBtn:hover{background:rgba(226,189,114,.1);color:var(--ink)}
+  #camsBtn:active{transform:scale(.95)}
+  #camsBtn .cb-dot{width:6px;height:6px;border-radius:50%;background:#5ad6a0;box-shadow:0 0 8px #5ad6a0;animation:pulse 2.4s var(--ease-out) infinite;flex-shrink:0}
+  #camsBtn .cb-badge{min-width:16px;height:16px;border-radius:999px;background:rgba(226,189,114,.15);border:1px solid rgba(226,189,114,.4);color:var(--brass);font-size:8px;padding:0 5px;display:flex;align-items:center;justify-content:center;line-height:1}
+
+  /* ── Overlay ── */
+  #cams{position:fixed;inset:0;z-index:2050;background:rgba(4,14,22,.86);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .28s var(--ease-out)}
+  #cams.open{opacity:1;pointer-events:auto}
+
+  /* ── Panel ── */
+  #camsPanel{background:var(--glass);border:1px solid var(--glass-edge);border-radius:20px;backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);box-shadow:0 32px 80px -20px rgba(0,0,0,.85),inset 0 1px 0 rgba(255,255,255,.05);width:min(1100px,96vw);max-height:92vh;display:flex;flex-direction:column;overflow:hidden;transform:translateY(24px) scale(.98);transition:transform .32s var(--ease-out)}
+  #cams.open #camsPanel{transform:none}
+
+  /* ── Drag handle (mobile) ── */
+  .cam-handle{width:40px;height:4px;background:var(--glass-edge);border-radius:2px;margin:10px auto 2px;flex-shrink:0;cursor:grab}
+
+  /* ── Header ── */
+  .cam-hdr{display:flex;align-items:center;gap:12px;padding:18px 24px 0;flex-shrink:0}
+  .cam-hdr-icon{color:var(--brass);flex-shrink:0;opacity:.9}
+  .cam-hdr-title{font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:var(--brass);flex:1;line-height:1}
+  .cam-hdr-meta{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);white-space:nowrap}
+  .cam-close{width:30px;height:30px;border:none;background:rgba(255,255,255,.05);border-radius:8px;cursor:pointer;color:var(--muted);font-size:15px;display:flex;align-items:center;justify-content:center;transition:background .18s,color .18s;flex-shrink:0}
+  .cam-close:hover{background:rgba(255,255,255,.1);color:var(--ink)}
+
+  /* ── Tabs ── */
+  .cam-tabs{display:flex;padding:0 24px;border-bottom:1px solid var(--glass-edge);flex-shrink:0;overflow-x:auto;scrollbar-width:none;margin-top:14px}
+  .cam-tabs::-webkit-scrollbar{display:none}
+  .cam-tab{padding:10px 15px 12px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .2s,border-color .2s;user-select:none}
+  .cam-tab:hover{color:var(--muted)}
+  .cam-tab.active{color:var(--brass);border-bottom-color:var(--brass)}
+
+  /* ── Grid ── */
+  .cam-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;padding:20px 24px;overflow-y:auto;flex:1;overscroll-behavior:contain}
+
+  /* ── Card ── */
+  .cam-card{border-radius:14px;overflow:hidden;background:rgba(255,255,255,.03);border:1px solid var(--glass-edge);display:flex;flex-direction:column;transition:border-color .22s,box-shadow .22s;animation:cam-in .32s var(--ease-out) both}
+  .cam-card:hover{border-color:rgba(255,255,255,.14);box-shadow:0 8px 32px -8px rgba(0,0,0,.6)}
+  @keyframes cam-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  /* ── Iframe zone ── */
+  .cam-ifr-wrap{position:relative;aspect-ratio:16/9;background:#030d16;overflow:hidden;flex-shrink:0}
+  .cam-ifr-wrap iframe{width:100%;height:100%;border:none;display:block}
+
+  /* click-to-expand overlay (covers iframe in grid view, removed in expanded view) */
+  .cam-click-overlay{position:absolute;inset:0;z-index:2;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .22s}
+  .cam-click-overlay:hover{background:rgba(0,0,0,.18)}
+  .cam-click-overlay::after{content:'⛶';font-size:28px;color:rgba(255,255,255,0);transition:color .22s;text-shadow:0 2px 12px rgba(0,0,0,.6)}
+  .cam-click-overlay:hover::after{color:rgba(255,255,255,.75)}
+  .cam-card.offline .cam-click-overlay{display:none}
+
+  /* skeleton — content provided by inline SVG (ship scene) */
+  .cam-skel{position:absolute;inset:0;overflow:hidden}
+  .cam-skel svg{width:100%;height:100%;display:block}
+  .cam-card.loaded .cam-skel{display:none}
+
+  /* LIVE badge */
+  .cam-live{position:absolute;top:8px;left:8px;background:rgba(4,13,22,.72);border:1px solid rgba(90,214,160,.38);color:#5ad6a0;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.12em;padding:3px 8px;border-radius:999px;display:flex;align-items:center;gap:5px;opacity:.55;transition:opacity .35s,border-color .35s,color .35s;pointer-events:none}
+  .cam-live .ld{width:5px;height:5px;border-radius:50%;background:#5ad6a0;flex-shrink:0}
+  .cam-card.loaded .cam-live{opacity:1}
+  .cam-card.offline .cam-live{border-color:rgba(255,255,255,.12);color:var(--faint)}
+  .cam-card.offline .ld{background:var(--faint);box-shadow:none}
+
+  /* offline overlay */
+  .cam-offline{position:absolute;inset:0;background:rgba(4,14,22,.9);display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+  .cam-card.offline .cam-offline{display:flex}
+  .cam-offline-lbl{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
+  .cam-offline-btn{color:var(--brass);font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.1em;text-decoration:none;border:1px solid rgba(226,189,114,.3);padding:5px 14px;border-radius:999px;transition:background .2s,color .2s}
+  .cam-offline-btn:hover{background:rgba(226,189,114,.09);color:var(--ink)}
+
+  /* ── Card info ── */
+  .cam-info{padding:11px 14px 0}
+  .cam-port{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);display:flex;align-items:center;gap:6px}
+  .cam-flag{font-size:13px;line-height:1}
+  .cam-loc{font-family:'Hanken Grotesk',sans-serif;font-size:11.5px;color:var(--muted);margin-top:3px}
+  .cam-view{display:inline-flex;margin-top:6px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);background:rgba(255,255,255,.025);border:1px solid var(--glass-edge);padding:3px 8px;border-radius:999px}
+
+  /* ships at port */
+  .cam-ships{padding:8px 14px 12px;display:flex;flex-wrap:wrap;gap:5px}
+  .cam-ship{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.06em;color:var(--brass);background:rgba(226,189,114,.07);border:1px solid rgba(226,189,114,.2);padding:3px 9px;border-radius:999px;cursor:pointer;transition:background .18s,color .18s;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+  .cam-ship:hover{background:rgba(226,189,114,.16);color:var(--ink)}
+  .cam-ships:empty{display:none}
+
+  /* ── Expand back button ── */
+  .cam-back{display:none;background:none;border:1px solid var(--glass-edge);color:var(--muted);padding:6px 14px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;cursor:pointer;margin:10px 24px 0;flex-shrink:0;align-self:flex-start;transition:color .18s,border-color .18s}
+  .cam-back:hover{color:var(--ink);border-color:rgba(255,255,255,.2)}
+  #camsPanel.expanded .cam-back{display:flex;align-items:center;gap:7px}
+  #camsPanel.expanded .cam-tabs,
+  #camsPanel.expanded .cam-pager{display:none}
+  #camsPanel.expanded .cam-grid{grid-template-columns:1fr;max-width:800px;margin:0 auto;width:100%}
+
+  /* ── Pagination ── */
+  .cam-pager{display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 24px 16px;flex-shrink:0;border-top:1px solid var(--glass-edge)}
+  .cam-pg{background:none;border:1px solid var(--glass-edge);color:var(--muted);width:28px;height:28px;border-radius:7px;cursor:pointer;font-size:14px;transition:border-color .18s,color .18s;display:flex;align-items:center;justify-content:center;font-family:'Hanken Grotesk',sans-serif}
+  .cam-pg:hover:not(:disabled){border-color:rgba(255,255,255,.2);color:var(--ink)}
+  .cam-pg:disabled{opacity:.22;cursor:default}
+  .cam-pg-dots{display:flex;gap:6px;align-items:center}
+  .cam-pg-dot{width:7px;height:7px;border-radius:50%;background:var(--glass-edge);cursor:pointer;transition:background .2s,transform .18s}
+  .cam-pg-dot.on{background:var(--brass);transform:scale(1.25)}
+
+  /* ── Footer ── */
+  .cam-footer{padding:8px 24px 14px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);text-align:center;flex-shrink:0;border-top:1px solid var(--glass-edge);margin-top:auto}
+
+  /* Windy webcam badge variant */
+  .cam-src-windy{border-color:rgba(90,214,160,.3);color:#7dcfc0}
+  .cam-src-windy .ld{background:#7dcfc0;box-shadow:0 0 5px #7dcfc0}
+
+  /* No-embed placeholder */
+  .cam-no-embed{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px}
+  .cam-no-embed-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+  .cam-view-btn{color:var(--brass);font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.1em;text-decoration:none;border:1px solid rgba(226,189,114,.32);padding:6px 16px;border-radius:999px;transition:background .2s,color .2s;margin-top:2px}
+  .cam-view-btn:hover{background:rgba(226,189,114,.09);color:var(--ink)}
+
+  /* ── Responsive ── */
+  @media (max-width:760px){
+    #camsBtn{top:auto;bottom:74px;right:10px}
+  }
+  @media (max-width:700px){
+    #cams{align-items:flex-end}
+    #camsPanel{width:100%;max-height:92vh;border-radius:20px 20px 0 0;transform:translateY(60px)}
+    #cams.open #camsPanel{transform:none}
+    .cam-grid{grid-template-columns:1fr;padding:14px 16px;gap:12px}
+    .cam-hdr{padding:0 16px}
+    .cam-back{margin:8px 16px 0}
+  }
 </style>
 </head>
 <body>
@@ -510,6 +641,13 @@
   <button id="zReset" class="rs">RST</button>
 </div>
 
+<button id="camsBtn" class="panel" title="Live port & cruise cameras">
+  <svg class="cam-hdr-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3Z"/><circle cx="12" cy="13" r="3"/></svg>
+  Cams
+  <span class="cb-dot"></span>
+  <span class="cb-badge" id="camsBadge" style="display:none"></span>
+</button>
+
 <div id="tip"><div class="t-name"></div><div class="t-meta"></div></div>
 
 <div id="shipSide" class="panel">
@@ -550,6 +688,22 @@
     </div>
   </div>
 </div>
+<!-- ══════════════ LIVE PORT CAMS MODAL ══════════════ -->
+<div id="cams" role="dialog" aria-modal="true" aria-label="Live Port Cameras">
+  <div id="camsPanel">
+    <div class="cam-handle" id="camHandle"></div>
+    <div class="cam-hdr">
+      <svg class="cam-hdr-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3Z"/><circle cx="12" cy="13" r="3"/></svg>
+      <span class="cam-hdr-title">Live Port Cams</span>
+      <span class="cam-hdr-meta" id="camsHdrMeta">6 LIVE FEEDS</span>
+      <button class="cam-close" id="camsClose" aria-label="Close cameras">✕</button>
+    </div>
+    <button class="cam-back" id="camsBack">‹ Back to all feeds</button>
+    <div class="cam-grid" id="camsGrid"></div>
+    <div class="cam-footer">Feeds via Windy Webcams &amp; YouTube &nbsp;·&nbsp; Free &amp; public</div>
+  </div>
+</div>
+
 <button id="navOpen" class="nav-open" aria-label="Show fleet menu" title="Show fleet menu">
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg><span>Fleet</span>
 </button>
@@ -1929,6 +2083,294 @@ byId("brandExpand").addEventListener("click",()=>{
   localStorage.removeItem("brandMini");
 });
 if(localStorage.getItem("brandMini")) brandEl.classList.add("mini");
+
+/* ============================================================
+   LIVE PORT CAMS
+   ============================================================ */
+// Only ports with verified, inline-playing embeds (Windy or YouTube)
+const CAM_FEEDS = [
+  {id:1, port:'Miami',            flag:'🇺🇸', country:'Florida, USA',       camView:'Dodge Island · cruise terminal',     windyId:null, ytId:'PeYZZinH1wI', srcUrl:'https://www.youtube.com/live/PeYZZinH1wI',          itinKey:'PortMiami'},
+  {id:2, port:'Fort Lauderdale',  flag:'🇺🇸', country:'Port Everglades, FL', camView:'Terminal 2 · cruise piers',          windyId:'1285077871', ytId:null, srcUrl:'https://www.windy.com/webcams/1285077871',          itinKey:'Port Everglades'},
+  {id:3, port:'Port Canaveral',   flag:'🇺🇸', country:'Florida, USA',       camView:'Harbor entrance & cruise piers',     windyId:'1656280774', ytId:null, srcUrl:'https://www.windy.com/webcams/1656280774',          itinKey:'Port Canaveral'},
+  {id:4, port:'Barcelona',        flag:'🇪🇸', country:'Catalonia, Spain',   camView:'Port Olímpic · cruise terminals',    windyId:'1450823411', ytId:null, srcUrl:'https://www.windy.com/webcams/1450823411',          itinKey:'Barcelona'},
+  {id:5, port:'Venice',           flag:'🇮🇹', country:'Veneto, Italy',      camView:'Grand Canal & passenger terminal',   windyId:'1279401088', ytId:null, srcUrl:'https://www.windy.com/webcams/1279401088',          itinKey:null},
+  {id:6, port:'Southampton',      flag:'🇬🇧', country:'Hampshire, UK',      camView:'Ocean Terminal · 24/7 live stream',  windyId:null,         ytId:'WxdeHH9T7Yk', srcUrl:'https://www.youtube.com/watch?v=WxdeHH9T7Yk', itinKey:'Southampton'},
+];
+
+(function initCams(){
+  let _open = false;
+  let _expanded = null;
+
+  function shipsAt(itinKey){
+    if(!itinKey) return [];
+    const k = itinKey.toLowerCase().replace(/[^a-z0-9]/g,'');
+    return fleet.filter(d => d.status==='port' && d.portCity &&
+      (d.portCity===itinKey || d.portCity.toLowerCase().replace(/[^a-z0-9]/g,'')=== k));
+  }
+
+  function openCams(){
+    if(_open) return;
+    _open = true;
+    document.body.style.overflow = 'hidden';
+    const el = byId('cams');
+    requestAnimationFrame(()=>{ el.classList.add('open'); renderGrid(); updateBadge(); });
+  }
+
+  function closeCams(){
+    if(!_open) return;
+    _open = false;
+    const el = byId('cams');
+    el.classList.remove('open');
+    el.addEventListener('transitionend', ()=>{
+      byId('camsGrid').innerHTML = '';
+      _expanded = null;
+      byId('camsPanel').classList.remove('expanded');
+    }, {once:true});
+    document.body.style.overflow = '';
+  }
+
+  function renderGrid(){
+    _expanded = null;
+    byId('camsPanel').classList.remove('expanded');
+    byId('camsBack').style.display = 'none';
+    const grid = byId('camsGrid');
+    grid.innerHTML = '';
+    CAM_FEEDS.forEach((feed, i)=>{ grid.appendChild(buildCard(feed, i)); });
+  }
+
+  // ── Ship loading scene ──────────────────────────────────────────────────
+  // Each call uses feed.id to give gradients unique IDs (avoids cross-card conflicts).
+  function shipSVG(uid, sailOffset){
+    // sailOffset staggers the ship position so 6 cards don't all look identical
+    const dur = 13, from = -140, to = 415;
+    const beginVal = sailOffset ? `${sailOffset}s` : '0s';
+    return `<svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="csg${uid}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#010810"/><stop offset="100%" stop-color="#04182a"/>
+    </linearGradient>
+    <linearGradient id="cog${uid}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b2d44"/><stop offset="100%" stop-color="#040e16"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="225" fill="url(#csg${uid})"/>
+  <circle cx="38" cy="14" r=".7" fill="#fff" opacity=".45"/>
+  <circle cx="82" cy="30" r=".5" fill="#fff" opacity=".35"/>
+  <circle cx="145" cy="9" r=".8" fill="#fff" opacity=".5"/>
+  <circle cx="205" cy="22" r=".6" fill="#fff" opacity=".4"/>
+  <circle cx="268" cy="7" r=".7" fill="#fff" opacity=".48"/>
+  <circle cx="322" cy="34" r=".5" fill="#fff" opacity=".3"/>
+  <circle cx="372" cy="17" r=".7" fill="#fff" opacity=".42"/>
+  <circle cx="112" cy="45" r=".5" fill="#fff" opacity=".3"/>
+  <circle cx="244" cy="40" r=".6" fill="#fff" opacity=".32"/>
+  <circle cx="170" cy="58" r=".4" fill="#fff" opacity=".25"/>
+  <circle cx="352" cy="26" r="11" fill="#e8d898" opacity=".09"/>
+  <circle cx="352" cy="26" r="7" fill="#f0e8b0" opacity=".08"/>
+  <circle cx="352" cy="26" r="4" fill="#fff8d0" opacity=".1"/>
+  <text x="200" y="52" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" letter-spacing="5" fill="rgba(255,255,255,.3)">LOADING<animate attributeName="opacity" values=".2;.55;.2" dur="1.6s" repeatCount="indefinite"/></text>
+  <text x="200" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(226,189,114,.35)">· · ·<animate attributeName="opacity" values=".2;.65;.2" dur="1.6s" begin="-0.6s" repeatCount="indefinite"/></text>
+  <ellipse cx="200" cy="153" rx="200" ry="18" fill="#0d3558" opacity=".28"/>
+  <rect x="0" y="153" width="400" height="72" fill="url(#cog${uid})"/>
+  <g><animateTransform attributeName="transform" attributeType="XML" type="translate" from="0,0" to="-100,0" dur="4s" repeatCount="indefinite"/>
+    <path d="M-100,158 Q-75,152 -50,158 Q-25,164 0,158 Q25,152 50,158 Q75,164 100,158 Q125,152 150,158 Q175,164 200,158 Q225,152 250,158 Q275,164 300,158 Q325,152 350,158 Q375,164 400,158 Q425,152 450,158 Q475,164 500,158 L500,225 L-100,225 Z" fill="#0e3655" opacity=".6"/>
+  </g>
+  <g><animateTransform attributeName="transform" attributeType="XML" type="translate" from="0,0" to="-150,0" dur="6.5s" repeatCount="indefinite"/>
+    <path d="M-150,164 Q-113,159 -75,164 Q-38,169 0,164 Q38,159 75,164 Q113,169 150,164 Q188,159 225,164 Q263,169 300,164 Q338,159 375,164 Q413,169 450,164 Q488,159 525,164 L525,225 L-150,225 Z" fill="#122840" opacity=".5"/>
+  </g>
+  <g><animateTransform attributeName="transform" attributeType="XML" type="translate" from="${from},0" to="${to},0" dur="${dur}s" begin="${beginVal}" repeatCount="indefinite"/>
+    <path d="M-5,152 Q-32,154 -62,151 Q-42,157 -5,156 Z" fill="white" opacity=".13"/>
+    <path d="M-5,154 Q-48,157 -88,154 Q-58,161 -5,159 Z" fill="white" opacity=".08"/>
+    <path d="M 0,138 L 0,153 L 108,153 Q 122,153 128,145 L 118,138 Z" fill="#c4a050" opacity=".62"/>
+    <rect x="1" y="150" width="107" height="2" fill="#e2c870" opacity=".3"/>
+    <circle cx="16" cy="145" r="1.8" fill="#ffe0a0" opacity=".4"/><circle cx="30" cy="145" r="1.8" fill="#ffe0a0" opacity=".38"/><circle cx="44" cy="145" r="1.8" fill="#ffe0a0" opacity=".38"/><circle cx="58" cy="145" r="1.8" fill="#ffe0a0" opacity=".36"/><circle cx="72" cy="145" r="1.8" fill="#ffe0a0" opacity=".36"/><circle cx="86" cy="145" r="1.8" fill="#ffe0a0" opacity=".34"/><circle cx="100" cy="145" r="1.8" fill="#ffe0a0" opacity=".32"/>
+    <rect x="4" y="125" width="106" height="13" rx="1" fill="#c4a050" opacity=".52"/>
+    <rect x="10" y="127" width="3.5" height="5" rx=".5" fill="#ffe8b0" opacity=".38"/><rect x="18" y="127" width="3.5" height="5" rx=".5" fill="#ffe8b0" opacity=".37"/><rect x="26" y="127" width="3.5" height="5" rx=".5" fill="#ffe8b0" opacity=".37"/><rect x="34" y="127" width="3.5" height="5" rx=".5" fill="#ffe8b0" opacity=".36"/><rect x="42" y="127" width="3.5" height="5" rx=".5" fill="#ffe8b0" opacity=".36"/><rect x="50" y="127" width="3.5" height="5" rx=".5" fill="#ffe8b0" opacity=".35"/><rect x="58" y="127" width="3.5" height="5" rx=".5" fill="#ffe8b0" opacity=".35"/><rect x="66" y="127" width="3.5" height="5" rx=".5" fill="#ffe8b0" opacity=".34"/><rect x="74" y="127" width="3.5" height="5" rx=".5" fill="#ffe8b0" opacity=".33"/><rect x="82" y="127" width="3.5" height="5" rx=".5" fill="#ffe8b0" opacity=".32"/><rect x="90" y="127" width="3.5" height="5" rx=".5" fill="#ffe8b0" opacity=".3"/><rect x="98" y="127" width="3.5" height="5" rx=".5" fill="#ffe8b0" opacity=".28"/>
+    <rect x="10" y="113" width="90" height="12" rx="1" fill="#c4a050" opacity=".47"/>
+    <rect x="16" y="115" width="3" height="4.5" rx=".5" fill="#ffe8b0" opacity=".36"/><rect x="23" y="115" width="3" height="4.5" rx=".5" fill="#ffe8b0" opacity=".35"/><rect x="30" y="115" width="3" height="4.5" rx=".5" fill="#ffe8b0" opacity=".35"/><rect x="37" y="115" width="3" height="4.5" rx=".5" fill="#ffe8b0" opacity=".34"/><rect x="44" y="115" width="3" height="4.5" rx=".5" fill="#ffe8b0" opacity=".33"/><rect x="51" y="115" width="3" height="4.5" rx=".5" fill="#ffe8b0" opacity=".32"/><rect x="58" y="115" width="3" height="4.5" rx=".5" fill="#ffe8b0" opacity=".31"/><rect x="65" y="115" width="3" height="4.5" rx=".5" fill="#ffe8b0" opacity=".3"/><rect x="72" y="115" width="3" height="4.5" rx=".5" fill="#ffe8b0" opacity=".3"/><rect x="79" y="115" width="3" height="4.5" rx=".5" fill="#ffe8b0" opacity=".28"/><rect x="86" y="115" width="3" height="4.5" rx=".5" fill="#ffe8b0" opacity=".28"/><rect x="93" y="115" width="3" height="4.5" rx=".5" fill="#ffe8b0" opacity=".26"/>
+    <rect x="18" y="102" width="73" height="11" rx="1" fill="#c4a050" opacity=".43"/>
+    <rect x="24" y="104" width="2.5" height="4" rx=".5" fill="#ffe8b0" opacity=".32"/><rect x="30" y="104" width="2.5" height="4" rx=".5" fill="#ffe8b0" opacity=".31"/><rect x="36" y="104" width="2.5" height="4" rx=".5" fill="#ffe8b0" opacity=".3"/><rect x="42" y="104" width="2.5" height="4" rx=".5" fill="#ffe8b0" opacity=".3"/><rect x="48" y="104" width="2.5" height="4" rx=".5" fill="#ffe8b0" opacity=".28"/><rect x="54" y="104" width="2.5" height="4" rx=".5" fill="#ffe8b0" opacity=".28"/><rect x="60" y="104" width="2.5" height="4" rx=".5" fill="#ffe8b0" opacity=".27"/><rect x="66" y="104" width="2.5" height="4" rx=".5" fill="#ffe8b0" opacity=".26"/><rect x="72" y="104" width="2.5" height="4" rx=".5" fill="#ffe8b0" opacity=".25"/><rect x="78" y="104" width="2.5" height="4" rx=".5" fill="#ffe8b0" opacity=".24"/>
+    <rect x="66" y="92" width="30" height="10" rx="1" fill="#d4b060" opacity=".48"/>
+    <rect x="70" y="94" width="3" height="4" rx=".5" fill="#ffe8b0" opacity=".42"/><rect x="76" y="94" width="3" height="4" rx=".5" fill="#ffe8b0" opacity=".4"/><rect x="82" y="94" width="3" height="4" rx=".5" fill="#ffe8b0" opacity=".38"/><rect x="88" y="94" width="3" height="4" rx=".5" fill="#ffe8b0" opacity=".36"/>
+    <rect x="36" y="83" width="16" height="19" rx="2.5" fill="#d4a838" opacity=".65"/>
+    <ellipse cx="44" cy="83" rx="6" ry="2.5" fill="#e0b840" opacity=".55"/>
+    <path d="M 41,82 Q 42,77 40,72 Q 44,76 43,82" fill="white" opacity=".07"/>
+    <path d="M 46,81 Q 48,75 47,69 Q 51,74 49,81" fill="white" opacity=".05"/>
+    <line x1="90" y1="92" x2="90" y2="74" stroke="#c8a848" stroke-width="1" opacity=".38"/>
+    <circle cx="90" cy="74" r="1.2" fill="#e2c060" opacity=".5"/>
+  </g>
+</svg>`;
+  }
+
+  function buildCard(feed, animIdx, isExpanded){
+    const card = document.createElement('div');
+    card.className = 'cam-card';
+    card.dataset.fid = feed.id;
+    card.style.animationDelay = (animIdx*55)+'ms';
+
+    const hasEmbed = !!(feed.windyId || feed.ytId);
+
+    // ── video/cam zone ──────────────────────────────────────
+    const wrap = document.createElement('div');
+    wrap.className = 'cam-ifr-wrap';
+
+    if(hasEmbed){
+      const skel = document.createElement('div'); skel.className = 'cam-skel';
+      skel.innerHTML = shipSVG(feed.id, -(animIdx * 2.2));
+      wrap.appendChild(skel);
+
+      const badge = document.createElement('div');
+      badge.className = 'cam-live' + (feed.windyId ? ' cam-src-windy' : '');
+      badge.innerHTML = `<span class="ld"></span>${feed.windyId ? 'WEBCAM' : 'LIVE'}`;
+      wrap.appendChild(badge);
+
+      const offlay = document.createElement('div');
+      offlay.className = 'cam-offline';
+      offlay.innerHTML = `<span class="cam-offline-lbl">Stream unavailable</span><a class="cam-offline-btn" href="${feed.srcUrl}" target="_blank" rel="noopener noreferrer">View webcam ↗</a>`;
+      wrap.appendChild(offlay);
+
+      // In grid view: transparent overlay so clicking anywhere expands the feed
+      // In expanded view: no overlay — iframe is fully interactive
+      if(!isExpanded){
+        const overlay = document.createElement('div');
+        overlay.className = 'cam-click-overlay';
+        overlay.title = 'Click to play full size';
+        overlay.addEventListener('click', ()=>{ expandFeed(feed.id); });
+        wrap.appendChild(overlay);
+      }
+    }
+
+    card.appendChild(wrap);
+
+    // ── port info ──────────────────────────────────────────
+    const info = document.createElement('div'); info.className = 'cam-info';
+    info.innerHTML = `<div class="cam-port"><span class="cam-flag">${feed.flag}</span>${feed.port}</div><div class="cam-loc">${feed.country}</div><span class="cam-view">${feed.camView}</span>`;
+    card.appendChild(info);
+
+    // ── ships at this port ─────────────────────────────────
+    const ships = shipsAt(feed.itinKey);
+    if(ships.length){
+      const sd = document.createElement('div'); sd.className = 'cam-ships';
+      ships.slice(0,5).forEach(s=>{
+        const chip = document.createElement('button'); chip.className = 'cam-ship';
+        chip.textContent = s.name; chip.title = `View ${s.name} on map`;
+        chip.addEventListener('click', ()=>{ closeCams(); goShip(s); });
+        sd.appendChild(chip);
+      });
+      if(ships.length>5){
+        const more = document.createElement('span'); more.className = 'cam-ship';
+        more.style.cssText = 'opacity:.55;cursor:default';
+        more.textContent = `+${ships.length-5} more`; sd.appendChild(more);
+      }
+      card.appendChild(sd);
+    }
+
+    if(hasEmbed) setTimeout(()=>injectIframe(card, wrap, feed, !!isExpanded), 100+animIdx*45);
+    return card;
+  }
+
+  function injectIframe(card, wrap, feed, withSound){
+    let src = null;
+    const isYT = !!feed.ytId;
+    if(feed.windyId){
+      src = `https://webcams.windy.com/webcams/public/embed/player?webcamId=${feed.windyId}&playerType=day&loop=false&interactive=true&forceFullScreenOnOverlayPlay=false`;
+    } else if(feed.ytId){
+      // Grid view: muted autoplay (multiple feeds, no noise war)
+      // Expanded view: unmuted autoplay (single feed, user wants to hear it)
+      const muteParam = withSound ? '0' : '1';
+      src = `https://www.youtube-nocookie.com/embed/${feed.ytId}?autoplay=1&mute=${muteParam}&enablejsapi=1&rel=0&modestbranding=1`;
+    }
+    if(!src){ markOffline(card); return; }
+
+    const ifr = document.createElement('iframe');
+    ifr.src = src;
+    ifr.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    ifr.allowFullscreen = true;
+    let done = false;
+    const hardTimeout = setTimeout(()=>{ if(!done) markOffline(card); }, 18000);
+
+    function markLoaded(){
+      if(done) return;
+      done = true;
+      clearTimeout(hardTimeout);
+      card.classList.add('loaded');
+    }
+
+    if(isYT){
+      // YouTube IFrame API sends postMessage when player state changes.
+      // State 1 = playing — that's the real signal the video is visible.
+      // State 3 = buffering — video has started but is buffering, also good to show.
+      const onMsg = e => {
+        try {
+          const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+          const state = (data.event === 'onStateChange') ? data.info :
+                        (data.event === 'infoDelivery' && data.info) ? data.info.playerState : null;
+          if(state === 1 || state === 3){
+            markLoaded();
+            window.removeEventListener('message', onMsg);
+          }
+        } catch(_){}
+      };
+      window.addEventListener('message', onMsg);
+      // Fallback: if YT API never fires (e.g. blocked), remove skeleton after iframe load + 3s
+      ifr.addEventListener('load', ()=>{ setTimeout(()=>{ markLoaded(); window.removeEventListener('message', onMsg); }, 3000); });
+      ifr.addEventListener('error', ()=>{ clearTimeout(hardTimeout); markOffline(card); window.removeEventListener('message', onMsg); });
+    } else {
+      // Windy: iframe load event is reliable enough
+      ifr.addEventListener('load', ()=>{ markLoaded(); });
+      ifr.addEventListener('error', ()=>{ clearTimeout(hardTimeout); markOffline(card); });
+    }
+
+    wrap.insertBefore(ifr, wrap.querySelector('.cam-skel'));
+  }
+
+  function markOffline(card){ card.classList.add('offline','loaded'); }
+
+  function expandFeed(feedId){
+    _expanded = feedId;
+    const feed = CAM_FEEDS.find(f=>f.id===feedId);
+    if(!feed) return;
+    byId('camsPanel').classList.add('expanded');
+    byId('camsBack').style.display = 'flex';
+    const grid = byId('camsGrid');
+    grid.innerHTML = '';
+    grid.appendChild(buildCard(feed, 0, true));
+  }
+
+  function updateBadge(){
+    const badge = byId('camsBadge');
+    if(!badge) return;
+    const keys = CAM_FEEDS.filter(f=>f.itinKey).map(f=>f.itinKey.toLowerCase().replace(/[^a-z0-9]/g,''));
+    const n = fleet.filter(d=>d.status==='port'&&d.portCity&&keys.includes(d.portCity.toLowerCase().replace(/[^a-z0-9]/g,''))).length;
+    badge.textContent = n;
+    badge.style.display = n>0?'flex':'none';
+  }
+
+  // ── Event wiring ──────────────────────────────────────────
+  byId('camsBtn').addEventListener('click', openCams);
+  byId('camsClose').addEventListener('click', closeCams);
+  byId('cams').addEventListener('click', e=>{ if(e.target===byId('cams')) closeCams(); });
+  byId('camsBack').addEventListener('click', ()=>{ renderGrid(); });
+  addEventListener('keydown', e=>{
+    if(e.key==='Escape' && _open) closeCams();
+  });
+
+  // mobile drag-to-close
+  const handle = byId('camHandle');
+  if(handle){
+    let sy=0, cy=0;
+    const panel = byId('camsPanel');
+    handle.addEventListener('touchstart', e=>{ sy=e.touches[0].clientY; panel.style.transition='none'; },{passive:true});
+    handle.addEventListener('touchmove', e=>{ cy=e.touches[0].clientY; const dy=Math.max(0,cy-sy); panel.style.transform=`translateY(${dy}px)`; },{passive:true});
+    handle.addEventListener('touchend', ()=>{
+      panel.style.transition='';
+      if(Math.max(0,cy-sy)>80) closeCams();
+      else panel.style.transform='';
+    });
+  }
+
+  // refresh ship badge every 30 s
+  setInterval(updateBadge, 30000);
+})();
 
 /* ---- boot ---- */
 fit();
