@@ -1020,6 +1020,7 @@ map.on('click',e=>{
   }
   if(best){ goShip(best); return; }
   if(nav.level===2){ nav={level:0,line:null,ship:null}; hoverLine=null; clearSelection(); renderNav("l"); applyVisibility(); }
+  collapseNav();
 });
 byId("zIn").addEventListener("click",()=>map.zoomIn());
 byId("zOut").addEventListener("click",()=>map.zoomOut());
@@ -1374,6 +1375,16 @@ navOpenBtn.addEventListener("click",expandNav);
 byId("navBackBar").addEventListener("click",()=>goLines());
 byId("navHide").addEventListener("click",collapseNav);
 byId("navHide").addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); collapseNav(); } });
+
+/* swipe-down on controls panel to collapse */
+let _swipeY0=null;
+controlsEl.addEventListener("touchstart",e=>{ _swipeY0=e.touches[0].clientY; },{passive:true});
+controlsEl.addEventListener("touchend",e=>{
+  if(_swipeY0===null) return;
+  const dy=e.changedTouches[0].clientY - _swipeY0;
+  _swipeY0=null;
+  if(dy>60) collapseNav();
+},{passive:true});
 
 /* ---- keyboard ---- */
 function navKey(e,row){
