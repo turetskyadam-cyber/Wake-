@@ -2301,10 +2301,11 @@ const CAM_FEEDS = [
     if(feed.windyId){
       src = `https://webcams.windy.com/webcams/public/embed/player?webcamId=${feed.windyId}&playerType=day&loop=false&interactive=true&forceFullScreenOnOverlayPlay=false`;
     } else if(feed.ytId){
-      // playsinline=1 — prevents iOS/Android from redirecting to YouTube app
-      // mute=1 — required for autoplay to actually fire on mobile browsers
-      // We unmute via postMessage once the player signals it's playing (state=1)
-      src = `https://www.youtube-nocookie.com/embed/${feed.ytId}?autoplay=1&mute=1&enablejsapi=1&playsinline=1&rel=0&modestbranding=1`;
+      // mute=1 needed for mobile autoplay policy; we unmute via API once playing
+      // playsinline=1 keeps it in-page on iOS instead of opening YouTube app
+      // origin= tells YouTube which domain is embedding (required for IFrame API on some browsers)
+      const origin = encodeURIComponent(location.origin);
+      src = `https://www.youtube-nocookie.com/embed/${feed.ytId}?autoplay=1&mute=1&enablejsapi=1&playsinline=1&rel=0&modestbranding=1&origin=${origin}`;
     }
     if(!src){ markOffline(card); return; }
 
@@ -2322,25 +2323,31 @@ const CAM_FEEDS = [
       card.classList.add('loaded');
     }
 
-    function tryUnmute(){
-      // Send unmute + full volume via YouTube IFrame API postMessage.
-      // Works on desktop and Android; iOS Safari ignores programmatic unmute
-      // (browser policy) but the player will still be visible and playable.
-      try {
-        ifr.contentWindow.postMessage(JSON.stringify({event:'command', func:'unMute', args:''}), '*');
-        ifr.contentWindow.postMessage(JSON.stringify({event:'command', func:'setVolume', args:[100]}), '*');
-      } catch(_){}
+    function sendCmd(func, args){
+      try { ifr.contentWindow.postMessage(JSON.stringify({event:'command', func, args: args||''}), '*'); } catch(_){}
+    }
+
+    function tryPlay(){
+      // Explicitly trigger playback + unmute via IFrame API postMessage.
+      // playVideo() here is the key fix: autoplay=1 URL param can be blocked
+      // by mobile browsers for live streams, but a postMessage play command
+      // called close to the user's tap is treated as intentional.
+      sendCmd('playVideo');
+      sendCmd('unMute');
+      sendCmd('setVolume', [100]);
     }
 
     if(isYT){
       const onMsg = e => {
         try {
           const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+          // onReady fires when the player is initialized — best moment to call play
+          if(data.event === 'onReady'){ tryPlay(); }
           const state = (data.event === 'onStateChange') ? data.info :
                         (data.event === 'infoDelivery' && data.info) ? data.info.playerState : null;
           if(state === 1){
-            // Playing — unmute now that autoplay fired
-            tryUnmute();
+            // Confirmed playing — ensure unmuted
+            sendCmd('unMute'); sendCmd('setVolume', [100]);
             markLoaded();
             window.removeEventListener('message', onMsg);
           } else if(state === 3){
@@ -2350,7 +2357,7 @@ const CAM_FEEDS = [
         } catch(_){}
       };
       window.addEventListener('message', onMsg);
-      ifr.addEventListener('load', ()=>{ setTimeout(()=>{ tryUnmute(); markLoaded(); window.removeEventListener('message', onMsg); }, 3000); });
+      ifr.addEventListener('load', ()=>{ setTimeout(()=>{ tryPlay(); markLoaded(); window.removeEventListener('message', onMsg); }, 2500); });
       ifr.addEventListener('error', ()=>{ clearTimeout(hardTimeout); markOffline(card); window.removeEventListener('message', onMsg); });
     } else {
       ifr.addEventListener('load', ()=>{ markLoaded(); });
