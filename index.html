@@ -491,7 +491,9 @@
 
   /* skeleton shimmer */
   .cam-skel{position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.015) 0%,rgba(255,255,255,.055) 50%,rgba(255,255,255,.015) 100%);background-size:200% 100%;animation:cam-shimmer 1.8s ease-in-out infinite}
+  .cam-skel::after{content:'LOADING\2026';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.22em;color:rgba(255,255,255,.28);pointer-events:none;animation:cam-pulse 1.4s ease-in-out infinite}
   @keyframes cam-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+  @keyframes cam-pulse{0%,100%{opacity:.4}50%{opacity:1}}
   .cam-card.loaded .cam-skel{display:none}
 
   /* LIVE badge */
@@ -2205,12 +2207,12 @@ const CAM_FEEDS = [
 
   function injectIframe(card, wrap, feed){
     let src = null;
+    const isYT = !!feed.ytId;
     if(feed.windyId){
-      // Windy webcam embed — plays inline, no redirect to external site
       src = `https://webcams.windy.com/webcams/public/embed/player?webcamId=${feed.windyId}&playerType=day&loop=false&interactive=true&forceFullScreenOnOverlayPlay=false`;
     } else if(feed.ytId){
-      // Verified YouTube live stream embed
-      src = `https://www.youtube-nocookie.com/embed/${feed.ytId}?autoplay=0&rel=0&modestbranding=1`;
+      // enablejsapi=1 lets us receive postMessage state changes so we know when video actually starts
+      src = `https://www.youtube-nocookie.com/embed/${feed.ytId}?autoplay=1&mute=1&enablejsapi=1&rel=0&modestbranding=1`;
     }
     if(!src){ markOffline(card); return; }
 
@@ -2218,11 +2220,41 @@ const CAM_FEEDS = [
     ifr.src = src;
     ifr.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
     ifr.allowFullscreen = true;
-    ifr.loading = 'lazy';
     let done = false;
-    const t = setTimeout(()=>{ if(!done) markOffline(card); }, 10000);
-    ifr.addEventListener('load', ()=>{ done=true; clearTimeout(t); card.classList.add('loaded'); });
-    ifr.addEventListener('error', ()=>{ done=true; clearTimeout(t); markOffline(card); });
+    const hardTimeout = setTimeout(()=>{ if(!done) markOffline(card); }, 18000);
+
+    function markLoaded(){
+      if(done) return;
+      done = true;
+      clearTimeout(hardTimeout);
+      card.classList.add('loaded');
+    }
+
+    if(isYT){
+      // YouTube IFrame API sends postMessage when player state changes.
+      // State 1 = playing — that's the real signal the video is visible.
+      // State 3 = buffering — video has started but is buffering, also good to show.
+      const onMsg = e => {
+        try {
+          const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+          const state = (data.event === 'onStateChange') ? data.info :
+                        (data.event === 'infoDelivery' && data.info) ? data.info.playerState : null;
+          if(state === 1 || state === 3){
+            markLoaded();
+            window.removeEventListener('message', onMsg);
+          }
+        } catch(_){}
+      };
+      window.addEventListener('message', onMsg);
+      // Fallback: if YT API never fires (e.g. blocked), remove skeleton after iframe load + 3s
+      ifr.addEventListener('load', ()=>{ setTimeout(()=>{ markLoaded(); window.removeEventListener('message', onMsg); }, 3000); });
+      ifr.addEventListener('error', ()=>{ clearTimeout(hardTimeout); markOffline(card); window.removeEventListener('message', onMsg); });
+    } else {
+      // Windy: iframe load event is reliable enough
+      ifr.addEventListener('load', ()=>{ markLoaded(); });
+      ifr.addEventListener('error', ()=>{ clearTimeout(hardTimeout); markOffline(card); });
+    }
+
     wrap.insertBefore(ifr, wrap.querySelector('.cam-skel'));
   }
 
