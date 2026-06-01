@@ -388,7 +388,7 @@
       <div class="moms-label">Mom's Search</div>
       <div class="moms-field">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input id="momsQ" type="text" placeholder="Ship name… Enter to go" autocomplete="off" spellcheck="false"/>
+        <input id="momsQ" type="text" placeholder="Type to find a ship…" autocomplete="off" spellcheck="false"/>
       </div>
     </div>
     <button id="nearBtn" class="ports-btn" style="align-self:flex-start" aria-haspopup="true" aria-expanded="false" title="Cruise ships near selected ship">
@@ -1405,13 +1405,24 @@ qInput.addEventListener("keydown",e=>{
 
 /* ---- mom's search ---- */
 const momsQ=byId("momsQ");
+let _momsTimer=null;
+function momsFind(clear){
+  const q=momsQ.value.trim().toLowerCase();
+  if(!q) return;
+  const byStart=fleet.filter(d=>d.lat!=null && d.name.toLowerCase().startsWith(q));
+  const byIncl =fleet.filter(d=>d.lat!=null && d.name.toLowerCase().includes(q));
+  const m=byStart.length ? byStart : byIncl;
+  if(!m.length) return;
+  goShip(m[0]);
+  if(clear){ momsQ.value=""; momsQ.blur(); }
+}
+momsQ.addEventListener("input",()=>{
+  clearTimeout(_momsTimer);
+  _momsTimer=setTimeout(()=>momsFind(false),220);
+});
 momsQ.addEventListener("keydown",e=>{
-  if(e.key==="Enter"){
-    const q=momsQ.value.trim().toLowerCase();
-    if(!q) return;
-    const m=fleet.filter(d=>d.lat!=null && d.name.toLowerCase().includes(q));
-    if(m.length){ momsQ.value=""; momsQ.blur(); goShip(m[0]); }
-  } else if(e.key==="Escape"){ momsQ.value=""; momsQ.blur(); }
+  if(e.key==="Enter"){ clearTimeout(_momsTimer); momsFind(true); }
+  else if(e.key==="Escape"){ clearTimeout(_momsTimer); momsQ.value=""; momsQ.blur(); }
 });
 momsQ.addEventListener("click",e=>e.stopPropagation());
 
