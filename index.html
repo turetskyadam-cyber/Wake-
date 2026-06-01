@@ -432,9 +432,272 @@
     .wordmark .dot::after,.sel-pulse,.blip{animation:none}
     .ship.breathe .halo,.row.awaiting .swatch{animation:none}
   }
+
+  /* ========== LOADING SCREEN ========== */
+  #loader{
+    position:fixed;inset:0;z-index:9999;
+    background:linear-gradient(180deg,#04101a 0%,#061c2c 55%,#082535 100%);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    overflow:hidden;
+    transition:opacity .9s ease,visibility .9s ease;
+  }
+  #loader.gone{opacity:0;visibility:hidden;pointer-events:none}
+  /* stars */
+  .ldr-stars{
+    position:absolute;inset:0;pointer-events:none;
+    background-image:
+      radial-gradient(1.2px 1.2px at 5% 8%, rgba(255,255,255,.55) 0%,transparent 100%),
+      radial-gradient(1px 1px at 12% 3%, rgba(255,255,255,.4) 0%,transparent 100%),
+      radial-gradient(1.5px 1.5px at 22% 14%, rgba(255,255,255,.65) 0%,transparent 100%),
+      radial-gradient(1px 1px at 35% 5%, rgba(255,255,255,.35) 0%,transparent 100%),
+      radial-gradient(1px 1px at 46% 10%, rgba(255,255,255,.5) 0%,transparent 100%),
+      radial-gradient(1.5px 1.5px at 58% 4%, rgba(255,255,255,.45) 0%,transparent 100%),
+      radial-gradient(1px 1px at 70% 7%, rgba(255,255,255,.5) 0%,transparent 100%),
+      radial-gradient(1px 1px at 80% 12%, rgba(255,255,255,.35) 0%,transparent 100%),
+      radial-gradient(1.5px 1.5px at 90% 6%, rgba(255,255,255,.6) 0%,transparent 100%),
+      radial-gradient(1px 1px at 96% 15%, rgba(255,255,255,.4) 0%,transparent 100%),
+      radial-gradient(1px 1px at 8% 23%, rgba(255,255,255,.3) 0%,transparent 100%),
+      radial-gradient(1px 1px at 18% 19%, rgba(255,255,255,.5) 0%,transparent 100%),
+      radial-gradient(1px 1px at 30% 27%, rgba(255,255,255,.38) 0%,transparent 100%),
+      radial-gradient(1.5px 1.5px at 43% 20%, rgba(255,255,255,.55) 0%,transparent 100%),
+      radial-gradient(1px 1px at 53% 30%, rgba(255,255,255,.3) 0%,transparent 100%),
+      radial-gradient(1px 1px at 66% 24%, rgba(255,255,255,.42) 0%,transparent 100%),
+      radial-gradient(1px 1px at 76% 17%, rgba(255,255,255,.5) 0%,transparent 100%),
+      radial-gradient(1px 1px at 86% 32%, rgba(255,255,255,.3) 0%,transparent 100%),
+      radial-gradient(1.5px 1.5px at 94% 22%, rgba(255,255,255,.45) 0%,transparent 100%),
+      radial-gradient(2px 2px at 40% 12%, rgba(255,255,255,.75) 0%,transparent 100%),
+      radial-gradient(1px 1px at 62% 18%, rgba(255,255,255,.35) 0%,transparent 100%),
+      radial-gradient(1px 1px at 25% 35%, rgba(255,255,255,.28) 0%,transparent 100%),
+      radial-gradient(1.2px 1.2px at 50% 25%, rgba(255,240,180,.5) 0%,transparent 100%);
+  }
+  /* moon glow at top-right */
+  .ldr-moon{
+    position:absolute;top:6%;right:10%;
+    width:36px;height:36px;border-radius:50%;
+    background:radial-gradient(circle at 38% 42%,#f5e9b8 0%,#e8d590 55%,transparent 72%);
+    box-shadow:0 0 32px 10px rgba(232,213,144,.15),0 0 80px 30px rgba(232,213,144,.07);
+    pointer-events:none;
+  }
+  /* horizon glow */
+  .ldr-horizon{
+    position:absolute;bottom:38%;left:50%;transform:translateX(-50%);
+    width:90%;height:1px;
+    background:radial-gradient(ellipse at center,rgba(226,189,114,.22) 0%,transparent 70%);
+    pointer-events:none;
+  }
+  /* ocean band */
+  .ldr-ocean{
+    position:absolute;bottom:0;left:0;right:0;
+    height:38%;
+    overflow:hidden;
+    background:linear-gradient(180deg,#0a2535 0%,#04151f 100%);
+  }
+  .ldr-waves-svg{
+    position:absolute;top:-1px;left:0;
+    width:200%;height:70px;
+    will-change:transform;
+  }
+  .ldr-wave1{animation:ldrWaveScroll 9s linear infinite}
+  .ldr-wave2{animation:ldrWaveScroll 14s linear infinite reverse;opacity:.55}
+  .ldr-wave3{animation:ldrWaveScroll 7s linear infinite;opacity:.35}
+  @keyframes ldrWaveScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  /* ship wrapper (waterline position + bob) */
+  .ldr-ship-wrap{
+    position:absolute;
+    bottom:36%;left:50%;
+    transform:translateX(-50%);
+    animation:ldrBob 3.4s ease-in-out infinite;
+    will-change:transform;
+    /* smoke + trail are absolutely positioned children */
+  }
+  @keyframes ldrBob{
+    0%,100%{transform:translateX(-50%) translateY(0px)}
+    50%{transform:translateX(-50%) translateY(-7px)}
+  }
+  .ldr-ship-svg{
+    width:clamp(200px,42vw,340px);
+    height:auto;
+    filter:drop-shadow(0 6px 18px rgba(0,0,0,.7)) drop-shadow(0 0 30px rgba(226,189,114,.08));
+  }
+  /* smoke puffs from funnel */
+  .ldr-smoke{
+    position:absolute;
+    bottom:100%;
+    left:51%;transform:translateX(-50%);
+    width:30px;height:60px;
+  }
+  .ldr-puff{
+    position:absolute;border-radius:50%;
+    background:rgba(200,200,200,.2);
+    animation:ldrPuff 2.8s ease-out infinite;
+  }
+  .ldr-puff:nth-child(1){width:10px;height:10px;left:-5px;bottom:0;animation-delay:0s}
+  .ldr-puff:nth-child(2){width:16px;height:16px;left:-8px;bottom:8px;animation-delay:.7s;opacity:.7}
+  .ldr-puff:nth-child(3){width:22px;height:22px;left:-11px;bottom:18px;animation-delay:1.4s;opacity:.5}
+  .ldr-puff:nth-child(4){width:28px;height:28px;left:-14px;bottom:30px;animation-delay:2.1s;opacity:.25}
+  @keyframes ldrPuff{
+    0%{opacity:.3;transform:translateY(0) scale(1)}
+    100%{opacity:0;transform:translateY(-28px) scale(1.9)}
+  }
+  /* foam trail behind ship */
+  .ldr-trail{
+    position:absolute;
+    right:calc(100% - 4px);bottom:6px;
+    width:120px;height:8px;
+    background:linear-gradient(to left,rgba(255,255,255,.18) 0%,transparent 100%);
+    border-radius:0 4px 4px 0;
+    pointer-events:none;
+  }
+  /* text overlay */
+  .ldr-text{
+    position:relative;z-index:1;
+    text-align:center;
+    margin-bottom:5vh;
+    pointer-events:none;
+  }
+  .ldr-logo{
+    font-family:'Fraunces',serif;
+    font-size:clamp(52px,10vw,88px);
+    font-weight:700;line-height:1;
+    color:#f0e8d0;
+    letter-spacing:.12em;
+    text-shadow:0 0 60px rgba(226,189,114,.25),0 2px 20px rgba(0,0,0,.5);
+  }
+  .ldr-tagline{
+    font-family:'JetBrains Mono',monospace;
+    font-size:clamp(8px,1.2vw,11px);
+    letter-spacing:.28em;text-transform:uppercase;
+    color:var(--brass);margin-top:8px;
+  }
+  .ldr-status{
+    font-family:'JetBrains Mono',monospace;
+    font-size:clamp(7px,1vw,9px);
+    letter-spacing:.18em;text-transform:uppercase;
+    color:var(--faint);margin-top:16px;
+  }
+  .ldr-dots::after{
+    content:'';
+    animation:ldrDots 1.6s steps(4,end) infinite;
+  }
+  @keyframes ldrDots{
+    0%{content:''}
+    25%{content:'.'}
+    50%{content:'..'}
+    75%{content:'...'}
+    100%{content:''}
+  }
 </style>
 </head>
 <body>
+<!-- ========== LOADING SCREEN ========== -->
+<div id="loader">
+  <div class="ldr-stars"></div>
+  <div class="ldr-moon"></div>
+  <div class="ldr-text">
+    <div class="ldr-logo">WAKE</div>
+    <div class="ldr-tagline">Live Cruise Fleet Tracker</div>
+    <div class="ldr-status">Charting the seas<span class="ldr-dots"></span></div>
+  </div>
+  <!-- ship at waterline -->
+  <div class="ldr-ship-wrap">
+    <div class="ldr-smoke">
+      <div class="ldr-puff"></div>
+      <div class="ldr-puff"></div>
+      <div class="ldr-puff"></div>
+      <div class="ldr-puff"></div>
+    </div>
+    <div class="ldr-trail"></div>
+    <svg class="ldr-ship-svg" viewBox="0 0 320 82" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Hull body -->
+      <path d="M12 57 L292 57 C302 57 312 61 315 67 L311 73 L10 73 Q4 69 12 57Z" fill="#E8D9A0"/>
+      <!-- Anti-fouling stripe (dark red at waterline) -->
+      <path d="M11 64 L298 64 L311 68 L308 73 L10 73 Q5 70 11 64Z" fill="#8B2525" opacity="0.75"/>
+      <!-- Superstructure level 1 (main, widest) -->
+      <rect x="22" y="37" width="268" height="22" rx="2" fill="#DFD090"/>
+      <!-- Superstructure level 2 -->
+      <rect x="42" y="23" width="228" height="16" rx="2" fill="#D6C680"/>
+      <!-- Superstructure level 3 -->
+      <rect x="62" y="13" width="188" height="12" rx="2" fill="#CEBC70"/>
+      <!-- Superstructure level 4 (top) -->
+      <rect x="82" y="5" width="148" height="10" rx="2" fill="#C6B260"/>
+      <!-- Bridge (forward/right) -->
+      <rect x="210" y="1" width="62" height="13" rx="2" fill="#BCA850"/>
+      <!-- Bridge wing left -->
+      <rect x="205" y="7" width="6" height="5" fill="#BCA850"/>
+      <!-- Bridge wing right -->
+      <rect x="271" y="7" width="6" height="5" fill="#BCA850"/>
+      <!-- Main funnel -->
+      <rect x="148" y="-8" width="30" height="24" rx="5" fill="#E07020"/>
+      <!-- Funnel top black band -->
+      <ellipse cx="163" cy="-8" rx="18" ry="5" fill="#111"/>
+      <!-- Secondary funnel (smaller, aft) -->
+      <rect x="108" y="-3" width="22" height="18" rx="4" fill="#E07020"/>
+      <ellipse cx="119" cy="-3" rx="13" ry="4" fill="#111"/>
+      <!-- Windows deck 1 -->
+      <g fill="rgba(255,245,195,0.55)">
+        <rect x="32"  y="42" width="4" height="4" rx="1"/>
+        <rect x="48"  y="42" width="4" height="4" rx="1"/>
+        <rect x="64"  y="42" width="4" height="4" rx="1"/>
+        <rect x="80"  y="42" width="4" height="4" rx="1"/>
+        <rect x="96"  y="42" width="4" height="4" rx="1"/>
+        <rect x="112" y="42" width="4" height="4" rx="1"/>
+        <rect x="128" y="42" width="4" height="4" rx="1"/>
+        <rect x="144" y="42" width="4" height="4" rx="1"/>
+        <rect x="180" y="42" width="4" height="4" rx="1"/>
+        <rect x="196" y="42" width="4" height="4" rx="1"/>
+        <rect x="212" y="42" width="4" height="4" rx="1"/>
+        <rect x="228" y="42" width="4" height="4" rx="1"/>
+        <rect x="244" y="42" width="4" height="4" rx="1"/>
+        <rect x="260" y="42" width="4" height="4" rx="1"/>
+        <rect x="276" y="42" width="4" height="4" rx="1"/>
+      </g>
+      <!-- Windows deck 2 -->
+      <g fill="rgba(255,245,195,0.45)">
+        <rect x="52"  y="27" width="3" height="3" rx="1"/>
+        <rect x="65"  y="27" width="3" height="3" rx="1"/>
+        <rect x="78"  y="27" width="3" height="3" rx="1"/>
+        <rect x="91"  y="27" width="3" height="3" rx="1"/>
+        <rect x="104" y="27" width="3" height="3" rx="1"/>
+        <rect x="175" y="27" width="3" height="3" rx="1"/>
+        <rect x="188" y="27" width="3" height="3" rx="1"/>
+        <rect x="201" y="27" width="3" height="3" rx="1"/>
+        <rect x="214" y="27" width="3" height="3" rx="1"/>
+        <rect x="227" y="27" width="3" height="3" rx="1"/>
+        <rect x="240" y="27" width="3" height="3" rx="1"/>
+        <rect x="253" y="27" width="3" height="3" rx="1"/>
+        <rect x="266" y="27" width="3" height="3" rx="1"/>
+      </g>
+      <!-- Portholes on hull -->
+      <g fill="#0a1c28" opacity="0.7">
+        <circle cx="50"  cy="62" r="2.5"/>
+        <circle cx="90"  cy="62" r="2.5"/>
+        <circle cx="130" cy="62" r="2.5"/>
+        <circle cx="170" cy="62" r="2.5"/>
+        <circle cx="210" cy="62" r="2.5"/>
+        <circle cx="250" cy="62" r="2.5"/>
+      </g>
+      <!-- Bow highlight -->
+      <path d="M292 57 C302 57 312 61 315 67" stroke="rgba(255,220,120,.35)" stroke-width="1.5" fill="none"/>
+    </svg>
+  </div>
+  <!-- ocean with animated waves -->
+  <div class="ldr-ocean">
+    <!-- wave layer 1 -->
+    <svg class="ldr-waves-svg ldr-wave1" viewBox="0 0 1440 70" preserveAspectRatio="none">
+      <path d="M0,30 C120,10 240,50 360,30 C480,10 600,50 720,30 C840,10 960,50 1080,30 C1200,10 1320,50 1440,30 L1440,70 L0,70Z" fill="rgba(10,45,65,0.9)"/>
+    </svg>
+    <!-- wave layer 2 -->
+    <svg class="ldr-waves-svg ldr-wave2" viewBox="0 0 1440 70" preserveAspectRatio="none">
+      <path d="M0,38 C100,18 200,52 360,36 C520,20 640,54 800,36 C960,18 1080,54 1200,36 C1300,22 1380,46 1440,38 L1440,70 L0,70Z" fill="rgba(8,35,55,0.7)"/>
+    </svg>
+    <!-- wave layer 3 -->
+    <svg class="ldr-waves-svg ldr-wave3" viewBox="0 0 1440 70" preserveAspectRatio="none">
+      <path d="M0,42 C180,22 360,58 540,40 C720,22 900,58 1080,40 C1260,22 1380,52 1440,42 L1440,70 L0,70Z" fill="rgba(6,25,40,0.5)"/>
+    </svg>
+  </div>
+  <div class="ldr-horizon"></div>
+</div>
+
 <div id="stage">
   <div id="map"></div>
 </div>
@@ -1937,6 +2200,21 @@ applyVisibility();
 updateStats();
 requestAnimationFrame(tick);
 connect();
+
+/* ---- loader dismiss ---- */
+(function(){
+  const loaderEl = byId("loader");
+  let dismissed = false;
+  function dismissLoader(){
+    if(dismissed) return;
+    dismissed = true;
+    loaderEl.classList.add("gone");
+    loaderEl.addEventListener("transitionend", ()=>{ loaderEl.remove(); }, {once:true});
+  }
+  // Dismiss as soon as map tiles load, or after 3.5s max
+  map.once("load", ()=> setTimeout(dismissLoader, 400));
+  setTimeout(dismissLoader, 3500);
+})();
 </script>
 </body>
 </html>
