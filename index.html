@@ -68,7 +68,9 @@
     -webkit-backdrop-filter:blur(18px) saturate(140%);
     box-shadow:0 24px 60px -20px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.04);
   }
-  #brand{top:18px;left:18px;padding:16px 20px 15px;max-width:368px}
+  #brand{top:18px;left:18px;padding:14px 16px 14px 20px;max-width:580px;display:flex;align-items:center;gap:16px}
+  .brand-left{flex:none}
+  .brand-right{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px;align-items:stretch}
   .wordmark{display:flex;align-items:baseline;gap:10px}
   .wordmark h1{
     font-family:'Fraunces',serif;font-weight:600;font-size:30px;letter-spacing:.04em;
@@ -103,6 +105,8 @@
   .ports-btn.on .pb-chev{transform:rotate(180deg)}
   #ports{position:fixed;z-index:1001;max-height:52vh;overflow-y:auto;padding:8px;opacity:0;transform:translateY(-8px) scale(.99);pointer-events:none;transform-origin:top center;transition:opacity .22s var(--ease-out),transform .32s var(--ease-out);scrollbar-width:thin;scrollbar-color:rgba(120,170,185,.25) transparent}
   #ports.show{opacity:1;transform:none;pointer-events:auto}
+  #near{z-index:1001;max-height:52vh;overflow-y:auto;padding:8px;opacity:0;transform:translateY(-6px) scale(.99);pointer-events:none;transform-origin:top right;transition:opacity .22s var(--ease-out),transform .28s var(--ease-out);scrollbar-width:thin;scrollbar-color:rgba(120,170,185,.25) transparent}
+  #near.show{opacity:1;transform:none;pointer-events:auto}
   #ports::-webkit-scrollbar{width:6px}#ports::-webkit-scrollbar-thumb{background:rgba(120,170,185,.22);border-radius:3px}
   .ports-hd{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);padding:6px 8px 9px;display:flex;justify-content:space-between;align-items:center}
   .port-row{border-radius:11px;overflow:hidden;margin-bottom:5px;background:rgba(255,255,255,.02);animation:rowIn .4s var(--ease-out) both}
@@ -129,11 +133,10 @@
   .near-user-dot{width:10px;height:10px;border-radius:50%;background:var(--brass);box-shadow:0 0 0 0 rgba(226,189,114,.5);animation:nearPulse 2s ease-out infinite}
   @keyframes nearPulse{0%{box-shadow:0 0 0 0 rgba(226,189,114,.5)}70%{box-shadow:0 0 0 12px rgba(226,189,114,0)}100%{box-shadow:0 0 0 0 rgba(226,189,114,0)}}
 
-  #toolbar{top:18px;right:18px;display:flex;align-items:center;gap:6px;padding:6px 8px}
   .tb-search{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.04);border:1px solid var(--glass-edge);border-radius:999px;padding:5px 11px;transition:border-color .18s}
   .tb-search:focus-within{border-color:rgba(226,189,114,.45)}
   .tb-search svg{flex:none;color:var(--faint)}
-  .tb-search input{width:148px;background:none;border:none;outline:none;color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.04em}
+  .tb-search input{width:100%;background:none;border:none;outline:none;color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.04em}
   .tb-search input::placeholder{color:var(--faint)}
 
   #controls{left:18px;bottom:18px;width:300px;padding:16px 16px 14px;display:flex;flex-direction:column;gap:13px}
@@ -227,14 +230,13 @@
 
   /* entrance stagger */
   .panel{animation:rise .6s var(--ease-out) both}
-  #toolbar{animation-delay:.06s}#controls{animation-delay:.12s}.credit{animation:fade .8s ease both;animation-delay:.5s}
+  #brand{animation-delay:.06s}#controls{animation-delay:.12s}.credit{animation:fade .8s ease both;animation-delay:.5s}
   @keyframes rise{from{opacity:0;transform:translateY(10px)}}
   @keyframes fade{from{opacity:0}}
 
   @media (max-width:760px){
-    #brand{max-width:none;left:10px;right:10px;top:10px;padding:12px 15px}
-    #toolbar{top:auto;bottom:118px;right:10px;left:10px;justify-content:center}
-    .tb-search input{width:120px}
+    #brand{max-width:none;left:10px;right:10px;top:10px;padding:12px 14px;gap:12px}
+    .brand-left .bstat .num{font-size:18px}
     #controls{left:10px;right:10px;bottom:10px;width:auto}
     .chips{max-height:84px}
     #detail{left:auto;right:10px;width:calc(100% - 140px);bottom:10px}
@@ -308,7 +310,7 @@
   .leaflet-container{background:#04101a;font-family:'Hanken Grotesk',system-ui,sans-serif}
   .leaflet-control-attribution{display:none}
   /* keep all glass panels above the map */
-  #brand,#toolbar,#controls,#detail,#zoom,#tip,.credit{z-index:1000}
+  #brand,#controls,#detail,#zoom,#tip,.credit{z-index:1000}
   /* dark hover tooltip */
   .leaflet-tooltip.ship-tt{background:rgba(4,14,20,.92);border:1px solid var(--glass-edge);color:var(--ink);
     border-radius:9px;padding:6px 10px;font-size:11.5px;box-shadow:0 8px 24px -10px rgba(0,0,0,.7);backdrop-filter:blur(6px)}
@@ -366,30 +368,31 @@
 </div>
 
 <div id="brand" class="panel">
-  <div class="wordmark"><h1>WAKE</h1><span class="dot"></span></div>
-  <div class="sub">Live Cruise Fleet Tracker</div>
-  <span class="feedpill" id="feedpill" data-state="connecting" title="Live AIS broadcasts via aisstream.io"><b></b>Connecting…</span>
-  <div class="brandstats">
-    <div class="bstat"><span class="num" id="s-total">0</span><span class="lab">Tracked</span></div>
-    <div class="bstat"><span class="num sea" id="s-sea">0</span><span class="lab">At&nbsp;sea</span></div>
-    <div class="bstat"><span class="num port" id="s-port">0</span><span class="lab">In&nbsp;port</span></div>
+  <div class="brand-left">
+    <div class="wordmark"><h1>WAKE</h1><span class="dot"></span></div>
+    <div class="sub">Live Cruise Fleet Tracker</div>
+    <span class="feedpill" id="feedpill" data-state="connecting" title="Live AIS broadcasts via aisstream.io"><b></b>Connecting…</span>
+    <div class="brandstats">
+      <div class="bstat"><span class="num" id="s-total">0</span><span class="lab">Tracked</span></div>
+      <div class="bstat"><span class="num sea" id="s-sea">0</span><span class="lab">At&nbsp;sea</span></div>
+      <div class="bstat"><span class="num port" id="s-port">0</span><span class="lab">In&nbsp;port</span></div>
+    </div>
   </div>
-</div>
-
-<div id="toolbar" class="panel">
-  <div class="tb-search">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-    <input id="momsQ" type="text" placeholder="Ship finder…" autocomplete="off" spellcheck="false"/>
+  <div class="brand-right">
+    <div class="tb-search">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="momsQ" type="text" placeholder="Ship finder…" autocomplete="off" spellcheck="false"/>
+    </div>
+    <button id="nearBtn" class="ports-btn" aria-haspopup="true" aria-expanded="false" title="Nearby ships within 25 mi">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+      <span>Nearby Ships</span>
+      <svg class="pb-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
   </div>
-  <button id="nearBtn" class="ports-btn" aria-haspopup="true" aria-expanded="false" title="Cruise ships near selected ship">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
-    <span>Nearby</span>
-    <svg class="pb-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-  </button>
 </div>
 
 <div id="near" class="panel" role="dialog" aria-label="Cruise ships near selected ship">
-  <div class="ports-hd"><span>Nearby&nbsp;·&nbsp;within&nbsp;10&nbsp;mi</span><span id="nearCount"></span></div>
+  <div class="ports-hd"><span>Nearby&nbsp;·&nbsp;within&nbsp;25&nbsp;mi</span><span id="nearCount"></span></div>
   <div id="nearBody"></div>
 </div>
 
@@ -1187,7 +1190,7 @@ async function reverseGeo(d){
 /* ===================== NEARBY SHIPS DROPDOWN ===================== */
 const nearEl=byId("near"), nearBtn=byId("nearBtn");
 let nearOpen=false, _nearCircle=null;
-const KM_PER_MILE=1.60934, NEAR_MILES=10;
+const KM_PER_MILE=1.60934, NEAR_MILES=25;
 
 function clearNearOverlay(){
   if(_nearCircle){ _nearCircle.remove(); _nearCircle=null; }
@@ -1222,11 +1225,11 @@ function renderNear(){
   });
 }
 function positionNear(){
-  const b=byId("toolbar").getBoundingClientRect();
+  const b=byId("brand").getBoundingClientRect();
   nearEl.style.top=(b.bottom+8)+"px";
-  nearEl.style.right="18px";
-  nearEl.style.left="auto";
-  nearEl.style.width=Math.max(b.width,260)+"px";
+  nearEl.style.left=b.left+"px";
+  nearEl.style.right="auto";
+  nearEl.style.width=b.width+"px";
 }
 function openNear(){
   nearOpen=true; nearBtn.classList.add("on"); nearBtn.setAttribute("aria-expanded","true");
