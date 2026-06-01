@@ -205,6 +205,7 @@
   .d-itin-today .d-itin-port{color:var(--ink);font-weight:600}
   .d-itin-row[data-port]:hover .d-itin-port{text-decoration:underline;text-underline-offset:2px}
   /* itinerary route preview overlay */
+  .gulf-logo{mix-blend-mode:multiply;pointer-events:none!important}
   .ipm-outer{pointer-events:none}
   .ipm-card{position:absolute;left:12px;top:-20px;background:rgba(6,18,28,.9);border:1px solid rgba(255,255,255,.16);border-radius:9px;padding:8px 12px;white-space:nowrap;backdrop-filter:blur(10px);box-shadow:0 4px 20px rgba(0,0,0,.55);pointer-events:none}
   .ipm-card b{display:block;font-size:13px;font-weight:600;color:#eef4f7;margin-bottom:3px}
@@ -937,6 +938,13 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
 
 const canvasR = L.canvas({ padding:0.5 });
 const wakeLayer = L.layerGroup().addTo(map);
+
+// Gulf of America logo overlay
+L.imageOverlay(
+  "https://raw.githubusercontent.com/turetskyadam-cyber/Wake-/main/Logo.png",
+  [[19.5, -96], [30, -84]],
+  {opacity:0.72, interactive:false, className:"gulf-logo"}
+).addTo(map);
 
 let selected=null, hoverShip=null, _markerClicked=false;
 const detail=byId("detail");
