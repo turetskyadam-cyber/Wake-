@@ -489,11 +489,9 @@
   .cam-click-overlay:hover::after{color:rgba(255,255,255,.75)}
   .cam-card.offline .cam-click-overlay{display:none}
 
-  /* skeleton shimmer */
-  .cam-skel{position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.015) 0%,rgba(255,255,255,.055) 50%,rgba(255,255,255,.015) 100%);background-size:200% 100%;animation:cam-shimmer 1.8s ease-in-out infinite}
-  .cam-skel::after{content:'LOADING\2026';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.22em;color:rgba(255,255,255,.28);pointer-events:none;animation:cam-pulse 1.4s ease-in-out infinite}
-  @keyframes cam-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-  @keyframes cam-pulse{0%,100%{opacity:.4}50%{opacity:1}}
+  /* skeleton — content provided by inline SVG (ship scene) */
+  .cam-skel{position:absolute;inset:0;overflow:hidden}
+  .cam-skel svg{width:100%;height:100%;display:block}
   .cam-card.loaded .cam-skel{display:none}
 
   /* LIVE badge */
@@ -2140,6 +2138,69 @@ const CAM_FEEDS = [
     CAM_FEEDS.forEach((feed, i)=>{ grid.appendChild(buildCard(feed, i)); });
   }
 
+  // ── Ship loading scene ──────────────────────────────────────────────────
+  // Each call uses feed.id to give gradients unique IDs (avoids cross-card conflicts).
+  function shipSVG(uid, sailOffset){
+    // sailOffset staggers the ship position so 6 cards don't all look identical
+    const dur = 13, from = -140, to = 415;
+    const beginVal = sailOffset ? `${sailOffset}s` : '0s';
+    return `<svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="csg${uid}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#010810"/><stop offset="100%" stop-color="#04182a"/>
+    </linearGradient>
+    <linearGradient id="cog${uid}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b2d44"/><stop offset="100%" stop-color="#040e16"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="225" fill="url(#csg${uid})"/>
+  <circle cx="38" cy="14" r=".7" fill="#fff" opacity=".45"/>
+  <circle cx="82" cy="30" r=".5" fill="#fff" opacity=".35"/>
+  <circle cx="145" cy="9" r=".8" fill="#fff" opacity=".5"/>
+  <circle cx="205" cy="22" r=".6" fill="#fff" opacity=".4"/>
+  <circle cx="268" cy="7" r=".7" fill="#fff" opacity=".48"/>
+  <circle cx="322" cy="34" r=".5" fill="#fff" opacity=".3"/>
+  <circle cx="372" cy="17" r=".7" fill="#fff" opacity=".42"/>
+  <circle cx="112" cy="45" r=".5" fill="#fff" opacity=".3"/>
+  <circle cx="244" cy="40" r=".6" fill="#fff" opacity=".32"/>
+  <circle cx="170" cy="58" r=".4" fill="#fff" opacity=".25"/>
+  <circle cx="352" cy="26" r="11" fill="#e8d898" opacity=".09"/>
+  <circle cx="352" cy="26" r="7" fill="#f0e8b0" opacity=".08"/>
+  <circle cx="352" cy="26" r="4" fill="#fff8d0" opacity=".1"/>
+  <text x="200" y="52" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" letter-spacing="5" fill="rgba(255,255,255,.3)">LOADING<animate attributeName="opacity" values=".2;.55;.2" dur="1.6s" repeatCount="indefinite"/></text>
+  <text x="200" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(226,189,114,.35)">· · ·<animate attributeName="opacity" values=".2;.65;.2" dur="1.6s" begin="-0.6s" repeatCount="indefinite"/></text>
+  <ellipse cx="200" cy="153" rx="200" ry="18" fill="#0d3558" opacity=".28"/>
+  <rect x="0" y="153" width="400" height="72" fill="url(#cog${uid})"/>
+  <g><animateTransform attributeName="transform" attributeType="XML" type="translate" from="0,0" to="-100,0" dur="4s" repeatCount="indefinite"/>
+    <path d="M-100,158 Q-75,152 -50,158 Q-25,164 0,158 Q25,152 50,158 Q75,164 100,158 Q125,152 150,158 Q175,164 200,158 Q225,152 250,158 Q275,164 300,158 Q325,152 350,158 Q375,164 400,158 Q425,152 450,158 Q475,164 500,158 L500,225 L-100,225 Z" fill="#0e3655" opacity=".6"/>
+  </g>
+  <g><animateTransform attributeName="transform" attributeType="XML" type="translate" from="0,0" to="-150,0" dur="6.5s" repeatCount="indefinite"/>
+    <path d="M-150,164 Q-113,159 -75,164 Q-38,169 0,164 Q38,159 75,164 Q113,169 150,164 Q188,159 225,164 Q263,169 300,164 Q338,159 375,164 Q413,169 450,164 Q488,159 525,164 L525,225 L-150,225 Z" fill="#122840" opacity=".5"/>
+  </g>
+  <g><animateTransform attributeName="transform" attributeType="XML" type="translate" from="${from},0" to="${to},0" dur="${dur}s" begin="${beginVal}" repeatCount="indefinite"/>
+    <path d="M-5,152 Q-32,154 -62,151 Q-42,157 -5,156 Z" fill="white" opacity=".13"/>
+    <path d="M-5,154 Q-48,157 -88,154 Q-58,161 -5,159 Z" fill="white" opacity=".08"/>
+    <path d="M 0,138 L 0,153 L 108,153 Q 122,153 128,145 L 118,138 Z" fill="#c4a050" opacity=".62"/>
+    <rect x="1" y="150" width="107" height="2" fill="#e2c870" opacity=".3"/>
+    <circle cx="16" cy="145" r="1.8" fill="#ffe0a0" opacity=".4"/><circle cx="30" cy="145" r="1.8" fill="#ffe0a0" opacity=".38"/><circle cx="44" cy="145" r="1.8" fill="#ffe0a0" opacity=".38"/><circle cx="58" cy="145" r="1.8" fill="#ffe0a0" opacity=".36"/><circle cx="72" cy="145" r="1.8" fill="#ffe0a0" opacity=".36"/><circle cx="86" cy="145" r="1.8" fill="#ffe0a0" opacity=".34"/><circle cx="100" cy="145" r="1.8" fill="#ffe0a0" opacity=".32"/>
+    <rect x="4" y="125" width="106" height="13" rx="1" fill="#c4a050" opacity=".52"/>
+    <rect x="10" y="127" width="3.5" height="5" rx=".5" fill="#ffe8b0" opacity=".38"/><rect x="18" y="127" width="3.5" height="5" rx=".5" fill="#ffe8b0" opacity=".37"/><rect x="26" y="127" width="3.5" height="5" rx=".5" fill="#ffe8b0" opacity=".37"/><rect x="34" y="127" width="3.5" height="5" rx=".5" fill="#ffe8b0" opacity=".36"/><rect x="42" y="127" width="3.5" height="5" rx=".5" fill="#ffe8b0" opacity=".36"/><rect x="50" y="127" width="3.5" height="5" rx=".5" fill="#ffe8b0" opacity=".35"/><rect x="58" y="127" width="3.5" height="5" rx=".5" fill="#ffe8b0" opacity=".35"/><rect x="66" y="127" width="3.5" height="5" rx=".5" fill="#ffe8b0" opacity=".34"/><rect x="74" y="127" width="3.5" height="5" rx=".5" fill="#ffe8b0" opacity=".33"/><rect x="82" y="127" width="3.5" height="5" rx=".5" fill="#ffe8b0" opacity=".32"/><rect x="90" y="127" width="3.5" height="5" rx=".5" fill="#ffe8b0" opacity=".3"/><rect x="98" y="127" width="3.5" height="5" rx=".5" fill="#ffe8b0" opacity=".28"/>
+    <rect x="10" y="113" width="90" height="12" rx="1" fill="#c4a050" opacity=".47"/>
+    <rect x="16" y="115" width="3" height="4.5" rx=".5" fill="#ffe8b0" opacity=".36"/><rect x="23" y="115" width="3" height="4.5" rx=".5" fill="#ffe8b0" opacity=".35"/><rect x="30" y="115" width="3" height="4.5" rx=".5" fill="#ffe8b0" opacity=".35"/><rect x="37" y="115" width="3" height="4.5" rx=".5" fill="#ffe8b0" opacity=".34"/><rect x="44" y="115" width="3" height="4.5" rx=".5" fill="#ffe8b0" opacity=".33"/><rect x="51" y="115" width="3" height="4.5" rx=".5" fill="#ffe8b0" opacity=".32"/><rect x="58" y="115" width="3" height="4.5" rx=".5" fill="#ffe8b0" opacity=".31"/><rect x="65" y="115" width="3" height="4.5" rx=".5" fill="#ffe8b0" opacity=".3"/><rect x="72" y="115" width="3" height="4.5" rx=".5" fill="#ffe8b0" opacity=".3"/><rect x="79" y="115" width="3" height="4.5" rx=".5" fill="#ffe8b0" opacity=".28"/><rect x="86" y="115" width="3" height="4.5" rx=".5" fill="#ffe8b0" opacity=".28"/><rect x="93" y="115" width="3" height="4.5" rx=".5" fill="#ffe8b0" opacity=".26"/>
+    <rect x="18" y="102" width="73" height="11" rx="1" fill="#c4a050" opacity=".43"/>
+    <rect x="24" y="104" width="2.5" height="4" rx=".5" fill="#ffe8b0" opacity=".32"/><rect x="30" y="104" width="2.5" height="4" rx=".5" fill="#ffe8b0" opacity=".31"/><rect x="36" y="104" width="2.5" height="4" rx=".5" fill="#ffe8b0" opacity=".3"/><rect x="42" y="104" width="2.5" height="4" rx=".5" fill="#ffe8b0" opacity=".3"/><rect x="48" y="104" width="2.5" height="4" rx=".5" fill="#ffe8b0" opacity=".28"/><rect x="54" y="104" width="2.5" height="4" rx=".5" fill="#ffe8b0" opacity=".28"/><rect x="60" y="104" width="2.5" height="4" rx=".5" fill="#ffe8b0" opacity=".27"/><rect x="66" y="104" width="2.5" height="4" rx=".5" fill="#ffe8b0" opacity=".26"/><rect x="72" y="104" width="2.5" height="4" rx=".5" fill="#ffe8b0" opacity=".25"/><rect x="78" y="104" width="2.5" height="4" rx=".5" fill="#ffe8b0" opacity=".24"/>
+    <rect x="66" y="92" width="30" height="10" rx="1" fill="#d4b060" opacity=".48"/>
+    <rect x="70" y="94" width="3" height="4" rx=".5" fill="#ffe8b0" opacity=".42"/><rect x="76" y="94" width="3" height="4" rx=".5" fill="#ffe8b0" opacity=".4"/><rect x="82" y="94" width="3" height="4" rx=".5" fill="#ffe8b0" opacity=".38"/><rect x="88" y="94" width="3" height="4" rx=".5" fill="#ffe8b0" opacity=".36"/>
+    <rect x="36" y="83" width="16" height="19" rx="2.5" fill="#d4a838" opacity=".65"/>
+    <ellipse cx="44" cy="83" rx="6" ry="2.5" fill="#e0b840" opacity=".55"/>
+    <path d="M 41,82 Q 42,77 40,72 Q 44,76 43,82" fill="white" opacity=".07"/>
+    <path d="M 46,81 Q 48,75 47,69 Q 51,74 49,81" fill="white" opacity=".05"/>
+    <line x1="90" y1="92" x2="90" y2="74" stroke="#c8a848" stroke-width="1" opacity=".38"/>
+    <circle cx="90" cy="74" r="1.2" fill="#e2c060" opacity=".5"/>
+  </g>
+</svg>`;
+  }
+
   function buildCard(feed, animIdx, isExpanded){
     const card = document.createElement('div');
     card.className = 'cam-card';
@@ -2153,7 +2214,9 @@ const CAM_FEEDS = [
     wrap.className = 'cam-ifr-wrap';
 
     if(hasEmbed){
-      const skel = document.createElement('div'); skel.className = 'cam-skel'; wrap.appendChild(skel);
+      const skel = document.createElement('div'); skel.className = 'cam-skel';
+      skel.innerHTML = shipSVG(feed.id, -(animIdx * 2.2));
+      wrap.appendChild(skel);
 
       const badge = document.createElement('div');
       badge.className = 'cam-live' + (feed.windyId ? ' cam-src-windy' : '');
