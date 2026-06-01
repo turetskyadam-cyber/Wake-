@@ -85,7 +85,8 @@
     padding:4px 9px;border-radius:999px;cursor:help;
   }
   .feedpill b{width:5px;height:5px;border-radius:50%;background:var(--brass);display:inline-block}
-  .brandstats{display:flex;align-items:center;margin-top:14px}
+  .brandstats{display:flex;flex-direction:column;align-items:stretch;margin-top:14px;gap:8px}
+  .bstats-row{display:flex;align-items:center}
   .bstat{padding-right:15px;margin-right:15px;border-right:1px solid var(--glass-edge)}
   .bstat:last-child{padding-right:0;margin-right:0;border-right:none}
   .bstat .num{font-family:'Fraunces',serif;font-weight:600;font-size:22px;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums;display:block}
@@ -94,7 +95,7 @@
   .bstat .lab{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-top:6px;display:block}
 
   /* ---- Ports button + dropdown (overlay, no map space) ---- */
-  .ports-btn{margin-left:auto;align-self:center;display:inline-flex;align-items:center;gap:6px;cursor:pointer;background:rgba(255,255,255,.04);border:1px solid var(--glass-edge);border-radius:999px;color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.13em;text-transform:uppercase;padding:8px 11px;transition:background .2s,border-color .2s,transform .1s,color .2s}
+  .ports-btn{display:inline-flex;align-items:center;gap:6px;cursor:pointer;background:rgba(255,255,255,.04);border:1px solid var(--glass-edge);border-radius:999px;color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.13em;text-transform:uppercase;padding:8px 11px;transition:background .2s,border-color .2s,transform .1s,color .2s}
   .ports-btn:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18)}
   .ports-btn.on{background:rgba(226,189,114,.13);border-color:rgba(226,189,114,.42);color:var(--brass)}
   .ports-btn:active{transform:scale(.95)}
@@ -124,12 +125,12 @@
   .ports-empty{padding:22px 10px;text-align:center;color:var(--faint);font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;line-height:1.7}
   .ports-empty .spin{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--brass);margin:0 3px;animation:shimmer 1.4s var(--ease-io) infinite}
   .ports-empty .spin:nth-child(2){animation-delay:.2s}.ports-empty .spin:nth-child(3){animation-delay:.4s}
-  .moms-wrap{width:100%;margin-bottom:8px}
-  .moms-label{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);margin-bottom:5px;opacity:.8}
-  .moms-field{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.05);border:1px solid var(--glass-edge);border-radius:999px;padding:7px 11px;transition:border-color .18s}
+  .moms-wrap{width:100%}
+  .moms-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);margin-bottom:4px;opacity:.8}
+  .moms-field{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.05);border:1px solid var(--glass-edge);border-radius:999px;padding:5px 10px;transition:border-color .18s}
   .moms-field:focus-within{border-color:rgba(226,189,114,.45)}
   .moms-field svg{flex:none;color:var(--faint)}
-  .moms-field input{flex:1;background:none;border:none;outline:none;color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.05em}
+  .moms-field input{flex:1;background:none;border:none;outline:none;color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.05em}
   .moms-field input::placeholder{color:var(--faint)}
   .near-dist{flex:none;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--brass);letter-spacing:.05em;background:rgba(226,189,114,.1);border-radius:4px;padding:1px 5px}
   .near-user-wrap{width:20px;height:20px;display:flex;align-items:center;justify-content:center}
@@ -378,17 +379,19 @@
   <div class="sub">Live Cruise Fleet Tracker</div>
   <span class="feedpill" id="feedpill" data-state="connecting" title="Live AIS broadcasts via aisstream.io"><b></b>Connecting…</span>
   <div class="brandstats">
-    <div class="bstat"><span class="num" id="s-total">0</span><span class="lab">Tracked</span></div>
-    <div class="bstat"><span class="num sea" id="s-sea">0</span><span class="lab">At&nbsp;sea</span></div>
-    <div class="bstat"><span class="num port" id="s-port">0</span><span class="lab">In&nbsp;port</span></div>
+    <div class="bstats-row">
+      <div class="bstat"><span class="num" id="s-total">0</span><span class="lab">Tracked</span></div>
+      <div class="bstat"><span class="num sea" id="s-sea">0</span><span class="lab">At&nbsp;sea</span></div>
+      <div class="bstat"><span class="num port" id="s-port">0</span><span class="lab">In&nbsp;port</span></div>
+    </div>
     <div class="moms-wrap">
       <div class="moms-label">Mom's Search</div>
       <div class="moms-field">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input id="momsQ" type="text" placeholder="Ship name… press Enter" autocomplete="off" spellcheck="false"/>
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="momsQ" type="text" placeholder="Ship name… Enter to go" autocomplete="off" spellcheck="false"/>
       </div>
     </div>
-    <button id="nearBtn" class="ports-btn" aria-haspopup="true" aria-expanded="false" title="Cruise ships near selected ship">
+    <button id="nearBtn" class="ports-btn" style="align-self:flex-start" aria-haspopup="true" aria-expanded="false" title="Cruise ships near selected ship">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
       <span>Ships&nbsp;Nearby</span>
       <svg class="pb-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
