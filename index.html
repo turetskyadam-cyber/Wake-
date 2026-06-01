@@ -2185,12 +2185,12 @@ function _whenYT(fn){ if(window._ytReady) fn(); else window._ytCbs.push(fn); }
   let _players = []; // active YT.Player instances — destroyed on close
 
   // Find all fleet ships currently at or near a feed's port.
-  // Uses geographic distance (40 km radius) so string-name mismatches don't hide ships.
-  const CAMS_RADIUS_KM = 40;
+  // 150 km radius; no status filter — AIS sometimes marks docked ships as 'sea'.
+  const CAMS_RADIUS_KM = 150;
   function shipsAt(feed){
     if(!feed || feed.pLat == null) return [];
     return fleet.filter(d =>
-      d.status === 'port' && d.lat != null &&
+      d.lat != null &&
       haverKm(d.lat, d.lon, feed.pLat, feed.pLon) <= CAMS_RADIUS_KM
     );
   }
