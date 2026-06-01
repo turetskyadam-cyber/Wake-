@@ -2317,8 +2317,14 @@ function _whenYT(fn){ if(window._ytReady) fn(); else window._ytCbs.push(fn); }
 
   function injectIframe(card, wrap, feed){
     let done = false;
+    const startedAt = Date.now();
+    const MIN_SHIP_MS = 2200; // minimum ms to show the ship loading animation
     const hardTimeout = setTimeout(()=>{ if(!done) markOffline(card); }, 20000);
-    function markLoaded(){ if(done) return; done=true; clearTimeout(hardTimeout); card.classList.add('loaded'); }
+    function markLoaded(){
+      if(done) return; done=true; clearTimeout(hardTimeout);
+      const wait = Math.max(0, MIN_SHIP_MS - (Date.now() - startedAt));
+      setTimeout(()=>card.classList.add('loaded'), wait);
+    }
 
     if(feed.windyId){
       const ifr = document.createElement('iframe');
