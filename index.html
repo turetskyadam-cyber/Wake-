@@ -85,8 +85,7 @@
     padding:4px 9px;border-radius:999px;cursor:help;
   }
   .feedpill b{width:5px;height:5px;border-radius:50%;background:var(--brass);display:inline-block}
-  .brandstats{display:flex;flex-direction:column;align-items:stretch;margin-top:14px;gap:8px}
-  .bstats-row{display:flex;align-items:center}
+  .brandstats{display:flex;align-items:center;margin-top:14px}
   .bstat{padding-right:15px;margin-right:15px;border-right:1px solid var(--glass-edge)}
   .bstat:last-child{padding-right:0;margin-right:0;border-right:none}
   .bstat .num{font-family:'Fraunces',serif;font-weight:600;font-size:22px;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums;display:block}
@@ -95,7 +94,7 @@
   .bstat .lab{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-top:6px;display:block}
 
   /* ---- Ports button + dropdown (overlay, no map space) ---- */
-  .ports-btn{display:inline-flex;align-items:center;gap:6px;cursor:pointer;background:rgba(255,255,255,.04);border:1px solid var(--glass-edge);border-radius:999px;color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.13em;text-transform:uppercase;padding:8px 11px;transition:background .2s,border-color .2s,transform .1s,color .2s}
+  .ports-btn{display:inline-flex;align-items:center;gap:5px;cursor:pointer;background:rgba(255,255,255,.04);border:1px solid var(--glass-edge);border-radius:999px;color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;padding:5px 11px;transition:background .2s,border-color .2s,transform .1s,color .2s}
   .ports-btn:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18)}
   .ports-btn.on{background:rgba(226,189,114,.13);border-color:rgba(226,189,114,.42);color:var(--brass)}
   .ports-btn:active{transform:scale(.95)}
@@ -125,25 +124,17 @@
   .ports-empty{padding:22px 10px;text-align:center;color:var(--faint);font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;line-height:1.7}
   .ports-empty .spin{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--brass);margin:0 3px;animation:shimmer 1.4s var(--ease-io) infinite}
   .ports-empty .spin:nth-child(2){animation-delay:.2s}.ports-empty .spin:nth-child(3){animation-delay:.4s}
-  .moms-wrap{width:100%}
-  .moms-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);margin-bottom:4px;opacity:.8}
-  .moms-field{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.05);border:1px solid var(--glass-edge);border-radius:999px;padding:5px 10px;transition:border-color .18s}
-  .moms-field:focus-within{border-color:rgba(226,189,114,.45)}
-  .moms-field svg{flex:none;color:var(--faint)}
-  .moms-field input{flex:1;background:none;border:none;outline:none;color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.05em}
-  .moms-field input::placeholder{color:var(--faint)}
   .near-dist{flex:none;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--brass);letter-spacing:.05em;background:rgba(226,189,114,.1);border-radius:4px;padding:1px 5px}
   .near-user-wrap{width:20px;height:20px;display:flex;align-items:center;justify-content:center}
   .near-user-dot{width:10px;height:10px;border-radius:50%;background:var(--brass);box-shadow:0 0 0 0 rgba(226,189,114,.5);animation:nearPulse 2s ease-out infinite}
   @keyframes nearPulse{0%{box-shadow:0 0 0 0 rgba(226,189,114,.5)}70%{box-shadow:0 0 0 12px rgba(226,189,114,0)}100%{box-shadow:0 0 0 0 rgba(226,189,114,0)}}
 
-  #stats{top:18px;right:18px;display:flex;gap:0;padding:14px 6px;overflow:hidden}
-  .stat{padding:2px 20px;text-align:center;position:relative}
-  .stat+.stat::before{content:"";position:absolute;left:0;top:14%;height:72%;width:1px;background:var(--glass-edge)}
-  .stat .num{font-family:'Fraunces',serif;font-weight:600;font-size:30px;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
-  .stat .lab{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-top:7px}
-  .stat .num.sea{color:#7fd0c4}
-  .stat .num.port{color:var(--brass)}
+  #toolbar{top:18px;right:18px;display:flex;align-items:center;gap:6px;padding:6px 8px}
+  .tb-search{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.04);border:1px solid var(--glass-edge);border-radius:999px;padding:5px 11px;transition:border-color .18s}
+  .tb-search:focus-within{border-color:rgba(226,189,114,.45)}
+  .tb-search svg{flex:none;color:var(--faint)}
+  .tb-search input{width:148px;background:none;border:none;outline:none;color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.04em}
+  .tb-search input::placeholder{color:var(--faint)}
 
   #controls{left:18px;bottom:18px;width:300px;padding:16px 16px 14px;display:flex;flex-direction:column;gap:13px}
   .search{position:relative}
@@ -236,14 +227,14 @@
 
   /* entrance stagger */
   .panel{animation:rise .6s var(--ease-out) both}
-  #stats{animation-delay:.06s}#controls{animation-delay:.12s}.credit{animation:fade .8s ease both;animation-delay:.5s}
+  #toolbar{animation-delay:.06s}#controls{animation-delay:.12s}.credit{animation:fade .8s ease both;animation-delay:.5s}
   @keyframes rise{from{opacity:0;transform:translateY(10px)}}
-  #stats{transform:none}@keyframes fade{from{opacity:0}}
+  @keyframes fade{from{opacity:0}}
 
   @media (max-width:760px){
     #brand{max-width:none;left:10px;right:10px;top:10px;padding:12px 15px}
-    #stats{top:auto;bottom:118px;right:10px;left:10px;justify-content:space-around;padding:11px 4px}
-    .stat .num{font-size:25px}
+    #toolbar{top:auto;bottom:118px;right:10px;left:10px;justify-content:center}
+    .tb-search input{width:120px}
     #controls{left:10px;right:10px;bottom:10px;width:auto}
     .chips{max-height:84px}
     #detail{left:auto;right:10px;width:calc(100% - 140px);bottom:10px}
@@ -317,7 +308,7 @@
   .leaflet-container{background:#04101a;font-family:'Hanken Grotesk',system-ui,sans-serif}
   .leaflet-control-attribution{display:none}
   /* keep all glass panels above the map */
-  #brand,#stats,#controls,#detail,#zoom,#tip,.credit{z-index:1000}
+  #brand,#toolbar,#controls,#detail,#zoom,#tip,.credit{z-index:1000}
   /* dark hover tooltip */
   .leaflet-tooltip.ship-tt{background:rgba(4,14,20,.92);border:1px solid var(--glass-edge);color:var(--ink);
     border-radius:9px;padding:6px 10px;font-size:11.5px;box-shadow:0 8px 24px -10px rgba(0,0,0,.7);backdrop-filter:blur(6px)}
@@ -379,24 +370,22 @@
   <div class="sub">Live Cruise Fleet Tracker</div>
   <span class="feedpill" id="feedpill" data-state="connecting" title="Live AIS broadcasts via aisstream.io"><b></b>Connecting…</span>
   <div class="brandstats">
-    <div class="bstats-row">
-      <div class="bstat"><span class="num" id="s-total">0</span><span class="lab">Tracked</span></div>
-      <div class="bstat"><span class="num sea" id="s-sea">0</span><span class="lab">At&nbsp;sea</span></div>
-      <div class="bstat"><span class="num port" id="s-port">0</span><span class="lab">In&nbsp;port</span></div>
-    </div>
-    <div class="moms-wrap">
-      <div class="moms-label">Mom's Search</div>
-      <div class="moms-field">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input id="momsQ" type="text" placeholder="Type to find a ship…" autocomplete="off" spellcheck="false"/>
-      </div>
-    </div>
-    <button id="nearBtn" class="ports-btn" style="align-self:flex-start" aria-haspopup="true" aria-expanded="false" title="Cruise ships near selected ship">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
-      <span>Ships&nbsp;Nearby</span>
-      <svg class="pb-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-    </button>
+    <div class="bstat"><span class="num" id="s-total">0</span><span class="lab">Tracked</span></div>
+    <div class="bstat"><span class="num sea" id="s-sea">0</span><span class="lab">At&nbsp;sea</span></div>
+    <div class="bstat"><span class="num port" id="s-port">0</span><span class="lab">In&nbsp;port</span></div>
   </div>
+</div>
+
+<div id="toolbar" class="panel">
+  <div class="tb-search">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="momsQ" type="text" placeholder="Ship finder…" autocomplete="off" spellcheck="false"/>
+  </div>
+  <button id="nearBtn" class="ports-btn" aria-haspopup="true" aria-expanded="false" title="Cruise ships near selected ship">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+    <span>Nearby</span>
+    <svg class="pb-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+  </button>
 </div>
 
 <div id="near" class="panel" role="dialog" aria-label="Cruise ships near selected ship">
@@ -1233,10 +1222,11 @@ function renderNear(){
   });
 }
 function positionNear(){
-  const b=byId("brand").getBoundingClientRect();
-  nearEl.style.top=(b.bottom+10)+"px";
-  nearEl.style.left=b.left+"px";
-  nearEl.style.width=b.width+"px";
+  const b=byId("toolbar").getBoundingClientRect();
+  nearEl.style.top=(b.bottom+8)+"px";
+  nearEl.style.right="18px";
+  nearEl.style.left="auto";
+  nearEl.style.width=Math.max(b.width,260)+"px";
 }
 function openNear(){
   nearOpen=true; nearBtn.classList.add("on"); nearBtn.setAttribute("aria-expanded","true");
