@@ -2190,11 +2190,9 @@ function openProfile(d){
   {
     const links=[];
     if(spec.wiki) links.push(`<a class="profile-wiki-link" href="${spec.wiki}" target="_blank" rel="noopener">Wikipedia ↗</a>`);
-    if(spec.cam){
-      const safeId=spec.cam.replace(/[^a-zA-Z0-9_\-]/g,"");
-      const safeName=d.name.replace(/'/g,"\\'");
-      links.push(`<button class="profile-cam-btn" onclick="openStream('${safeId}','${safeName}')"><b></b>Live Camera</button>`);
-    }
+    const camId=spec.cam?spec.cam.replace(/[^a-zA-Z0-9_\-]/g,""):"";
+    const safeName=d.name.replace(/'/g,"\\'");
+    links.push(`<button class="profile-cam-btn" onclick="openStream('${camId}','${safeName}')"><b></b>Live Camera</button>`);
     byId("profileLinks").innerHTML=links.join("");
   }
   profileEl.hidden=false;
@@ -2244,6 +2242,14 @@ function openStream(videoId, shipName){
   byId("streamLoader").classList.remove("sl-hide");
   byId("streamModal").hidden = false;
   document.body.style.overflow = "hidden";
+  if(!videoId){
+    // No cam ID configured for this ship yet
+    byId("streamLoader").querySelector(".ldr-tagline").textContent="No live camera available";
+    byId("streamLoader").querySelector(".ldr-status").textContent="Add a YouTube video ID to ships.json";
+    return;
+  }
+  byId("streamLoader").querySelector(".ldr-tagline").textContent="Live Camera";
+  byId("streamLoader").querySelector(".ldr-status").innerHTML='Loading stream<span class="ldr-dots"></span>';
   if(_ytReady) _createYTPlayer(videoId);
   else _ytPending = videoId;
 }
