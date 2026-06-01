@@ -2201,18 +2201,20 @@ const CAM_FEEDS = [
       card.appendChild(sd);
     }
 
-    if(hasEmbed) setTimeout(()=>injectIframe(card, wrap, feed), 100+animIdx*45);
+    if(hasEmbed) setTimeout(()=>injectIframe(card, wrap, feed, !!isExpanded), 100+animIdx*45);
     return card;
   }
 
-  function injectIframe(card, wrap, feed){
+  function injectIframe(card, wrap, feed, withSound){
     let src = null;
     const isYT = !!feed.ytId;
     if(feed.windyId){
       src = `https://webcams.windy.com/webcams/public/embed/player?webcamId=${feed.windyId}&playerType=day&loop=false&interactive=true&forceFullScreenOnOverlayPlay=false`;
     } else if(feed.ytId){
-      // enablejsapi=1 lets us receive postMessage state changes so we know when video actually starts
-      src = `https://www.youtube-nocookie.com/embed/${feed.ytId}?autoplay=1&mute=1&enablejsapi=1&rel=0&modestbranding=1`;
+      // Grid view: muted autoplay (multiple feeds, no noise war)
+      // Expanded view: unmuted autoplay (single feed, user wants to hear it)
+      const muteParam = withSound ? '0' : '1';
+      src = `https://www.youtube-nocookie.com/embed/${feed.ytId}?autoplay=1&mute=${muteParam}&enablejsapi=1&rel=0&modestbranding=1`;
     }
     if(!src){ markOffline(card); return; }
 
