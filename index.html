@@ -471,7 +471,7 @@
   .cam-tab.active{color:var(--brass);border-bottom-color:var(--brass)}
 
   /* ── Grid ── */
-  .cam-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:16px 24px;overflow-y:auto;flex:1;overscroll-behavior:contain}
+  .cam-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;padding:20px 24px;overflow-y:auto;flex:1;overscroll-behavior:contain}
 
   /* ── Card ── */
   .cam-card{border-radius:14px;overflow:hidden;background:rgba(255,255,255,.03);border:1px solid var(--glass-edge);display:flex;flex-direction:column;transition:border-color .22s,box-shadow .22s;animation:cam-in .32s var(--ease-out) both}
@@ -551,18 +551,15 @@
   .cam-view-btn:hover{background:rgba(226,189,114,.09);color:var(--ink)}
 
   /* ── Responsive ── */
-  @media (min-width:601px) and (max-width:900px){.cam-grid{grid-template-columns:repeat(2,1fr)}}
   @media (max-width:760px){
     #camsBtn{top:auto;bottom:74px;right:10px}
   }
-  @media (max-width:600px){
+  @media (max-width:700px){
     #cams{align-items:flex-end}
-    #camsPanel{width:100%;max-height:88vh;border-radius:20px 20px 0 0;transform:translateY(60px)}
+    #camsPanel{width:100%;max-height:92vh;border-radius:20px 20px 0 0;transform:translateY(60px)}
     #cams.open #camsPanel{transform:none}
-    .cam-grid{grid-template-columns:1fr;padding:12px 14px;gap:10px}
+    .cam-grid{grid-template-columns:1fr;padding:14px 16px;gap:12px}
     .cam-hdr{padding:0 16px}
-    .cam-tabs{padding:0 12px}
-    .cam-tab{padding:10px 11px 11px;font-size:8.5px}
     .cam-back{margin:8px 16px 0}
   }
 </style>
@@ -697,20 +694,12 @@
     <div class="cam-hdr">
       <svg class="cam-hdr-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3Z"/><circle cx="12" cy="13" r="3"/></svg>
       <span class="cam-hdr-title">Live Port Cams</span>
-      <span class="cam-hdr-meta" id="camsHdrMeta">28 FEEDS · 5 REGIONS</span>
+      <span class="cam-hdr-meta" id="camsHdrMeta">6 LIVE FEEDS</span>
       <button class="cam-close" id="camsClose" aria-label="Close cameras">✕</button>
-    </div>
-    <div class="cam-tabs" id="camsTabs">
-      <div class="cam-tab active" data-region="all">All Ports</div>
-      <div class="cam-tab" data-region="americas">🌎 Americas</div>
-      <div class="cam-tab" data-region="caribbean">🌴 Caribbean</div>
-      <div class="cam-tab" data-region="europe">🌍 Europe</div>
-      <div class="cam-tab" data-region="asia">🌏 Asia &amp; Pacific</div>
     </div>
     <button class="cam-back" id="camsBack">‹ Back to all feeds</button>
     <div class="cam-grid" id="camsGrid"></div>
-    <div class="cam-pager" id="camsPager"></div>
-    <div class="cam-footer">Embedded feeds via Windy Webcams &amp; YouTube &nbsp;·&nbsp; All free &amp; public &nbsp;·&nbsp; WEBCAM = Windy time-lapse · LIVE = YouTube stream</div>
+    <div class="cam-footer">Feeds via Windy Webcams &amp; YouTube &nbsp;·&nbsp; Free &amp; public</div>
   </div>
 </div>
 
@@ -2097,55 +2086,19 @@ if(localStorage.getItem("brandMini")) brandEl.classList.add("mini");
 /* ============================================================
    LIVE PORT CAMS
    ============================================================ */
-// windyId = verified Windy.com webcam ID (plays inline, no redirect)
-// ytId    = verified YouTube live stream ID
-// null    = no embed available → shows "View Live Cam ↗" card
+// Only ports with verified, inline-playing embeds (Windy or YouTube)
 const CAM_FEEDS = [
-  // ── AMERICAS ──────────────────────────────────────────────
-  {id:1,  region:'americas', port:'Port Miami',          flag:'🇺🇸', country:'Florida, USA',            camView:'Dodge Island cruise terminal',    windyId:'1481485072', ytId:null, srcUrl:'https://www.windy.com/webcams/1481485072',              itinKey:'PortMiami'},
-  {id:2,  region:'americas', port:'Port Everglades',     flag:'🇺🇸', country:'Fort Lauderdale, FL',      camView:'Terminal 2 · cruise piers',       windyId:'1285077871', ytId:null, srcUrl:'https://www.windy.com/webcams/1285077871',              itinKey:'Port Everglades'},
-  {id:3,  region:'americas', port:'Port Canaveral',      flag:'🇺🇸', country:'Brevard County, FL',       camView:'Harbor entrance & cruise piers',  windyId:'1656280774', ytId:null, srcUrl:'https://www.windy.com/webcams/1656280774',              itinKey:'Port Canaveral'},
-  {id:4,  region:'americas', port:'Port of Los Angeles', flag:'🇺🇸', country:'San Pedro, CA',            camView:'San Pedro Bay · Vincent Thomas',  windyId:null,         ytId:null, srcUrl:'https://www.portoflosangeles.org/news/livestream',      itinKey:'Los Angeles'},
-  {id:5,  region:'americas', port:'Port of Seattle',     flag:'🇺🇸', country:'Seattle, WA',              camView:'Elliott Bay · Alaska departures', windyId:null,         ytId:null, srcUrl:'https://www.portseattle.org/sea-tac/cruise',            itinKey:'Seattle'},
-  {id:6,  region:'americas', port:'Vancouver',           flag:'🇨🇦', country:'British Columbia, Canada', camView:'Canada Place cruise terminal',    windyId:null,         ytId:null, srcUrl:'https://www.portvancouver.com',                         itinKey:'Vancouver'},
-  {id:7,  region:'americas', port:'San Juan',            flag:'🇵🇷', country:'Puerto Rico',              camView:'Old San Juan harbor panorama',    windyId:null,         ytId:null, srcUrl:'https://www.cruiseportpuertorico.com',                  itinKey:'San Juan'},
-
-  // ── CARIBBEAN ─────────────────────────────────────────────
-  {id:8,  region:'caribbean', port:'Nassau',             flag:'🇧🇸', country:'New Providence, Bahamas',  camView:'Prince George Wharf · piers',     windyId:null,         ytId:null, srcUrl:'https://www.nassauparadiseisland.com',                  itinKey:'Nassau'},
-  {id:9,  region:'caribbean', port:'Cozumel',            flag:'🇲🇽', country:'Quintana Roo, Mexico',     camView:'International Pier · Mayan coast', windyId:null,        ytId:null, srcUrl:'https://www.puertomayacozumel.com',                     itinKey:'Cozumel'},
-  {id:10, region:'caribbean', port:'St. Thomas',         flag:'🇻🇮', country:'U.S. Virgin Islands',      camView:'Charlotte Amalie harbor',         windyId:null,         ytId:null, srcUrl:'https://www.vipa.vi.gov',                               itinKey:'St. Thomas'},
-  {id:11, region:'caribbean', port:'Grand Cayman',       flag:'🇰🇾', country:'Cayman Islands',           camView:'George Town tender zone',         windyId:null,         ytId:null, srcUrl:'https://www.caymanislands.ky',                          itinKey:'Grand Cayman'},
-  {id:12, region:'caribbean', port:'Ocho Rios',          flag:'🇯🇲', country:'Jamaica',                  camView:'Reynolds Pier & downtown',        windyId:null,         ytId:null, srcUrl:'https://www.portauthority.org.jm',                      itinKey:'Ocho Rios'},
-  {id:13, region:'caribbean', port:'Bridgetown',         flag:'🇧🇧', country:'Barbados',                 camView:'Deep Water Harbour',              windyId:null,         ytId:null, srcUrl:'https://www.visitbarbados.org',                         itinKey:null},
-
-  // ── EUROPE ────────────────────────────────────────────────
-  {id:14, region:'europe',    port:'Southampton',        flag:'🇬🇧', country:'Hampshire, UK',            camView:'Ocean Terminal · 24/7 live',      windyId:null,         ytId:'WxdeHH9T7Yk', srcUrl:'https://www.youtube.com/watch?v=WxdeHH9T7Yk', itinKey:'Southampton'},
-  {id:15, region:'europe',    port:'Barcelona',          flag:'🇪🇸', country:'Catalonia, Spain',         camView:'Port Olímpic & cruise terminals', windyId:'1450823411', ytId:null, srcUrl:'https://www.windy.com/webcams/1450823411',              itinKey:'Barcelona'},
-  {id:16, region:'europe',    port:'Civitavecchia',      flag:'🇮🇹', country:'Lazio, Italy',             camView:'Gateway to Rome · Terminal A',   windyId:null,         ytId:null, srcUrl:'https://www.portidiroma.it',                            itinKey:null},
-  {id:17, region:'europe',    port:'Venice',             flag:'🇮🇹', country:'Veneto, Italy',            camView:'Grand Canal & historic piers',   windyId:'1279401088', ytId:null, srcUrl:'https://www.windy.com/webcams/1279401088',              itinKey:null},
-  {id:18, region:'europe',    port:'Piraeus',            flag:'🇬🇷', country:'Attica, Greece',           camView:'Athens cruise terminal · Gate E1',windyId:null,        ytId:null, srcUrl:'https://www.olp.gr',                                    itinKey:'Piraeus'},
-  {id:19, region:'europe',    port:'Marseille',          flag:'🇫🇷', country:'Provence, France',         camView:'La Joliette · MuCEM berths',     windyId:null,         ytId:null, srcUrl:'https://www.marseille-port.fr',                         itinKey:null},
-  {id:20, region:'europe',    port:'Lisbon',             flag:'🇵🇹', country:'Portugal',                 camView:'Tagus River cruise terminal',    windyId:null,         ytId:null, srcUrl:'https://www.portofLisbon.pt',                           itinKey:null},
-  {id:21, region:'europe',    port:'Hamburg',            flag:'🇩🇪', country:'Germany',                  camView:'HafenCity cruise center',        windyId:null,         ytId:null, srcUrl:'https://www.hamburg-cruise.de',                         itinKey:null},
-  {id:22, region:'europe',    port:'Dubrovnik',          flag:'🇭🇷', country:'Dalmatia, Croatia',        camView:'Old Town port · Adriatic skyline',windyId:null,        ytId:null, srcUrl:'https://www.portdubrovnik.hr',                          itinKey:'Dubrovnik'},
-
-  // ── ASIA & PACIFIC ────────────────────────────────────────
-  {id:23, region:'asia',      port:'Singapore',          flag:'🇸🇬', country:'Republic of Singapore',    camView:'Marina Bay Cruise Centre',       windyId:null,         ytId:null, srcUrl:'https://www.mbccs.com.sg',                              itinKey:'Singapore'},
-  {id:24, region:'asia',      port:'Sydney',             flag:'🇦🇺', country:'New South Wales, Australia',camView:'Opera House · Harbour Bridge',  windyId:null,         ytId:null, srcUrl:'https://www.sydneyharbour.nsw.gov.au',                  itinKey:null},
-  {id:25, region:'asia',      port:'Dubai',              flag:'🇦🇪', country:'United Arab Emirates',     camView:'Mina Rashid cruise terminal',    windyId:null,         ytId:null, srcUrl:'https://www.dpworld.com/en/ports/cruise',               itinKey:null},
-  {id:26, region:'asia',      port:'Hong Kong',          flag:'🇭🇰', country:'SAR China',                camView:'Kai Tak Terminal · Victoria Harbour',windyId:null,      ytId:null, srcUrl:'https://www.kaitakcruiseterminal.com.hk',               itinKey:null},
-  {id:27, region:'asia',      port:'Yokohama',           flag:'🇯🇵', country:'Kanagawa, Japan',          camView:'Osanbashi Pier · Mount Fuji views',windyId:null,       ytId:null, srcUrl:'https://www.osanbashi.com',                             itinKey:null},
-  {id:28, region:'asia',      port:'Auckland',           flag:'🇳🇿', country:'New Zealand',              camView:'Queens Wharf · Waitemata Harbour',windyId:null,        ytId:null, srcUrl:'https://www.poal.co.nz',                                itinKey:null},
+  {id:1, port:'Miami',            flag:'🇺🇸', country:'Florida, USA',       camView:'Dodge Island · cruise terminal',     windyId:'1481485072', ytId:null, srcUrl:'https://www.windy.com/webcams/1481485072',          itinKey:'PortMiami'},
+  {id:2, port:'Fort Lauderdale',  flag:'🇺🇸', country:'Port Everglades, FL', camView:'Terminal 2 · cruise piers',          windyId:'1285077871', ytId:null, srcUrl:'https://www.windy.com/webcams/1285077871',          itinKey:'Port Everglades'},
+  {id:3, port:'Port Canaveral',   flag:'🇺🇸', country:'Florida, USA',       camView:'Harbor entrance & cruise piers',     windyId:'1656280774', ytId:null, srcUrl:'https://www.windy.com/webcams/1656280774',          itinKey:'Port Canaveral'},
+  {id:4, port:'Barcelona',        flag:'🇪🇸', country:'Catalonia, Spain',   camView:'Port Olímpic · cruise terminals',    windyId:'1450823411', ytId:null, srcUrl:'https://www.windy.com/webcams/1450823411',          itinKey:'Barcelona'},
+  {id:5, port:'Venice',           flag:'🇮🇹', country:'Veneto, Italy',      camView:'Grand Canal & passenger terminal',   windyId:'1279401088', ytId:null, srcUrl:'https://www.windy.com/webcams/1279401088',          itinKey:null},
+  {id:6, port:'Southampton',      flag:'🇬🇧', country:'Hampshire, UK',      camView:'Ocean Terminal · 24/7 live stream',  windyId:null,         ytId:'WxdeHH9T7Yk', srcUrl:'https://www.youtube.com/watch?v=WxdeHH9T7Yk', itinKey:'Southampton'},
 ];
 
 (function initCams(){
-  const PAGE_SIZE = 6;
   let _open = false;
-  let _tab = 'all';
-  let _pages = {all:0, americas:0, caribbean:0, europe:0, asia:0};
   let _expanded = null;
-
-  function feedsFor(region){ return region==='all' ? CAM_FEEDS : CAM_FEEDS.filter(f=>f.region===region); }
 
   function shipsAt(itinKey){
     if(!itinKey) return [];
@@ -2159,7 +2112,7 @@ const CAM_FEEDS = [
     _open = true;
     document.body.style.overflow = 'hidden';
     const el = byId('cams');
-    requestAnimationFrame(()=>{ el.classList.add('open'); renderTab(_tab); updateBadge(); });
+    requestAnimationFrame(()=>{ el.classList.add('open'); renderGrid(); updateBadge(); });
   }
 
   function closeCams(){
@@ -2175,23 +2128,13 @@ const CAM_FEEDS = [
     document.body.style.overflow = '';
   }
 
-  function renderTab(tab){
-    _tab = tab;
+  function renderGrid(){
     _expanded = null;
     byId('camsPanel').classList.remove('expanded');
     byId('camsBack').style.display = 'none';
-    document.querySelectorAll('.cam-tab').forEach(t => t.classList.toggle('active', t.dataset.region===tab));
-    renderPage(tab, _pages[tab]||0);
-  }
-
-  function renderPage(tab, page){
-    _pages[tab] = page;
-    const feeds = feedsFor(tab);
-    const slice = feeds.slice(page*PAGE_SIZE, (page+1)*PAGE_SIZE);
     const grid = byId('camsGrid');
     grid.innerHTML = '';
-    slice.forEach((feed, i)=>{ grid.appendChild(buildCard(feed, i)); });
-    renderPager(tab, feeds.length, page);
+    CAM_FEEDS.forEach((feed, i)=>{ grid.appendChild(buildCard(feed, i)); });
   }
 
   function buildCard(feed, animIdx){
@@ -2306,19 +2249,6 @@ const CAM_FEEDS = [
     grid.appendChild(buildCard(feed, 0));
   }
 
-  function renderPager(tab, total, page){
-    const pager = byId('camsPager');
-    const pages = Math.ceil(total/PAGE_SIZE);
-    if(pages<=1){ pager.innerHTML=''; return; }
-    let html=`<button class="cam-pg" id="cpPrev" ${page===0?'disabled':''}>‹</button><div class="cam-pg-dots">`;
-    for(let i=0;i<pages;i++) html+=`<div class="cam-pg-dot${i===page?' on':''}" data-p="${i}"></div>`;
-    html+=`</div><button class="cam-pg" id="cpNext" ${page===pages-1?'disabled':''}>›</button>`;
-    pager.innerHTML = html;
-    pager.querySelector('#cpPrev')?.addEventListener('click',()=>renderPage(tab,page-1));
-    pager.querySelector('#cpNext')?.addEventListener('click',()=>renderPage(tab,page+1));
-    pager.querySelectorAll('.cam-pg-dot').forEach(d=>d.addEventListener('click',()=>renderPage(tab,+d.dataset.p)));
-  }
-
   function updateBadge(){
     const badge = byId('camsBadge');
     if(!badge) return;
@@ -2332,16 +2262,7 @@ const CAM_FEEDS = [
   byId('camsBtn').addEventListener('click', openCams);
   byId('camsClose').addEventListener('click', closeCams);
   byId('cams').addEventListener('click', e=>{ if(e.target===byId('cams')) closeCams(); });
-  byId('camsBack').addEventListener('click', ()=>{
-    _expanded = null;
-    byId('camsPanel').classList.remove('expanded');
-    byId('camsBack').style.display = 'none';
-    renderPage(_tab, _pages[_tab]||0);
-  });
-  byId('camsTabs').addEventListener('click', e=>{
-    const tab = e.target.closest('.cam-tab');
-    if(tab){ _pages[tab.dataset.region]=0; renderTab(tab.dataset.region); }
-  });
+  byId('camsBack').addEventListener('click', ()=>{ renderGrid(); });
   addEventListener('keydown', e=>{
     if(e.key==='Escape' && _open) closeCams();
   });
