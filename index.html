@@ -245,9 +245,9 @@
   }
   /* ---- brand collapse ---- */
   #brand{transition:padding .3s var(--ease-out),max-width .3s var(--ease-out)}
-  .brand-hide-btn{align-self:flex-end;margin-top:auto;background:none;border:none;cursor:pointer;color:var(--faint);padding:5px;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:color .18s,background .18s;flex:none}
-  .brand-hide-btn:hover{color:var(--ink);background:rgba(255,255,255,.07)}
-  .brand-expand-btn{display:none;background:none;border:none;cursor:pointer;color:var(--brass);padding:2px 6px;font-size:18px;line-height:1;font-family:'JetBrains Mono',monospace;letter-spacing:0}
+  .brand-hide-btn{align-self:flex-end;margin-top:auto;background:rgba(226,189,114,.1);border:1px solid rgba(226,189,114,.35);border-radius:999px;cursor:pointer;color:var(--brass);padding:4px 11px;display:flex;align-items:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;transition:background .18s,border-color .18s;flex:none}
+  .brand-hide-btn:hover{background:rgba(226,189,114,.2);border-color:rgba(226,189,114,.55)}
+  .brand-expand-btn{display:none;background:none;border:none;cursor:pointer;color:var(--brass);padding:0 6px;font-size:18px;line-height:1;font-family:'JetBrains Mono',monospace;letter-spacing:0}
   #brand.mini{padding:10px 14px;width:auto;max-width:none;gap:8px}
   #brand.mini .brand-left .sub,
   #brand.mini .brand-left .feedpill,
@@ -449,9 +449,7 @@
       <span>Nearby Ships</span>
       <svg class="pb-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
     </button>
-    <button id="brandHide" class="brand-hide-btn" title="Minimize panel">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-    </button>
+    <button id="brandHide" class="brand-hide-btn" title="Minimize panel">Hide</button>
   </div>
 </div>
 
@@ -1234,7 +1232,7 @@ function selectShip(d){
     reverseGeo(d); if(d._m){ d._m.setStyle(markerStyle(d)); d._m.openTooltip(); }
   }
   applyVisibility();
-  fetchWeather(d);
+  fetchWeather(d); // pre-fetches in background; panel shows when Cruise Info opens
 }
 function clearSelection(){
   if(selected&&selected._m){ selected._m.closeTooltip(); }
@@ -1243,7 +1241,7 @@ function clearSelection(){
   detail.classList.remove("show"); detail.classList.add("collapsed"); clearPing(); clearItinPreview(); if(nearOpen) closeNear(); applyVisibility();
   hideShipSide(); if(!profileEl.hidden) closeProfile();
 }
-function collapseDetail(){ detail.classList.add("collapsed"); byId("dToggle").setAttribute("aria-expanded","false"); }
+function collapseDetail(){ detail.classList.add("collapsed"); byId("dToggle").setAttribute("aria-expanded","false"); hideShipSide(); }
 byId("dClose").addEventListener("click",e=>{ e.stopPropagation(); nav={level:0,line:null,ship:null}; hoverLine=null; clearSelection(); renderNav("l"); applyVisibility(); });
 // Stop touch events from reaching Leaflet so the panel scrolls natively
 ["touchstart","touchmove","touchend","touchcancel"].forEach(ev=>{
@@ -1252,6 +1250,7 @@ byId("dClose").addEventListener("click",e=>{ e.stopPropagation(); nav={level:0,l
 byId("dToggle").addEventListener("click",()=>{
   const open=detail.classList.toggle("collapsed")===false;
   byId("dToggle").setAttribute("aria-expanded", open?"true":"false");
+  if(open) showShipSide(); else hideShipSide();
 });
 
 /* ---- reverse geocode: human-readable "roughly where" + port city ---- */
@@ -1806,12 +1805,11 @@ const WMO={
 };
 const _wxCache={};
 const shipSideEl=byId("shipSide"), ssWxEl=byId("ssWx");
-function showShipSide(){ shipSideEl.classList.add("show"); }
+function showShipSide(){ if(selected) shipSideEl.classList.add("show"); }
 function hideShipSide(){ shipSideEl.classList.remove("show"); }
 async function fetchWeather(d){
   if(!d||d.lat==null) return;
   ssWxEl.innerHTML=`<span class="ss-wx-loading">Loading…</span>`;
-  showShipSide();
   const key=`${d.lat.toFixed(1)},${d.lon.toFixed(1)}`;
   if(_wxCache[key]&&Date.now()-_wxCache[key].ts<10*60*1000){ renderWeather(_wxCache[key].data); return; }
   try{

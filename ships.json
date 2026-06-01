@@ -1,1 +1,345 @@
-{}
+{
+  "Ovation of the Seas": {
+    "built": 2016,
+    "pax": 4180,
+    "shipyard": "Meyer Werft",
+    "flag": "Royal Caribbean International",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/4/49/Ovation_of_the_Seas_%2826417060696%29_%28cropped%29.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Ovation_of_the_Seas"
+  },
+  "Spectrum of the Seas": {
+    "built": 2019,
+    "pax": 4246,
+    "shipyard": "Meyer Werft",
+    "flag": "Cyprus",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/6/61/SPECTRUM_OF_THE_SEAS_20190608-2_%28cropped%29.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Spectrum_of_the_Seas"
+  },
+  "Odyssey of the Seas": {
+    "built": 2020,
+    "pax": 4284,
+    "crew": 1663,
+    "shipyard": "Meyer Werft",
+    "flag": "Royal Caribbean International",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/8/8e/Odyssey_of_the_Seas_moored_in_Akandia_Harbour_in_Port_of_Rhodes_8_September_2024_%28cropped%29.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Odyssey_of_the_Seas"
+  },
+  "Voyager of the Seas": {
+    "built": 1999,
+    "pax": 3602,
+    "crew": 1200,
+    "shipyard": "Kværner Masa-Yards",
+    "flag": "Royal Caribbean International",
+    "photo": "https://upload.wikimedia.org/wikipedia/en/1/19/Voyager_of_the_seas_santorini.png",
+    "wiki": "https://en.wikipedia.org/wiki/Voyager_of_the_Seas"
+  },
+  "Explorer of the Seas": {
+    "ton": 108654,
+    "built": 2000,
+    "pax": 3286,
+    "crew": 1180,
+    "shipyard": "Kværner Masa-Yards",
+    "flag": "Liberia",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Explorer_of_the_Seas_%28ship%2C_2000%29_Departs_Port_Canaveral_%28February_2026%29.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Explorer_of_the_Seas"
+  },
+  "Adventure of the Seas": {
+    "ton": 108644,
+    "built": 2001,
+    "pax": 3807,
+    "crew": 1185,
+    "shipyard": "Kværner Masa-Yards",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Adventure_of_the_Seas_at_Grand_Turk.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Adventure_of_the_Seas"
+  },
+  "Navigator of the Seas": {
+    "built": 2002,
+    "pax": 3386,
+    "crew": 1200,
+    "shipyard": "Kværner Masa-Yards",
+    "flag": "Royal Caribbean International",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/1/10/Navigator_of_the_Seas_%28ship%2C_2002%29_in_Ensenada%2C_Mexico_%28August_2024%29_1.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Navigator_of_the_Seas"
+  },
+  "Mariner of the Seas": {
+    "built": 2003,
+    "pax": 3114,
+    "crew": 1185,
+    "shipyard": "Kværner Masa-Yards",
+    "flag": "Royal Caribbean International",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/3/31/Bahamas_Cruise_-_ship_exterior_-_June_2018_%283303%29.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Mariner_of_the_Seas"
+  },
+  "Freedom of the Seas": {
+    "wiki": "https://en.wikipedia.org/wiki/Freedom_of_the_Seas"
+  },
+  "Liberty of the Seas": {
+    "built": 2007,
+    "pax": 3798,
+    "crew": 1300,
+    "shipyard": "Aker Yards",
+    "flag": "Royal Caribbean International",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Liberty_of_the_Seas_%28ship%2C_2006%29_in_Halifax%2C_Nova_Scotia%2C_Canada_on_August_18%2C_2025.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Liberty_of_the_Seas"
+  },
+  "Carnival Elation": {
+    "built": 1998,
+    "pax": 2052,
+    "crew": 900,
+    "flag": "Panama",
+    "wiki": "https://en.wikipedia.org/wiki/Carnival_Elation"
+  },
+  "Carnival Paradise": {
+    "built": 1998,
+    "pax": 2040,
+    "crew": 920,
+    "flag": "Panama",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Carnival_Paradise_in_Carnival_Cruise_Line%27s_new_livery.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Carnival_Paradise"
+  },
+  "Norwegian Prima": {
+    "built": 2022,
+    "pax": 3099,
+    "crew": 1506,
+    "shipyard": "Fincantieri",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/0/0b/Norwegian_Prima_Jan_19_2023.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Norwegian_Prima"
+  },
+  "Norwegian Viva": {
+    "built": 2022,
+    "pax": 3215,
+    "shipyard": "Fincantieri",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/a/ad/Norwegian_Viva_Mar_1_2024.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Norwegian_Viva"
+  },
+  "Norwegian Aqua": {
+    "pax": 3571,
+    "crew": 1597,
+    "shipyard": "Fincantieri",
+    "wiki": "https://en.wikipedia.org/wiki/Norwegian_Aqua"
+  },
+  "Norwegian Bliss": {
+    "built": 2018,
+    "pax": 4002,
+    "crew": 1700,
+    "shipyard": "Meyer Werft",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/a/ab/Norwegian_Bliss_SE.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Norwegian_Bliss"
+  },
+  "Norwegian Encore": {
+    "built": 2019,
+    "pax": 3998,
+    "crew": 2100,
+    "shipyard": "Meyer Werft",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/8/8c/NCLEncoreJuneau.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Norwegian_Encore"
+  },
+  "Norwegian Joy": {
+    "built": 2017,
+    "pax": 3883,
+    "crew": 1821,
+    "length": 333.46,
+    "shipyard": "Meyer Werft",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/e/ec/Norwegian_Joy_at_kochi_new_port.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Norwegian_Joy"
+  },
+  "Norwegian Escape": {
+    "built": 2015,
+    "pax": 4266,
+    "crew": 1733,
+    "shipyard": "Meyer Werft",
+    "flag": "Bahamas",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Cruise_ship_Norwegian_Escape_%281%29_%28cropped%29.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Norwegian_Escape"
+  },
+  "Norwegian Getaway": {
+    "built": 2013,
+    "pax": 3963,
+    "crew": 1646,
+    "shipyard": "Meyer Werft",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/7/75/Norwegian_Getaway_Jan_29_2025.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Norwegian_Getaway"
+  },
+  "MSC Opera": {
+    "ton": 65591,
+    "built": 2003,
+    "pax": 2150,
+    "crew": 728,
+    "shipyard": "Chantiers de l'Atlantique",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/1/13/MSCOperaArgostoli1.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/MSC_Opera"
+  },
+  "MSC Armonia": {
+    "built": 2000,
+    "pax": 2679,
+    "crew": 721,
+    "flag": "Panama",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/0/04/Costa_Fascinosa_and_MSC_Armonia_in_Malta_%28MSC_Armonia%29.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/MSC_Armonia"
+  },
+  "Sun Princess": {
+    "wiki": "https://en.wikipedia.org/wiki/Sun_Princess"
+  },
+  "Sky Princess": {
+    "built": 1984,
+    "wiki": "https://en.wikipedia.org/wiki/Sky_Princess"
+  },
+  "Discovery Princess": {
+    "built": 2022,
+    "pax": 3660,
+    "crew": 1346,
+    "shipyard": "Fincantieri",
+    "flag": "Bermuda",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/f/fa/2023_04_29b_Discovery_Princess_16_%2852935882014%29.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Discovery_Princess"
+  },
+  "Majestic Princess": {
+    "built": 2017,
+    "pax": 3560,
+    "crew": 1346,
+    "shipyard": "Fincantieri",
+    "flag": "Bermuda",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/b/b7/Majestic_Princess_%28ship%2C_2017%29_El_Medano_Beach_%28Cabo_San_Lucas%29_November_2024.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Majestic_Princess"
+  },
+  "Enchanted Princess": {
+    "built": 2020,
+    "pax": 3660,
+    "crew": 1346,
+    "shipyard": "Fincantieri",
+    "flag": "Bermuda",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Princess_Cruise_Lines_Enchanted_Princess_%28cropped%29.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Enchanted_Princess"
+  },
+  "Regal Princess": {
+    "wiki": "https://en.wikipedia.org/wiki/Regal_Princess"
+  },
+  "Royal Princess": {
+    "wiki": "https://en.wikipedia.org/wiki/Royal_Princess"
+  },
+  "Ruby Princess": {
+    "built": 2008,
+    "pax": 3080,
+    "crew": 1100,
+    "shipyard": "Fincantieri",
+    "flag": "Bermuda",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Ruby_Princess_beim_Durchfahren_der_Agua_Clara_Schleusen_des_Panamakanals_240304.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Ruby_Princess"
+  },
+  "Rotterdam": {
+    "flag": "Flag",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/e/e3/A_view_of_Rotterdam%2C_taken_from_the_roof_of_the_Maassilo%2C_Rotterdam%2C_The_Netherlands.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Rotterdam"
+  },
+  "Koningsdam": {
+    "wiki": "https://en.wikipedia.org/wiki/Koningsdam"
+  },
+  "Nieuw Statendam": {
+    "built": 2018,
+    "pax": 2666,
+    "crew": 1053,
+    "shipyard": "Fincantieri",
+    "flag": "Netherlands",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/3/3d/NIEUW_STATENDAM_%2849895575701%29.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/MS_Nieuw_Statendam"
+  },
+  "Nieuw Amsterdam": {
+    "wiki": "https://en.wikipedia.org/wiki/Nieuw_Amsterdam"
+  },
+  "Eurodam": {
+    "wiki": "https://en.wikipedia.org/wiki/Eurodam"
+  },
+  "Oosterdam": {
+    "wiki": "https://en.wikipedia.org/wiki/Oosterdam"
+  },
+  "Westerdam": {
+    "wiki": "https://en.wikipedia.org/wiki/Westerdam"
+  },
+  "Queen Mary 2": {
+    "wiki": "https://en.wikipedia.org/wiki/Queen_Mary_2_(ship)"
+  },
+  "Queen Victoria": {
+    "built": 2007,
+    "flag": "See also",
+    "wiki": "https://en.wikipedia.org/wiki/Queen_Victoria_(ship)"
+  },
+  "Queen Elizabeth": {
+    "built": 1831,
+    "wiki": "https://en.wikipedia.org/wiki/Queen_Elizabeth_(ship)"
+  },
+  "Costa Smeralda": {
+    "built": 2019,
+    "pax": 5224,
+    "crew": 1646,
+    "shipyard": "Meyer Turku",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/2/24/Costa_Smeralda_Storeb%C3%A6lt_IV_%28cropped%29.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Costa_Smeralda_(ship)"
+  },
+  "Seven Seas Mariner": {
+    "built": 2001,
+    "pax": 700,
+    "crew": 445,
+    "wiki": "https://en.wikipedia.org/wiki/Seven_Seas_Mariner"
+  },
+  "Seven Seas Navigator": {
+    "built": 1999,
+    "pax": 490,
+    "crew": 340,
+    "flag": "2011–present: Nassau,",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/5/5a/Seven_Seas_Navigator%2C_Fremantle%2C_2018_%2806%29.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Seven_Seas_Navigator"
+  },
+  "Azamara Pursuit": {
+    "built": 2001,
+    "pax": 777,
+    "crew": 380,
+    "flag": "Monrovia, Liberia",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/2/20/Azamara_pursuit.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Azamara_Pursuit"
+  },
+  "Azamara Quest": {
+    "built": 2000,
+    "pax": 686,
+    "crew": 408,
+    "shipyard": "Chantiers de l'Atlantique",
+    "flag": "Liberia",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/9/91/Azamara_Quest_%28ship%2C_2000%29_IMO_9210218%3B_Split%2C_2013-09-29_%281%29.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Azamara_Quest"
+  },
+  "Azamara Journey": {
+    "built": 2000,
+    "pax": 694,
+    "crew": 407,
+    "shipyard": "Chantiers de l'Atlantique",
+    "flag": "Liberia",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/8/82/Azamara_Journey%2C_Fremantle%2C_2018_%2804%29.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Azamara_Journey"
+  },
+  "Azamara Onward": {
+    "built": 1999,
+    "pax": 688,
+    "crew": 373,
+    "shipyard": "Chantiers de l'Atlantique",
+    "flag": "Liberia",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/3/3b/Azamara_Onward_IMO_9187887_P_Hamburg_29-08-2024_%281%29.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Azamara_Onward"
+  },
+  "Iona": {
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/7/7f/Iona_%2815020668711%29.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Iona"
+  },
+  "Arvia": {
+    "wiki": "https://en.wikipedia.org/wiki/Arvia"
+  },
+  "Britannia": {
+    "built": 7000,
+    "pax": 2015,
+    "crew": 127,
+    "flag": "Union Flag",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/d/dd/Britannia-Statue.jpg",
+    "wiki": "https://en.wikipedia.org/wiki/Britannia"
+  },
+  "Ventura": {
+    "wiki": "https://en.wikipedia.org/wiki/Ventura"
+  }
+}
