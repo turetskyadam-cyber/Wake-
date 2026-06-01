@@ -278,11 +278,6 @@
   .s-full{color:var(--brass)}
   .s-half{color:var(--brass);opacity:.5}
   .s-empty{color:var(--faint)}
-  .profile-critic{padding:18px 20px 14px;border-top:1px solid var(--glass-edge);display:flex;flex-direction:column;align-items:center;gap:5px}
-  .profile-critic-stars{display:flex;gap:2px;font-size:22px;line-height:1}
-  .profile-critic-row{display:flex;align-items:center;gap:10px}
-  .profile-critic-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
-  .profile-critic-score{font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--brass)}
 
   /* ---- ship profile modal ---- */
   .profile-modal{position:fixed;inset:0;z-index:2000;background:rgba(4,14,20,.86);backdrop-filter:blur(16px) saturate(130%);-webkit-backdrop-filter:blur(16px) saturate(130%);opacity:0;transition:opacity .25s var(--ease-out);overflow:hidden}
@@ -537,7 +532,6 @@
     </div>
     <div class="profile-body">
       <div class="profile-specs" id="profileSpecs"></div>
-      <div class="profile-critic" id="profileCritic"></div>
       <div class="profile-section">
         <div class="profile-section-hd">Current Voyage</div>
         <div id="profileVoyage"></div>
@@ -1881,15 +1875,9 @@ function openProfile(d){
     <div class="spec-cell"><div class="spec-k">Gross Tons</div><div class="spec-v" style="font-size:16px">${fmt(spec.ton)}<small> GT</small></div></div>
     <div class="spec-cell"><div class="spec-k">Length</div><div class="spec-v">${spec.length||"—"}<small>${spec.length?" m":""}</small></div></div>
     <div class="spec-cell"><div class="spec-k">Decks</div><div class="spec-v">${spec.decks||"—"}</div></div>
-    <div class="spec-cell"><div class="spec-k">Shipyard</div><div class="spec-v" style="font-size:12px;padding-top:6px;line-height:1.3">${spec.shipyard||"—"}</div></div>
+    <div class="spec-cell"><div class="spec-k">Cruise Critic</div><div class="spec-v" style="font-size:0;padding-top:6px">${spec.critic?`<span style="font-size:18px;letter-spacing:1px">${renderStars(spec.critic)}</span><span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--brass);margin-top:4px;font-weight:400">${spec.critic} / 5</span>`:"<span style='font-size:14px;color:var(--faint)'>—</span>"}</div></div>
   `;
-  byId("profileCritic").innerHTML=spec.critic?`
-    <div class="profile-critic-stars">${renderStars(spec.critic)}</div>
-    <div class="profile-critic-row">
-      <span class="profile-critic-label">Cruise Critic</span>
-      <span class="profile-critic-score">${spec.critic} / 5</span>
-    </div>
-  `:`<div style="color:var(--faint);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em">No rating available</div>`;
+  byId("profileCritic").innerHTML="";
   const statusIcon=d.status==="port"?"🚢":"⛵";
   const loc=d.place||d.region||"Open Ocean";
   byId("profileVoyage").innerHTML=`
