@@ -440,7 +440,7 @@
   /* ── Trigger button ── */
   /* PORT CAMS — right-edge side tab */
   #camsBtn{
-    position:fixed;right:0;top:50%;transform:translateY(-50%);
+    position:fixed;right:0;top:calc(50% - 55px);transform:translateY(-50%);
     z-index:1001;
     /* side tab shape — rounds on left only */
     background:rgba(8,22,36,.82);
@@ -461,7 +461,7 @@
   #camsBtn .cb-icon{color:var(--brass);opacity:.95;flex-shrink:0}
   #camsBtn .cb-label{writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);letter-spacing:.2em;font-size:8px;line-height:1}
   #camsBtn .cb-dot{width:5px;height:5px;border-radius:50%;background:#5ad6a0;box-shadow:0 0 7px #5ad6a0;animation:pulse 2.4s var(--ease-out) infinite;flex-shrink:0}
-  #camsBtn .cb-badge{min-width:15px;height:15px;border-radius:999px;background:rgba(226,189,114,.18);border:1px solid rgba(226,189,114,.45);color:var(--brass);font-size:8px;padding:0 4px;display:flex;align-items:center;justify-content:center;line-height:1}
+  #camsBtn .cb-badge{display:none!important}
 
   /* ── Overlay ── */
   #cams{position:fixed;inset:0;z-index:2050;background:rgba(4,14,22,.86);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .28s var(--ease-out)}
@@ -584,7 +584,7 @@
 
   /* ── Responsive ── */
   @media (max-width:760px){
-    #camsBtn{top:50%;transform:translateY(-50%);right:0;bottom:auto}
+    #camsBtn{top:calc(50% - 55px);transform:translateY(-50%);right:0;bottom:auto}
   }
   @media (max-width:700px){
     #cams{align-items:flex-end}
