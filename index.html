@@ -208,10 +208,10 @@
   .d-itin-row[data-port]:hover .d-itin-port{text-decoration:underline;text-underline-offset:2px}
   /* itinerary route preview overlay */
   .gulf-logo{mix-blend-mode:multiply;pointer-events:none!important}
-  .ipm-outer{pointer-events:none}
-  .ipm-card{position:absolute;left:10px;top:-14px;background:rgba(6,18,28,.88);border:1px solid rgba(255,255,255,.13);border-radius:6px;padding:4px 8px;white-space:nowrap;backdrop-filter:blur(10px);box-shadow:0 3px 12px rgba(0,0,0,.5);pointer-events:none}
-  .ipm-card b{display:block;font-size:11px;font-weight:600;color:#eef4f7;margin-bottom:1px}
-  .ipm-card span{font-family:'JetBrains Mono',monospace;font-size:8px;color:#8aabb8;letter-spacing:.04em}
+  .ipm-outer{cursor:default}
+  .ipm-card{position:absolute;left:7px;top:-10px;background:rgba(6,18,28,.88);border:1px solid rgba(255,255,255,.13);border-radius:4px;padding:2px 5px;white-space:nowrap;backdrop-filter:blur(10px);box-shadow:0 2px 8px rgba(0,0,0,.5)}
+  .ipm-card b{display:block;font-size:8.5px;font-weight:600;color:#eef4f7;margin-bottom:0}
+  .ipm-card span{font-family:'JetBrains Mono',monospace;font-size:6.5px;color:#8aabb8;letter-spacing:.04em}
   .d-close{position:absolute;top:13px;right:13px;width:24px;height:24px;border-radius:50%;border:1px solid var(--glass-edge);background:rgba(4,16,24,.5);color:var(--muted);cursor:pointer;font-size:13px;line-height:1;display:flex;align-items:center;justify-content:center;z-index:2;transition:transform .12s var(--ease-out),color .2s}
   .d-close:hover{color:var(--ink)}.d-close:active{transform:scale(.9)}
 
@@ -1537,11 +1537,17 @@ function fillDetailItin(d){
         _itinDots.push(L.circleMarker([w.lat,w.lon],
           {renderer:canvasR,radius:isLast?5:4,color:"#fff",weight:1.5,
            fillColor:d.color,fillOpacity:isLast?0.9:0.65,interactive:false}).addTo(map));
-        _itinMarks.push(L.marker([w.lat,w.lon],{
+        const mark=L.marker([w.lat,w.lon],{
           icon:L.divIcon({className:"ipm-outer",iconSize:[0,0],iconAnchor:[0,8],
             html:`<div class="ipm-card"><span>${dateLabel}</span><b>${w.portEntry.name}</b></div>`}),
-          interactive:false,keyboard:false
-        }).addTo(map));
+          interactive:true,keyboard:false
+        }).addTo(map);
+        mark.on('click',e=>{
+          L.DomEvent.stopPropagation(e);
+          _itinMarks.forEach(m=>m.setZIndexOffset(0));
+          mark.setZIndexOffset(10000);
+        });
+        _itinMarks.push(mark);
       });
 
       map.flyToBounds(L.latLngBounds(latlngs),{padding:[80,120],maxZoom:8,duration:CAM_DUR});
