@@ -1342,6 +1342,11 @@ map.on('click',e=>{
     if(dist<bestDist){ bestDist=dist; best=d; }
   }
   if(best){ goShip(best); return; }
+  if(_itinMarks.length){
+    _itinLabelsVisible=!_itinLabelsVisible;
+    _itinMarks.forEach(m=>{const el=m.getElement();if(el)el.style.display=_itinLabelsVisible?'':'none';});
+    return;
+  }
   if(nav.level===2){ nav={level:0,line:null,ship:null}; hoverLine=null; clearSelection(); renderNav("l"); applyVisibility(); }
   collapseNav();
 });
@@ -1351,11 +1356,12 @@ byId("zReset").addEventListener("click",()=>goLines());
 
 /* ---- selection pulse + arrival blip ---- */
 let selPulse=null;
-let _itinLine=null, _itinDots=[], _itinMarks=[];
+let _itinLine=null, _itinDots=[], _itinMarks=[], _itinLabelsVisible=true;
 function clearItinPreview(){
   if(_itinLine){ map.removeLayer(_itinLine); _itinLine=null; }
   _itinDots.forEach(l=>map.removeLayer(l)); _itinDots=[];
   _itinMarks.forEach(l=>map.removeLayer(l)); _itinMarks=[];
+  _itinLabelsVisible=true;
 }
 function spawnPing(d){
   clearPing();
