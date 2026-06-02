@@ -1410,7 +1410,7 @@ function fillDetailItin(d){
       return `<div class="d-itin-row${isToday?" d-itin-today":""}" data-port="${c.port}" data-date="${c.date}" data-arr="${c.arr||""}" data-dep="${c.dep||""}"><span class="d-itin-date">${label}</span><span class="d-itin-port">${c.port}</span>${times?`<span class="d-itin-times">${times}</span>`:""}</div>`;
     }).join("")+`</div>`;
   itinEl.querySelectorAll(".d-itin-row[data-port]").forEach(row=>{
-    row.addEventListener("click",async e=>{
+    row.addEventListener("click",e=>{
       e.stopPropagation();
       const finalPortEntry=CRUISE_PORTS.find(p=>p.name===row.dataset.port);
       if(!finalPortEntry) return;
@@ -1429,9 +1429,10 @@ function fillDetailItin(d){
         if(pe) waypoints.push({lat:pe.lat,lon:pe.lon,call:c,portEntry:pe});
       }
 
-      // Draw straight-line placeholder immediately so the map responds at once
-      const latlngs=waypoints.map(w=>[w.lat,w.lon]);
-      _itinLine=L.polyline(latlngs,{color:d.color,weight:2,dashArray:"8 10",opacity:0.4,interactive:false}).addTo(map);
+      // Route each leg through sea-gate waypoints to avoid land
+      const latlngs=[[waypoints[0].lat,waypoints[0].lon]];
+      for(let i=1;i<waypoints.length;i++) latlngs.push(..._routeLeg(waypoints[i-1],waypoints[i]));
+      _itinLine=L.polyline(latlngs,{color:d.color,weight:2,dashArray:"8 10",opacity:0.65,interactive:false}).addTo(map);
 
       // Dot + info card at every stop (skip the ship start position)
       waypoints.slice(1).forEach((w,i)=>{
@@ -1452,18 +1453,6 @@ function fillDetailItin(d){
       });
 
       map.flyToBounds(L.latLngBounds(latlngs),{padding:[80,120],maxZoom:8,duration:CAM_DUR});
-
-      // Upgrade placeholder to water-following route if API key is set
-      if(SEALANE_KEY && waypoints.length>1){
-        const segs=await Promise.all(waypoints.slice(1).map((w,i)=>seaRoute(waypoints[i],w)));
-        const routedLls=[[waypoints[0].lat,waypoints[0].lon]];
-        segs.forEach((seg,i)=>{
-          if(seg) routedLls.push(...seg.slice(1));
-          else routedLls.push([waypoints[i+1].lat,waypoints[i+1].lon]);
-        });
-        if(_itinLine){ map.removeLayer(_itinLine); _itinLine=null; }
-        _itinLine=L.polyline(routedLls,{color:d.color,weight:2,dashArray:"8 10",opacity:0.65,interactive:false}).addTo(map);
-      }
     });
   });
 }
@@ -2015,30 +2004,41 @@ function applySnapshot(snap){
 const SNAP_URL="https://raw.githubusercontent.com/turetskyadam-cyber/Wake-/main/positions.json";
 const ITIN_URL="https://raw.githubusercontent.com/turetskyadam-cyber/Wake-/main/itineraries.json";
 
-// Maritime routing — paste your free searoutes.com API key here to get water-following route lines.
-// Leave blank to keep straight-line fallback.
-const SEALANE_KEY="";
-const _seaRouteCache={};
-async function seaRoute(from,to){
-  if(!SEALANE_KEY) return null;
-  const ckey=`${from.lat.toFixed(2)},${from.lon.toFixed(2)}|${to.lat.toFixed(2)},${to.lon.toFixed(2)}`;
-  if(_seaRouteCache[ckey]) return _seaRouteCache[ckey];
-  try{
-    const r=await fetch(
-      `https://api.searoutes.com/route/v2/sea/${from.lon},${from.lat};${to.lon},${to.lat}`,
-      {headers:{'x-api-key':SEALANE_KEY,'Accept':'application/json'}}
-    );
-    if(!r.ok) return null;
-    const geo=await r.json();
-    const feat=geo.features?.[0];
-    let coords=null;
-    if(feat?.geometry?.type==='LineString') coords=feat.geometry.coordinates;
-    else if(feat?.geometry?.type==='MultiLineString') coords=feat.geometry.coordinates.flat();
-    if(!coords?.length) return null;
-    const lls=coords.map(([lon,lat])=>[lat,lon]);
-    _seaRouteCache[ckey]=lls;
-    return lls;
-  }catch(e){ return null; }
+// Sea-gate routing — strategic waypoints at real ocean passages used to route around land.
+// No API key needed; runs entirely offline.
+const _seaGates={
+  'fl-str':  [23.8,-79.0],  // Florida Straits (between Cuba & Bahamas)
+  'yucatan': [21.8,-85.8],  // Yucatan Channel (between Mexico & Cuba)
+  'windward':[19.8,-73.0],  // Windward Passage (Cuba ↔ Haiti)
+  'mona':    [18.5,-67.8],  // Mona Passage (DR ↔ Puerto Rico)
+  'pan-atl': [ 9.3,-79.8],  // Panama Canal – Atlantic entrance
+  'pan-pac': [ 8.9,-79.4],  // Panama Canal – Pacific exit
+  'gibr':    [35.9, -5.5],  // Strait of Gibraltar
+  'suez':    [30.0, 32.5],  // Suez Canal
+  'malacca': [ 2.5,101.0],  // Strait of Malacca
+};
+// Rough land-blocker rectangles; sample points on each leg — if one lands inside, insert the gate
+const _landBlocks=[
+  {minLat:21.5,maxLat:23.3,minLon:-85.0,maxLon:-80.0,gate:'fl-str'},   // Cuba west / Havana
+  {minLat:19.8,maxLat:22.0,minLon:-80.0,maxLon:-74.1,gate:'windward'}, // Cuba east
+  {minLat: 7.5,maxLat:10.5,minLon:-82.0,maxLon:-77.0,gate:'pan-atl'},  // Panama isthmus
+  {minLat:28.5,maxLat:32.0,minLon: 31.5,maxLon: 33.5,gate:'suez'},     // Suez / Sinai
+  {minLat: 1.0,maxLat: 5.5,minLon: 99.0,maxLon:104.0,gate:'malacca'},  // Malay Peninsula
+];
+function _routeLeg(from,to){
+  const gates=new Set();
+  for(const blk of _landBlocks){
+    for(let i=1;i<=9;i++){
+      const t=i/10,lat=from.lat+t*(to.lat-from.lat),lon=from.lon+t*(to.lon-from.lon);
+      if(lat>=blk.minLat&&lat<=blk.maxLat&&lon>=blk.minLon&&lon<=blk.maxLon){gates.add(blk.gate);break;}
+    }
+  }
+  if(!gates.size) return [[to.lat,to.lon]];
+  // Sort intercepted gates by distance from origin so we pass through them in order
+  const sorted=[...gates]
+    .map(g=>({g,d:Math.hypot(_seaGates[g][0]-from.lat,_seaGates[g][1]-from.lon)}))
+    .sort((a,b)=>a.d-b.d);
+  return [...sorted.map(({g})=>_seaGates[g]),[to.lat,to.lon]];
 }
 
 fetch(SNAP_URL,{cache:"no-store"}).then(r=>r.ok?r.json():Promise.reject())
