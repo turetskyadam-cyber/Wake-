@@ -753,6 +753,7 @@ const CONFIG = {
   STALE_MS: 30 * 60 * 1000,   // mark a ship "stale" if unheard this long
   FOCUS_ZOOM: 9,              // map zoom level when focusing one ship (see the port/coast)
   TRAIL_MAX: 32,              // wake length (positions kept per ship)
+  WAKE_SEGS: 8,               // gradient segments tail→tip
   DISCOVERY: false,           // also adopt name-matched ships outside the MMSI filter
   REDUCED_MOTION: matchMedia("(prefers-reduced-motion: reduce)").matches,
 };
@@ -1304,16 +1305,42 @@ function ensureMarker(d){
 
 function placeShips(){
   for(const d of fleet){
-    if(d.lat==null){ if(d._m){ map.removeLayer(d._m); d._m=null; } if(d._w){ wakeLayer.removeLayer(d._w); d._w=null; } continue; }
+    if(d.lat==null){ if(d._m){ map.removeLayer(d._m); d._m=null; } if(d._w){ wakeLayer.removeLayer(d._w); d._w=null; } if(d._wGlow2){ wakeLayer.removeLayer(d._wGlow2); d._wGlow2=null; } if(d._wGlow){ wakeLayer.removeLayer(d._wGlow); d._wGlow=null; } if(d._wSegs){ d._wSegs.forEach(s=>wakeLayer.removeLayer(s)); d._wSegs=null; } continue; }
     const m=ensureMarker(d);
     m.setLatLng(dispLL(d));
     m.setStyle(markerStyle(d));
     if(d.trail.length>1){
-      const ll=d.trail.map(p=>[p[1],p[0]]);
-      if(d._w) d._w.setLatLngs(ll);
-      else d._w=L.polyline(ll,{renderer:canvasR,color:d.color,weight:1.6,opacity:0.45,interactive:false}).addTo(wakeLayer);
-      d._w.setStyle({opacity: d===selected?0.8:(d._dim?0.1:0.4)});
-    } else if(d._w){ wakeLayer.removeLayer(d._w); d._w=null; }
+      if(REDUCED){
+        const ll=d.trail.map(p=>[p[1],p[0]]);
+        if(d._w) d._w.setLatLngs(ll);
+        else d._w=L.polyline(ll,{renderer:canvasR,color:d.color,weight:1.6,opacity:0.45,interactive:false}).addTo(wakeLayer);
+        d._w.setStyle({opacity:d===selected?0.8:(d._dim?0.1:0.4)});
+      } else {
+        if(d._w){ wakeLayer.removeLayer(d._w); d._w=null; }
+        const sm=wakeSmooth(d.trail);
+        const sel=d===selected, dim=d._dim, n=CONFIG.WAKE_SEGS;
+        if(!d._wGlow2) d._wGlow2=L.polyline(sm,{renderer:canvasR,color:d.color,weight:16,opacity:0,interactive:false,lineCap:'round'}).addTo(wakeLayer);
+        else d._wGlow2.setLatLngs(sm);
+        d._wGlow2.setStyle({opacity:dim?0:(sel?0.06:0.035)});
+        if(!d._wGlow) d._wGlow=L.polyline(sm,{renderer:canvasR,color:d.color,weight:7,opacity:0,interactive:false,lineCap:'round'}).addTo(wakeLayer);
+        else d._wGlow.setLatLngs(sm);
+        d._wGlow.setStyle({opacity:dim?0:(sel?0.15:0.09)});
+        if(!d._wSegs||d._wSegs.length!==n){
+          if(d._wSegs) d._wSegs.forEach(s=>wakeLayer.removeLayer(s));
+          d._wSegs=Array.from({length:n},(_,i)=>{
+            const frac=(i+1)/n;
+            return L.polyline(wakeSegPts(sm,i,n),{renderer:canvasR,color:d.color,weight:wakeWt(frac),opacity:wakeOp(frac,sel,dim),interactive:false,lineCap:'round'}).addTo(wakeLayer);
+          });
+        } else {
+          d._wSegs.forEach((seg,i)=>{ const frac=(i+1)/n; seg.setLatLngs(wakeSegPts(sm,i,n)); seg.setStyle({opacity:wakeOp(frac,sel,dim),weight:wakeWt(frac)}); });
+        }
+      }
+    } else {
+      if(d._w){ wakeLayer.removeLayer(d._w); d._w=null; }
+      if(d._wGlow2){ wakeLayer.removeLayer(d._wGlow2); d._wGlow2=null; }
+      if(d._wGlow){ wakeLayer.removeLayer(d._wGlow); d._wGlow=null; }
+      if(d._wSegs){ d._wSegs.forEach(s=>wakeLayer.removeLayer(s)); d._wSegs=null; }
+    }
   }
   if(selPulse && selected && selected.lat!=null) selPulse.setLatLng([selected.lat,selected.lon]);
   if(selected) updateDetailLive(selected);
@@ -1789,7 +1816,14 @@ function applyVisibility(){
     const on = !act || act.has(d);
     d._dim = d.lat!=null && !on;
     if(d._m) d._m.setStyle(markerStyle(d));
-    if(d._w) d._w.setStyle({opacity: d===selected?0.8:(d._dim?0.1:0.4)});
+    if(REDUCED){
+      if(d._w) d._w.setStyle({opacity:d===selected?0.8:(d._dim?0.1:0.4)});
+    } else {
+      const sel=d===selected, dim=d._dim, n=CONFIG.WAKE_SEGS;
+      if(d._wGlow2) d._wGlow2.setStyle({opacity:dim?0:(sel?0.06:0.035)});
+      if(d._wGlow)  d._wGlow.setStyle({opacity:dim?0:(sel?0.15:0.09)});
+      if(d._wSegs)  d._wSegs.forEach((seg,i)=>{ const frac=(i+1)/n; seg.setStyle({opacity:wakeOp(frac,sel,dim),weight:wakeWt(frac)}); });
+    }
   });
   updateStats();
 }
@@ -2003,6 +2037,25 @@ fetch(SNAP_URL,{cache:"no-store"}).then(r=>r.ok?r.json():Promise.reject())
 // port schedule itineraries — scraped daily from CruiseDig by GitHub Actions
 let _itin={};     // portCity -> Map(normShip -> {a,e})
 let _itinShip={}; // normShip  -> [{port,date,arr,dep}] sorted by date
+
+function wakeSmooth(trail){
+  const p=trail.map(pt=>[pt[1],pt[0]]);
+  if(p.length<3) return p;
+  const q=[p[0]];
+  for(let i=0;i<p.length-1;i++){
+    q.push([0.75*p[i][0]+0.25*p[i+1][0], 0.75*p[i][1]+0.25*p[i+1][1]]);
+    q.push([0.25*p[i][0]+0.75*p[i+1][0], 0.25*p[i][1]+0.75*p[i+1][1]]);
+  }
+  q.push(p[p.length-1]);
+  return q;
+}
+function wakeSegPts(sm,i,n){
+  const len=sm.length;
+  const s=Math.floor(i/n*(len-1)), e=Math.min(len-1,Math.ceil((i+1)/n*(len-1)));
+  return sm.slice(s,e+1);
+}
+function wakeOp(frac,sel,dim){ const t=frac*frac; if(dim) return t*0.06; return t*(sel?0.92:0.65); }
+function wakeWt(frac){ return 0.5+frac*frac*3.5; }
 
 function normShip(s){ return s.toLowerCase().replace(/[^a-z0-9]/g,""); }
 function itinFor(d){
