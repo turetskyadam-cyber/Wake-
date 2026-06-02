@@ -1,8 +1,7 @@
 name: port-itineraries
 
-# Scrapes CruiseMapper port schedule pages once a day and commits the
-# result to itineraries.json. The app fetches this file from GitHub raw
-# so it stays fresh without a full redeploy.
+# Scrapes CruiseDig ship itinerary pages once a day, stores results in
+# SQLite (cruisedig.db), and exports itineraries.json for the browser app.
 
 on:
   schedule:
@@ -19,21 +18,29 @@ concurrency:
 jobs:
   scrape:
     runs-on: ubuntu-latest
+    timeout-minutes: 360
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+
+      - uses: actions/setup-python@v5
         with:
-          node-version: "20"
-      - name: Scrape schedules
-        run: node tools/itineraries.mjs
-      - name: Commit itineraries
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run scraper
+        run: python tools/scraper.py --run-now
+
+      - name: Commit results
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add itineraries.json
+          git add itineraries.json cruisedig.db ship_slugs.json
           if git diff --staged --quiet; then
-            echo "No itinerary changes."
+            echo "No itinerary changes to commit."
           else
-            git commit -m "chore: update port itineraries [skip ci]"
+            git commit -m "chore: update itineraries from CruiseDig [skip ci]"
             git push
           fi

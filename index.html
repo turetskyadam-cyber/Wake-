@@ -1980,7 +1980,7 @@ fetch(SNAP_URL,{cache:"no-store"}).then(r=>r.ok?r.json():Promise.reject())
   .catch(()=>fetch("positions.json",{cache:"no-store"}).then(r=>r.ok?r.json():null))
   .then(j=>{ if(j) applySnapshot(j); }).catch(()=>{});
 
-// port schedule itineraries — scraped daily from CruiseMapper by GitHub Actions
+// port schedule itineraries — scraped daily from CruiseDig by GitHub Actions
 let _itin={};     // portCity -> Map(normShip -> {a,e})
 let _itinShip={}; // normShip  -> [{port,date,arr,dep}] sorted by date
 
