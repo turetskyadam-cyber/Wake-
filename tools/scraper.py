@@ -35,6 +35,8 @@ LOG_PATH = BASE_DIR / "scraper.log"
 BASE_URL = "https://cruisedig.com"
 SHIPS_TOTAL_PAGES = 15        # pages 0–14 ≈ 285 ships
 PORT_STOP_HORIZON_DAYS = 90   # only fetch AJAX port-stop detail for voyages starting within this window
+MAX_AJAX_PER_SHIP = 3         # cap: fetch port-stop detail for at most this many voyages per ship
+                              # keeps total AJAX calls to ~855 (285 ships × 3) and avoids rate-limiting
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (compatible; CruiseItineraryScraper/1.0)",
@@ -566,7 +568,8 @@ def scrape_ship(slug: str) -> dict | None:
     current_url = base_url
     page_num = 0
     current_soup = soup
-    stop_paginating = False
+    # Shared mutable budget so the cap applies across all voyage pages for this ship
+    ajax_budget = [MAX_AJAX_PER_SHIP]
 
     while True:
         if page_num > 0:
@@ -575,9 +578,15 @@ def scrape_ship(slug: str) -> dict | None:
                 break
             current_soup = BeautifulSoup(html, "lxml")
 
-        page_voyages = _parse_voyage_cards(current_soup, slug, today_iso, horizon_iso)
+        page_voyages = _parse_voyage_cards(current_soup, slug, today_iso, horizon_iso, ajax_budget)
         all_voyages.extend(page_voyages)
-        logging.info("  [%s] page %d → %d voyages on page (total %d)", slug, page_num, len(page_voyages), len(all_voyages))
+        logging.info("  [%s] page %d → %d voyages (total %d, ajax budget left: %d)",
+                     slug, page_num, len(page_voyages), len(all_voyages), ajax_budget[0])
+
+        # Stop paginating once AJAX budget is spent — remaining pages only have
+        # voyages we won't fetch port stops for anyway.
+        if ajax_budget[0] == 0:
+            break
 
         # Follow "Next" pager link
         next_link = current_soup.select_one(".pager__item--next a")
@@ -609,8 +618,13 @@ def scrape_ship(slug: str) -> dict | None:
     }
 
 
-def _parse_voyage_cards(soup, slug: str, today_iso: str, horizon_iso: str) -> list[dict]:
-    """Extract voyage blocks from a ship page and fetch port stops where needed."""
+def _parse_voyage_cards(soup, slug: str, today_iso: str, horizon_iso: str,
+                        ajax_budget: list[int]) -> list[dict]:
+    """
+    Extract voyage blocks from a ship page and fetch port stops where needed.
+    ajax_budget is a one-element mutable list [remaining_calls] shared across
+    pagination pages so the cap is applied per-ship across all pages.
+    """
     voyages: list[dict] = []
 
     for card in soup.select(".card--view-mode-cruise-ship-itinerary"):
@@ -626,21 +640,27 @@ def _parse_voyage_cards(soup, slug: str, today_iso: str, horizon_iso: str) -> li
         if len(time_els) >= 2:
             ret_dt = _iso_from_time_el(time_els[1])
 
-        # Extract cruise node ID from data-href attribute for AJAX port-stop fetch
+        # Extract cruise node ID from data-href for AJAX port-stop fetch
         voyage_node_id: str | None = None
         data_href = card.get("data-href", "")
         m = re.search(r"/(\d+)$", data_href)
         if m:
             voyage_node_id = m.group(1)
 
-        # Fetch port stops via AJAX only for voyages within the horizon
+        # Fetch port stops via AJAX only for upcoming voyages within the horizon,
+        # and only while we have AJAX budget remaining for this ship.
         port_stops: list[dict] = []
-        if dep_dt and dep_dt[:10] <= horizon_iso and voyage_node_id:
+        if ajax_budget[0] > 0 and dep_dt and voyage_node_id:
             dep_date = dep_dt[:10]
-            if dep_date >= today_iso or (ret_dt and ret_dt[:10] >= today_iso):
+            in_window = dep_date <= horizon_iso and (
+                dep_date >= today_iso or (ret_dt and ret_dt[:10] >= today_iso)
+            )
+            if in_window:
                 port_stops = fetch_port_stops(voyage_node_id, dep_date)
+                ajax_budget[0] -= 1
                 if port_stops:
-                    logging.debug("    node %s: %d stops", voyage_node_id, len(port_stops))
+                    logging.debug("    node %s: %d stops (budget left: %d)",
+                                  voyage_node_id, len(port_stops), ajax_budget[0])
                 polite_sleep()
 
         voyages.append({
