@@ -1410,7 +1410,7 @@ function fillDetailItin(d){
       return `<div class="d-itin-row${isToday?" d-itin-today":""}" data-port="${c.port}" data-date="${c.date}" data-arr="${c.arr||""}" data-dep="${c.dep||""}"><span class="d-itin-date">${label}</span><span class="d-itin-port">${c.port}</span>${times?`<span class="d-itin-times">${times}</span>`:""}</div>`;
     }).join("")+`</div>`;
   itinEl.querySelectorAll(".d-itin-row[data-port]").forEach(row=>{
-    row.addEventListener("click",e=>{
+    row.addEventListener("click",async e=>{
       e.stopPropagation();
       const finalPortEntry=CRUISE_PORTS.find(p=>p.name===row.dataset.port);
       if(!finalPortEntry) return;
@@ -1429,9 +1429,9 @@ function fillDetailItin(d){
         if(pe) waypoints.push({lat:pe.lat,lon:pe.lon,call:c,portEntry:pe});
       }
 
-      // Single multi-point dashed polyline through all waypoints
+      // Draw straight-line placeholder immediately so the map responds at once
       const latlngs=waypoints.map(w=>[w.lat,w.lon]);
-      _itinLine=L.polyline(latlngs,{color:d.color,weight:2,dashArray:"8 10",opacity:0.65,interactive:false}).addTo(map);
+      _itinLine=L.polyline(latlngs,{color:d.color,weight:2,dashArray:"8 10",opacity:0.4,interactive:false}).addTo(map);
 
       // Dot + info card at every stop (skip the ship start position)
       waypoints.slice(1).forEach((w,i)=>{
@@ -1452,6 +1452,18 @@ function fillDetailItin(d){
       });
 
       map.flyToBounds(L.latLngBounds(latlngs),{padding:[80,120],maxZoom:8,duration:CAM_DUR});
+
+      // Upgrade placeholder to water-following route if API key is set
+      if(SEALANE_KEY && waypoints.length>1){
+        const segs=await Promise.all(waypoints.slice(1).map((w,i)=>seaRoute(waypoints[i],w)));
+        const routedLls=[[waypoints[0].lat,waypoints[0].lon]];
+        segs.forEach((seg,i)=>{
+          if(seg) routedLls.push(...seg.slice(1));
+          else routedLls.push([waypoints[i+1].lat,waypoints[i+1].lon]);
+        });
+        if(_itinLine){ map.removeLayer(_itinLine); _itinLine=null; }
+        _itinLine=L.polyline(routedLls,{color:d.color,weight:2,dashArray:"8 10",opacity:0.65,interactive:false}).addTo(map);
+      }
     });
   });
 }
@@ -2002,6 +2014,33 @@ function applySnapshot(snap){
 // it refreshes without a redeploy); falls back to the bundled copy, then the embedded SEED.
 const SNAP_URL="https://raw.githubusercontent.com/turetskyadam-cyber/Wake-/main/positions.json";
 const ITIN_URL="https://raw.githubusercontent.com/turetskyadam-cyber/Wake-/main/itineraries.json";
+
+// Maritime routing — paste your free searoutes.com API key here to get water-following route lines.
+// Leave blank to keep straight-line fallback.
+const SEALANE_KEY="";
+const _seaRouteCache={};
+async function seaRoute(from,to){
+  if(!SEALANE_KEY) return null;
+  const ckey=`${from.lat.toFixed(2)},${from.lon.toFixed(2)}|${to.lat.toFixed(2)},${to.lon.toFixed(2)}`;
+  if(_seaRouteCache[ckey]) return _seaRouteCache[ckey];
+  try{
+    const r=await fetch(
+      `https://api.searoutes.com/route/v2/sea/${from.lon},${from.lat};${to.lon},${to.lat}`,
+      {headers:{'x-api-key':SEALANE_KEY,'Accept':'application/json'}}
+    );
+    if(!r.ok) return null;
+    const geo=await r.json();
+    const feat=geo.features?.[0];
+    let coords=null;
+    if(feat?.geometry?.type==='LineString') coords=feat.geometry.coordinates;
+    else if(feat?.geometry?.type==='MultiLineString') coords=feat.geometry.coordinates.flat();
+    if(!coords?.length) return null;
+    const lls=coords.map(([lon,lat])=>[lat,lon]);
+    _seaRouteCache[ckey]=lls;
+    return lls;
+  }catch(e){ return null; }
+}
+
 fetch(SNAP_URL,{cache:"no-store"}).then(r=>r.ok?r.json():Promise.reject())
   .catch(()=>fetch("positions.json",{cache:"no-store"}).then(r=>r.ok?r.json():null))
   .then(j=>{ if(j) applySnapshot(j); }).catch(()=>{});
