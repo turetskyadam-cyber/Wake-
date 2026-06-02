@@ -1351,11 +1351,11 @@ byId("zReset").addEventListener("click",()=>goLines());
 
 /* ---- selection pulse + arrival blip ---- */
 let selPulse=null;
-let _itinLine=null, _itinDot=null, _itinMark=null;
+let _itinLine=null, _itinDots=[], _itinMarks=[];
 function clearItinPreview(){
   if(_itinLine){ map.removeLayer(_itinLine); _itinLine=null; }
-  if(_itinDot){  map.removeLayer(_itinDot);  _itinDot=null;  }
-  if(_itinMark){ map.removeLayer(_itinMark); _itinMark=null; }
+  _itinDots.forEach(l=>map.removeLayer(l)); _itinDots=[];
+  _itinMarks.forEach(l=>map.removeLayer(l)); _itinMarks=[];
 }
 function spawnPing(d){
   clearPing();
@@ -1406,26 +1406,46 @@ function fillDetailItin(d){
   itinEl.querySelectorAll(".d-itin-row[data-port]").forEach(row=>{
     row.addEventListener("click",e=>{
       e.stopPropagation();
-      const portEntry=CRUISE_PORTS.find(p=>p.name===row.dataset.port);
-      if(!portEntry) return;
+      const finalPortEntry=CRUISE_PORTS.find(p=>p.name===row.dataset.port);
+      if(!finalPortEntry) return;
       collapseDetail();
       clearItinPreview();
-      if(d.lat==null){ map.flyTo([portEntry.lat,portEntry.lon],8,{duration:CAM_DUR}); return; }
-      _itinLine=L.polyline([[d.lat,d.lon],[portEntry.lat,portEntry.lon]],
-        {color:d.color,weight:2,dashArray:"8 10",opacity:0.65,interactive:false}).addTo(map);
-      _itinDot=L.circleMarker([portEntry.lat,portEntry.lon],
-        {renderer:canvasR,radius:5,color:"#fff",weight:1.5,fillColor:d.color,fillOpacity:0.9,interactive:false}).addTo(map);
-      const isToday=row.dataset.date===new Date().toISOString().slice(0,10);
-      const dt=new Date(row.dataset.date+"T12:00:00Z");
-      const dateLabel=isToday?"Today":dt.toLocaleDateString("en-US",{month:"short",day:"numeric"});
-      const timeParts=[row.dataset.arr&&"Arr "+row.dataset.arr,row.dataset.dep&&"Dep "+row.dataset.dep].filter(Boolean).join(" · ");
-      _itinMark=L.marker([portEntry.lat,portEntry.lon],{
-        icon:L.divIcon({className:"ipm-outer",iconSize:[0,0],iconAnchor:[0,8],
-          html:`<div class="ipm-card"><b>${portEntry.name}</b><span>${dateLabel}${timeParts?" · "+timeParts:""}</span></div>`}),
-        interactive:false,keyboard:false
-      }).addTo(map);
-      map.flyToBounds(L.latLngBounds([[d.lat,d.lon],[portEntry.lat,portEntry.lon]]),
-        {padding:[80,120],maxZoom:8,duration:CAM_DUR});
+      if(d.lat==null){ map.flyTo([finalPortEntry.lat,finalPortEntry.lon],8,{duration:CAM_DUR}); return; }
+
+      // All stops from today through (and including) the clicked port
+      const clickedIdx=calls.findIndex(c=>c.port===row.dataset.port&&c.date===row.dataset.date);
+      const routeCalls=clickedIdx>=0?calls.slice(0,clickedIdx+1):[{port:row.dataset.port,date:row.dataset.date,arr:row.dataset.arr,dep:row.dataset.dep}];
+
+      // Build waypoints: ship current pos + each stop that has known coords
+      const waypoints=[{lat:d.lat,lon:d.lon,isShip:true}];
+      for(const c of routeCalls){
+        const pe=CRUISE_PORTS.find(p=>p.name===c.port);
+        if(pe) waypoints.push({lat:pe.lat,lon:pe.lon,call:c,portEntry:pe});
+      }
+
+      // Single multi-point dashed polyline through all waypoints
+      const latlngs=waypoints.map(w=>[w.lat,w.lon]);
+      _itinLine=L.polyline(latlngs,{color:d.color,weight:2,dashArray:"8 10",opacity:0.65,interactive:false}).addTo(map);
+
+      // Dot + info card at every stop (skip the ship start position)
+      waypoints.slice(1).forEach((w,i)=>{
+        const isLast=i===waypoints.length-2;
+        const c=w.call;
+        const isToday=c.date===today;
+        const dt=new Date(c.date+"T12:00:00Z");
+        const dateLabel=isToday?"Today":dt.toLocaleDateString("en-US",{month:"short",day:"numeric"});
+        const timeParts=[c.arr&&"Arr "+c.arr,c.dep&&"Dep "+c.dep].filter(Boolean).join(" · ");
+        _itinDots.push(L.circleMarker([w.lat,w.lon],
+          {renderer:canvasR,radius:isLast?5:4,color:"#fff",weight:1.5,
+           fillColor:d.color,fillOpacity:isLast?0.9:0.65,interactive:false}).addTo(map));
+        _itinMarks.push(L.marker([w.lat,w.lon],{
+          icon:L.divIcon({className:"ipm-outer",iconSize:[0,0],iconAnchor:[0,8],
+            html:`<div class="ipm-card"><b>${w.portEntry.name}</b><span>${dateLabel}${timeParts?" · "+timeParts:""}</span></div>`}),
+          interactive:false,keyboard:false
+        }).addTo(map));
+      });
+
+      map.flyToBounds(L.latLngBounds(latlngs),{padding:[80,120],maxZoom:8,duration:CAM_DUR});
     });
   });
 }
