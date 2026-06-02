@@ -209,9 +209,9 @@
   /* itinerary route preview overlay */
   .gulf-logo{mix-blend-mode:multiply;pointer-events:none!important}
   .ipm-outer{pointer-events:none}
-  .ipm-card{position:absolute;left:12px;top:-20px;background:rgba(6,18,28,.9);border:1px solid rgba(255,255,255,.16);border-radius:9px;padding:8px 12px;white-space:nowrap;backdrop-filter:blur(10px);box-shadow:0 4px 20px rgba(0,0,0,.55);pointer-events:none}
-  .ipm-card b{display:block;font-size:13px;font-weight:600;color:#eef4f7;margin-bottom:3px}
-  .ipm-card span{font-family:'JetBrains Mono',monospace;font-size:9px;color:#8aabb8;letter-spacing:.04em}
+  .ipm-card{position:absolute;left:10px;top:-14px;background:rgba(6,18,28,.88);border:1px solid rgba(255,255,255,.13);border-radius:6px;padding:4px 8px;white-space:nowrap;backdrop-filter:blur(10px);box-shadow:0 3px 12px rgba(0,0,0,.5);pointer-events:none}
+  .ipm-card b{display:block;font-size:11px;font-weight:600;color:#eef4f7;margin-bottom:1px}
+  .ipm-card span{font-family:'JetBrains Mono',monospace;font-size:8px;color:#8aabb8;letter-spacing:.04em}
   .d-close{position:absolute;top:13px;right:13px;width:24px;height:24px;border-radius:50%;border:1px solid var(--glass-edge);background:rgba(4,16,24,.5);color:var(--muted);cursor:pointer;font-size:13px;line-height:1;display:flex;align-items:center;justify-content:center;z-index:2;transition:transform .12s var(--ease-out),color .2s}
   .d-close:hover{color:var(--ink)}.d-close:active{transform:scale(.9)}
 
@@ -1168,6 +1168,98 @@ const CRUISE_PORTS=[
   // South America
   {name:"Buenos Aires",          country:"AR", lat:-34.6037,lon:-58.3816},
   {name:"Santos",                country:"BR", lat:-23.9618,lon:-46.3322},
+  {name:"Rio de Janeiro",        country:"BR", lat:-22.9068,lon:-43.1729},
+  {name:"Montevideo",            country:"UY", lat:-34.9011,lon:-56.1645},
+  {name:"Cartagena",             country:"CO", lat: 10.3910,lon:-75.4794},
+  {name:"Manta",                 country:"EC", lat: -0.9568,lon:-80.7066},
+  {name:"Callao",                country:"PE", lat:-12.0576,lon:-77.1425},
+  {name:"Valparaiso",            country:"CL", lat:-33.0353,lon:-71.6274},
+  {name:"Puerto Montt",          country:"CL", lat:-41.4718,lon:-72.9454},
+  {name:"Punta Arenas",          country:"CL", lat:-53.1638,lon:-70.9171},
+  {name:"Ushuaia",               country:"AR", lat:-54.8019,lon:-68.3030},
+  {name:"Puerto Madryn",         country:"AR", lat:-42.7638,lon:-65.0349},
+  // Mediterranean – Italy (additional)
+  {name:"Ravenna",               country:"IT", lat: 44.4145,lon: 12.2035},
+  {name:"Livorno",               country:"IT", lat: 43.5488,lon: 10.3066},
+  {name:"Savona",                country:"IT", lat: 44.3069,lon:  8.4787},
+  {name:"Catania",               country:"IT", lat: 37.5020,lon: 15.0973},
+  {name:"Messina",               country:"IT", lat: 38.1937,lon: 15.5534},
+  {name:"Bari",                  country:"IT", lat: 41.1240,lon: 16.8677},
+  {name:"Ancona",                country:"IT", lat: 43.6230,lon: 13.5168},
+  {name:"Cagliari",              country:"IT", lat: 39.2238,lon:  9.1217},
+  {name:"Ajaccio",               country:"FR", lat: 41.9194,lon:  8.7386},
+  // Mediterranean – Iberia / Atlantic Islands
+  {name:"Lisbon",                country:"PT", lat: 38.7223,lon: -9.1393},
+  {name:"Funchal",               country:"PT", lat: 32.6488,lon:-16.9103},
+  {name:"Las Palmas",            country:"ES", lat: 28.1248,lon:-15.4300},
+  {name:"Santa Cruz de Tenerife",country:"ES", lat: 28.4698,lon:-16.2548},
+  {name:"Cádiz",                 country:"ES", lat: 36.5297,lon: -6.2926},
+  {name:"Cartagena Spain",       country:"ES", lat: 37.6013,lon: -0.9779},
+  {name:"Ibiza",                 country:"ES", lat: 38.9086,lon:  1.4271},
+  {name:"Malaga",                country:"ES", lat: 36.7213,lon: -4.4217},
+  {name:"Alicante",              country:"ES", lat: 38.3452,lon: -0.4815},
+  {name:"Mahon",                 country:"ES", lat: 39.8888,lon:  4.2587},
+  {name:"Toulon",                country:"FR", lat: 43.1258,lon:  5.9308},
+  // Mediterranean – North Africa / Middle East
+  {name:"La Goulette",           country:"TN", lat: 36.8178,lon: 10.3059},
+  {name:"Limassol",              country:"CY", lat: 34.6845,lon: 33.0460},
+  {name:"Haifa",                 country:"IL", lat: 32.8191,lon: 34.9983},
+  {name:"Ashdod",                country:"IL", lat: 31.8044,lon: 34.6553},
+  {name:"Alexandria",            country:"EG", lat: 31.2001,lon: 29.9187},
+  {name:"Aqaba",                 country:"JO", lat: 29.5269,lon: 35.0065},
+  // Mediterranean – Turkey (additional)
+  {name:"Bodrum",                country:"TR", lat: 37.0355,lon: 27.4267},
+  {name:"Izmir",                 country:"TR", lat: 38.4237,lon: 27.1428},
+  {name:"Antalya",               country:"TR", lat: 36.8969,lon: 30.7133},
+  // Mediterranean – Greece (additional)
+  {name:"Thessaloniki",          country:"GR", lat: 40.6401,lon: 22.9444},
+  {name:"Kavala",                country:"GR", lat: 40.9396,lon: 24.4031},
+  {name:"Volos",                 country:"GR", lat: 39.3644,lon: 22.9426},
+  {name:"Zakynthos",             country:"GR", lat: 37.7896,lon: 20.8953},
+  {name:"Nafplion",              country:"GR", lat: 37.5667,lon: 22.8014},
+  // Mediterranean – Croatia (additional)
+  {name:"Zadar",                 country:"HR", lat: 44.1194,lon: 15.2314},
+  {name:"Hvar",                  country:"HR", lat: 43.1727,lon: 16.4414},
+  {name:"Sibenik",               country:"HR", lat: 43.7350,lon: 15.8952},
+  // Caribbean (additional)
+  {name:"Martinique",            country:"MQ", lat: 14.6103,lon:-61.0709},
+  {name:"Grenada",               country:"GD", lat: 12.0561,lon:-61.7488},
+  {name:"Trinidad",              country:"TT", lat: 10.6549,lon:-61.5019},
+  {name:"Tortola",               country:"VG", lat: 18.4286,lon:-64.6172},
+  {name:"Key West",              country:"US", lat: 24.5551,lon:-81.7800},
+  {name:"Costa Maya",            country:"MX", lat: 18.7278,lon:-87.7167},
+  {name:"Progreso",              country:"MX", lat: 21.2789,lon:-89.6647},
+  {name:"La Romana",             country:"DO", lat: 18.4278,lon:-68.9706},
+  {name:"Samana",                country:"DO", lat: 19.2061,lon:-69.3372},
+  {name:"St. Vincent",           country:"VC", lat: 13.1562,lon:-61.2249},
+  {name:"Guadeloupe",            country:"GP", lat: 16.2365,lon:-61.5402},
+  {name:"Bonaire",               country:"BQ", lat: 12.1208,lon:-68.2686},
+  {name:"Half Moon Cay",         country:"BS", lat: 24.4917,lon:-76.6587},
+  {name:"Princess Cays",         country:"BS", lat: 23.3833,lon:-74.8667},
+  // Northern Europe (additional)
+  {name:"Reykjavik",             country:"IS", lat: 64.1355,lon:-21.8954},
+  {name:"Le Havre",              country:"FR", lat: 49.4944,lon:  0.1079},
+  {name:"Dublin",                country:"IE", lat: 53.3498,lon: -6.2603},
+  {name:"Invergordon",           country:"GB", lat: 57.6858,lon: -4.1694},
+  {name:"Tromsø",                country:"NO", lat: 69.6492,lon: 18.9553},
+  {name:"Honningsvåg",           country:"NO", lat: 70.9823,lon: 25.9667},
+  {name:"Leixões",               country:"PT", lat: 41.1833,lon: -8.7000},
+  // Asia / Pacific (additional)
+  {name:"Shanghai",              country:"CN", lat: 31.2304,lon:121.4737},
+  {name:"Osaka",                 country:"JP", lat: 34.6937,lon:135.5023},
+  {name:"Kobe",                  country:"JP", lat: 34.6901,lon:135.1956},
+  {name:"Busan",                 country:"KR", lat: 35.1028,lon:129.0403},
+  {name:"Ho Chi Minh City",      country:"VN", lat: 10.8231,lon:106.6297},
+  {name:"Bangkok",               country:"TH", lat: 13.0878,lon:100.8974},
+  {name:"Colombo",               country:"LK", lat:  6.9271,lon: 79.8612},
+  {name:"Mumbai",                country:"IN", lat: 18.9252,lon: 72.8242},
+  {name:"Cochin",                country:"IN", lat:  9.9312,lon: 76.2673},
+  {name:"Muscat",                country:"OM", lat: 23.5859,lon: 58.5922},
+  {name:"Noumea",                country:"NC", lat:-22.2771,lon:166.4576},
+  {name:"Papeete",               country:"PF", lat:-17.5334,lon:-149.5667},
+  {name:"Suva",                  country:"FJ", lat:-18.1416,lon:178.4419},
+  {name:"Cairns",                country:"AU", lat:-16.9186,lon:145.7781},
+  {name:"Brisbane",              country:"AU", lat:-27.4698,lon:153.0251},
 ];
 const PORT_SNAP_KM=30;
 function haverKm(la1,lo1,la2,lo2){
@@ -1447,7 +1539,7 @@ function fillDetailItin(d){
            fillColor:d.color,fillOpacity:isLast?0.9:0.65,interactive:false}).addTo(map));
         _itinMarks.push(L.marker([w.lat,w.lon],{
           icon:L.divIcon({className:"ipm-outer",iconSize:[0,0],iconAnchor:[0,8],
-            html:`<div class="ipm-card"><b>${w.portEntry.name}</b><span>${dateLabel}${timeParts?" · "+timeParts:""}</span></div>`}),
+            html:`<div class="ipm-card"><span>${dateLabel}</span><b>${w.portEntry.name}</b></div>`}),
           interactive:false,keyboard:false
         }).addTo(map));
       });
@@ -2007,23 +2099,43 @@ const ITIN_URL="https://raw.githubusercontent.com/turetskyadam-cyber/Wake-/main/
 // Sea-gate routing — strategic waypoints at real ocean passages used to route around land.
 // No API key needed; runs entirely offline.
 const _seaGates={
-  'fl-str':  [23.8,-79.0],  // Florida Straits (between Cuba & Bahamas)
-  'yucatan': [21.8,-85.8],  // Yucatan Channel (between Mexico & Cuba)
-  'windward':[19.8,-73.0],  // Windward Passage (Cuba ↔ Haiti)
-  'mona':    [18.5,-67.8],  // Mona Passage (DR ↔ Puerto Rico)
-  'pan-atl': [ 9.3,-79.8],  // Panama Canal – Atlantic entrance
-  'pan-pac': [ 8.9,-79.4],  // Panama Canal – Pacific exit
-  'gibr':    [35.9, -5.5],  // Strait of Gibraltar
-  'suez':    [30.0, 32.5],  // Suez Canal
-  'malacca': [ 2.5,101.0],  // Strait of Malacca
+  // Caribbean / Gulf of Mexico
+  'fl-str':      [23.8, -79.0],  // Florida Straits
+  'yucatan':     [21.8, -85.8],  // Yucatan Channel
+  'windward':    [19.8, -73.0],  // Windward Passage (Cuba ↔ Haiti)
+  'mona':        [18.5, -67.8],  // Mona Passage (DR ↔ Puerto Rico)
+  'pan-atl':     [ 9.3, -79.8],  // Panama Canal – Atlantic
+  'pan-pac':     [ 8.9, -79.4],  // Panama Canal – Pacific
+  // Atlantic
+  'gibr':        [35.9,  -5.5],  // Strait of Gibraltar
+  'dover':       [51.0,   1.5],  // Strait of Dover / English Channel
+  // Mediterranean
+  'dardanelles': [40.2,  26.4],  // Dardanelles (Aegean → Sea of Marmara → Istanbul)
+  'messina':     [38.3,  15.6],  // Strait of Messina (Sicily ↔ Italy toe)
+  'otranto':     [40.0,  19.0],  // Strait of Otranto (Italy ↔ Albania)
+  'bonifacio':   [41.3,   9.2],  // Strait of Bonifacio (Corsica ↔ Sardinia)
+  // Africa / Indian Ocean
+  'suez':        [30.0,  32.5],  // Suez Canal
+  'malacca':     [ 2.5, 101.0],  // Strait of Malacca
+  // South America
+  'magellan':    [-54.0,-70.5],  // Strait of Magellan
 };
 // Rough land-blocker rectangles; sample points on each leg — if one lands inside, insert the gate
 const _landBlocks=[
-  {minLat:21.5,maxLat:23.3,minLon:-85.0,maxLon:-80.0,gate:'fl-str'},   // Cuba west / Havana
-  {minLat:19.8,maxLat:22.0,minLon:-80.0,maxLon:-74.1,gate:'windward'}, // Cuba east
-  {minLat: 7.5,maxLat:10.5,minLon:-82.0,maxLon:-77.0,gate:'pan-atl'},  // Panama isthmus
-  {minLat:28.5,maxLat:32.0,minLon: 31.5,maxLon: 33.5,gate:'suez'},     // Suez / Sinai
-  {minLat: 1.0,maxLat: 5.5,minLon: 99.0,maxLon:104.0,gate:'malacca'},  // Malay Peninsula
+  // Caribbean
+  {minLat:21.5,maxLat:23.3,minLon:-85.0,maxLon:-80.0,gate:'fl-str'},      // Cuba west / Havana
+  {minLat:19.8,maxLat:22.0,minLon:-80.0,maxLon:-74.1,gate:'windward'},    // Cuba east
+  // Central America / Panama
+  {minLat: 7.5,maxLat:10.5,minLon:-82.0,maxLon:-77.0,gate:'pan-atl'},     // Panama isthmus
+  // Mediterranean
+  {minLat:38.5,maxLat:41.5,minLon: 26.0,maxLon: 30.5,gate:'dardanelles'}, // NW Turkey (Bursa / Marmara)
+  {minLat:37.5,maxLat:40.5,minLon: 15.0,maxLon: 18.5,gate:'otranto'},     // S Italian peninsula / Puglia heel
+  {minLat:36.5,maxLat:38.5,minLon: 12.5,maxLon: 15.5,gate:'messina'},     // Sicily / Calabria toe
+  // Africa / Indian Ocean
+  {minLat:28.5,maxLat:32.0,minLon: 31.5,maxLon: 33.5,gate:'suez'},        // Suez / Sinai
+  {minLat: 1.0,maxLat: 5.5,minLon: 99.0,maxLon:104.0,gate:'malacca'},     // Malay Peninsula
+  // South America – Andes
+  {minLat:-55.0,maxLat:-20.0,minLon:-73.0,maxLon:-67.0,gate:'magellan'},  // Andes mountain range
 ];
 function _routeLeg(from,to){
   const gates=new Set();
