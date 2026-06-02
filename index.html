@@ -1102,6 +1102,12 @@ const CRUISE_PORTS=[
   {name:"Sitka",                 country:"US", lat:57.0531, lon:-135.3300},
   {name:"Haines",                country:"US", lat:59.2358, lon:-135.4453},
   {name:"Icy Strait Point",      country:"US", lat:58.0977, lon:-135.4490},
+  {name:"Tracy Arm",             country:"US", lat:57.8500, lon:-133.1000},
+  {name:"Endicott Arm",          country:"US", lat:57.6800, lon:-132.9800},
+  {name:"Hubbard Glacier",       country:"US", lat:59.9900, lon:-139.5200},
+  {name:"Glacier Bay",           country:"US", lat:58.4500, lon:-135.8800},
+  {name:"College Fjord",         country:"US", lat:61.0000, lon:-147.5000},
+  {name:"Misty Fjords",          country:"US", lat:55.3000, lon:-130.5000},
   // Mexico / Central America
   {name:"Ensenada",              country:"MX", lat:31.8667, lon:-116.6000},
   {name:"Puerto Vallarta",       country:"MX", lat:20.6296, lon:-105.2253},
@@ -1148,10 +1154,16 @@ const CRUISE_PORTS=[
   {name:"Copenhagen",            country:"DK", lat:55.6761, lon:12.5683},
   {name:"Oslo",                  country:"NO", lat:59.9139, lon:10.7522},
   {name:"Bergen",                country:"NO", lat:60.3913, lon:5.3221},
-  {name:"Stavanger",             country:"NO", lat:58.9700, lon:5.7331},
-  {name:"Ålesund",               country:"NO", lat:62.4724, lon:6.1549},
-  {name:"Geiranger",             country:"NO", lat:62.1008, lon:7.2059},
-  {name:"Flåm",                  country:"NO", lat:60.8631, lon:7.1139},
+  {name:"Kristiansand",          country:"NO", lat:58.1467, lon:  7.9956},
+  {name:"Stavanger",             country:"NO", lat:58.9700, lon:  5.7331},
+  {name:"Ålesund",               country:"NO", lat:62.4724, lon:  6.1549},
+  {name:"Molde",                 country:"NO", lat:62.7376, lon:  7.1591},
+  {name:"Åndalsnes",             country:"NO", lat:62.5667, lon:  7.6833},
+  {name:"Geiranger",             country:"NO", lat:62.1008, lon:  7.2059},
+  {name:"Olden",                 country:"NO", lat:61.8340, lon:  6.7982},
+  {name:"Måløy",                 country:"NO", lat:61.9333, lon:  5.1167},
+  {name:"Flåm",                  country:"NO", lat:60.8631, lon:  7.1139},
+  {name:"Trondheim",             country:"NO", lat:63.4305, lon: 10.3951},
   {name:"Stockholm",             country:"SE", lat:59.3293, lon:18.0686},
   {name:"Nynäshamn",             country:"SE", lat:58.9046, lon:17.9491},
   {name:"Helsinki",              country:"FI", lat:60.1699, lon:24.9384},
@@ -1295,7 +1307,7 @@ function spreadPortShips(){
   fleet.forEach(d=>{ d._dispLat=null; d._dispLon=null; });
   for(const [city,ships] of Object.entries(groups)){
     if(ships.length<2) continue;
-    const port=CRUISE_PORTS.find(p=>p.name===city);
+    const port=CRUISE_PORTS.find(p=>normPort(p.name)===normPort(city));
     const cLat=port?port.lat:ships.reduce((s,d)=>s+d.lat,0)/ships.length;
     const cLon=port?port.lon:ships.reduce((s,d)=>s+d.lon,0)/ships.length;
     const R=0.012; // ~1.3 km spread radius — visible at port zoom levels
@@ -1511,7 +1523,7 @@ function fillDetailItin(d){
   itinEl.querySelectorAll(".d-itin-row[data-port]").forEach(row=>{
     row.addEventListener("click",e=>{
       e.stopPropagation();
-      const finalPortEntry=CRUISE_PORTS.find(p=>p.name===row.dataset.port);
+      const finalPortEntry=CRUISE_PORTS.find(p=>normPort(p.name)===normPort(row.dataset.port));
       if(!finalPortEntry) return;
       collapseDetail();
       clearItinPreview();
@@ -1524,7 +1536,7 @@ function fillDetailItin(d){
       // Build waypoints: ship current pos + each stop that has known coords
       const waypoints=[{lat:d.lat,lon:d.lon,isShip:true}];
       for(const c of routeCalls){
-        const pe=CRUISE_PORTS.find(p=>p.name===c.port);
+        const pe=CRUISE_PORTS.find(p=>normPort(p.name)===normPort(c.port));
         if(pe) waypoints.push({lat:pe.lat,lon:pe.lon,call:c,portEntry:pe});
       }
 
@@ -2175,6 +2187,11 @@ let _itin={};     // portCity -> Map(normShip -> {a,e})
 let _itinShip={}; // normShip  -> [{port,date,arr,dep}] sorted by date
 
 function normShip(s){ return s.toLowerCase().replace(/[^a-z0-9]/g,""); }
+function normPort(s){
+  return s.normalize('NFD').replace(/[̀-ͯ]/g,'')
+    .replace(/[øØ]/g,'o').replace(/[æÆ]/g,'ae').replace(/[þÞ]/g,'th').replace(/[ðÐ]/g,'d')
+    .toLowerCase().trim();
+}
 function itinFor(d){
   const m=_itin[d.portCity]; if(!m) return null;
   const t=m.get(normShip(d.name)); if(!t) return null;
