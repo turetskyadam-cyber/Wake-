@@ -229,7 +229,7 @@
   .pc-cname{font-size:11px;color:rgba(255,255,255,.65);margin-top:2px}
   .pc-body{padding:10px 14px 14px}
   .pc-timing{font-size:10px;color:#8aabb8;font-family:'JetBrains Mono',monospace;letter-spacing:.04em;margin-bottom:9px;padding-left:9px;border-left:2px solid var(--pc-accent,#4a9aba)}
-  .pc-desc{font-size:11.5px;color:#b8cdd6;line-height:1.6;margin:0 0 10px}
+  .pc-desc{font-size:11.5px;color:#b8cdd6;line-height:1.6;margin:0 0 10px;max-height:130px;overflow-y:auto}
   .pc-foot{display:flex;align-items:center;justify-content:space-between}
   .pc-ships{font-size:10px;color:#4d7a8a;font-family:'JetBrains Mono',monospace}
   .pc-wiki{font-size:10px;color:#4a9aba;text-decoration:none;letter-spacing:.04em}
@@ -2466,8 +2466,9 @@ function showPortCard(portEntry,call,shipColor){
       }
       if(data.extract&&!portEntry.desc){
         let txt=data.extract.replace(/\s*\([^)]*\)\s*/g,' ').trim();
-        const dot=txt.indexOf('.',80);
-        byId('pcDesc').textContent=dot>0?txt.slice(0,dot+1):txt.slice(0,220);
+        const re=/[.!?](?=\s|$)/g; let m, count=0, end=txt.length;
+        while((m=re.exec(txt))!==null){ count++; if(count===3){end=m.index+1;break;} }
+        byId('pcDesc').textContent=txt.slice(0,Math.min(end,520)).trim();
       }
       if(data.content_urls?.desktop?.page){ byId('pcWiki').href=data.content_urls.desktop.page; byId('pcWiki').hidden=false; }
     })
