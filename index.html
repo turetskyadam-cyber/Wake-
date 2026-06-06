@@ -408,7 +408,7 @@
   /* keep all glass panels above the map */
   #brand,#controls,#detail,#zoom,#tip,.credit{z-index:1000}
   /* dark hover tooltip */
-  .leaflet-tooltip.ship-tt{background:rgba(4,14,20,.92);border:1px solid var(--glass-edge);color:var(--ink);
+  .leaflet-tooltip.ship-tt{cursor:pointer;background:rgba(4,14,20,.92);border:1px solid var(--glass-edge);color:var(--ink);
     border-radius:9px;padding:6px 10px;font-size:11.5px;box-shadow:0 8px 24px -10px rgba(0,0,0,.7);backdrop-filter:blur(6px)}
   .leaflet-tooltip.ship-tt b{font-family:'Fraunces',serif;font-size:13px}
   .leaflet-tooltip.ship-tt .tt-loc{color:var(--brass-soft);font-size:10.5px}
@@ -1365,7 +1365,7 @@ const CRUISE_PORTS=[
   {name:"Cairns",                country:"AU", lat:-16.9186,lon:145.7781},
   {name:"Brisbane",              country:"AU", lat:-27.4698,lon:153.0251},
   // High-priority entries for common itinerary routes not in base list
-  {name:"Halifax",               country:"CA", lat:44.6488, lon:-63.5752},
+  {name:"Halifax",               country:"CA", lat:44.6488, lon:-63.5752, wiki:"Halifax, Nova Scotia"},
   {name:"Kings Wharf",           country:"BM", lat:32.3199, lon:-64.8381, wiki:"Royal Naval Dockyard, Bermuda"},
   {name:"Hamilton",              country:"BM", lat:32.2965, lon:-64.7839, wiki:"Hamilton, Bermuda"},
   {name:"Oranjestad Aruba",      country:"AW", lat:12.5186, lon:-70.0358, wiki:"Oranjestad, Aruba"},
@@ -1524,7 +1524,15 @@ function ensureMarker(d){
   m.bindTooltip(()=>{
     const loc=locShort(d);
     return `<b>${d.name}</b><br>${d.line} · ${d.status==='port'?'in port':d.spd.toFixed(0)+' kn'}`+(loc?`<br><span class="tt-loc">${loc}</span>`:"");
-  },{direction:'top',offset:[0,-4],className:'ship-tt',opacity:1});
+  },{direction:'top',offset:[0,-4],className:'ship-tt',opacity:1,interactive:true});
+  m.on('tooltipopen',()=>{
+    const el=m.getTooltip()?.getElement();
+    if(el) el.addEventListener('click',()=>{
+      detail.classList.remove('collapsed');
+      byId('dToggle').setAttribute('aria-expanded','true');
+      showShipSide();
+    },{once:true});
+  });
   m.on('click',ev=>{ L.DomEvent.stop(ev); _markerClicked=true; goShip(d); });
   m.on('mouseover',()=>{ hoverShip=d; reverseGeo(d); });
   m.on('mouseout',()=>{ if(hoverShip===d) hoverShip=null; });
@@ -2394,23 +2402,54 @@ function showPortCard(portEntry,call,shipColor){
   if(portEntry.photo){
     const pi=new Image();
     pi.onload=()=>{ hero.classList.remove('pc-hero-skeleton'); img.style.backgroundImage=`url(${portEntry.photo})`; img.classList.add('loaded'); };
+    pi.onerror=()=>hero.classList.remove('pc-hero-skeleton');
     pi.src=portEntry.photo;
   }
   if(portEntry.desc) byId('pcDesc').textContent=portEntry.desc;
   if(_portCardAbort) _portCardAbort.abort();
-  _portCardAbort=new AbortController();
+  const ctrl=new AbortController();
+  _portCardAbort=ctrl;
+  const sig=ctrl.signal;
   const title=encodeURIComponent(portEntry.wiki||portEntry.name);
+
+  function applyPhoto(src){
+    const wi=new Image();
+    wi.onload=()=>{ hero.classList.remove('pc-hero-skeleton'); img.style.backgroundImage=`url(${src})`; img.classList.add('loaded'); };
+    wi.onerror=()=>hero.classList.remove('pc-hero-skeleton');
+    wi.src=src;
+  }
+
+  function tryMediaList(){
+    fetch(`https://en.wikipedia.org/api/rest_v1/page/media-list/${title}`,
+      {signal:sig,headers:{'Api-User-Agent':'wake-cruise-tracker/1.0'}})
+      .then(r=>r.ok?r.json():null)
+      .then(ml=>{
+        if(!ml?.items) return;
+        const BAD=/flag|map|coat|arms|logo|icon|seal|emblem|banner|locator|relief|\.svg$/i;
+        const pick=ml.items.find(it=>
+          it.type==='image'&&it.showInGallery&&it.srcset?.length&&
+          !BAD.test(it.title||'')&&!BAD.test(it.srcset[0]?.src||'')
+        );
+        if(!pick?.srcset?.length){ hero.classList.remove('pc-hero-skeleton'); return; }
+        let src=pick.srcset[pick.srcset.length-1].src;
+        src=src.replace(/\/\d+px-/,'/640px-');
+        if(src.startsWith('//')) src='https:'+src;
+        applyPhoto(src);
+      })
+      .catch(()=>hero.classList.remove('pc-hero-skeleton'));
+  }
+
   fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${title}`,
-    {signal:_portCardAbort.signal,headers:{'Api-User-Agent':'wake-cruise-tracker/1.0'}})
+    {signal:sig,headers:{'Api-User-Agent':'wake-cruise-tracker/1.0'}})
     .then(r=>r.ok?r.json():null)
     .then(data=>{
-      if(!data||data.type==='disambiguation') return;
-      hero.classList.remove('pc-hero-skeleton');
+      if(!data||data.type==='disambiguation'){ hero.classList.remove('pc-hero-skeleton'); return; }
       if(data.thumbnail?.source&&!portEntry.photo){
-        const src=data.thumbnail.source.replace(/\/\d+px-/,'/640px-');
-        const wi=new Image();
-        wi.onload=()=>{ img.style.backgroundImage=`url(${src})`; img.classList.add('loaded'); };
-        wi.src=src;
+        applyPhoto(data.thumbnail.source.replace(/\/\d+px-/,'/640px-'));
+      } else if(!portEntry.photo){
+        tryMediaList();
+      } else {
+        hero.classList.remove('pc-hero-skeleton');
       }
       if(data.extract&&!portEntry.desc){
         let txt=data.extract.replace(/\s*\([^)]*\)\s*/g,' ').trim();
