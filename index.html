@@ -206,6 +206,8 @@
   .d-itin-today .d-itin-date{color:var(--brass)}
   .d-itin-today .d-itin-port{color:var(--ink);font-weight:600}
   .d-itin-row[data-port]:hover .d-itin-port{text-decoration:underline;text-underline-offset:2px}
+  .d-itin-row.itin-loading{opacity:.5;pointer-events:none}
+  .d-itin-row.itin-loading .d-itin-port::after{content:' ···'}
   /* itinerary route preview overlay */
   .gulf-logo{mix-blend-mode:multiply;pointer-events:none!important}
   .ipm-outer{cursor:default}
@@ -1362,6 +1364,39 @@ const CRUISE_PORTS=[
   {name:"Suva",                  country:"FJ", lat:-18.1416,lon:178.4419},
   {name:"Cairns",                country:"AU", lat:-16.9186,lon:145.7781},
   {name:"Brisbane",              country:"AU", lat:-27.4698,lon:153.0251},
+  // High-priority entries for common itinerary routes not in base list
+  {name:"Halifax",               country:"CA", lat:44.6488, lon:-63.5752},
+  {name:"Kings Wharf",           country:"BM", lat:32.3199, lon:-64.8381, wiki:"Royal Naval Dockyard, Bermuda"},
+  {name:"Hamilton",              country:"BM", lat:32.2965, lon:-64.7839, wiki:"Hamilton, Bermuda"},
+  {name:"Oranjestad Aruba",      country:"AW", lat:12.5186, lon:-70.0358, wiki:"Oranjestad, Aruba"},
+  {name:"Bar Harbor",            country:"US", lat:44.3876, lon:-68.2039},
+  {name:"Portland ME",           country:"US", lat:43.6591, lon:-70.2568, wiki:"Portland, Maine"},
+  {name:"Quebec City",           country:"CA", lat:46.8139, lon:-71.2080},
+  {name:"Saguenay",              country:"CA", lat:48.4284, lon:-71.0704, wiki:"Saguenay, Quebec"},
+  {name:"Saint John",            country:"CA", lat:45.2733, lon:-66.0633, wiki:"Saint John, New Brunswick"},
+  {name:"St Johns NL",           country:"CA", lat:47.5615, lon:-52.7126, wiki:"St. John's, Newfoundland and Labrador"},
+  {name:"Montreal",              country:"CA", lat:45.5019, lon:-73.5674},
+  {name:"Gibraltar",             country:"GI", lat:36.1408, lon:-5.3536},
+  {name:"Rotterdam",             country:"NL", lat:51.9225, lon:4.4792},
+  {name:"Le Havre-Paris",        country:"FR", lat:49.4938, lon:0.1077, wiki:"Le Havre"},
+  {name:"Cape Liberty Bayonne",  country:"US", lat:40.6613, lon:-74.0937, wiki:"Cape Liberty"},
+  {name:"Falmouth Jamaica",      country:"JM", lat:18.4958, lon:-77.6588, wiki:"Falmouth, Jamaica"},
+  {name:"Falmouth UK",           country:"GB", lat:50.1527, lon:-5.0658, wiki:"Falmouth, Cornwall"},
+  {name:"Grand Cayman Island",   country:"KY", lat:19.3000, lon:-81.3794, wiki:"Grand Cayman"},
+  {name:"St Johns Antigua",      country:"AG", lat:17.1271, lon:-61.8468, wiki:"St. John's, Antigua"},
+  {name:"Montego Bay",           country:"JM", lat:18.4762, lon:-77.8939},
+  {name:"Puerto Plata-Amber Cove",country:"DO",lat:19.8534, lon:-70.6986, wiki:"Puerto Plata"},
+  {name:"Casablanca",            country:"MA", lat:33.5992, lon:-7.6200},
+  {name:"Tangier",               country:"MA", lat:35.7721, lon:-5.8099},
+  {name:"Lisbon",                country:"PT", lat:38.7223, lon:-9.1393},
+  {name:"Liverpool",             country:"GB", lat:53.4084, lon:-2.9916},
+  {name:"Belfast",               country:"GB", lat:54.5973, lon:-5.9301},
+  {name:"Cobh-Cork",             country:"IE", lat:51.8503, lon:-8.2966, wiki:"Cobh"},
+  {name:"MSC Ocean Cay",         country:"BS", lat:25.4311, lon:-79.1494, wiki:"Ocean Cay MSC Marine Reserve"},
+  {name:"Great Stirrup Cay",     country:"BS", lat:25.8281, lon:-77.8442, wiki:"Great Stirrup Cay"},
+  {name:"Harvest Caye",          country:"BZ", lat:16.0936, lon:-88.5353, wiki:"Harvest Caye"},
+  {name:"Celebration Key",       country:"BS", lat:26.5730, lon:-78.6870, wiki:"Celebration Key"},
+  {name:"Disney Lookout Cay",    country:"BS", lat:24.9012, lon:-76.5442, wiki:"Lighthouse Point, Eleuthera"},
 ];
 const PORT_SNAP_KM=30;
 function haverKm(la1,lo1,la2,lo2){
@@ -1605,10 +1640,15 @@ function fillDetailItin(d){
       return `<div class="d-itin-row${isToday?" d-itin-today":""}" data-port="${c.port}" data-date="${c.date}" data-arr="${c.arr||""}" data-dep="${c.dep||""}"><span class="d-itin-date">${label}</span><span class="d-itin-port">${c.port}</span>${times?`<span class="d-itin-times">${times}</span>`:""}</div>`;
     }).join("")+`</div>`;
   itinEl.querySelectorAll(".d-itin-row[data-port]").forEach(row=>{
-    row.addEventListener("click",e=>{
+    row.addEventListener("click",async e=>{
       e.stopPropagation();
-      const finalPortEntry=CRUISE_PORTS.find(p=>normPort(p.name)===normPort(row.dataset.port));
-      if(!finalPortEntry) return;
+      let finalPortEntry=findPort(row.dataset.port);
+      if(!finalPortEntry){
+        row.classList.add('itin-loading');
+        finalPortEntry=await geocodePortName(row.dataset.port);
+        row.classList.remove('itin-loading');
+        if(!finalPortEntry) return;
+      }
       collapseDetail();
       clearItinPreview();
       if(d.lat==null){ map.flyTo([finalPortEntry.lat,finalPortEntry.lon],8,{duration:CAM_DUR}); return; }
@@ -1617,10 +1657,15 @@ function fillDetailItin(d){
       const clickedIdx=calls.findIndex(c=>c.port===row.dataset.port&&c.date===row.dataset.date);
       const routeCalls=clickedIdx>=0?calls.slice(0,clickedIdx+1):[{port:row.dataset.port,date:row.dataset.date,arr:row.dataset.arr,dep:row.dataset.dep}];
 
+      // Geocode any waypoints not already in CRUISE_PORTS or cache (parallel)
+      await Promise.all(routeCalls
+        .filter(c=>!findPort(c.port))
+        .map(c=>geocodePortName(c.port)));
+
       // Build waypoints: ship current pos + each stop that has known coords
       const waypoints=[{lat:d.lat,lon:d.lon,isShip:true}];
       for(const c of routeCalls){
-        const pe=CRUISE_PORTS.find(p=>normPort(p.name)===normPort(c.port));
+        const pe=findPort(c.port);
         if(pe) waypoints.push({lat:pe.lat,lon:pe.lon,call:c,portEntry:pe});
       }
 
@@ -2293,6 +2338,32 @@ const COUNTRY_NAMES={
 function shipsAtPort(portName){
   return fleet.filter(d=>d.status==='port'&&d.portCity&&normPort(d.portCity)===normPort(portName)&&!d._dim).length;
 }
+/* ---- port geocoding fallback ---- */
+const _portGeoCache={};
+async function geocodePortName(name){
+  const key=normPort(name);
+  if(key in _portGeoCache) return _portGeoCache[key];
+  try{
+    const r=await fetch(
+      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(name)}&format=json&limit=1&addressdetails=1`,
+      {headers:{'User-Agent':'wake-cruise-tracker/1.0'}}
+    );
+    if(!r.ok) throw 0;
+    const [hit]=await r.json();
+    if(hit){
+      const entry={name,lat:+hit.lat,lon:+hit.lon,country:(hit.address?.country_code||'').toUpperCase()};
+      _portGeoCache[key]=entry;
+      return entry;
+    }
+  }catch(e){}
+  _portGeoCache[key]=null;
+  return null;
+}
+function findPort(portName){
+  return CRUISE_PORTS.find(p=>normPort(p.name)===normPort(portName))
+    ||_portGeoCache[normPort(portName)]||null;
+}
+
 let _portCardAbort=null;
 function showPortCard(portEntry,call,shipColor){
   const card=byId('portCard'),hero=byId('pcHero'),img=byId('pcHeroImg');
