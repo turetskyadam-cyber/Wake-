@@ -1524,16 +1524,29 @@ function ensureMarker(d){
   m.bindTooltip(()=>{
     const loc=locShort(d);
     return `<b>${d.name}</b><br>${d.line} · ${d.status==='port'?'in port':d.spd.toFixed(0)+' kn'}`+(loc?`<br><span class="tt-loc">${loc}</span>`:"");
-  },{direction:'top',offset:[0,-4],className:'ship-tt',opacity:1,interactive:true});
+  },{direction:'top',offset:[0,-4],className:'ship-tt',opacity:1,interactive:true,permanent:false});
   m.on('tooltipopen',()=>{
     const el=m.getTooltip()?.getElement();
-    if(el) el.addEventListener('click',()=>{
+    if(!el||el._wakeExpand) return;
+    el._wakeExpand=true;
+    function expandFromTooltip(e){
+      e.stopPropagation();
+      if(e.cancelable) e.preventDefault();
       detail.classList.remove('collapsed');
       byId('dToggle').setAttribute('aria-expanded','true');
       showShipSide();
-    },{once:true});
+    }
+    el.addEventListener('click',expandFromTooltip);
+    el.addEventListener('touchend',expandFromTooltip,{passive:false});
   });
-  m.on('click',ev=>{ L.DomEvent.stop(ev); _markerClicked=true; goShip(d); });
+  m.on('click',ev=>{
+    L.DomEvent.stop(ev); _markerClicked=true;
+    if(selected===d&&detail.classList.contains('show')&&detail.classList.contains('collapsed')){
+      detail.classList.remove('collapsed');
+      byId('dToggle').setAttribute('aria-expanded','true');
+      showShipSide();
+    } else { goShip(d); }
+  });
   m.on('mouseover',()=>{ hoverShip=d; reverseGeo(d); });
   m.on('mouseout',()=>{ if(hoverShip===d) hoverShip=null; });
   m.addTo(map); d._m=m; return m;
