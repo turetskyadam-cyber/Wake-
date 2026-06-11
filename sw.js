@@ -1,6 +1,6 @@
-/* WAKE Service Worker — v3 */
-const SHELL_CACHE = "wake-shell-v3";
-const DATA_CACHE  = "wake-data-v3";
+/* WAKE Service Worker — v4 */
+const SHELL_CACHE = "wake-shell-v4";
+const DATA_CACHE  = "wake-data-v4";
 
 const SHELL_URLS = [
   "/",
@@ -46,6 +46,9 @@ self.addEventListener("fetch", e => {
 
   // External APIs (weather, Wikipedia, AIS) — network only
   if (u.hostname !== self.location.hostname) return;
+
+  // Serverless API routes — always network, never cache
+  if (u.pathname.startsWith("/api/")) return;
 
   // Live positions — network first, short-lived cache fallback
   if (u.pathname === "/positions.json") {
