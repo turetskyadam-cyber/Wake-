@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WAKE — Ship Tracker Embed</title>
+<meta name="robots" content="noindex" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  html,body{margin:0;height:100%;background:#04101a;font-family:system-ui,-apple-system,'Segoe UI',sans-serif}
+  #map{position:absolute;inset:0}
+  .card{position:absolute;top:10px;left:10px;z-index:1000;background:rgba(7,22,32,.88);backdrop-filter:blur(8px);
+        border:1px solid rgba(170,200,210,.16);border-radius:12px;padding:10px 14px;color:#eaf1f3;max-width:75%}
+  .card .name{font-weight:700;font-size:14px;letter-spacing:.02em}
+  .card .line{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--c,#8fb6c9);margin-top:2px}
+  .card .stat{font-size:11px;color:#9fb4bf;margin-top:5px;font-variant-numeric:tabular-nums}
+  .card .stat b{color:#eaf1f3;font-weight:600}
+  .card a{display:inline-block;margin-top:7px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+          color:#e2bd72;text-decoration:none}
+  .card a:hover{text-decoration:underline}
+  .err{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#9fb4bf;font-size:13px;z-index:1000}
+  .attr{position:absolute;bottom:4px;right:6px;z-index:1000;font-size:9px;color:#56707c}
+  .attr a{color:#56707c}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div class="card" id="card" hidden>
+  <div class="name" id="cName"></div>
+  <div class="line" id="cLine"></div>
+  <div class="stat" id="cStat"></div>
+  <a id="cLink" target="_blank" rel="noopener">Track live on WAKE ↗</a>
+</div>
+<div class="attr">© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OSM</a> · <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a></div>
+<script>
+// Standalone single-ship mini tracker. Reads the same committed JSON the main
+// app uses (no AIS WebSocket — embeds poll positions.json every 5 minutes).
+// DATA_BRANCH: flip to "main" when the feature branch is merged.
+const DATA_BRANCH="claude/cruise-ship-tracking-nsefj4";
+const RAW=`https://raw.githubusercontent.com/turetskyadam-cyber/Wake-/${DATA_BRANCH}/`;
+const SITE="https://wake-rose.vercel.app";
+const slugOf=n=>n.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+
+const map=L.map("map",{zoomControl:false,attributionControl:false,minZoom:2,maxZoom:14,preferCanvas:true}).setView([25,-60],4);
+L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",{subdomains:"abcd",maxZoom:20}).addTo(map);
+
+function fail(msg){ const e=document.createElement("div"); e.className="err"; e.textContent=msg; document.body.appendChild(e); }
+const getJSON=u=>fetch(u,{cache:"no-store"}).then(r=>r.ok?r.json():null).catch(()=>null);
+
+let ship=null, marker=null, centered=false;
+
+async function boot(){
+  const q=(new URLSearchParams(location.search).get("ship")||"").trim();
+  if(!q){ fail("Add ?ship=<name> to embed a ship"); return; }
+  const fleetData=await getJSON(RAW+"fleet.json");
+  if(!fleetData||!fleetData.ships){ fail("Fleet data unavailable"); return; }
+  ship=fleetData.ships.find(s=>s.slug===slugOf(q)||s.mmsi===q);
+  if(!ship){ fail("Ship not found: "+q); return; }
+
+  document.getElementById("cName").textContent=ship.name;
+  const lineEl=document.getElementById("cLine");
+  lineEl.textContent=ship.line; lineEl.style.setProperty("--c",ship.color);
+  document.getElementById("cLink").href=SITE+"/?ship="+ship.slug;
+  document.getElementById("card").hidden=false;
+
+  drawTrail();
+  await update();
+  setInterval(update,5*60*1000);
+}
+
+async function drawTrail(){
+  // last 48h from the two most recent history day files (best-effort)
+  const days=[1,0].map(off=>new Date(Date.now()-off*864e5).toISOString().slice(0,10));
+  const files=await Promise.all(days.map(d=>getJSON(RAW+"history/"+d+".json")));
+  const pts=[];
+  files.forEach((f,i)=>{
+    const base=Date.parse(days[i]+"T00:00:00Z");
+    ((f&&f[ship.mmsi])||[]).forEach(p=>pts.push({t:base+p[0]*60000,lat:p[1],lon:p[2]}));
+  });
+  const segs=[[]];
+  for(let i=0;i<pts.length;i++){
+    const prev=pts[i-1];
+    if(prev&&(pts[i].t-prev.t>12*3600*1000||Math.abs(pts[i].lon-prev.lon)>180)) segs.push([]);
+    segs[segs.length-1].push([pts[i].lat,pts[i].lon]);
+  }
+  segs.filter(s=>s.length>1).forEach(s=>
+    L.polyline(s,{color:ship.color,weight:1.6,opacity:.55,dashArray:"1 5",interactive:false}).addTo(map));
+}
+
+async function update(){
+  const snap=await getJSON(RAW+"positions.json");
+  const fix=snap&&snap.s&&snap.s[ship.mmsi];
+  const statEl=document.getElementById("cStat");
+  if(!fix){ statEl.innerHTML="Awaiting signal"; return; }
+  const [lat,lon,port,hdg,spd]=fix;
+  statEl.innerHTML=port?`<b>In port</b>`:`<b>${(+spd).toFixed(1)} kn</b> · underway · hdg ${Math.round(hdg)}°`;
+  if(marker) marker.setLatLng([lat,lon]);
+  else marker=L.circleMarker([lat,lon],{radius:7,color:"#fff",weight:1.5,fillColor:ship.color,fillOpacity:.95})
+    .bindTooltip(ship.name,{direction:"top",offset:[0,-8]}).addTo(map);
+  if(!centered){ map.setView([lat,lon],7); centered=true; }
+}
+
+boot();
+</script>
+</body>
+</html>
