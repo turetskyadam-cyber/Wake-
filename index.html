@@ -412,7 +412,7 @@
   .nav-title span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .nav-list{display:flex;flex-direction:column;gap:5px;max-height:240px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(120,170,185,.25) transparent;margin:0 -4px;padding:2px 4px}
   .nav-list::-webkit-scrollbar{width:6px}.nav-list::-webkit-scrollbar-thumb{background:rgba(120,170,185,.22);border-radius:3px}
-  .row{display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:11px;border:1px solid transparent;background:rgba(255,255,255,.02);cursor:pointer;user-select:none;outline:none;transition:background .2s var(--ease-out),border-color .2s var(--ease-out),transform .12s var(--ease-out),box-shadow .2s var(--ease-out);animation:rowIn .4s var(--ease-out) both}
+  .row{display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:11px;border:1px solid transparent;background:rgba(255,255,255,.02);cursor:pointer;user-select:none;outline:none;transition:background .2s var(--ease-out),border-color .2s var(--ease-out),transform .12s var(--ease-out),box-shadow .2s var(--ease-out);animation:rowIn .4s var(--ease-out) both;touch-action:manipulation}
   @keyframes rowIn{from{opacity:0;transform:translateY(6px)}}
   .row:hover,.row:focus-visible{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14)}
   .row:focus-visible{box-shadow:0 0 0 2px rgba(226,189,114,.45)}
@@ -2058,6 +2058,7 @@ const controlsEl=byId("controls"), navOpenBtn=byId("navOpen");
 function collapseNav(){ controlsEl.classList.add("collapsed"); navOpenBtn.classList.add("show"); }
 function expandNav(){ controlsEl.classList.remove("collapsed"); navOpenBtn.classList.remove("show"); }
 navOpenBtn.addEventListener("click",()=>{
+  if(Date.now()-_goShipTime<400) return; // ignore ghost tap after ship selection
   expandNav();
   detail.classList.add("collapsed");
   byId("dToggle").setAttribute("aria-expanded","false");
