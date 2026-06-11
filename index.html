@@ -421,10 +421,6 @@
   .leaflet-tooltip.ship-tt b{font-family:'Fraunces',serif;font-size:13px}
   .leaflet-tooltip.ship-tt .tt-loc{color:var(--brass-soft);font-size:10.5px}
   .leaflet-tooltip.ship-tt::before{display:none}
-  /* sea state dot labels */
-  .leaflet-tooltip.sea-dot-lbl{background:rgba(4,14,20,.9);border:1px solid rgba(255,255,255,.13);color:var(--ink);border-radius:6px;padding:3px 8px;font-size:10px;font-family:'JetBrains Mono',monospace;letter-spacing:.02em;box-shadow:0 4px 12px rgba(0,0,0,.5);pointer-events:none;white-space:nowrap}
-  .leaflet-tooltip.sea-dot-lbl b{font-size:10.5px;font-family:'Fraunces',serif;font-weight:600}
-  .leaflet-tooltip.sea-dot-lbl::before{display:none}
   /* selection pulse + arrival blip (divIcon overlays) */
   .sel-pulse{width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;border:2px solid #fff;opacity:.9;
     animation:selPulse 1.6s var(--ease-out) infinite}
@@ -754,10 +750,8 @@
     <div class="ss-wx-wind" id="ssWxWind">— kt —</div>
     <div class="ss-wx-label" id="ssWxLabel">—</div>
   </div>
-  <div class="ss-sea" id="ssSea" hidden></div>
   <div class="ss-div"></div>
   <button class="ss-dive-btn ss-sm" id="histBtn" title="Show this ship's actual 7-day track">〰 7-Day Track</button>
-  <button class="ss-dive-btn ss-sm" id="seaBtn" title="Forecast wave height along the upcoming route">🌊 Sea State</button>
   <div class="ss-div"></div>
   <button class="ss-dive-btn" id="profileBtn">
     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -1533,7 +1527,6 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
 const canvasR = L.canvas({ padding:0.5 });
 const wakeLayer = L.layerGroup().addTo(map);
 const histLayer = L.layerGroup().addTo(map);   // 7-day historical track for the selected ship
-const seaLayer  = L.layerGroup().addTo(map);   // sea-state (wave height) route overlay
 
 // Gulf of America logo overlay
 L.imageOverlay(
@@ -1776,8 +1769,7 @@ function updateDetailLive(d){
 }
 function selectShip(d){
   clearItinPreview();
-  histLayer.clearLayers(); seaLayer.clearLayers(); closeSharePop();
-  seaOn=false; byId("seaBtn").classList.remove("on"); byId("seaKey").style.display='none';
+  histLayer.clearLayers(); closeSharePop();
   selected=d;
   if(histOn) drawHistory(d);
   if(nearOpen){ clearNearOverlay(); renderNear(); if(d.lat!=null){ _nearCircle=L.circle([d.lat,d.lon],{radius:NEAR_MILES*KM_PER_MILE*1000,color:"rgba(226,189,114,0.5)",fill:false,dashArray:"5 8",weight:1.5}).addTo(map); } }
@@ -1793,15 +1785,13 @@ function selectShip(d){
   }
   applyVisibility();
   fetchWeather(d); // pre-fetches in background; panel shows when Cruise Info opens
-  fetchSeaSummary(d); // sea-state summary for the side panel (overlay draws only when toggled)
 }
 function clearSelection(){
   if(selected&&selected._m){ selected._m.closeTooltip(); }
   const prev=selected; selected=null;
   if(prev&&prev._m) prev._m.setStyle(markerStyle(prev));
   detail.classList.remove("show"); detail.classList.add("collapsed"); clearPing(); clearItinPreview(); if(nearOpen) closeNear(); applyVisibility();
-  histLayer.clearLayers(); seaLayer.clearLayers(); byId("seaKey").style.display='none';
-  seaOn=false; byId("seaBtn").classList.remove("on");
+  histLayer.clearLayers();
   try{ history.replaceState(null,"",location.pathname); }catch(e){}
   hideShipSide(); if(!profileEl.hidden) closeProfile();
 }
@@ -2563,7 +2553,6 @@ fetch(ITIN_URL,{cache:"no-store"}).then(r=>r.ok?r.json():Promise.reject())
     Object.values(_itinShip).forEach(arr=>arr.sort((a,b)=>a.date.localeCompare(b.date)));
     if(nearOpen) renderNear();
     if(selected) fillDetailItin(selected);
-    if(selected){ delete _seaCache[selected.mmsi]; fetchSeaSummary(selected); } // redo sea route now that itineraries exist
   }).catch(()=>{});
 
 /* ---- ship profile data (scraped monthly by GitHub Actions) ---- */
@@ -2681,129 +2670,6 @@ byId("histBtn").addEventListener("click",()=>{
     if(selected) drawHistory(selected,{fit:true});
   } else {
     histLayer.clearLayers();
-  }
-});
-
-/* ---- sea state & route weather (Open-Meteo marine API, free & keyless) ---- */
-let seaOn=false;
-const _seaCache={}; // mmsi -> {ts, samples}
-function waveColor(h){ return h==null?"#56707c":h<1?"#5ad6a0":h<2.5?"#e2bd72":h<4?"#f08c4a":"#ff5a4d"; }
-function seaDayLabel(off){ return off===0?"Today":new Date(Date.now()+off*864e5).toLocaleDateString("en-US",{month:"short",day:"numeric"}); }
-async function buildSeaPoints(d){
-  const today=new Date().toISOString().slice(0,10);
-  const limit=new Date(Date.now()+6*864e5).toISOString().slice(0,10);
-  const calls=(_itinShip[normShip(d.name)]||[]).filter(c=>c.date>=today&&c.date<=limit).slice(0,6);
-  const pts=[];
-  if(d.lat!=null) pts.push({lat:d.lat,lon:d.lon,day:0,label:"Now"});
-  if(calls.length){
-    await Promise.all(calls.filter(c=>!findPort(c.port)).map(c=>geocodePortName(c.port)));
-    let prev=pts[0]||null;
-    for(const c of calls){
-      const pe=findPort(c.port); if(!pe) continue;
-      const day=Math.min(6,Math.max(0,Math.round((Date.parse(c.date+"T12:00:00Z")-Date.now())/864e5)));
-      const wp={lat:pe.lat,lon:pe.lon,day,label:pe.name};
-      if(prev){
-        const leg=_routeLeg(prev,wp);                       // midpoint via sea gates stays off land
-        const mid=leg.length>1?leg[0]:[(prev.lat+wp.lat)/2,(prev.lon+wp.lon)/2];
-        pts.push({lat:mid[0],lon:mid[1],day:Math.min(6,Math.round((prev.day+day)/2)),label:"En route"});
-      }
-      pts.push(wp); prev=wp;
-    }
-  }else if(d.lat!=null&&d.spd>3){
-    // no itinerary — dead-reckon along current course at current speed
-    for(const h of [6,12,24,48]){
-      const dist=d.spd*h/60, rad=(d.cog||d.hdg||0)*Math.PI/180;   // degrees travelled (60 nm/deg)
-      const lat=d.lat+dist*Math.cos(rad);
-      const lon=d.lon+dist*Math.sin(rad)/Math.cos(d.lat*Math.PI/180);
-      if(Math.abs(lat)<85) pts.push({lat:+lat.toFixed(3),lon:+(((lon+540)%360)-180).toFixed(3),day:Math.min(6,Math.round(h/24)),label:"+"+h+"h projected"});
-    }
-  }
-  return pts.slice(0,10);
-}
-const _seaSeq={};
-async function fetchSea(d){
-  const c=_seaCache[d.mmsi];
-  // degenerate samples (selection before itineraries/position loaded) expire fast
-  if(c&&Date.now()-c.ts<(c.samples.length>1?30*60*1000:2*60*1000)) return c.samples;
-  const seq=(_seaSeq[d.mmsi]||0)+1; _seaSeq[d.mmsi]=seq;
-  const pts=await buildSeaPoints(d);
-  if(pts.length){
-    try{
-      const url=`https://marine-api.open-meteo.com/v1/marine?latitude=${pts.map(p=>p.lat.toFixed(3)).join(",")}&longitude=${pts.map(p=>p.lon.toFixed(3)).join(",")}&daily=wave_height_max,swell_wave_height_max&forecast_days=7&timezone=UTC`;
-      const r=await fetch(url).then(r=>r.json());
-      const arr=Array.isArray(r)?r:[r];                     // 1 point -> object, N points -> array
-      pts.forEach((p,i)=>{
-        const dd=arr[i]&&arr[i].daily;
-        p.wave=(dd&&dd.wave_height_max)?(dd.wave_height_max[p.day]??null):null;
-        p.swell=(dd&&dd.swell_wave_height_max)?(dd.swell_wave_height_max[p.day]??null):null;
-      });
-    }catch(e){ pts.forEach(p=>{p.wave=null;p.swell=null;}); }
-  }
-  // a newer request superseded this one while we awaited — don't clobber its result
-  if(_seaSeq[d.mmsi]!==seq) return _seaCache[d.mmsi]?_seaCache[d.mmsi].samples:pts;
-  _seaCache[d.mmsi]={ts:Date.now(),samples:pts};
-  return pts;
-}
-async function fetchSeaSummary(d){
-  const el=byId("ssSea"); el.hidden=true;
-  const my=d.mmsi;
-  const s=await fetchSea(d);
-  if(!selected||selected.mmsi!==my) return;
-  if(seaOn) drawSea(d);
-  const waves=s.filter(p=>p.wave!=null);
-  if(!waves.length){ el.innerHTML=`<b>Sea State</b>No route forecast`; el.hidden=false; return; }
-  const max=waves.reduce((a,p)=>p.wave>a.wave?p:a,waves[0]);
-  const ft=Math.round(max.wave*3.281);
-  const roughDays=[...new Set(waves.filter(p=>p.wave>2.5).map(p=>p.day))].sort((a,b)=>a-b);
-  const note=roughDays.length
-    ?`<span class="rough">Rough seas ${roughDays.length>1?seaDayLabel(roughDays[0])+"–"+seaDayLabel(roughDays[roughDays.length-1]):seaDayLabel(roughDays[0])}</span>`
-    :`<span class="calm">Calm seas ahead</span>`;
-  el.innerHTML=`<b>Sea State</b>Max waves ${max.wave.toFixed(1)} m (${ft} ft) · ${seaDayLabel(max.day)}<br>${note}`;
-  el.hidden=false;
-}
-async function drawSea(d,opts){
-  const my=d.mmsi;
-  const s=await fetchSea(d);
-  if(!selected||selected.mmsi!==my||!seaOn) return;
-  seaLayer.clearLayers();
-  if(s.length<2){ if(opts&&opts.fit) flashBtn("seaBtn","No route forecast"); return; }
-  for(let i=1;i<s.length;i++){
-    if(Math.abs(s[i].lon-s[i-1].lon)>180) continue;         // don't draw across the antimeridian
-    const w=Math.max(s[i-1].wave??-1,s[i].wave??-1);
-    L.polyline([[s[i-1].lat,s[i-1].lon],[s[i].lat,s[i].lon]],
-      {renderer:canvasR,color:waveColor(w<0?null:w),weight:3,opacity:0.75,dashArray:"2 7",interactive:false}).addTo(seaLayer);
-  }
-  const seaKeyLegend='<span style="color:#5ad6a0">●</span> Calm <span style="color:#e2bd72">●</span> Choppy <span style="color:#f08c4a">●</span> Rough <span style="color:#ff5a4d">●</span> Wild';
-  s.forEach(p=>{
-    const isPort=p.label&&p.label!=='Now'&&p.label!=='En route'&&!p.label.startsWith('+');
-    const waveStr=p.wave!=null?`≤ ${p.wave.toFixed(1)} m`:'No data';
-    const permanent=isPort||p.label==='Now';
-    const tipHtml=permanent
-      ?`<b>${p.label||'Now'}</b><br>${waveStr} · ${seaDayLabel(p.day)}`
-      :`${waveStr} · ${seaDayLabel(p.day)}${p.label?' · '+p.label:''}`;
-    L.circleMarker([p.lat,p.lon],{renderer:canvasR,radius:4.5,color:"#fff",weight:1,fillColor:waveColor(p.wave),fillOpacity:0.9})
-      .bindTooltip(tipHtml,{permanent,direction:"top",offset:[0,-8],className:'sea-dot-lbl'})
-      .on('click',L.DomEvent.stop)
-      .addTo(seaLayer);
-  });
-  byId("seaKey").innerHTML=seaKeyLegend; byId("seaKey").style.display='flex';
-  if(opts&&opts.fit) map.flyToBounds(L.latLngBounds(s.map(p=>[p.lat,p.lon])),{padding:[60,60],maxZoom:8,duration:CAM_DUR});
-}
-byId("seaBtn").addEventListener("click",()=>{
-  seaOn=!seaOn;
-  byId("seaBtn").classList.toggle("on",seaOn);
-  if(seaOn){
-    detail.classList.add("collapsed");
-    byId("dToggle").setAttribute("aria-expanded","false");
-    hideShipSide(); collapseNav();
-    hidePortCard();
-    if(!profileEl.hidden) closeProfile();
-    byId("seaKey").innerHTML='<span style="opacity:.7">Loading forecast…</span>';
-    byId("seaKey").style.display='flex';
-    if(selected) drawSea(selected,{fit:true});
-  } else {
-    seaLayer.clearLayers();
-    byId("seaKey").style.display='none';
   }
 });
 
@@ -3303,6 +3169,5 @@ requestAnimationFrame(tick);
 connect();
 applyDeepLink();
 </script>
-<div id="seaKey" style="display:none;position:fixed;bottom:85px;right:14px;z-index:900;background:rgba(6,18,28,.88);border:1px solid rgba(255,255,255,.13);border-radius:8px;padding:5px 10px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.04em;gap:8px;align-items:center;pointer-events:none;backdrop-filter:blur(10px)"></div>
 </body>
 </html>
