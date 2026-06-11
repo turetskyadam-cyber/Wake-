@@ -421,6 +421,10 @@
   .leaflet-tooltip.ship-tt b{font-family:'Fraunces',serif;font-size:13px}
   .leaflet-tooltip.ship-tt .tt-loc{color:var(--brass-soft);font-size:10.5px}
   .leaflet-tooltip.ship-tt::before{display:none}
+  /* sea state dot labels */
+  .leaflet-tooltip.sea-dot-lbl{background:rgba(4,14,20,.9);border:1px solid rgba(255,255,255,.13);color:var(--ink);border-radius:6px;padding:3px 8px;font-size:10px;font-family:'JetBrains Mono',monospace;letter-spacing:.02em;box-shadow:0 4px 12px rgba(0,0,0,.5);pointer-events:none;white-space:nowrap}
+  .leaflet-tooltip.sea-dot-lbl b{font-size:10.5px;font-family:'Fraunces',serif;font-weight:600}
+  .leaflet-tooltip.sea-dot-lbl::before{display:none}
   /* selection pulse + arrival blip (divIcon overlays) */
   .sel-pulse{width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;border:2px solid #fff;opacity:.9;
     animation:selPulse 1.6s var(--ease-out) infinite}
@@ -2656,7 +2660,8 @@ async function drawHistory(d,opts){
       seenDays.add(day);
       const label=new Date(p.t).toLocaleDateString("en-US",{month:"short",day:"numeric"});
       L.circleMarker([p.lat,p.lon],{renderer:canvasR,radius:4,color:"#fff",weight:1.2,fillColor:d.color,fillOpacity:0.85})
-        .bindTooltip(label,{permanent:false,direction:"top",offset:[0,-6]})
+        .bindTooltip(label,{permanent:false,direction:"top",offset:[0,-6],className:'sea-dot-lbl'})
+        .on('click',L.DomEvent.stop)
         .addTo(histLayer);
     }
   });
@@ -2767,11 +2772,20 @@ async function drawSea(d,opts){
     L.polyline([[s[i-1].lat,s[i-1].lon],[s[i].lat,s[i].lon]],
       {renderer:canvasR,color:waveColor(w<0?null:w),weight:3,opacity:0.75,dashArray:"2 7",interactive:false}).addTo(seaLayer);
   }
+  const seaKeyLegend='<span style="color:#5ad6a0">●</span> Calm <span style="color:#e2bd72">●</span> Choppy <span style="color:#f08c4a">●</span> Rough <span style="color:#ff5a4d">●</span> Wild';
   s.forEach(p=>{
+    const isPort=p.label&&p.label!=='Now'&&p.label!=='En route'&&!p.label.startsWith('+');
+    const waveStr=p.wave!=null?`≤ ${p.wave.toFixed(1)} m`:'No data';
+    const permanent=isPort||p.label==='Now';
+    const tipHtml=permanent
+      ?`<b>${p.label||'Now'}</b><br>${waveStr} · ${seaDayLabel(p.day)}`
+      :`${waveStr} · ${seaDayLabel(p.day)}${p.label?' · '+p.label:''}`;
     L.circleMarker([p.lat,p.lon],{renderer:canvasR,radius:4.5,color:"#fff",weight:1,fillColor:waveColor(p.wave),fillOpacity:0.9})
-      .bindTooltip(`${p.wave!=null?"≤ "+p.wave.toFixed(1)+" m waves":"No data"} · ${seaDayLabel(p.day)}${p.label?" · "+p.label:""}`,{direction:"top",offset:[0,-6]})
+      .bindTooltip(tipHtml,{permanent,direction:"top",offset:[0,-8],className:'sea-dot-lbl'})
+      .on('click',L.DomEvent.stop)
       .addTo(seaLayer);
   });
+  byId("seaKey").innerHTML=seaKeyLegend; byId("seaKey").hidden=false;
   if(opts&&opts.fit) map.flyToBounds(L.latLngBounds(s.map(p=>[p.lat,p.lon])),{padding:[60,60],maxZoom:8,duration:CAM_DUR});
 }
 byId("seaBtn").addEventListener("click",()=>{
@@ -2783,6 +2797,7 @@ byId("seaBtn").addEventListener("click",()=>{
     hideShipSide(); collapseNav();
     hidePortCard();
     if(!profileEl.hidden) closeProfile();
+    byId("seaKey").innerHTML='<span style="opacity:.7">Loading forecast…</span>';
     byId("seaKey").hidden=false;
     if(selected) drawSea(selected,{fit:true});
   } else {
@@ -3287,6 +3302,6 @@ requestAnimationFrame(tick);
 connect();
 applyDeepLink();
 </script>
-<div id="seaKey" hidden style="position:fixed;bottom:58px;right:14px;z-index:900;background:rgba(6,18,28,.88);border:1px solid rgba(255,255,255,.13);border-radius:8px;padding:5px 10px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.04em;display:flex;gap:8px;align-items:center;pointer-events:none;backdrop-filter:blur(10px)"><span style="color:#5ad6a0">●</span> Calm <span style="color:#e2bd72">●</span> Choppy <span style="color:#f08c4a">●</span> Rough <span style="color:#ff5a4d">●</span> Wild</div>
+<div id="seaKey" hidden style="position:fixed;bottom:85px;right:14px;z-index:900;background:rgba(6,18,28,.88);border:1px solid rgba(255,255,255,.13);border-radius:8px;padding:5px 10px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.04em;display:flex;gap:8px;align-items:center;pointer-events:none;backdrop-filter:blur(10px)"><span style="color:#5ad6a0">●</span> Calm <span style="color:#e2bd72">●</span> Choppy <span style="color:#f08c4a">●</span> Rough <span style="color:#ff5a4d">●</span> Wild</div>
 </body>
 </html>
