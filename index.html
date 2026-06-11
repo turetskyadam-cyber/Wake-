@@ -1800,7 +1800,7 @@ function clearSelection(){
   const prev=selected; selected=null;
   if(prev&&prev._m) prev._m.setStyle(markerStyle(prev));
   detail.classList.remove("show"); detail.classList.add("collapsed"); clearPing(); clearItinPreview(); if(nearOpen) closeNear(); applyVisibility();
-  histLayer.clearLayers(); seaLayer.clearLayers(); byId("seaKey").hidden=true;
+  histLayer.clearLayers(); seaLayer.clearLayers(); byId("seaKey").style.display='none';
   try{ history.replaceState(null,"",location.pathname); }catch(e){}
   hideShipSide(); if(!profileEl.hidden) closeProfile();
 }
@@ -2785,7 +2785,7 @@ async function drawSea(d,opts){
       .on('click',L.DomEvent.stop)
       .addTo(seaLayer);
   });
-  byId("seaKey").innerHTML=seaKeyLegend; byId("seaKey").hidden=false;
+  byId("seaKey").innerHTML=seaKeyLegend; byId("seaKey").style.display='flex';
   if(opts&&opts.fit) map.flyToBounds(L.latLngBounds(s.map(p=>[p.lat,p.lon])),{padding:[60,60],maxZoom:8,duration:CAM_DUR});
 }
 byId("seaBtn").addEventListener("click",()=>{
@@ -2798,11 +2798,11 @@ byId("seaBtn").addEventListener("click",()=>{
     hidePortCard();
     if(!profileEl.hidden) closeProfile();
     byId("seaKey").innerHTML='<span style="opacity:.7">Loading forecast…</span>';
-    byId("seaKey").hidden=false;
+    byId("seaKey").style.display='flex';
     if(selected) drawSea(selected,{fit:true});
   } else {
     seaLayer.clearLayers();
-    byId("seaKey").hidden=true;
+    byId("seaKey").style.display='none';
   }
 });
 
@@ -3302,6 +3302,6 @@ requestAnimationFrame(tick);
 connect();
 applyDeepLink();
 </script>
-<div id="seaKey" hidden style="position:fixed;bottom:85px;right:14px;z-index:900;background:rgba(6,18,28,.88);border:1px solid rgba(255,255,255,.13);border-radius:8px;padding:5px 10px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.04em;display:flex;gap:8px;align-items:center;pointer-events:none;backdrop-filter:blur(10px)"><span style="color:#5ad6a0">●</span> Calm <span style="color:#e2bd72">●</span> Choppy <span style="color:#f08c4a">●</span> Rough <span style="color:#ff5a4d">●</span> Wild</div>
+<div id="seaKey" style="display:none;position:fixed;bottom:85px;right:14px;z-index:900;background:rgba(6,18,28,.88);border:1px solid rgba(255,255,255,.13);border-radius:8px;padding:5px 10px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.04em;gap:8px;align-items:center;pointer-events:none;backdrop-filter:blur(10px)"></div>
 </body>
 </html>
