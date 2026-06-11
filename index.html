@@ -1653,7 +1653,7 @@ map.on('click',e=>{
     _itinMarks.forEach(m=>{const el=m.getElement();if(el)el.style.display=_itinLabelsVisible?'':'none';});
     return;
   }
-  if(nav.level===2){ nav={level:0,line:null,ship:null}; hoverLine=null; clearSelection(); renderNav("l"); applyVisibility(); }
+  if(nav.level===2){ if(Date.now()-_goShipTime<400) return; nav={level:0,line:null,ship:null}; hoverLine=null; clearSelection(); renderNav("l"); applyVisibility(); }
   collapseNav();
 });
 byId("zIn").addEventListener("click",()=>map.zoomIn());
@@ -2048,7 +2048,8 @@ function refreshNav(){ // light refresh of counts/meta without re-animating
 /* ---- navigation actions ---- */
 function goLines(){ nav={level:0,line:null,ship:null}; hoverLine=null; clearSelection(); renderNav("l"); applyVisibility(); resetCamera(); }
 function goLine(line){ const deeper=nav.level<1; nav={level:1,line,ship:null}; hoverLine=null; clearSelection(); renderNav(deeper?"r":"l"); applyVisibility(); flyToShips(byLine[line]); }
-function goShip(d){ nav={level:2,line:d.line,ship:d}; renderNav("r"); selectShip(d); collapseNav(); try{ history.replaceState(null,"","?ship="+slugOf(d.name)); }catch(e){} }
+let _goShipTime=0;
+function goShip(d){ _goShipTime=Date.now(); nav={level:2,line:d.line,ship:d}; renderNav("r"); selectShip(d); collapseNav(); try{ history.replaceState(null,"","?ship="+slugOf(d.name)); }catch(e){} }
 function fullFleet(line){ nav={level:1,line,ship:null}; clearSelection(); renderNav(); applyVisibility(); flyToShips(byLine[line]); collapseNav(); }
 function navBack(){ if(nav.level===2) goLine(nav.line); else if(nav.level===1) goLines(); }
 
@@ -2056,7 +2057,12 @@ function navBack(){ if(nav.level===2) goLine(nav.line); else if(nav.level===1) g
 const controlsEl=byId("controls"), navOpenBtn=byId("navOpen");
 function collapseNav(){ controlsEl.classList.add("collapsed"); navOpenBtn.classList.add("show"); }
 function expandNav(){ controlsEl.classList.remove("collapsed"); navOpenBtn.classList.remove("show"); }
-navOpenBtn.addEventListener("click",expandNav);
+navOpenBtn.addEventListener("click",()=>{
+  expandNav();
+  detail.classList.add("collapsed");
+  byId("dToggle").setAttribute("aria-expanded","false");
+  hideShipSide();
+});
 byId("navBackBar").addEventListener("click",()=>goLines());
 byId("navHide").addEventListener("click",collapseNav);
 byId("navHide").addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); collapseNav(); } });
