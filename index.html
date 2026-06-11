@@ -1959,6 +1959,20 @@ function shipMeta(d){
   return `<span class="pill sea"><b></b>${d.spd.toFixed(0)} kn</span> · ${d.region}`;
 }
 
+/* Tap helper: fires instantly on touchend (prevents 300ms delay + ghost click).
+   Falls back to click on desktop/keyboard. */
+function onTap(el,fn){
+  let sy=0,moved=false;
+  el.addEventListener("touchstart",e=>{ sy=e.touches[0].clientY; moved=false; },{passive:true});
+  el.addEventListener("touchmove",()=>{ moved=true; },{passive:true});
+  el.addEventListener("touchend",e=>{
+    if(moved) return;
+    e.preventDefault(); // kills the 300ms ghost click
+    fn();
+  },{passive:false});
+  el.addEventListener("click",fn); // desktop / keyboard
+}
+
 function buildLines(root){
   root.appendChild(el("div","grouphd","<span>Cruise lines</span><span style='color:var(--faint)'>tap to explore</span>"));
   const list=el("div","nav-list"); list.setAttribute("role","list");
@@ -1971,7 +1985,7 @@ function buildLines(root){
       <div class="body"><div class="title">${line}</div>
       <div class="meta">${c.shown}/${c.total} tracked${c.sea?` · ${c.sea} at sea`:""}</div></div>
       <span class="chev">›</span>`;
-    row.addEventListener("click",()=>goLine(line));
+    onTap(row,()=>goLine(line));
     row.addEventListener("mouseenter",()=>{ hoverLine=line; applyVisibility(); });
     row.addEventListener("mouseleave",()=>{ if(hoverLine===line){ hoverLine=null; applyVisibility(); } });
     row.addEventListener("keydown",e=>navKey(e,row));
@@ -1992,7 +2006,7 @@ function buildShips(root){
   full.innerHTML=`<i class="swatch" style="color:${LINES[line]};background:${LINES[line]}"></i>
     <div class="body"><div class="title">Full fleet</div><div class="meta">${c.shown} of ${c.total} on map${c.sea?` · ${c.sea} at sea`:""}</div></div>
     <span class="chev">⤢</span>`;
-  full.addEventListener("click",()=>fullFleet(line));
+  onTap(full,()=>fullFleet(line));
   full.addEventListener("keydown",e=>navKey(e,full));
   list.appendChild(full);
   const ships=(byLine[line]||[]).slice().sort((a,b)=>{
@@ -2010,7 +2024,7 @@ function buildShips(root){
       ${awaiting?"":'<span class="chev">›</span>'}`;
     if(!awaiting){
       any=true;
-      row.addEventListener("click",()=>goShip(d));
+      onTap(row,()=>goShip(d));
       row.addEventListener("mouseenter",()=>{ hoverShip=d; positionLabels(); });
       row.addEventListener("mouseleave",()=>{ if(hoverShip===d){ hoverShip=null; positionLabels(); } });
       row.addEventListener("keydown",e=>navKey(e,row));
