@@ -1777,9 +1777,9 @@ function updateDetailLive(d){
 function selectShip(d){
   clearItinPreview();
   histLayer.clearLayers(); seaLayer.clearLayers(); closeSharePop();
+  seaOn=false; byId("seaBtn").classList.remove("on"); byId("seaKey").style.display='none';
   selected=d;
   if(histOn) drawHistory(d);
-  if(seaOn) drawSea(d);
   if(nearOpen){ clearNearOverlay(); renderNear(); if(d.lat!=null){ _nearCircle=L.circle([d.lat,d.lon],{radius:NEAR_MILES*KM_PER_MILE*1000,color:"rgba(226,189,114,0.5)",fill:false,dashArray:"5 8",weight:1.5}).addTo(map); } }
   fillDetail(d); detail.classList.add("show","collapsed");   // appears as a slim "Cruise info" bar; tap to expand
   byId("dToggle").setAttribute("aria-expanded","false");
@@ -1801,6 +1801,7 @@ function clearSelection(){
   if(prev&&prev._m) prev._m.setStyle(markerStyle(prev));
   detail.classList.remove("show"); detail.classList.add("collapsed"); clearPing(); clearItinPreview(); if(nearOpen) closeNear(); applyVisibility();
   histLayer.clearLayers(); seaLayer.clearLayers(); byId("seaKey").style.display='none';
+  seaOn=false; byId("seaBtn").classList.remove("on");
   try{ history.replaceState(null,"",location.pathname); }catch(e){}
   hideShipSide(); if(!profileEl.hidden) closeProfile();
 }
