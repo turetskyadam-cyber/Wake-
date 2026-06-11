@@ -3230,54 +3230,12 @@ if("serviceWorker" in navigator){
 /* ---- install banner ---- */
 (function(){
   const banner = byId("installBanner");
-  const closeBtn = byId("installBannerClose");
-
-  // Already installed as standalone — never show
-  const isStandalone = ("standalone" in navigator && navigator.standalone===true)
-                    || window.matchMedia("(display-mode:standalone)").matches;
-  if(isStandalone) return;
-
-  // Already dismissed this session (use sessionStorage so it re-appears next visit)
-  if(sessionStorage.getItem("wakeInstallDismissed")) return;
-
-  function dismiss(){
-    sessionStorage.setItem("wakeInstallDismissed","1");
-    banner.classList.remove("show");
-  }
-  closeBtn.addEventListener("click", dismiss);
-
-  // iOS detection: covers iPhone, older iPad, and iPad iOS 13+ (which reports MacIntel)
-  const ua = navigator.userAgent;
-  const isIOS = /iphone|ipad|ipod/i.test(ua)
-             || (navigator.platform==="MacIntel" && navigator.maxTouchPoints > 1);
-
-  if(isIOS){
-    // Show after 1.5s — enough for the map to settle
-    setTimeout(()=>{ banner.classList.add("show"); }, 1500);
-    return;
-  }
-
-  // Android / Chrome — intercept native install prompt
-  let deferredPrompt;
-  window.addEventListener("beforeinstallprompt", e=>{
-    e.preventDefault();
-    deferredPrompt = e;
-    const inner = byId("installBannerInner");
-    inner.innerHTML = `
-      <div id="installBannerIcon"><img src="/icons/apple-touch-icon.png" alt="WAKE"></div>
-      <div id="installBannerAndroid">Add <strong>WAKE</strong> to your home screen for quick access</div>
-      <button id="androidInstallBtn">Install</button>
-      <button id="installBannerClose" style="flex-shrink:0;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:0 2px;line-height:1">×</button>
-    `;
-    byId("androidInstallBtn").addEventListener("click", async ()=>{
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if(outcome==="accepted") dismiss();
-      deferredPrompt = null;
-    });
-    byId("installBannerClose").addEventListener("click", dismiss);
-    setTimeout(()=>{ banner.classList.add("show"); }, 1500);
-  });
+  // Don't show if already running as installed PWA
+  if(navigator.standalone || window.matchMedia("(display-mode:standalone)").matches) return;
+  // Only on touch devices (phones/tablets)
+  if(!navigator.maxTouchPoints) return;
+  setTimeout(()=>{ banner.classList.add("show"); }, 1000);
+  byId("installBannerClose").addEventListener("click",()=>{ banner.classList.remove("show"); });
 })();
 </script>
 
