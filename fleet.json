@@ -1,0 +1,1482 @@
+{
+ "generated": 1781135854356,
+ "ships": [
+  {
+   "slug": "icon-of-the-seas",
+   "mmsi": "311001178",
+   "name": "Icon of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "star-of-the-seas",
+   "mmsi": "311001551",
+   "name": "Star of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "utopia-of-the-seas",
+   "mmsi": "311001259",
+   "name": "Utopia of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "wonder-of-the-seas",
+   "mmsi": "311001033",
+   "name": "Wonder of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "symphony-of-the-seas",
+   "mmsi": "311000660",
+   "name": "Symphony of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "oasis-of-the-seas",
+   "mmsi": "311020600",
+   "name": "Oasis of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "allure-of-the-seas",
+   "mmsi": "311020700",
+   "name": "Allure of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "harmony-of-the-seas",
+   "mmsi": "311000396",
+   "name": "Harmony of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "quantum-of-the-seas",
+   "mmsi": "311000267",
+   "name": "Quantum of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "anthem-of-the-seas",
+   "mmsi": "311000274",
+   "name": "Anthem of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "ovation-of-the-seas",
+   "mmsi": "311000397",
+   "name": "Ovation of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "spectrum-of-the-seas",
+   "mmsi": "210563000",
+   "name": "Spectrum of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "odyssey-of-the-seas",
+   "mmsi": "311000912",
+   "name": "Odyssey of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "voyager-of-the-seas",
+   "mmsi": "311317000",
+   "name": "Voyager of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "explorer-of-the-seas",
+   "mmsi": "311316000",
+   "name": "Explorer of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "adventure-of-the-seas",
+   "mmsi": "311263000",
+   "name": "Adventure of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "navigator-of-the-seas",
+   "mmsi": "311478000",
+   "name": "Navigator of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "mariner-of-the-seas",
+   "mmsi": "311493000",
+   "name": "Mariner of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "freedom-of-the-seas",
+   "mmsi": "309906000",
+   "name": "Freedom of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "liberty-of-the-seas",
+   "mmsi": "309436000",
+   "name": "Liberty of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "independence-of-the-seas",
+   "mmsi": "309374000",
+   "name": "Independence of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "radiance-of-the-seas",
+   "mmsi": "311319000",
+   "name": "Radiance of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "brilliance-of-the-seas",
+   "mmsi": "311361000",
+   "name": "Brilliance of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "serenade-of-the-seas",
+   "mmsi": "311492000",
+   "name": "Serenade of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "jewel-of-the-seas",
+   "mmsi": "311583000",
+   "name": "Jewel of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "grandeur-of-the-seas",
+   "mmsi": "311315000",
+   "name": "Grandeur of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "rhapsody-of-the-seas",
+   "mmsi": "311805000",
+   "name": "Rhapsody of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "enchantment-of-the-seas",
+   "mmsi": "311733000",
+   "name": "Enchantment of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "vision-of-the-seas",
+   "mmsi": "311321000",
+   "name": "Vision of the Seas",
+   "line": "Royal Caribbean",
+   "color": "#4d8fdb"
+  },
+  {
+   "slug": "mardi-gras",
+   "mmsi": "311001049",
+   "name": "Mardi Gras",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-celebration",
+   "mmsi": "311001223",
+   "name": "Carnival Celebration",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-jubilee",
+   "mmsi": "311001390",
+   "name": "Carnival Jubilee",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-venezia",
+   "mmsi": "311001253",
+   "name": "Carnival Venezia",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-firenze",
+   "mmsi": "352003546",
+   "name": "Carnival Firenze",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-panorama",
+   "mmsi": "374527000",
+   "name": "Carnival Panorama",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-horizon",
+   "mmsi": "370039000",
+   "name": "Carnival Horizon",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-vista",
+   "mmsi": "356883000",
+   "name": "Carnival Vista",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-dream",
+   "mmsi": "370490000",
+   "name": "Carnival Dream",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-magic",
+   "mmsi": "370491000",
+   "name": "Carnival Magic",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-breeze",
+   "mmsi": "354842000",
+   "name": "Carnival Breeze",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-conquest",
+   "mmsi": "357657000",
+   "name": "Carnival Conquest",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-glory",
+   "mmsi": "357659000",
+   "name": "Carnival Glory",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-valor",
+   "mmsi": "354298000",
+   "name": "Carnival Valor",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-liberty",
+   "mmsi": "371083000",
+   "name": "Carnival Liberty",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-freedom",
+   "mmsi": "371154000",
+   "name": "Carnival Freedom",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-spirit",
+   "mmsi": "229136000",
+   "name": "Carnival Spirit",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-pride",
+   "mmsi": "354215000",
+   "name": "Carnival Pride",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-legend",
+   "mmsi": "229857000",
+   "name": "Carnival Legend",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-miracle",
+   "mmsi": "354277000",
+   "name": "Carnival Miracle",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-sunshine",
+   "mmsi": "308017000",
+   "name": "Carnival Sunshine",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-sunrise",
+   "mmsi": "308045000",
+   "name": "Carnival Sunrise",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-radiance",
+   "mmsi": "355263000",
+   "name": "Carnival Radiance",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-splendor",
+   "mmsi": "372808000",
+   "name": "Carnival Splendor",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-elation",
+   "mmsi": "355831000",
+   "name": "Carnival Elation",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "carnival-paradise",
+   "mmsi": "355833000",
+   "name": "Carnival Paradise",
+   "line": "Carnival",
+   "color": "#ff5a4d"
+  },
+  {
+   "slug": "norwegian-prima",
+   "mmsi": "311001059",
+   "name": "Norwegian Prima",
+   "line": "Norwegian",
+   "color": "#37b6a6"
+  },
+  {
+   "slug": "norwegian-viva",
+   "mmsi": "311001127",
+   "name": "Norwegian Viva",
+   "line": "Norwegian",
+   "color": "#37b6a6"
+  },
+  {
+   "slug": "norwegian-aqua",
+   "mmsi": "311001559",
+   "name": "Norwegian Aqua",
+   "line": "Norwegian",
+   "color": "#37b6a6"
+  },
+  {
+   "slug": "norwegian-bliss",
+   "mmsi": "311000710",
+   "name": "Norwegian Bliss",
+   "line": "Norwegian",
+   "color": "#37b6a6"
+  },
+  {
+   "slug": "norwegian-encore",
+   "mmsi": "311000879",
+   "name": "Norwegian Encore",
+   "line": "Norwegian",
+   "color": "#37b6a6"
+  },
+  {
+   "slug": "norwegian-joy",
+   "mmsi": "311000599",
+   "name": "Norwegian Joy",
+   "line": "Norwegian",
+   "color": "#37b6a6"
+  },
+  {
+   "slug": "norwegian-escape",
+   "mmsi": "311000341",
+   "name": "Norwegian Escape",
+   "line": "Norwegian",
+   "color": "#37b6a6"
+  },
+  {
+   "slug": "norwegian-getaway",
+   "mmsi": "311050900",
+   "name": "Norwegian Getaway",
+   "line": "Norwegian",
+   "color": "#37b6a6"
+  },
+  {
+   "slug": "norwegian-breakaway",
+   "mmsi": "311050800",
+   "name": "Norwegian Breakaway",
+   "line": "Norwegian",
+   "color": "#37b6a6"
+  },
+  {
+   "slug": "norwegian-epic",
+   "mmsi": "311018500",
+   "name": "Norwegian Epic",
+   "line": "Norwegian",
+   "color": "#37b6a6"
+  },
+  {
+   "slug": "norwegian-gem",
+   "mmsi": "309951000",
+   "name": "Norwegian Gem",
+   "line": "Norwegian",
+   "color": "#37b6a6"
+  },
+  {
+   "slug": "norwegian-jade",
+   "mmsi": "308416000",
+   "name": "Norwegian Jade",
+   "line": "Norwegian",
+   "color": "#37b6a6"
+  },
+  {
+   "slug": "norwegian-pearl",
+   "mmsi": "309653000",
+   "name": "Norwegian Pearl",
+   "line": "Norwegian",
+   "color": "#37b6a6"
+  },
+  {
+   "slug": "norwegian-jewel",
+   "mmsi": "311827000",
+   "name": "Norwegian Jewel",
+   "line": "Norwegian",
+   "color": "#37b6a6"
+  },
+  {
+   "slug": "norwegian-dawn",
+   "mmsi": "311307000",
+   "name": "Norwegian Dawn",
+   "line": "Norwegian",
+   "color": "#37b6a6"
+  },
+  {
+   "slug": "norwegian-star",
+   "mmsi": "311082000",
+   "name": "Norwegian Star",
+   "line": "Norwegian",
+   "color": "#37b6a6"
+  },
+  {
+   "slug": "norwegian-sun",
+   "mmsi": "311109000",
+   "name": "Norwegian Sun",
+   "line": "Norwegian",
+   "color": "#37b6a6"
+  },
+  {
+   "slug": "norwegian-sky",
+   "mmsi": "308865000",
+   "name": "Norwegian Sky",
+   "line": "Norwegian",
+   "color": "#37b6a6"
+  },
+  {
+   "slug": "norwegian-spirit",
+   "mmsi": "311746000",
+   "name": "Norwegian Spirit",
+   "line": "Norwegian",
+   "color": "#37b6a6"
+  },
+  {
+   "slug": "pride-of-america",
+   "mmsi": "366994450",
+   "name": "Pride of America",
+   "line": "Norwegian",
+   "color": "#37b6a6"
+  },
+  {
+   "slug": "msc-world-europa",
+   "mmsi": "256070000",
+   "name": "MSC World Europa",
+   "line": "MSC",
+   "color": "#e0b64a"
+  },
+  {
+   "slug": "msc-world-america",
+   "mmsi": "249193000",
+   "name": "MSC World America",
+   "line": "MSC",
+   "color": "#e0b64a"
+  },
+  {
+   "slug": "msc-seascape",
+   "mmsi": "256059000",
+   "name": "MSC Seascape",
+   "line": "MSC",
+   "color": "#e0b64a"
+  },
+  {
+   "slug": "msc-seashore",
+   "mmsi": "215920000",
+   "name": "MSC Seashore",
+   "line": "MSC",
+   "color": "#e0b64a"
+  },
+  {
+   "slug": "msc-seaside",
+   "mmsi": "248392000",
+   "name": "MSC Seaside",
+   "line": "MSC",
+   "color": "#e0b64a"
+  },
+  {
+   "slug": "msc-seaview",
+   "mmsi": "248717000",
+   "name": "MSC Seaview",
+   "line": "MSC",
+   "color": "#e0b64a"
+  },
+  {
+   "slug": "msc-grandiosa",
+   "mmsi": "215325000",
+   "name": "MSC Grandiosa",
+   "line": "MSC",
+   "color": "#e0b64a"
+  },
+  {
+   "slug": "msc-meraviglia",
+   "mmsi": "249973000",
+   "name": "MSC Meraviglia",
+   "line": "MSC",
+   "color": "#e0b64a"
+  },
+  {
+   "slug": "msc-bellissima",
+   "mmsi": "248992000",
+   "name": "MSC Bellissima",
+   "line": "MSC",
+   "color": "#e0b64a"
+  },
+  {
+   "slug": "msc-virtuosa",
+   "mmsi": "215610000",
+   "name": "MSC Virtuosa",
+   "line": "MSC",
+   "color": "#e0b64a"
+  },
+  {
+   "slug": "msc-euribia",
+   "mmsi": "256281000",
+   "name": "MSC Euribia",
+   "line": "MSC",
+   "color": "#e0b64a"
+  },
+  {
+   "slug": "msc-divina",
+   "mmsi": "373178000",
+   "name": "MSC Divina",
+   "line": "MSC",
+   "color": "#e0b64a"
+  },
+  {
+   "slug": "msc-splendida",
+   "mmsi": "357698000",
+   "name": "MSC Splendida",
+   "line": "MSC",
+   "color": "#e0b64a"
+  },
+  {
+   "slug": "msc-fantasia",
+   "mmsi": "370648000",
+   "name": "MSC Fantasia",
+   "line": "MSC",
+   "color": "#e0b64a"
+  },
+  {
+   "slug": "msc-preziosa",
+   "mmsi": "371861000",
+   "name": "MSC Preziosa",
+   "line": "MSC",
+   "color": "#e0b64a"
+  },
+  {
+   "slug": "msc-magnifica",
+   "mmsi": "352594000",
+   "name": "MSC Magnifica",
+   "line": "MSC",
+   "color": "#e0b64a"
+  },
+  {
+   "slug": "msc-musica",
+   "mmsi": "352003000",
+   "name": "MSC Musica",
+   "line": "MSC",
+   "color": "#e0b64a"
+  },
+  {
+   "slug": "msc-orchestra",
+   "mmsi": "372497000",
+   "name": "MSC Orchestra",
+   "line": "MSC",
+   "color": "#e0b64a"
+  },
+  {
+   "slug": "msc-poesia",
+   "mmsi": "355931000",
+   "name": "MSC Poesia",
+   "line": "MSC",
+   "color": "#e0b64a"
+  },
+  {
+   "slug": "msc-lirica",
+   "mmsi": "356042000",
+   "name": "MSC Lirica",
+   "line": "MSC",
+   "color": "#e0b64a"
+  },
+  {
+   "slug": "msc-sinfonia",
+   "mmsi": "356716000",
+   "name": "MSC Sinfonia",
+   "line": "MSC",
+   "color": "#e0b64a"
+  },
+  {
+   "slug": "msc-opera",
+   "mmsi": "357627000",
+   "name": "MSC Opera",
+   "line": "MSC",
+   "color": "#e0b64a"
+  },
+  {
+   "slug": "msc-armonia",
+   "mmsi": "357281000",
+   "name": "MSC Armonia",
+   "line": "MSC",
+   "color": "#e0b64a"
+  },
+  {
+   "slug": "sun-princess",
+   "mmsi": "310841000",
+   "name": "Sun Princess",
+   "line": "Princess",
+   "color": "#7d8be6"
+  },
+  {
+   "slug": "sky-princess",
+   "mmsi": "310780000",
+   "name": "Sky Princess",
+   "line": "Princess",
+   "color": "#7d8be6"
+  },
+  {
+   "slug": "discovery-princess",
+   "mmsi": "310812000",
+   "name": "Discovery Princess",
+   "line": "Princess",
+   "color": "#7d8be6"
+  },
+  {
+   "slug": "majestic-princess",
+   "mmsi": "310865000",
+   "name": "Majestic Princess",
+   "line": "Princess",
+   "color": "#7d8be6"
+  },
+  {
+   "slug": "enchanted-princess",
+   "mmsi": "310791000",
+   "name": "Enchanted Princess",
+   "line": "Princess",
+   "color": "#7d8be6"
+  },
+  {
+   "slug": "regal-princess",
+   "mmsi": "310674000",
+   "name": "Regal Princess",
+   "line": "Princess",
+   "color": "#7d8be6"
+  },
+  {
+   "slug": "royal-princess",
+   "mmsi": "310661000",
+   "name": "Royal Princess",
+   "line": "Princess",
+   "color": "#7d8be6"
+  },
+  {
+   "slug": "ruby-princess",
+   "mmsi": "310567000",
+   "name": "Ruby Princess",
+   "line": "Princess",
+   "color": "#7d8be6"
+  },
+  {
+   "slug": "emerald-princess",
+   "mmsi": "310531000",
+   "name": "Emerald Princess",
+   "line": "Princess",
+   "color": "#7d8be6"
+  },
+  {
+   "slug": "crown-princess",
+   "mmsi": "310500000",
+   "name": "Crown Princess",
+   "line": "Princess",
+   "color": "#7d8be6"
+  },
+  {
+   "slug": "caribbean-princess",
+   "mmsi": "310423000",
+   "name": "Caribbean Princess",
+   "line": "Princess",
+   "color": "#7d8be6"
+  },
+  {
+   "slug": "grand-princess",
+   "mmsi": "310327000",
+   "name": "Grand Princess",
+   "line": "Princess",
+   "color": "#7d8be6"
+  },
+  {
+   "slug": "island-princess",
+   "mmsi": "310384000",
+   "name": "Island Princess",
+   "line": "Princess",
+   "color": "#7d8be6"
+  },
+  {
+   "slug": "coral-princess",
+   "mmsi": "310376000",
+   "name": "Coral Princess",
+   "line": "Princess",
+   "color": "#7d8be6"
+  },
+  {
+   "slug": "diamond-princess",
+   "mmsi": "235103359",
+   "name": "Diamond Princess",
+   "line": "Princess",
+   "color": "#7d8be6"
+  },
+  {
+   "slug": "sapphire-princess",
+   "mmsi": "235103357",
+   "name": "Sapphire Princess",
+   "line": "Princess",
+   "color": "#7d8be6"
+  },
+  {
+   "slug": "celebrity-beyond",
+   "mmsi": "215808000",
+   "name": "Celebrity Beyond",
+   "line": "Celebrity",
+   "color": "#8fb6c9"
+  },
+  {
+   "slug": "celebrity-apex",
+   "mmsi": "215105000",
+   "name": "Celebrity Apex",
+   "line": "Celebrity",
+   "color": "#8fb6c9"
+  },
+  {
+   "slug": "celebrity-edge",
+   "mmsi": "248325000",
+   "name": "Celebrity Edge",
+   "line": "Celebrity",
+   "color": "#8fb6c9"
+  },
+  {
+   "slug": "celebrity-ascent",
+   "mmsi": "256191000",
+   "name": "Celebrity Ascent",
+   "line": "Celebrity",
+   "color": "#8fb6c9"
+  },
+  {
+   "slug": "celebrity-reflection",
+   "mmsi": "229074000",
+   "name": "Celebrity Reflection",
+   "line": "Celebrity",
+   "color": "#8fb6c9"
+  },
+  {
+   "slug": "celebrity-silhouette",
+   "mmsi": "248939000",
+   "name": "Celebrity Silhouette",
+   "line": "Celebrity",
+   "color": "#8fb6c9"
+  },
+  {
+   "slug": "celebrity-solstice",
+   "mmsi": "249409000",
+   "name": "Celebrity Solstice",
+   "line": "Celebrity",
+   "color": "#8fb6c9"
+  },
+  {
+   "slug": "celebrity-eclipse",
+   "mmsi": "249666000",
+   "name": "Celebrity Eclipse",
+   "line": "Celebrity",
+   "color": "#8fb6c9"
+  },
+  {
+   "slug": "celebrity-equinox",
+   "mmsi": "249667000",
+   "name": "Celebrity Equinox",
+   "line": "Celebrity",
+   "color": "#8fb6c9"
+  },
+  {
+   "slug": "celebrity-millennium",
+   "mmsi": "249055000",
+   "name": "Celebrity Millennium",
+   "line": "Celebrity",
+   "color": "#8fb6c9"
+  },
+  {
+   "slug": "celebrity-summit",
+   "mmsi": "249047000",
+   "name": "Celebrity Summit",
+   "line": "Celebrity",
+   "color": "#8fb6c9"
+  },
+  {
+   "slug": "celebrity-infinity",
+   "mmsi": "249048000",
+   "name": "Celebrity Infinity",
+   "line": "Celebrity",
+   "color": "#8fb6c9"
+  },
+  {
+   "slug": "celebrity-constellation",
+   "mmsi": "249046000",
+   "name": "Celebrity Constellation",
+   "line": "Celebrity",
+   "color": "#8fb6c9"
+  },
+  {
+   "slug": "disney-wish",
+   "mmsi": "311001098",
+   "name": "Disney Wish",
+   "line": "Disney",
+   "color": "#8b73f6"
+  },
+  {
+   "slug": "disney-treasure",
+   "mmsi": "311001221",
+   "name": "Disney Treasure",
+   "line": "Disney",
+   "color": "#8b73f6"
+  },
+  {
+   "slug": "disney-fantasy",
+   "mmsi": "311058700",
+   "name": "Disney Fantasy",
+   "line": "Disney",
+   "color": "#8b73f6"
+  },
+  {
+   "slug": "disney-adventure",
+   "mmsi": "311000934",
+   "name": "Disney Adventure",
+   "line": "Disney",
+   "color": "#8b73f6"
+  },
+  {
+   "slug": "disney-dream",
+   "mmsi": "311042900",
+   "name": "Disney Dream",
+   "line": "Disney",
+   "color": "#8b73f6"
+  },
+  {
+   "slug": "disney-magic",
+   "mmsi": "308516000",
+   "name": "Disney Magic",
+   "line": "Disney",
+   "color": "#8b73f6"
+  },
+  {
+   "slug": "disney-wonder",
+   "mmsi": "308457000",
+   "name": "Disney Wonder",
+   "line": "Disney",
+   "color": "#8b73f6"
+  },
+  {
+   "slug": "scarlet-lady",
+   "mmsi": "311000807",
+   "name": "Scarlet Lady",
+   "line": "Virgin Voyages",
+   "color": "#ff5a93"
+  },
+  {
+   "slug": "resilient-lady",
+   "mmsi": "311001056",
+   "name": "Resilient Lady",
+   "line": "Virgin Voyages",
+   "color": "#ff5a93"
+  },
+  {
+   "slug": "brilliant-lady",
+   "mmsi": "311001167",
+   "name": "Brilliant Lady",
+   "line": "Virgin Voyages",
+   "color": "#ff5a93"
+  },
+  {
+   "slug": "valiant-lady",
+   "mmsi": "311000983",
+   "name": "Valiant Lady",
+   "line": "Virgin Voyages",
+   "color": "#ff5a93"
+  },
+  {
+   "slug": "rotterdam",
+   "mmsi": "245464000",
+   "name": "Rotterdam",
+   "line": "Holland America",
+   "color": "#5fb37a"
+  },
+  {
+   "slug": "koningsdam",
+   "mmsi": "244830547",
+   "name": "Koningsdam",
+   "line": "Holland America",
+   "color": "#5fb37a"
+  },
+  {
+   "slug": "nieuw-statendam",
+   "mmsi": "244140580",
+   "name": "Nieuw Statendam",
+   "line": "Holland America",
+   "color": "#5fb37a"
+  },
+  {
+   "slug": "nieuw-amsterdam",
+   "mmsi": "246648000",
+   "name": "Nieuw Amsterdam",
+   "line": "Holland America",
+   "color": "#5fb37a"
+  },
+  {
+   "slug": "eurodam",
+   "mmsi": "245206000",
+   "name": "Eurodam",
+   "line": "Holland America",
+   "color": "#5fb37a"
+  },
+  {
+   "slug": "oosterdam",
+   "mmsi": "245417000",
+   "name": "Oosterdam",
+   "line": "Holland America",
+   "color": "#5fb37a"
+  },
+  {
+   "slug": "westerdam",
+   "mmsi": "244128000",
+   "name": "Westerdam",
+   "line": "Holland America",
+   "color": "#5fb37a"
+  },
+  {
+   "slug": "zuiderdam",
+   "mmsi": "245304000",
+   "name": "Zuiderdam",
+   "line": "Holland America",
+   "color": "#5fb37a"
+  },
+  {
+   "slug": "noordam",
+   "mmsi": "246028000",
+   "name": "Noordam",
+   "line": "Holland America",
+   "color": "#5fb37a"
+  },
+  {
+   "slug": "zaandam",
+   "mmsi": "246442000",
+   "name": "Zaandam",
+   "line": "Holland America",
+   "color": "#5fb37a"
+  },
+  {
+   "slug": "volendam",
+   "mmsi": "245968000",
+   "name": "Volendam",
+   "line": "Holland America",
+   "color": "#5fb37a"
+  },
+  {
+   "slug": "queen-mary-2",
+   "mmsi": "310627000",
+   "name": "Queen Mary 2",
+   "line": "Cunard",
+   "color": "#e0903a"
+  },
+  {
+   "slug": "queen-anne",
+   "mmsi": "310835000",
+   "name": "Queen Anne",
+   "line": "Cunard",
+   "color": "#e0903a"
+  },
+  {
+   "slug": "queen-victoria",
+   "mmsi": "310624000",
+   "name": "Queen Victoria",
+   "line": "Cunard",
+   "color": "#e0903a"
+  },
+  {
+   "slug": "queen-elizabeth",
+   "mmsi": "310625000",
+   "name": "Queen Elizabeth",
+   "line": "Cunard",
+   "color": "#e0903a"
+  },
+  {
+   "slug": "costa-smeralda",
+   "mmsi": "247391900",
+   "name": "Costa Smeralda",
+   "line": "Costa",
+   "color": "#f2c14e"
+  },
+  {
+   "slug": "costa-toscana",
+   "mmsi": "247431200",
+   "name": "Costa Toscana",
+   "line": "Costa",
+   "color": "#f2c14e"
+  },
+  {
+   "slug": "costa-diadema",
+   "mmsi": "247353700",
+   "name": "Costa Diadema",
+   "line": "Costa",
+   "color": "#f2c14e"
+  },
+  {
+   "slug": "costa-pacifica",
+   "mmsi": "247258100",
+   "name": "Costa Pacifica",
+   "line": "Costa",
+   "color": "#f2c14e"
+  },
+  {
+   "slug": "costa-serena",
+   "mmsi": "247187600",
+   "name": "Costa Serena",
+   "line": "Costa",
+   "color": "#f2c14e"
+  },
+  {
+   "slug": "costa-magica",
+   "mmsi": "247113300",
+   "name": "Costa Magica",
+   "line": "Costa",
+   "color": "#f2c14e"
+  },
+  {
+   "slug": "costa-fortuna",
+   "mmsi": "247094800",
+   "name": "Costa Fortuna",
+   "line": "Costa",
+   "color": "#f2c14e"
+  },
+  {
+   "slug": "costa-deliziosa",
+   "mmsi": "247282900",
+   "name": "Costa Deliziosa",
+   "line": "Costa",
+   "color": "#f2c14e"
+  },
+  {
+   "slug": "costa-mediterranea",
+   "mmsi": "247088200",
+   "name": "Costa Mediterranea",
+   "line": "Costa",
+   "color": "#f2c14e"
+  },
+  {
+   "slug": "costa-favolosa",
+   "mmsi": "247311100",
+   "name": "Costa Favolosa",
+   "line": "Costa",
+   "color": "#f2c14e"
+  },
+  {
+   "slug": "costa-fascinosa",
+   "mmsi": "247313500",
+   "name": "Costa Fascinosa",
+   "line": "Costa",
+   "color": "#f2c14e"
+  },
+  {
+   "slug": "costa-luminosa",
+   "mmsi": "247325300",
+   "name": "Costa Luminosa",
+   "line": "Costa",
+   "color": "#f2c14e"
+  },
+  {
+   "slug": "wind-surf",
+   "mmsi": "309242000",
+   "name": "Wind Surf",
+   "line": "Windstar",
+   "color": "#4fc3f7"
+  },
+  {
+   "slug": "wind-spirit",
+   "mmsi": "309056000",
+   "name": "Wind Spirit",
+   "line": "Windstar",
+   "color": "#4fc3f7"
+  },
+  {
+   "slug": "wind-star",
+   "mmsi": "309163000",
+   "name": "Wind Star",
+   "line": "Windstar",
+   "color": "#4fc3f7"
+  },
+  {
+   "slug": "star-breeze",
+   "mmsi": "311083000",
+   "name": "Star Breeze",
+   "line": "Windstar",
+   "color": "#4fc3f7"
+  },
+  {
+   "slug": "star-legend",
+   "mmsi": "311085000",
+   "name": "Star Legend",
+   "line": "Windstar",
+   "color": "#4fc3f7"
+  },
+  {
+   "slug": "star-pride",
+   "mmsi": "311084000",
+   "name": "Star Pride",
+   "line": "Windstar",
+   "color": "#4fc3f7"
+  },
+  {
+   "slug": "oceania-riviera",
+   "mmsi": "538004353",
+   "name": "Oceania Riviera",
+   "line": "Oceania",
+   "color": "#46c4b0"
+  },
+  {
+   "slug": "oceania-marina",
+   "mmsi": "538003668",
+   "name": "Oceania Marina",
+   "line": "Oceania",
+   "color": "#46c4b0"
+  },
+  {
+   "slug": "oceania-nautica",
+   "mmsi": "538001665",
+   "name": "Oceania Nautica",
+   "line": "Oceania",
+   "color": "#46c4b0"
+  },
+  {
+   "slug": "oceania-sirena",
+   "mmsi": "538006842",
+   "name": "Oceania Sirena",
+   "line": "Oceania",
+   "color": "#46c4b0"
+  },
+  {
+   "slug": "oceania-insignia",
+   "mmsi": "538001663",
+   "name": "Oceania Insignia",
+   "line": "Oceania",
+   "color": "#46c4b0"
+  },
+  {
+   "slug": "oceania-regatta",
+   "mmsi": "538001664",
+   "name": "Oceania Regatta",
+   "line": "Oceania",
+   "color": "#46c4b0"
+  },
+  {
+   "slug": "seven-seas-splendor",
+   "mmsi": "538007673",
+   "name": "Seven Seas Splendor",
+   "line": "Regent",
+   "color": "#caa24a"
+  },
+  {
+   "slug": "seven-seas-explorer",
+   "mmsi": "538006712",
+   "name": "Seven Seas Explorer",
+   "line": "Regent",
+   "color": "#caa24a"
+  },
+  {
+   "slug": "seven-seas-voyager",
+   "mmsi": "311513000",
+   "name": "Seven Seas Voyager",
+   "line": "Regent",
+   "color": "#caa24a"
+  },
+  {
+   "slug": "seven-seas-mariner",
+   "mmsi": "311622000",
+   "name": "Seven Seas Mariner",
+   "line": "Regent",
+   "color": "#caa24a"
+  },
+  {
+   "slug": "seven-seas-navigator",
+   "mmsi": "311050600",
+   "name": "Seven Seas Navigator",
+   "line": "Regent",
+   "color": "#caa24a"
+  },
+  {
+   "slug": "azamara-pursuit",
+   "mmsi": "248762000",
+   "name": "Azamara Pursuit",
+   "line": "Azamara",
+   "color": "#8fae3f"
+  },
+  {
+   "slug": "azamara-quest",
+   "mmsi": "256216000",
+   "name": "Azamara Quest",
+   "line": "Azamara",
+   "color": "#8fae3f"
+  },
+  {
+   "slug": "azamara-journey",
+   "mmsi": "256204000",
+   "name": "Azamara Journey",
+   "line": "Azamara",
+   "color": "#8fae3f"
+  },
+  {
+   "slug": "azamara-onward",
+   "mmsi": "229765000",
+   "name": "Azamara Onward",
+   "line": "Azamara",
+   "color": "#8fae3f"
+  },
+  {
+   "slug": "iona",
+   "mmsi": "232025845",
+   "name": "Iona",
+   "line": "P&O Cruises",
+   "color": "#4a78c4"
+  },
+  {
+   "slug": "arvia",
+   "mmsi": "232040520",
+   "name": "Arvia",
+   "line": "P&O Cruises",
+   "color": "#4a78c4"
+  },
+  {
+   "slug": "britannia",
+   "mmsi": "235106595",
+   "name": "Britannia",
+   "line": "P&O Cruises",
+   "color": "#4a78c4"
+  },
+  {
+   "slug": "ventura",
+   "mmsi": "310562000",
+   "name": "Ventura",
+   "line": "P&O Cruises",
+   "color": "#4a78c4"
+  },
+  {
+   "slug": "azura",
+   "mmsi": "310610000",
+   "name": "Azura",
+   "line": "P&O Cruises",
+   "color": "#4a78c4"
+  },
+  {
+   "slug": "aurora",
+   "mmsi": "310556000",
+   "name": "Aurora",
+   "line": "P&O Cruises",
+   "color": "#4a78c4"
+  },
+  {
+   "slug": "arcadia",
+   "mmsi": "310459000",
+   "name": "Arcadia",
+   "line": "P&O Cruises",
+   "color": "#4a78c4"
+  },
+  {
+   "slug": "aidanova",
+   "mmsi": "247389200",
+   "name": "AIDAnova",
+   "line": "AIDA",
+   "color": "#e0457f"
+  },
+  {
+   "slug": "aidacosma",
+   "mmsi": "247435300",
+   "name": "AIDAcosma",
+   "line": "AIDA",
+   "color": "#e0457f"
+  },
+  {
+   "slug": "aidaprima",
+   "mmsi": "247353800",
+   "name": "AIDAprima",
+   "line": "AIDA",
+   "color": "#e0457f"
+  },
+  {
+   "slug": "aidaperla",
+   "mmsi": "247385300",
+   "name": "AIDAperla",
+   "line": "AIDA",
+   "color": "#e0457f"
+  },
+  {
+   "slug": "aidabella",
+   "mmsi": "247229700",
+   "name": "AIDAbella",
+   "line": "AIDA",
+   "color": "#e0457f"
+  },
+  {
+   "slug": "aidadiva",
+   "mmsi": "247187700",
+   "name": "AIDAdiva",
+   "line": "AIDA",
+   "color": "#e0457f"
+  },
+  {
+   "slug": "aidaluna",
+   "mmsi": "247255400",
+   "name": "AIDAluna",
+   "line": "AIDA",
+   "color": "#e0457f"
+  },
+  {
+   "slug": "aidablu",
+   "mmsi": "247282500",
+   "name": "AIDAblu",
+   "line": "AIDA",
+   "color": "#e0457f"
+  },
+  {
+   "slug": "aidasol",
+   "mmsi": "247302900",
+   "name": "AIDAsol",
+   "line": "AIDA",
+   "color": "#e0457f"
+  },
+  {
+   "slug": "aidamar",
+   "mmsi": "247312900",
+   "name": "AIDAmar",
+   "line": "AIDA",
+   "color": "#e0457f"
+  },
+  {
+   "slug": "aidastella",
+   "mmsi": "247322800",
+   "name": "AIDAstella",
+   "line": "AIDA",
+   "color": "#e0457f"
+  },
+  {
+   "slug": "viking-star",
+   "mmsi": "257903000",
+   "name": "Viking Star",
+   "line": "Viking",
+   "color": "#c0453b"
+  },
+  {
+   "slug": "viking-sea",
+   "mmsi": "258215000",
+   "name": "Viking Sea",
+   "line": "Viking",
+   "color": "#c0453b"
+  },
+  {
+   "slug": "viking-sky",
+   "mmsi": "257034130",
+   "name": "Viking Sky",
+   "line": "Viking",
+   "color": "#c0453b"
+  },
+  {
+   "slug": "viking-jupiter",
+   "mmsi": "257058920",
+   "name": "Viking Jupiter",
+   "line": "Viking",
+   "color": "#c0453b"
+  },
+  {
+   "slug": "viking-venus",
+   "mmsi": "257552000",
+   "name": "Viking Venus",
+   "line": "Viking",
+   "color": "#c0453b"
+  },
+  {
+   "slug": "viking-octantis",
+   "mmsi": "259070000",
+   "name": "Viking Octantis",
+   "line": "Viking",
+   "color": "#c0453b"
+  },
+  {
+   "slug": "viking-polaris",
+   "mmsi": "259144000",
+   "name": "Viking Polaris",
+   "line": "Viking",
+   "color": "#c0453b"
+  }
+ ]
+}
