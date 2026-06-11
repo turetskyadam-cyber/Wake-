@@ -285,6 +285,21 @@
     #zoom{display:none}
     .credit{display:none}
   }
+  /* ---- install banner ---- */
+  #installBanner{position:fixed;bottom:0;left:0;right:0;z-index:3000;display:flex;justify-content:center;padding:0 12px 12px;pointer-events:none;transform:translateY(120%);transition:transform .38s cubic-bezier(.22,.68,0,1.2)}
+  #installBanner.show{transform:translateY(0)}
+  #installBannerInner{pointer-events:auto;display:flex;align-items:center;gap:10px;background:rgba(4,14,20,.96);border:1px solid rgba(226,189,114,.28);border-radius:16px;padding:12px 14px 12px 16px;box-shadow:0 8px 32px rgba(0,0,0,.7);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);max-width:400px;width:100%}
+  #installBannerIcon{flex-shrink:0;width:36px;height:36px;border-radius:9px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  #installBannerIcon img{width:36px;height:36px;object-fit:cover}
+  #installBannerText{flex:1;font-family:'Hanken Grotesk',sans-serif;font-size:13px;line-height:1.45;color:var(--ink)}
+  #installBannerText strong{color:var(--brass)}
+  #installBannerText .share-icon{display:inline-block;vertical-align:middle;margin:0 2px}
+  #installBannerClose{flex-shrink:0;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:0 2px;line-height:1;font-family:'Hanken Grotesk';transition:color .15s}
+  #installBannerClose:hover{color:var(--ink)}
+  #installBannerAndroid{flex:1;font-family:'Hanken Grotesk',sans-serif;font-size:13px;color:var(--ink)}
+  #installBannerAndroid strong{color:var(--brass)}
+  #androidInstallBtn{background:rgba(226,189,114,.15);border:1px solid rgba(226,189,114,.35);color:var(--brass);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:7px 14px;border-radius:8px;cursor:pointer;transition:background .18s;white-space:nowrap}
+  #androidInstallBtn:hover{background:rgba(226,189,114,.25)}
   /* ---- brand collapse ---- */
   #brand{transition:padding .3s var(--ease-out),max-width .3s var(--ease-out)}
   .brand-hide-btn{position:absolute;bottom:0;right:0;width:40px;height:40px;background:linear-gradient(135deg,transparent 49%,rgba(226,189,114,.82) 49%);border:none;padding:0;cursor:pointer;z-index:3;transition:width .22s var(--ease-out),height .22s var(--ease-out)}
@@ -3211,6 +3226,68 @@ applyDeepLink();
 if("serviceWorker" in navigator){
   navigator.serviceWorker.register("/sw.js",{scope:"/"}).catch(()=>{});
 }
+
+/* ---- install banner ---- */
+(function(){
+  if(localStorage.getItem("wakeInstallDismissed")) return;
+  const banner = byId("installBanner");
+  const closeBtn = byId("installBannerClose");
+  function dismiss(){ localStorage.setItem("wakeInstallDismissed","1"); banner.classList.remove("show"); }
+  closeBtn.addEventListener("click", dismiss);
+
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isSafari = /safari/i.test(navigator.userAgent) && !/crios|fxios|opios|chrome/i.test(navigator.userAgent);
+  const isStandalone = ("standalone" in navigator && navigator.standalone) || window.matchMedia("(display-mode: standalone)").matches;
+
+  if(isStandalone) return; // already installed
+
+  if(isIOS && isSafari){
+    // Show after 3s so the map loads first
+    setTimeout(()=>{ banner.classList.add("show"); }, 3000);
+    return;
+  }
+
+  // Android / Chrome — intercept native prompt
+  let deferredPrompt;
+  window.addEventListener("beforeinstallprompt", e=>{
+    e.preventDefault();
+    deferredPrompt = e;
+    // Swap banner content to an install button
+    const inner = byId("installBannerInner");
+    inner.innerHTML = `
+      <div id="installBannerIcon"><img src="/icons/apple-touch-icon.png" alt="WAKE"></div>
+      <div id="installBannerAndroid">Add <strong>WAKE</strong> to your home screen for quick access</div>
+      <button id="androidInstallBtn">Install</button>
+      <button id="installBannerClose" style="background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:0 2px;line-height:1">×</button>
+    `;
+    byId("androidInstallBtn").addEventListener("click", async ()=>{
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if(outcome==="accepted") dismiss();
+      deferredPrompt = null;
+    });
+    byId("installBannerClose").addEventListener("click", dismiss);
+    setTimeout(()=>{ banner.classList.add("show"); }, 2000);
+  });
+})();
 </script>
+
+<!-- install banner -->
+<div id="installBanner">
+  <div id="installBannerInner">
+    <div id="installBannerIcon">
+      <img src="/icons/apple-touch-icon.png" alt="WAKE">
+    </div>
+    <div id="installBannerText">
+      Tap
+      <svg class="share-icon" width="14" height="17" viewBox="0 0 14 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin:0 1px">
+        <path d="M7 1v9.5M4 4l3-3 3 3" stroke="#e2bd72" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M1 7v8h12V7H9.5" stroke="#e2bd72" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      then <strong>Add to Home Screen</strong> to install WAKE
+    </div>
+    <button id="installBannerClose" aria-label="Dismiss">×</button>
+  </div>
+</div>
 </body>
 </html>
