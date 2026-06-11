@@ -1,21 +1,62 @@
-// Fetches live camera data from the Google Sheet and returns JSON.
-// Server-side fetch avoids CORS; Vercel Edge cache keeps it fast.
-//
-// Sheet column headers (case-insensitive, flexible names accepted):
-//   port       | name
-//   flag       (emoji)
-//   country
-//   camview    | cam_view | description | view
-//   ytid       | yt_id   | youtube_id
-//   plat       | lat     | latitude
-//   plon       | plon    | lon | lng   | longitude
+// Fetches camera list from Google Sheet — only "name" and "url" columns required.
+// Everything else (ytId, coordinates, flag, country) is derived automatically.
 
 const SHEET_ID = "10F_8H8bPROFrSsVmhJ8oZ5yJS9IftpvKpViyMEIdVMk";
+const CSV_URL  = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
 
-// gviz endpoint works for sheets shared "Anyone with the link can view"
-// without needing File → Publish to web
-const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+// ── Extract YouTube video ID from any YT URL format ─────────────────────────
+function extractYtId(url) {
+  if (!url) return null;
+  url = url.trim();
+  // Already just an ID (11 chars, no slashes)
+  if (/^[A-Za-z0-9_-]{11}$/.test(url)) return url;
+  const m =
+    url.match(/[?&]v=([A-Za-z0-9_-]{11})/) ||
+    url.match(/youtu\.be\/([A-Za-z0-9_-]{11})/) ||
+    url.match(/\/live\/([A-Za-z0-9_-]{11})/) ||
+    url.match(/\/embed\/([A-Za-z0-9_-]{11})/) ||
+    url.match(/\/shorts\/([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
 
+// ── Country code → flag emoji ────────────────────────────────────────────────
+function countryFlag(code) {
+  if (!code || code.length !== 2) return "🌍";
+  return code.toUpperCase().split("")
+    .map(c => String.fromCodePoint(c.charCodeAt(0) + 127397))
+    .join("");
+}
+
+// ── Geocode a port name via Nominatim (free, no key needed) ─────────────────
+async function geocode(portName) {
+  try {
+    const q = encodeURIComponent(portName + " port");
+    const url = `https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1&addressdetails=1`;
+    const r = await fetch(url, {
+      headers: { "User-Agent": "WAKE-CruiseTracker/1.0 (wake-rose.vercel.app)" }
+    });
+    if (!r.ok) return null;
+    const data = await r.json();
+    if (!data.length) return null;
+    const hit = data[0];
+    const addr = hit.address || {};
+    const countryCode = addr.country_code?.toUpperCase() || "";
+    const country = [
+      addr.city || addr.town || addr.state || addr.county || "",
+      addr.country || ""
+    ].filter(Boolean).join(", ");
+    return {
+      lat: parseFloat(hit.lat),
+      lon: parseFloat(hit.lon),
+      flag: countryFlag(countryCode),
+      country,
+    };
+  } catch {
+    return null;
+  }
+}
+
+// ── Simple CSV parser (handles quoted fields) ────────────────────────────────
 function parseCSV(text) {
   const rows = [];
   for (const line of text.split(/\r?\n/)) {
@@ -36,9 +77,9 @@ function parseCSV(text) {
   return rows;
 }
 
-function col(headers, ...names) {
+function colIdx(headers, ...names) {
   for (const n of names) {
-    const i = headers.indexOf(n.toLowerCase());
+    const i = headers.indexOf(n.toLowerCase().replace(/[\s_-]/g, ""));
     if (i >= 0) return i;
   }
   return -1;
@@ -52,57 +93,81 @@ export default async function handler(req, res) {
     const r = await fetch(CSV_URL, {
       headers: { "User-Agent": "WAKE-CruiseTracker/1.0" },
     });
-
     if (!r.ok) throw new Error(`Sheet fetch ${r.status}`);
     const text = await r.text();
-
-    // Detect Google sign-in redirect (sheet not public)
-    if (text.includes("accounts.google.com") || text.includes("<html")) {
-      throw new Error("Sheet not publicly accessible");
+    if (text.includes("accounts.google.com") || text.trim().startsWith("<")) {
+      throw new Error("Sheet not public — share it with 'Anyone with the link can view'");
     }
 
     const rows = parseCSV(text);
-    if (rows.length < 2) throw new Error("Empty sheet");
+    if (rows.length < 2) throw new Error("Sheet appears empty");
 
-    const headers = rows[0].map(h => h.trim().toLowerCase().replace(/\s+/g, ""));
+    const headers = rows[0].map(h => h.trim().toLowerCase().replace(/[\s_-]/g, ""));
 
-    const iPort    = col(headers, "port", "name");
-    const iFlag    = col(headers, "flag");
-    const iCountry = col(headers, "country");
-    const iView    = col(headers, "camview", "cam_view", "description", "view");
-    const iYtId    = col(headers, "ytid", "yt_id", "youtubeid", "youtube_id");
-    const iLat     = col(headers, "plat", "lat", "latitude");
-    const iLon     = col(headers, "plon", "plon", "lon", "lng", "longitude");
-    const iSrc     = col(headers, "srcurl", "src_url", "url", "link");
+    // Accept "name" or "port" for the port name column
+    const iName = colIdx(headers, "name", "port", "portname");
+    // Accept "url", "youtube", "link", "yturl", "youtubeurl"
+    const iUrl  = colIdx(headers, "url", "youtube", "link", "yturl", "youtubeurl", "youtubelink");
+    // Optional overrides the user can add if they want
+    const iLat  = colIdx(headers, "lat", "plat", "latitude");
+    const iLon  = colIdx(headers, "lon", "plon", "lng", "longitude");
+    const iFlag = colIdx(headers, "flag");
+    const iCntry= colIdx(headers, "country");
+    const iView = colIdx(headers, "view", "camview", "description");
+
+    if (iName < 0 || iUrl < 0) {
+      throw new Error(`Sheet must have "name" and "url" columns. Found: ${headers.join(", ")}`);
+    }
 
     const get = (row, i) => (i >= 0 && row[i] != null ? row[i].trim() : "");
 
-    const feeds = [];
-    rows.slice(1).forEach((row, idx) => {
-      const ytId = get(row, iYtId);
-      const port = get(row, iPort);
-      if (!ytId || !port) return; // skip rows without required fields
-      const lat = parseFloat(get(row, iLat));
-      const lon = parseFloat(get(row, iLon));
-      feeds.push({
+    // Build raw entries
+    const entries = rows.slice(1)
+      .map(row => ({ name: get(row, iName), url: get(row, iUrl), row }))
+      .filter(e => e.name && e.url);
+
+    if (!entries.length) throw new Error("No valid rows (need name + url)");
+
+    // Geocode all entries in parallel (Nominatim allows reasonable concurrency)
+    const feeds = await Promise.all(entries.map(async (e, idx) => {
+      const ytId = extractYtId(e.url);
+      if (!ytId) return null; // skip bad URLs
+
+      // Use sheet overrides if provided, otherwise geocode
+      let lat = parseFloat(get(e.row, iLat));
+      let lon = parseFloat(get(e.row, iLon));
+      let flag = get(e.row, iFlag);
+      let country = get(e.row, iCntry);
+
+      if (isNaN(lat) || isNaN(lon) || !flag) {
+        const geo = await geocode(e.name);
+        if (geo) {
+          if (isNaN(lat)) lat = geo.lat;
+          if (isNaN(lon)) lon = geo.lon;
+          if (!flag) flag = geo.flag;
+          if (!country) country = geo.country;
+        }
+      }
+
+      return {
         id:      idx + 1,
-        port,
-        flag:    get(row, iFlag)    || "🌍",
-        country: get(row, iCountry) || "",
-        camView: get(row, iView)    || "",
+        port:    e.name,
+        flag:    flag || "🌍",
+        country: country || "",
+        camView: get(e.row, iView) || `${e.name} live cam`,
         ytId,
-        srcUrl:  get(row, iSrc)     || `https://www.youtube.com/live/${ytId}`,
+        srcUrl:  `https://www.youtube.com/live/${ytId}`,
         pLat:    isNaN(lat) ? null : lat,
         pLon:    isNaN(lon) ? null : lon,
-      });
-    });
+      };
+    }));
 
-    if (!feeds.length) throw new Error("No valid rows");
+    const valid = feeds.filter(Boolean);
+    if (!valid.length) throw new Error("No entries with valid YouTube URLs");
 
-    res.status(200).json({ ok: true, feeds, source: "sheet", ts: Date.now() });
+    res.status(200).json({ ok: true, feeds: valid, source: "sheet", ts: Date.now() });
 
   } catch (err) {
-    // Return error so the app knows to use its hardcoded fallback
     res.status(200).json({ ok: false, error: err.message });
   }
 }
