@@ -2559,6 +2559,7 @@ fetch(ITIN_URL,{cache:"no-store"}).then(r=>r.ok?r.json():Promise.reject())
     Object.values(_itinShip).forEach(arr=>arr.sort((a,b)=>a.date.localeCompare(b.date)));
     if(nearOpen) renderNear();
     if(selected) fillDetailItin(selected);
+    if(selected){ delete _seaCache[selected.mmsi]; fetchSeaSummary(selected); } // redo sea route now that itineraries exist
   }).catch(()=>{});
 
 /* ---- ship profile data (scraped monthly by GitHub Actions) ---- */
@@ -2685,9 +2686,12 @@ async function buildSeaPoints(d){
   }
   return pts.slice(0,10);
 }
+const _seaSeq={};
 async function fetchSea(d){
   const c=_seaCache[d.mmsi];
-  if(c&&Date.now()-c.ts<30*60*1000) return c.samples;
+  // degenerate samples (selection before itineraries/position loaded) expire fast
+  if(c&&Date.now()-c.ts<(c.samples.length>1?30*60*1000:2*60*1000)) return c.samples;
+  const seq=(_seaSeq[d.mmsi]||0)+1; _seaSeq[d.mmsi]=seq;
   const pts=await buildSeaPoints(d);
   if(pts.length){
     try{
@@ -2701,6 +2705,8 @@ async function fetchSea(d){
       });
     }catch(e){ pts.forEach(p=>{p.wave=null;p.swell=null;}); }
   }
+  // a newer request superseded this one while we awaited — don't clobber its result
+  if(_seaSeq[d.mmsi]!==seq) return _seaCache[d.mmsi]?_seaCache[d.mmsi].samples:pts;
   _seaCache[d.mmsi]={ts:Date.now(),samples:pts};
   return pts;
 }
