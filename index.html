@@ -3280,8 +3280,30 @@ if("serviceWorker" in navigator){
   var banner = document.getElementById("installBanner");
   try{ if(navigator.standalone===true) return; }catch(e){}
   try{ if(matchMedia("(display-mode:standalone)").matches) return; }catch(e){}
-  banner.classList.add("show");
-  document.getElementById("installBannerClose").addEventListener("click",function(){ banner.classList.remove("show"); });
+
+  var hideTimer = null;
+
+  function showBanner(){ banner.classList.add("show"); }
+  function hideBanner(){ banner.classList.remove("show"); }
+
+  function snooze(){
+    hideBanner();
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(showBanner, 2 * 60 * 1000); // reappear in 2 min
+  }
+
+  // Hide on any click anywhere on the page
+  document.addEventListener("click", function(e){
+    if(banner.classList.contains("show")) snooze();
+  });
+
+  // × button also snoozes
+  document.getElementById("installBannerClose").addEventListener("click", function(e){
+    e.stopPropagation();
+    snooze();
+  });
+
+  showBanner();
 })();
 </script>
 </body>
