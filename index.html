@@ -3227,18 +3227,9 @@ if("serviceWorker" in navigator){
   navigator.serviceWorker.register("/sw.js",{scope:"/"}).catch(()=>{});
 }
 
-/* ---- install banner ---- */
-(function(){
-  const banner = byId("installBanner");
-  if(!banner) return;
-  try{ if(navigator.standalone===true) return; }catch(e){}
-  try{ if(matchMedia("(display-mode:standalone)").matches) return; }catch(e){}
-  banner.classList.add("show");
-  byId("installBannerClose").addEventListener("click",()=>{ banner.classList.remove("show"); });
-})();
 </script>
 
-<!-- install banner -->
+<!-- install banner — must be in DOM before the init script below -->
 <div id="installBanner">
   <div id="installBannerInner">
     <div id="installBannerIcon">
@@ -3255,5 +3246,14 @@ if("serviceWorker" in navigator){
     <button id="installBannerClose" aria-label="Dismiss">×</button>
   </div>
 </div>
+<script>
+(function(){
+  var banner = document.getElementById("installBanner");
+  try{ if(navigator.standalone===true) return; }catch(e){}
+  try{ if(matchMedia("(display-mode:standalone)").matches) return; }catch(e){}
+  banner.classList.add("show");
+  document.getElementById("installBannerClose").addEventListener("click",function(){ banner.classList.remove("show"); });
+})();
+</script>
 </body>
 </html>
