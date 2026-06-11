@@ -759,10 +759,9 @@
     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     Deep Dive
   </button>
-  <button class="ss-dive-btn ss-sm" id="shareBtn" title="Copy a shareable link or embed code">⤴ Share</button>
+  <button class="ss-dive-btn ss-sm" id="shareBtn" title="Share this ship">⤴ Share</button>
   <div class="share-pop" id="sharePop" hidden>
-    <button id="shareCopyLink">Copy Link</button>
-    <button id="shareCopyEmbed">Copy Embed</button>
+    <button id="shareCopyLink">Copy Message</button>
   </div>
 </div>
 
@@ -1796,7 +1795,7 @@ function clearSelection(){
   const prev=selected; selected=null;
   if(prev&&prev._m) prev._m.setStyle(markerStyle(prev));
   detail.classList.remove("show"); detail.classList.add("collapsed"); clearPing(); clearItinPreview(); if(nearOpen) closeNear(); applyVisibility();
-  histLayer.clearLayers(); seaLayer.clearLayers();
+  histLayer.clearLayers(); seaLayer.clearLayers(); byId("seaKey").hidden=true;
   try{ history.replaceState(null,"",location.pathname); }catch(e){}
   hideShipSide(); if(!profileEl.hidden) closeProfile();
 }
@@ -2649,21 +2648,39 @@ async function drawHistory(d,opts){
   const drawn=segs.filter(s=>s.length>1);
   drawn.forEach(s=>
     L.polyline(s,{renderer:canvasR,color:d.color,weight:1.2,opacity:0.5,dashArray:"1 5",interactive:false}).addTo(histLayer));
-  L.circleMarker([pts[0].lat,pts[0].lon],{renderer:canvasR,radius:3,color:d.color,weight:1,fillColor:d.color,fillOpacity:0.5,interactive:false}).addTo(histLayer);
+  const seenDays=new Set();
+  pts.forEach(p=>{
+    const day=new Date(p.t).toISOString().slice(0,10);
+    if(!seenDays.has(day)){
+      seenDays.add(day);
+      const label=new Date(p.t).toLocaleDateString("en-US",{month:"short",day:"numeric"});
+      L.circleMarker([p.lat,p.lon],{renderer:canvasR,radius:4,color:"#fff",weight:1.2,fillColor:d.color,fillOpacity:0.85})
+        .bindTooltip(label,{permanent:false,direction:"top",offset:[0,-6]})
+        .addTo(histLayer);
+    }
+  });
   if(!drawn.length){ if(opts&&opts.fit) flashBtn("histBtn","No track data yet"); return; }
   if(opts&&opts.fit) map.flyToBounds(L.latLngBounds(drawn.flat()),{padding:[60,60],maxZoom:9,duration:CAM_DUR});
 }
 byId("histBtn").addEventListener("click",()=>{
   histOn=!histOn;
   byId("histBtn").classList.toggle("on",histOn);
-  if(histOn&&selected) drawHistory(selected,{fit:true}); else histLayer.clearLayers();
+  if(histOn){
+    detail.classList.add("collapsed");
+    byId("dToggle").setAttribute("aria-expanded","false");
+    hidePortCard();
+    if(!profileEl.hidden) closeProfile();
+    if(selected) drawHistory(selected,{fit:true});
+  } else {
+    histLayer.clearLayers();
+  }
 });
 
 /* ---- sea state & route weather (Open-Meteo marine API, free & keyless) ---- */
 let seaOn=false;
 const _seaCache={}; // mmsi -> {ts, samples}
 function waveColor(h){ return h==null?"#56707c":h<1?"#5ad6a0":h<2.5?"#e2bd72":h<4?"#f08c4a":"#ff5a4d"; }
-function seaDayLabel(off){ return off===0?"Today":new Date(Date.now()+off*864e5).toLocaleDateString("en-US",{weekday:"short"}); }
+function seaDayLabel(off){ return off===0?"Today":new Date(Date.now()+off*864e5).toLocaleDateString("en-US",{month:"short",day:"numeric"}); }
 async function buildSeaPoints(d){
   const today=new Date().toISOString().slice(0,10);
   const limit=new Date(Date.now()+6*864e5).toISOString().slice(0,10);
@@ -2758,10 +2775,20 @@ async function drawSea(d,opts){
 byId("seaBtn").addEventListener("click",()=>{
   seaOn=!seaOn;
   byId("seaBtn").classList.toggle("on",seaOn);
-  if(seaOn&&selected) drawSea(selected,{fit:true}); else seaLayer.clearLayers();
+  if(seaOn){
+    detail.classList.add("collapsed");
+    byId("dToggle").setAttribute("aria-expanded","false");
+    hidePortCard();
+    if(!profileEl.hidden) closeProfile();
+    byId("seaKey").hidden=false;
+    if(selected) drawSea(selected,{fit:true});
+  } else {
+    seaLayer.clearLayers();
+    byId("seaKey").hidden=true;
+  }
 });
 
-/* ---- share link & embed snippet ---- */
+/* ---- share ---- */
 const SITE_ORIGIN=/^https?:/.test(location.origin)?location.origin:"https://wake-rose.vercel.app";
 function copyText(txt,btn){
   const done=()=>{ const old=btn.textContent; btn.textContent="Copied ✓"; setTimeout(()=>{btn.textContent=old;},1400); };
@@ -2769,16 +2796,25 @@ function copyText(txt,btn){
   if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done).catch(fallback);
   else fallback();
 }
+function shareMsg(d){
+  const link=SITE_ORIGIN+"/s/"+slugOf(d.name);
+  const status=d.status==="port"
+    ?"docked in "+(d.portCity||"port")
+    :"sailing at "+d.spd.toFixed(0)+" kn"+(d.next?" bound for "+d.next:"");
+  return `${d.name} (${d.line}) – ${status}. Track it live: ${link}`;
+}
 function closeSharePop(){ byId("sharePop").hidden=true; byId("shareBtn").classList.remove("on"); }
 byId("shareBtn").addEventListener("click",()=>{
+  if(!selected) return;
+  if(navigator.share){
+    navigator.share({text:shareMsg(selected)}).catch(()=>{});
+    return;
+  }
   const pop=byId("sharePop");
   pop.hidden=!pop.hidden;
   byId("shareBtn").classList.toggle("on",!pop.hidden);
 });
-byId("shareCopyLink").addEventListener("click",e=>{ if(selected) copyText(SITE_ORIGIN+"/s/"+slugOf(selected.name),e.target); });
-byId("shareCopyEmbed").addEventListener("click",e=>{
-  if(selected) copyText(`<iframe src="${SITE_ORIGIN}/embed.html?ship=${slugOf(selected.name)}" width="100%" height="360" style="border:0;border-radius:12px" loading="lazy" title="WAKE ship tracker"></iframe>`,e.target);
-});
+byId("shareCopyLink").addEventListener("click",e=>{ if(selected) copyText(shareMsg(selected),e.target); });
 
 /* ---- ?ship= deep links (slug or MMSI) ---- */
 let _deepLinkPending=false;
@@ -3248,5 +3284,6 @@ requestAnimationFrame(tick);
 connect();
 applyDeepLink();
 </script>
+<div id="seaKey" hidden style="position:fixed;bottom:58px;right:14px;z-index:900;background:rgba(6,18,28,.88);border:1px solid rgba(255,255,255,.13);border-radius:8px;padding:5px 10px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.04em;display:flex;gap:8px;align-items:center;pointer-events:none;backdrop-filter:blur(10px)"><span style="color:#5ad6a0">●</span> Calm <span style="color:#e2bd72">●</span> Choppy <span style="color:#f08c4a">●</span> Rough <span style="color:#ff5a4d">●</span> Wild</div>
 </body>
 </html>
