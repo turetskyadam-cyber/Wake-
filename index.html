@@ -2874,8 +2874,8 @@ if(localStorage.getItem("brandMini")) brandEl.classList.add("mini");
 /* ============================================================
    LIVE PORT CAMS
    ============================================================ */
-// Only ports with verified, inline-playing embeds (Windy or YouTube)
-const CAM_FEEDS = [
+// Hardcoded fallback — replaced at runtime by /api/cameras (Google Sheet)
+let CAM_FEEDS = [
   // pLat/pLon = actual port coordinates used for geographic ship cross-reference
   {id:1,  port:'Miami',           flag:'🇺🇸', country:'Florida, USA',      camView:'Port of Miami · cruise terminal',    ytId:'PeYZZinH1wI', srcUrl:'https://www.youtube.com/live/PeYZZinH1wI',  pLat:25.7742, pLon:-80.1728},
   {id:2,  port:'Key West',        flag:'🇺🇸', country:'Florida, USA',      camView:'Historic harbor live cam',           ytId:'8Rw-tZTeBjU', srcUrl:'https://www.youtube.com/live/8Rw-tZTeBjU',  pLat:24.5551, pLon:-81.8034},
@@ -2912,6 +2912,18 @@ const CAM_FEEDS = [
   document.head.appendChild(s);
 })();
 function _whenYT(fn){ if(window._ytReady) fn(); else window._ytCbs.push(fn); }
+
+/* ---- load cameras from Google Sheet ---- */
+(async function loadCamSheet(){
+  try{
+    const res = await fetch("/api/cameras");
+    const data = await res.json();
+    if(data.ok && data.feeds && data.feeds.length){
+      CAM_FEEDS = data.feeds;
+      // Badge will auto-update on next tick; grid re-renders when cams panel opens
+    }
+  }catch(e){/* keep hardcoded fallback */}
+})();
 
 (function initCams(){
   let _open = false;
