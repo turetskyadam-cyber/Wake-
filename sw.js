@@ -1,6 +1,6 @@
-/* WAKE Service Worker — v1 */
-const SHELL_CACHE = "wake-shell-v1";
-const DATA_CACHE  = "wake-data-v1";
+/* WAKE Service Worker — v3 */
+const SHELL_CACHE = "wake-shell-v3";
+const DATA_CACHE  = "wake-data-v3";
 
 const SHELL_URLS = [
   "/",
@@ -65,9 +65,26 @@ self.addEventListener("fetch", e => {
     return;
   }
 
-  // App shell — cache first
+  // index.html — always network first so updates are instant
+  if(u.pathname === "/" || u.pathname === "/index.html"){
+    e.respondWith(networkFirstShell(e.request));
+    return;
+  }
+
+  // Other shell assets (icons, manifest) — cache first
   e.respondWith(cacheFirst(e.request));
 });
+
+async function networkFirstShell(req) {
+  const cache = await caches.open(SHELL_CACHE);
+  try {
+    const res = await fetch(req);
+    if(res.ok) cache.put(req, res.clone());
+    return res;
+  } catch {
+    return await cache.match(req) || Response.error();
+  }
+}
 
 async function cacheFirst(req) {
   const cached = await caches.match(req);

@@ -3230,11 +3230,10 @@ if("serviceWorker" in navigator){
 /* ---- install banner ---- */
 (function(){
   const banner = byId("installBanner");
-  // Don't show if already running as installed PWA
-  if(navigator.standalone || window.matchMedia("(display-mode:standalone)").matches) return;
-  // Only on touch devices (phones/tablets)
-  if(!navigator.maxTouchPoints) return;
-  setTimeout(()=>{ banner.classList.add("show"); }, 1000);
+  if(!banner) return;
+  try{ if(navigator.standalone===true) return; }catch(e){}
+  try{ if(matchMedia("(display-mode:standalone)").matches) return; }catch(e){}
+  banner.classList.add("show");
   byId("installBannerClose").addEventListener("click",()=>{ banner.classList.remove("show"); });
 })();
 </script>
