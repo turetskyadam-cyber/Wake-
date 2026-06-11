@@ -340,6 +340,8 @@
   .profile-stat-row span:last-child{color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:11px}
   .profile-itin-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12.5px;color:var(--muted)}
   .profile-itin-row:last-child{border-bottom:none}
+  .profile-itin-row[data-port]{cursor:pointer}
+  .profile-itin-row[data-port]:hover .profile-itin-port{text-decoration:underline;text-underline-offset:2px}
   .profile-itin-date{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);flex:none;width:48px}
   .profile-itin-port{flex:1;min-width:0;color:var(--ink)}
   .profile-itin-times{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);white-space:nowrap}
@@ -758,7 +760,7 @@
     Deep Dive
   </button>
   <button class="ss-dive-btn ss-sm" id="shareBtn" title="Share this ship">⤴ Share</button>
-  <div class="share-pop" id="sharePop" hidden>
+  <div class="share-pop" id="sharePop" style="display:none">
     <button id="shareCopyLink">Copy Message</button>
   </div>
 </div>
@@ -2688,16 +2690,22 @@ function shareMsg(d){
     :"sailing at "+d.spd.toFixed(0)+" kn"+(d.next?" bound for "+d.next:"");
   return `${d.name} (${d.line}) – ${status}. Track it live: ${link}`;
 }
-function closeSharePop(){ byId("sharePop").hidden=true; byId("shareBtn").classList.remove("on"); }
-byId("shareBtn").addEventListener("click",()=>{
+function closeSharePop(){ byId("sharePop").style.display='none'; byId("shareBtn").classList.remove("on"); }
+byId("shareBtn").addEventListener("click",e=>{
+  e.stopPropagation();
   if(!selected) return;
   if(navigator.share){
     navigator.share({text:shareMsg(selected)}).catch(()=>{});
     return;
   }
   const pop=byId("sharePop");
-  pop.hidden=!pop.hidden;
-  byId("shareBtn").classList.toggle("on",!pop.hidden);
+  const opening=pop.style.display==='none';
+  pop.style.display=opening?'flex':'none';
+  byId("shareBtn").classList.toggle("on",opening);
+});
+document.addEventListener("click",e=>{
+  const pop=byId("sharePop");
+  if(pop.style.display!=='none'&&!pop.contains(e.target)&&!byId("shareBtn").contains(e.target)) closeSharePop();
 });
 byId("shareCopyLink").addEventListener("click",e=>{ if(selected) copyText(shareMsg(selected),e.target); });
 
@@ -2766,9 +2774,24 @@ function openProfile(d){
       const dt=new Date(c.date+"T12:00:00Z");
       const label=isToday?"Today":dt.toLocaleDateString("en-US",{month:"short",day:"numeric"});
       const times=[c.arr&&"Arr "+c.arr,c.dep&&"Dep "+c.dep].filter(Boolean).join(" → ");
-      return `<div class="profile-itin-row"><span class="profile-itin-date" style="${isToday?"color:var(--brass)":""}">${label}</span><span class="profile-itin-port">${c.port}</span>${times?`<span class="profile-itin-times">${times}</span>`:""}</div>`;
+      return `<div class="profile-itin-row" data-port="${c.port}" data-date="${c.date}" data-arr="${c.arr||''}" data-dep="${c.dep||''}"><span class="profile-itin-date" style="${isToday?"color:var(--brass)":""}">${label}</span><span class="profile-itin-port">${c.port}</span>${times?`<span class="profile-itin-times">${times}</span>`:""}</div>`;
     }).join("")
     :`<div style="color:var(--faint);font-size:12px;padding:6px 0">No itinerary data available</div>`;
+  byId("profileItin").querySelectorAll(".profile-itin-row[data-port]").forEach(row=>{
+    row.addEventListener("click",async e=>{
+      e.stopPropagation();
+      let pe=findPort(row.dataset.port);
+      if(!pe){
+        row.style.opacity='0.5';
+        pe=await geocodePortName(row.dataset.port);
+        row.style.opacity='';
+        if(!pe) return;
+      }
+      closeProfile();
+      showPortCard(pe,{date:row.dataset.date,arr:row.dataset.arr||null,dep:row.dataset.dep||null},d.color);
+      if(pe.lat!=null) map.flyTo([pe.lat,pe.lon],8,{duration:CAM_DUR});
+    });
+  });
   byId("profileLinks").innerHTML=spec.wiki
     ?`<a class="profile-wiki-link" href="${spec.wiki}" target="_blank" rel="noopener">Wikipedia ↗</a>`:
     "";
