@@ -1563,6 +1563,7 @@ function ensureMarker(d){
     function expandFromTooltip(e){
       e.stopPropagation();
       if(e.cancelable) e.preventDefault();
+      if(selected!==d) goShip(d);
       detail.classList.remove('collapsed');
       byId('dToggle').setAttribute('aria-expanded','true');
       showShipSide();
