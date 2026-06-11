@@ -6,8 +6,7 @@ import { ImageResponse } from "@vercel/og";
 
 export const config = { runtime: "edge" };
 
-// DATA_BRANCH: flip to "main" when the feature branch is merged.
-const DATA_BRANCH = "claude/cruise-ship-tracking-nsefj4";
+const DATA_BRANCH = "main";
 const RAW = `https://raw.githubusercontent.com/turetskyadam-cyber/Wake-/${DATA_BRANCH}/`;
 
 async function fetchJSON(url) {

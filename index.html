@@ -2312,8 +2312,7 @@ function applySnapshot(snap){
 const SNAP_URL="https://raw.githubusercontent.com/turetskyadam-cyber/Wake-/main/positions.json";
 const ITIN_URL="https://raw.githubusercontent.com/turetskyadam-cyber/Wake-/main/itineraries.json";
 // History day-files are committed by the same Action (see tools/append-history.mjs).
-// DATA_BRANCH: flip to "main" when this feature branch is merged.
-const DATA_BRANCH="claude/cruise-ship-tracking-nsefj4";
+const DATA_BRANCH="main";
 const HIST_BASE=`https://raw.githubusercontent.com/turetskyadam-cyber/Wake-/${DATA_BRANCH}/history/`;
 
 // Sea-gate routing — strategic waypoints at real ocean passages used to route around land.
@@ -2608,6 +2607,13 @@ function renderWeather(c){
 
 /* ---- 7-day historical wake trail (history/*.json committed by GitHub Actions) ---- */
 let histOn=false;
+function flashBtn(id,msg){
+  const b=byId(id);
+  if(b.dataset.orig==null) b.dataset.orig=b.textContent;
+  b.textContent=msg;
+  clearTimeout(b._flashT);
+  b._flashT=setTimeout(()=>{ b.textContent=b.dataset.orig; },1800);
+}
 const _histDayCache=new Map(); // dateStr -> {ts, p:Promise<json|null>}; past days are immutable
 function histDates(){ const out=[]; for(let i=7;i>=0;i--) out.push(new Date(Date.now()-i*864e5).toISOString().slice(0,10)); return out; }
 function loadHistDay(date){
@@ -2628,26 +2634,29 @@ async function loadHistory(d){
   });
   return pts;
 }
-async function drawHistory(d){
+async function drawHistory(d,opts){
   const my=d.mmsi;
   const pts=await loadHistory(d);
   if(!selected||selected.mmsi!==my||!histOn) return;       // selection changed while loading
   histLayer.clearLayers();
-  if(pts.length<2) return;
+  if(pts.length<2){ if(opts&&opts.fit) flashBtn("histBtn","No track data yet"); return; }
   const segs=[[]];                                          // split at long gaps & the antimeridian
   for(let i=0;i<pts.length;i++){
     const prev=pts[i-1];
     if(prev&&(pts[i].t-prev.t>12*3600*1000||Math.abs(pts[i].lon-prev.lon)>180)) segs.push([]);
     segs[segs.length-1].push([pts[i].lat,pts[i].lon]);
   }
-  segs.filter(s=>s.length>1).forEach(s=>
+  const drawn=segs.filter(s=>s.length>1);
+  drawn.forEach(s=>
     L.polyline(s,{renderer:canvasR,color:d.color,weight:1.2,opacity:0.5,dashArray:"1 5",interactive:false}).addTo(histLayer));
   L.circleMarker([pts[0].lat,pts[0].lon],{renderer:canvasR,radius:3,color:d.color,weight:1,fillColor:d.color,fillOpacity:0.5,interactive:false}).addTo(histLayer);
+  if(!drawn.length){ if(opts&&opts.fit) flashBtn("histBtn","No track data yet"); return; }
+  if(opts&&opts.fit) map.flyToBounds(L.latLngBounds(drawn.flat()),{padding:[60,60],maxZoom:9,duration:CAM_DUR});
 }
 byId("histBtn").addEventListener("click",()=>{
   histOn=!histOn;
   byId("histBtn").classList.toggle("on",histOn);
-  if(histOn&&selected) drawHistory(selected); else histLayer.clearLayers();
+  if(histOn&&selected) drawHistory(selected,{fit:true}); else histLayer.clearLayers();
 });
 
 /* ---- sea state & route weather (Open-Meteo marine API, free & keyless) ---- */
@@ -2727,11 +2736,12 @@ async function fetchSeaSummary(d){
   el.innerHTML=`<b>Sea State</b>Max waves ${max.wave.toFixed(1)} m (${ft} ft) · ${seaDayLabel(max.day)}<br>${note}`;
   el.hidden=false;
 }
-async function drawSea(d){
+async function drawSea(d,opts){
   const my=d.mmsi;
   const s=await fetchSea(d);
   if(!selected||selected.mmsi!==my||!seaOn) return;
   seaLayer.clearLayers();
+  if(s.length<2){ if(opts&&opts.fit) flashBtn("seaBtn","No route forecast"); return; }
   for(let i=1;i<s.length;i++){
     if(Math.abs(s[i].lon-s[i-1].lon)>180) continue;         // don't draw across the antimeridian
     const w=Math.max(s[i-1].wave??-1,s[i].wave??-1);
@@ -2743,11 +2753,12 @@ async function drawSea(d){
       .bindTooltip(`${p.wave!=null?"≤ "+p.wave.toFixed(1)+" m waves":"No data"} · ${seaDayLabel(p.day)}${p.label?" · "+p.label:""}`,{direction:"top",offset:[0,-6]})
       .addTo(seaLayer);
   });
+  if(opts&&opts.fit) map.flyToBounds(L.latLngBounds(s.map(p=>[p.lat,p.lon])),{padding:[60,60],maxZoom:8,duration:CAM_DUR});
 }
 byId("seaBtn").addEventListener("click",()=>{
   seaOn=!seaOn;
   byId("seaBtn").classList.toggle("on",seaOn);
-  if(seaOn&&selected) drawSea(selected); else seaLayer.clearLayers();
+  if(seaOn&&selected) drawSea(selected,{fit:true}); else seaLayer.clearLayers();
 });
 
 /* ---- share link & embed snippet ---- */

@@ -36,8 +36,7 @@
 <script>
 // Standalone single-ship mini tracker. Reads the same committed JSON the main
 // app uses (no AIS WebSocket — embeds poll positions.json every 5 minutes).
-// DATA_BRANCH: flip to "main" when the feature branch is merged.
-const DATA_BRANCH="claude/cruise-ship-tracking-nsefj4";
+const DATA_BRANCH="main";
 const RAW=`https://raw.githubusercontent.com/turetskyadam-cyber/Wake-/${DATA_BRANCH}/`;
 const SITE="https://wake-rose.vercel.app";
 const slugOf=n=>n.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
