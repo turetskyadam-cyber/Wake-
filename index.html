@@ -4,6 +4,14 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>WAKE — Live Cruise Fleet Tracker</title>
+<!-- Default social preview (per-ship previews are served by /s/<slug> via api/share) -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="WAKE" />
+<meta property="og:title" content="WAKE — Live Cruise Fleet Tracker" />
+<meta property="og:description" content="Track 200+ cruise ships live on a dark ocean map — positions, wake trails, itineraries and sea conditions." />
+<meta property="og:url" content="https://wake-rose.vercel.app/" />
+<meta property="og:image" content="https://wake-rose.vercel.app/api/og" />
+<meta name="twitter:card" content="summary_large_image" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -618,6 +626,16 @@
     .cam-hdr{padding:0 16px}
     .cam-back{margin:8px 16px 0}
   }
+  /* ---- 7-day track / sea state / share additions (additive only) ---- */
+  .ss-dive-btn.ss-sm{flex-direction:row;justify-content:center;gap:7px;padding:11px 8px;border-radius:0;font-size:8.5px}
+  .ss-dive-btn.on{background:rgba(226,189,114,.13);color:var(--ink)}
+  .ss-sea{padding:9px 12px 11px;font-family:'JetBrains Mono',monospace;font-size:9px;line-height:1.5;letter-spacing:.06em;color:var(--faint);text-align:center;border-top:1px solid var(--glass-edge)}
+  .ss-sea b{display:block;color:var(--ink);font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+  .ss-sea .rough{color:#f08c4a}
+  .ss-sea .calm{color:#5ad6a0}
+  .share-pop{padding:4px 10px 12px;display:flex;flex-direction:column;gap:6px}
+  .share-pop button{padding:8px 6px;cursor:pointer;background:rgba(226,189,114,.07);border:1px solid var(--glass-edge);border-radius:8px;color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;transition:background .2s}
+  .share-pop button:hover{background:rgba(226,189,114,.16)}
 </style>
 </head>
 <body>
@@ -732,11 +750,20 @@
     <div class="ss-wx-wind" id="ssWxWind">— kt —</div>
     <div class="ss-wx-label" id="ssWxLabel">—</div>
   </div>
+  <div class="ss-sea" id="ssSea" hidden></div>
+  <div class="ss-div"></div>
+  <button class="ss-dive-btn ss-sm" id="histBtn" title="Show this ship's actual 7-day track">〰 7-Day Track</button>
+  <button class="ss-dive-btn ss-sm" id="seaBtn" title="Forecast wave height along the upcoming route">🌊 Sea State</button>
   <div class="ss-div"></div>
   <button class="ss-dive-btn" id="profileBtn">
     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     Deep Dive
   </button>
+  <button class="ss-dive-btn ss-sm" id="shareBtn" title="Copy a shareable link or embed code">⤴ Share</button>
+  <div class="share-pop" id="sharePop" hidden>
+    <button id="shareCopyLink">Copy Link</button>
+    <button id="shareCopyEmbed">Copy Embed</button>
+  </div>
 </div>
 
 <div id="profile" class="profile-modal" aria-modal="true" hidden>
@@ -1484,6 +1511,9 @@ const fleet=getFleet();
 const byMmsi=new Map(); fleet.forEach(d=>{ if(d.mmsi) byMmsi.set(d.mmsi,d); });
 const byName=new Map(); fleet.forEach(d=> byName.set(normName(d.name),d));
 const byLine={}; Object.keys(LINES).forEach(l=>byLine[l]=[]); fleet.forEach(d=> (byLine[d.line]||(byLine[d.line]=[])).push(d));
+// URL-friendly slug per ship (same rule as tools/scrape-ships.mjs) — powers ?ship= deep links
+const slugOf=n=>n.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+const bySlug=new Map(fleet.map(d=>[slugOf(d.name),d]));
 
 /* ===================== MAP (Leaflet, real tiles) ===================== */
 const map = L.map('map', {
@@ -1499,6 +1529,8 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
 
 const canvasR = L.canvas({ padding:0.5 });
 const wakeLayer = L.layerGroup().addTo(map);
+const histLayer = L.layerGroup().addTo(map);   // 7-day historical track for the selected ship
+const seaLayer  = L.layerGroup().addTo(map);   // sea-state (wave height) route overlay
 
 // Gulf of America logo overlay
 L.imageOverlay(
@@ -1740,7 +1772,10 @@ function updateDetailLive(d){
 }
 function selectShip(d){
   clearItinPreview();
+  histLayer.clearLayers(); seaLayer.clearLayers(); closeSharePop();
   selected=d;
+  if(histOn) drawHistory(d);
+  if(seaOn) drawSea(d);
   if(nearOpen){ clearNearOverlay(); renderNear(); if(d.lat!=null){ _nearCircle=L.circle([d.lat,d.lon],{radius:NEAR_MILES*KM_PER_MILE*1000,color:"rgba(226,189,114,0.5)",fill:false,dashArray:"5 8",weight:1.5}).addTo(map); } }
   fillDetail(d); detail.classList.add("show","collapsed");   // appears as a slim "Cruise info" bar; tap to expand
   byId("dToggle").setAttribute("aria-expanded","false");
@@ -1754,12 +1789,15 @@ function selectShip(d){
   }
   applyVisibility();
   fetchWeather(d); // pre-fetches in background; panel shows when Cruise Info opens
+  fetchSeaSummary(d); // sea-state summary for the side panel (overlay draws only when toggled)
 }
 function clearSelection(){
   if(selected&&selected._m){ selected._m.closeTooltip(); }
   const prev=selected; selected=null;
   if(prev&&prev._m) prev._m.setStyle(markerStyle(prev));
   detail.classList.remove("show"); detail.classList.add("collapsed"); clearPing(); clearItinPreview(); if(nearOpen) closeNear(); applyVisibility();
+  histLayer.clearLayers(); seaLayer.clearLayers();
+  try{ history.replaceState(null,"",location.pathname); }catch(e){}
   hideShipSide(); if(!profileEl.hidden) closeProfile();
 }
 function collapseDetail(){ detail.classList.add("collapsed"); byId("dToggle").setAttribute("aria-expanded","false"); hideShipSide(); }
@@ -1986,7 +2024,7 @@ function refreshNav(){ // light refresh of counts/meta without re-animating
 /* ---- navigation actions ---- */
 function goLines(){ nav={level:0,line:null,ship:null}; hoverLine=null; clearSelection(); renderNav("l"); applyVisibility(); resetCamera(); }
 function goLine(line){ const deeper=nav.level<1; nav={level:1,line,ship:null}; hoverLine=null; clearSelection(); renderNav(deeper?"r":"l"); applyVisibility(); flyToShips(byLine[line]); }
-function goShip(d){ nav={level:2,line:d.line,ship:d}; renderNav("r"); selectShip(d); collapseNav(); }
+function goShip(d){ nav={level:2,line:d.line,ship:d}; renderNav("r"); selectShip(d); collapseNav(); try{ history.replaceState(null,"","?ship="+slugOf(d.name)); }catch(e){} }
 function fullFleet(line){ nav={level:1,line,ship:null}; clearSelection(); renderNav(); applyVisibility(); flyToShips(byLine[line]); collapseNav(); }
 function navBack(){ if(nav.level===2) goLine(nav.line); else if(nav.level===1) goLines(); }
 
@@ -2273,6 +2311,10 @@ function applySnapshot(snap){
 // it refreshes without a redeploy); falls back to the bundled copy, then the embedded SEED.
 const SNAP_URL="https://raw.githubusercontent.com/turetskyadam-cyber/Wake-/main/positions.json";
 const ITIN_URL="https://raw.githubusercontent.com/turetskyadam-cyber/Wake-/main/itineraries.json";
+// History day-files are committed by the same Action (see tools/append-history.mjs).
+// DATA_BRANCH: flip to "main" when this feature branch is merged.
+const DATA_BRANCH="claude/cruise-ship-tracking-nsefj4";
+const HIST_BASE=`https://raw.githubusercontent.com/turetskyadam-cyber/Wake-/${DATA_BRANCH}/history/`;
 
 // Sea-gate routing — strategic waypoints at real ocean passages used to route around land.
 // No API key needed; runs entirely offline.
@@ -2333,7 +2375,11 @@ function _routeLeg(from,to){
 
 fetch(SNAP_URL,{cache:"no-store"}).then(r=>r.ok?r.json():Promise.reject())
   .catch(()=>fetch("positions.json",{cache:"no-store"}).then(r=>r.ok?r.json():null))
-  .then(j=>{ if(j) applySnapshot(j); }).catch(()=>{});
+  .then(j=>{
+    if(j) applySnapshot(j);
+    // complete a ?ship= deep link that arrived before this ship had coordinates
+    if(_deepLinkPending&&selected&&selected.lat!=null){ _deepLinkPending=false; flyToPoint(selected); }
+  }).catch(()=>{});
 
 // port schedule itineraries — scraped daily from CruiseDig by GitHub Actions
 let _itin={};     // portCity -> Map(normShip -> {a,e})
@@ -2557,6 +2603,176 @@ function renderWeather(c){
   byId("ssWxTemp").textContent=Math.round(c.temperature_2m)+"°F";
   byId("ssWxWind").textContent=Math.round(c.wind_speed_10m)+" kt "+dir;
   byId("ssWxLabel").textContent=w.l;
+}
+
+/* ---- 7-day historical wake trail (history/*.json committed by GitHub Actions) ---- */
+let histOn=false;
+const _histDayCache=new Map(); // dateStr -> {ts, p:Promise<json|null>}; past days are immutable
+function histDates(){ const out=[]; for(let i=7;i>=0;i--) out.push(new Date(Date.now()-i*864e5).toISOString().slice(0,10)); return out; }
+function loadHistDay(date){
+  const today=new Date().toISOString().slice(0,10);
+  const hit=_histDayCache.get(date);
+  if(hit&&(date!==today||Date.now()-hit.ts<10*60*1000)) return hit.p;
+  const p=fetch(HIST_BASE+date+".json",{cache:"no-store"}).then(r=>r.ok?r.json():null).catch(()=>null);
+  _histDayCache.set(date,{ts:Date.now(),p});
+  return p;
+}
+async function loadHistory(d){
+  const dates=histDates();
+  const days=await Promise.all(dates.map(loadHistDay));
+  const pts=[];
+  days.forEach((day,i)=>{
+    const base=Date.parse(dates[i]+"T00:00:00Z");
+    ((day&&day[d.mmsi])||[]).forEach(p=>pts.push({t:base+p[0]*60000,lat:p[1],lon:p[2]}));
+  });
+  return pts;
+}
+async function drawHistory(d){
+  const my=d.mmsi;
+  const pts=await loadHistory(d);
+  if(!selected||selected.mmsi!==my||!histOn) return;       // selection changed while loading
+  histLayer.clearLayers();
+  if(pts.length<2) return;
+  const segs=[[]];                                          // split at long gaps & the antimeridian
+  for(let i=0;i<pts.length;i++){
+    const prev=pts[i-1];
+    if(prev&&(pts[i].t-prev.t>12*3600*1000||Math.abs(pts[i].lon-prev.lon)>180)) segs.push([]);
+    segs[segs.length-1].push([pts[i].lat,pts[i].lon]);
+  }
+  segs.filter(s=>s.length>1).forEach(s=>
+    L.polyline(s,{renderer:canvasR,color:d.color,weight:1.2,opacity:0.5,dashArray:"1 5",interactive:false}).addTo(histLayer));
+  L.circleMarker([pts[0].lat,pts[0].lon],{renderer:canvasR,radius:3,color:d.color,weight:1,fillColor:d.color,fillOpacity:0.5,interactive:false}).addTo(histLayer);
+}
+byId("histBtn").addEventListener("click",()=>{
+  histOn=!histOn;
+  byId("histBtn").classList.toggle("on",histOn);
+  if(histOn&&selected) drawHistory(selected); else histLayer.clearLayers();
+});
+
+/* ---- sea state & route weather (Open-Meteo marine API, free & keyless) ---- */
+let seaOn=false;
+const _seaCache={}; // mmsi -> {ts, samples}
+function waveColor(h){ return h==null?"#56707c":h<1?"#5ad6a0":h<2.5?"#e2bd72":h<4?"#f08c4a":"#ff5a4d"; }
+function seaDayLabel(off){ return off===0?"Today":new Date(Date.now()+off*864e5).toLocaleDateString("en-US",{weekday:"short"}); }
+async function buildSeaPoints(d){
+  const today=new Date().toISOString().slice(0,10);
+  const limit=new Date(Date.now()+6*864e5).toISOString().slice(0,10);
+  const calls=(_itinShip[normShip(d.name)]||[]).filter(c=>c.date>=today&&c.date<=limit).slice(0,6);
+  const pts=[];
+  if(d.lat!=null) pts.push({lat:d.lat,lon:d.lon,day:0,label:"Now"});
+  if(calls.length){
+    await Promise.all(calls.filter(c=>!findPort(c.port)).map(c=>geocodePortName(c.port)));
+    let prev=pts[0]||null;
+    for(const c of calls){
+      const pe=findPort(c.port); if(!pe) continue;
+      const day=Math.min(6,Math.max(0,Math.round((Date.parse(c.date+"T12:00:00Z")-Date.now())/864e5)));
+      const wp={lat:pe.lat,lon:pe.lon,day,label:pe.name};
+      if(prev){
+        const leg=_routeLeg(prev,wp);                       // midpoint via sea gates stays off land
+        const mid=leg.length>1?leg[0]:[(prev.lat+wp.lat)/2,(prev.lon+wp.lon)/2];
+        pts.push({lat:mid[0],lon:mid[1],day:Math.min(6,Math.round((prev.day+day)/2)),label:"En route"});
+      }
+      pts.push(wp); prev=wp;
+    }
+  }else if(d.lat!=null&&d.spd>3){
+    // no itinerary — dead-reckon along current course at current speed
+    for(const h of [6,12,24,48]){
+      const dist=d.spd*h/60, rad=(d.cog||d.hdg||0)*Math.PI/180;   // degrees travelled (60 nm/deg)
+      const lat=d.lat+dist*Math.cos(rad);
+      const lon=d.lon+dist*Math.sin(rad)/Math.cos(d.lat*Math.PI/180);
+      if(Math.abs(lat)<85) pts.push({lat:+lat.toFixed(3),lon:+(((lon+540)%360)-180).toFixed(3),day:Math.min(6,Math.round(h/24)),label:"+"+h+"h projected"});
+    }
+  }
+  return pts.slice(0,10);
+}
+async function fetchSea(d){
+  const c=_seaCache[d.mmsi];
+  if(c&&Date.now()-c.ts<30*60*1000) return c.samples;
+  const pts=await buildSeaPoints(d);
+  if(pts.length){
+    try{
+      const url=`https://marine-api.open-meteo.com/v1/marine?latitude=${pts.map(p=>p.lat.toFixed(3)).join(",")}&longitude=${pts.map(p=>p.lon.toFixed(3)).join(",")}&daily=wave_height_max,swell_wave_height_max&forecast_days=7&timezone=UTC`;
+      const r=await fetch(url).then(r=>r.json());
+      const arr=Array.isArray(r)?r:[r];                     // 1 point -> object, N points -> array
+      pts.forEach((p,i)=>{
+        const dd=arr[i]&&arr[i].daily;
+        p.wave=(dd&&dd.wave_height_max)?(dd.wave_height_max[p.day]??null):null;
+        p.swell=(dd&&dd.swell_wave_height_max)?(dd.swell_wave_height_max[p.day]??null):null;
+      });
+    }catch(e){ pts.forEach(p=>{p.wave=null;p.swell=null;}); }
+  }
+  _seaCache[d.mmsi]={ts:Date.now(),samples:pts};
+  return pts;
+}
+async function fetchSeaSummary(d){
+  const el=byId("ssSea"); el.hidden=true;
+  const my=d.mmsi;
+  const s=await fetchSea(d);
+  if(!selected||selected.mmsi!==my) return;
+  if(seaOn) drawSea(d);
+  const waves=s.filter(p=>p.wave!=null);
+  if(!waves.length){ el.innerHTML=`<b>Sea State</b>No route forecast`; el.hidden=false; return; }
+  const max=waves.reduce((a,p)=>p.wave>a.wave?p:a,waves[0]);
+  const ft=Math.round(max.wave*3.281);
+  const roughDays=[...new Set(waves.filter(p=>p.wave>2.5).map(p=>p.day))].sort((a,b)=>a-b);
+  const note=roughDays.length
+    ?`<span class="rough">Rough seas ${roughDays.length>1?seaDayLabel(roughDays[0])+"–"+seaDayLabel(roughDays[roughDays.length-1]):seaDayLabel(roughDays[0])}</span>`
+    :`<span class="calm">Calm seas ahead</span>`;
+  el.innerHTML=`<b>Sea State</b>Max waves ${max.wave.toFixed(1)} m (${ft} ft) · ${seaDayLabel(max.day)}<br>${note}`;
+  el.hidden=false;
+}
+async function drawSea(d){
+  const my=d.mmsi;
+  const s=await fetchSea(d);
+  if(!selected||selected.mmsi!==my||!seaOn) return;
+  seaLayer.clearLayers();
+  for(let i=1;i<s.length;i++){
+    if(Math.abs(s[i].lon-s[i-1].lon)>180) continue;         // don't draw across the antimeridian
+    const w=Math.max(s[i-1].wave??-1,s[i].wave??-1);
+    L.polyline([[s[i-1].lat,s[i-1].lon],[s[i].lat,s[i].lon]],
+      {renderer:canvasR,color:waveColor(w<0?null:w),weight:3,opacity:0.75,dashArray:"2 7",interactive:false}).addTo(seaLayer);
+  }
+  s.forEach(p=>{
+    L.circleMarker([p.lat,p.lon],{renderer:canvasR,radius:4.5,color:"#fff",weight:1,fillColor:waveColor(p.wave),fillOpacity:0.9})
+      .bindTooltip(`${p.wave!=null?"≤ "+p.wave.toFixed(1)+" m waves":"No data"} · ${seaDayLabel(p.day)}${p.label?" · "+p.label:""}`,{direction:"top",offset:[0,-6]})
+      .addTo(seaLayer);
+  });
+}
+byId("seaBtn").addEventListener("click",()=>{
+  seaOn=!seaOn;
+  byId("seaBtn").classList.toggle("on",seaOn);
+  if(seaOn&&selected) drawSea(selected); else seaLayer.clearLayers();
+});
+
+/* ---- share link & embed snippet ---- */
+const SITE_ORIGIN=/^https?:/.test(location.origin)?location.origin:"https://wake-rose.vercel.app";
+function copyText(txt,btn){
+  const done=()=>{ const old=btn.textContent; btn.textContent="Copied ✓"; setTimeout(()=>{btn.textContent=old;},1400); };
+  const fallback=()=>{ const ta=document.createElement("textarea"); ta.value=txt; document.body.appendChild(ta); ta.select(); try{ document.execCommand("copy"); done(); }catch(e){} ta.remove(); };
+  if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done).catch(fallback);
+  else fallback();
+}
+function closeSharePop(){ byId("sharePop").hidden=true; byId("shareBtn").classList.remove("on"); }
+byId("shareBtn").addEventListener("click",()=>{
+  const pop=byId("sharePop");
+  pop.hidden=!pop.hidden;
+  byId("shareBtn").classList.toggle("on",!pop.hidden);
+});
+byId("shareCopyLink").addEventListener("click",e=>{ if(selected) copyText(SITE_ORIGIN+"/s/"+slugOf(selected.name),e.target); });
+byId("shareCopyEmbed").addEventListener("click",e=>{
+  if(selected) copyText(`<iframe src="${SITE_ORIGIN}/embed.html?ship=${slugOf(selected.name)}" width="100%" height="360" style="border:0;border-radius:12px" loading="lazy" title="WAKE ship tracker"></iframe>`,e.target);
+});
+
+/* ---- ?ship= deep links (slug or MMSI) ---- */
+let _deepLinkPending=false;
+function applyDeepLink(){
+  let q=null;
+  try{ q=new URLSearchParams(location.search).get("ship"); }catch(e){}
+  if(!q) return;
+  const d=bySlug.get(slugOf(q))||byMmsi.get(q.trim());
+  if(!d) return;
+  goShip(d);
+  if(d.lat==null) _deepLinkPending=true; // fly once the snapshot delivers coordinates
 }
 
 /* ---- ship profile modal ---- */
@@ -3013,6 +3229,7 @@ applyVisibility();
 updateStats();
 requestAnimationFrame(tick);
 connect();
+applyDeepLink();
 </script>
 </body>
 </html>
