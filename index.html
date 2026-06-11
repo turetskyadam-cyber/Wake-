@@ -317,8 +317,8 @@
   .s-empty{color:var(--faint)}
 
   /* ---- ship profile modal ---- */
-  .profile-modal{position:fixed;inset:0;z-index:2000;background:rgba(4,14,20,.86);backdrop-filter:blur(16px) saturate(130%);-webkit-backdrop-filter:blur(16px) saturate(130%);opacity:0;transition:opacity .25s var(--ease-out);overflow:hidden}
-  .profile-modal.show{opacity:1}
+  .profile-modal{position:fixed;inset:0;z-index:2000;background:rgba(4,14,20,.86);backdrop-filter:blur(16px) saturate(130%);-webkit-backdrop-filter:blur(16px) saturate(130%);opacity:0;transition:opacity .25s var(--ease-out);overflow:hidden;pointer-events:none}
+  .profile-modal.show{opacity:1;pointer-events:auto}
   .profile-scroll{height:100%;overflow-y:auto;max-width:540px;margin:0 auto;padding-bottom:48px;scrollbar-width:thin;scrollbar-color:rgba(120,170,185,.2) transparent}
   .profile-close{position:fixed;top:16px;right:16px;z-index:2001;width:36px;height:36px;border-radius:50%;background:rgba(8,26,36,.7);border:1px solid var(--glass-edge);color:var(--ink);font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .18s,transform .12s;backdrop-filter:blur(8px)}
   .profile-close:hover{background:rgba(255,255,255,.12)}.profile-close:active{transform:scale(.92)}
