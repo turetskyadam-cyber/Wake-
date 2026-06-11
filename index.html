@@ -3282,6 +3282,7 @@ if("serviceWorker" in navigator){
   try{ if(matchMedia("(display-mode:standalone)").matches) return; }catch(e){}
 
   var hideTimer = null;
+  var dismissCount = 0;
 
   function showBanner(){ banner.classList.add("show"); }
   function hideBanner(){ banner.classList.remove("show"); }
@@ -3289,7 +3290,9 @@ if("serviceWorker" in navigator){
   function snooze(){
     hideBanner();
     clearTimeout(hideTimer);
-    hideTimer = setTimeout(showBanner, 2 * 60 * 1000); // reappear in 2 min
+    dismissCount++;
+    var delay = dismissCount >= 2 ? 30 * 60 * 1000 : 2 * 60 * 1000;
+    hideTimer = setTimeout(showBanner, delay);
   }
 
   // Hide on any click anywhere on the page
