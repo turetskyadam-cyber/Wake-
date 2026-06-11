@@ -2735,6 +2735,7 @@ function renderStars(n){
   return h;
 }
 function openProfile(d){
+  _profileOpen=true;
   const spec=_ships[d.name]||{};
   const hero=byId("profileHero");
   if(spec.photo){
@@ -2795,14 +2796,16 @@ function openProfile(d){
     ?`<a class="profile-wiki-link" href="${spec.wiki}" target="_blank" rel="noopener">Wikipedia ↗</a>`:
     "";
   profileEl.hidden=false;
-  requestAnimationFrame(()=>requestAnimationFrame(()=>profileEl.classList.add("show")));
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{ if(_profileOpen) profileEl.classList.add("show"); }));
   document.body.style.overflow="hidden";
 }
+let _profileOpen=false;
 function closeProfile(){
+  _profileOpen=false;
   profileEl.classList.remove("show");
-  profileEl.addEventListener("transitionend",()=>{ profileEl.hidden=true; document.body.style.overflow=""; },{once:true});
+  profileEl.addEventListener("transitionend",()=>{ if(!_profileOpen){ profileEl.hidden=true; document.body.style.overflow=""; } },{once:true});
 }
-byId("profileBtn").addEventListener("click",()=>{ if(selected) openProfile(selected); });
+byId("profileBtn").addEventListener("click",e=>{ e.stopPropagation(); if(selected) openProfile(selected); });
 byId("profileClose").addEventListener("click",closeProfile);
 profileEl.addEventListener("click",e=>{ if(e.target===profileEl) closeProfile(); });
 addEventListener("keydown",e=>{ if(e.key==="Escape"&&!profileEl.hidden) closeProfile(); });
