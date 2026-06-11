@@ -2669,6 +2669,7 @@ byId("histBtn").addEventListener("click",()=>{
   if(histOn){
     detail.classList.add("collapsed");
     byId("dToggle").setAttribute("aria-expanded","false");
+    hideShipSide(); collapseNav();
     hidePortCard();
     if(!profileEl.hidden) closeProfile();
     if(selected) drawHistory(selected,{fit:true});
@@ -2779,6 +2780,7 @@ byId("seaBtn").addEventListener("click",()=>{
   if(seaOn){
     detail.classList.add("collapsed");
     byId("dToggle").setAttribute("aria-expanded","false");
+    hideShipSide(); collapseNav();
     hidePortCard();
     if(!profileEl.hidden) closeProfile();
     byId("seaKey").hidden=false;
