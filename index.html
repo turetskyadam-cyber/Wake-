@@ -303,7 +303,7 @@
   .ss-wx-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-top:3px}
   .ss-wx-loading{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);letter-spacing:.06em;text-transform:uppercase;padding:28px 0;display:block;text-align:center}
   .ss-div{height:1px;background:var(--glass-edge)}
-  .ss-dive-btn{display:flex;flex-direction:column;align-items:center;gap:7px;padding:15px 10px 17px;cursor:pointer;background:none;border:none;color:var(--brass);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;border-radius:0 0 16px 16px;transition:background .2s,color .2s;width:100%}
+  .ss-dive-btn{display:flex;flex-direction:column;align-items:center;gap:7px;padding:15px 10px 17px;cursor:pointer;background:none;border:none;color:var(--brass);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;border-radius:0 0 16px 16px;transition:background .2s,color .2s;width:100%;touch-action:manipulation}
   .ss-dive-btn:hover{background:rgba(226,189,114,.09);color:var(--ink)}
   .ss-dive-btn svg{transition:transform .22s var(--ease-out)}
   .ss-dive-btn:hover svg{transform:scale(1.12)}
@@ -1804,6 +1804,7 @@ byId('pcClose').addEventListener('click', hidePortCard);
 // Stop touch events from reaching Leaflet so the panel scrolls natively
 ["touchstart","touchmove","touchend","touchcancel"].forEach(ev=>{
   detail.addEventListener(ev,e=>e.stopPropagation(),{passive:true});
+  byId("shipSide").addEventListener(ev,e=>e.stopPropagation(),{passive:true});
 });
 byId("dToggle").addEventListener("click",()=>{
   const open=detail.classList.toggle("collapsed")===false;
@@ -2736,6 +2737,7 @@ function renderStars(n){
 }
 function openProfile(d){
   _profileOpen=true;
+  _profileOpenTime=Date.now();
   const spec=_ships[d.name]||{};
   const hero=byId("profileHero");
   if(spec.photo){
@@ -2800,6 +2802,7 @@ function openProfile(d){
   document.body.style.overflow="hidden";
 }
 let _profileOpen=false;
+let _profileOpenTime=0;
 function closeProfile(){
   _profileOpen=false;
   profileEl.classList.remove("show");
@@ -2807,7 +2810,7 @@ function closeProfile(){
 }
 byId("profileBtn").addEventListener("click",e=>{ e.stopPropagation(); if(selected) openProfile(selected); });
 byId("profileClose").addEventListener("click",closeProfile);
-profileEl.addEventListener("click",e=>{ if(e.target===profileEl) closeProfile(); });
+profileEl.addEventListener("click",e=>{ if(e.target===profileEl && Date.now()-_profileOpenTime>350) closeProfile(); });
 addEventListener("keydown",e=>{ if(e.key==="Escape"&&!profileEl.hidden) closeProfile(); });
 
 /* ---- brand panel collapse ---- */
