@@ -5043,6 +5043,7 @@ byId("pinCancel").addEventListener("click",closePinModal);
 byId("pinModalBackdrop").addEventListener("click",closePinModal);
 byId("pinInput").addEventListener("keydown",e=>{ if(e.key==="Enter") doSubmitPin(); });
 byId("pinInput").addEventListener("input",e=>{ if(e.target.value.length>4) e.target.value=e.target.value.slice(0,4); });
+byId("pinSubmit").addEventListener("click",doSubmitPin);
 
 async function doSubmitPin(){
   const pin=byId("pinInput").value.trim();
