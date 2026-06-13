@@ -3629,7 +3629,23 @@ function buildVoyageCard(voy,idx){
   const color=d?(d.color||"#9fb4bf"):"#9fb4bf";
   const today=new Date().toISOString().slice(0,10);
   const itin=d?(_itinShip[normShip(voy.shipName)]||[]).filter(c=>c.date>=today):[];
-  const upcomingPorts=itin.slice(0,3);
+  const upcomingPorts=(()=>{
+    // Fill sea days between port entries so gaps don't silently disappear
+    const result=[], max=6;
+    let prev=today;
+    for(const c of itin){
+      if(result.length>=max) break;
+      const prevD=new Date(prev+"T12:00:00Z"), portD=new Date(c.date+"T12:00:00Z");
+      const gap=Math.round((portD-prevD)/864e5);
+      for(let g=1;g<gap&&result.length<max;g++){
+        const sd=new Date(prevD.getTime()+g*864e5);
+        result.push({date:sd.toISOString().slice(0,10),port:"Day at Sea",isSeaDay:true});
+      }
+      if(result.length<max) result.push(c);
+      prev=c.date;
+    }
+    return result;
+  })();
   const sailDt=voy.sailDate?new Date(voy.sailDate+"T12:00:00Z"):null;
   const sailDateFmt=sailDt?sailDt.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"}):"No date set";
   const diffDays=sailDt?Math.ceil((sailDt-new Date())/864e5):null;
@@ -3689,9 +3705,10 @@ function buildVoyageCard(voy,idx){
     const portsHtml=upcomingPorts.map(c=>{
       const dt=new Date(c.date+"T12:00:00Z");
       const lbl=dt.toLocaleDateString("en-US",{month:"short",day:"numeric",timeZone:"UTC"});
-      return `<div class="voy-port-row"><span class="voy-port-date">${lbl}</span><span class="voy-port-name">${c.port}</span></div>`;
+      if(c.isSeaDay) return `<div class="voy-port-row voy-port-sea"><span class="voy-port-date" style="color:var(--faint)">${lbl}</span><span class="voy-port-name" style="color:var(--faint);font-style:italic">🌊 Day at Sea</span></div>`;
+      return `<div class="voy-port-row" data-port="${c.port}" data-date="${c.date}"><span class="voy-port-date">${lbl}</span><span class="voy-port-name">${c.port}</span></div>`;
     }).join("");
-    card.insertAdjacentHTML("beforeend",`<div class="voy-card-ports"><div class="voy-ports-hd">Upcoming Ports</div>${portsHtml}</div>`);
+    card.insertAdjacentHTML("beforeend",`<div class="voy-card-ports"><div class="voy-ports-hd">Itinerary</div>${portsHtml}</div>`);
   }
   const wxDiv=document.createElement("div");
   wxDiv.className="voy-card-wx";
@@ -3840,10 +3857,10 @@ function buildVoyageCard(voy,idx){
       </button>
     </div>
   `);
-  // Port weather — async fetch for upcoming ports within 16 days
-  card.querySelectorAll(".voy-port-row").forEach((row,i)=>{
-    const portData=upcomingPorts[i];
-    if(!portData) return;
+  // Port weather — async fetch for upcoming ports within 16 days (skip sea days)
+  card.querySelectorAll(".voy-port-row[data-port]").forEach(row=>{
+    const portData={port:row.dataset.port,date:row.dataset.date};
+    if(!portData.port||!portData.date) return;
     const wxSpan=document.createElement("span");
     wxSpan.className="voy-port-wx";
     row.appendChild(wxSpan);
