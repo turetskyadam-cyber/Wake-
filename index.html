@@ -3604,10 +3604,11 @@ function tickVoyCountdowns(){
     const diff=ts-Date.now();
     // Sail-date countdown just expired — re-render cards to switch to disembarkation view
     if(diff<=0&&el.dataset.mode==="sail"){ renderVoyageCards(); return; }
-    el.innerHTML=fmtLiveCountdown(diff);
+    const forceCol=el.dataset.mode==="disembark"?"#5ad6a0":null;
+    el.innerHTML=fmtLiveCountdown(diff,forceCol);
   });
 }
-function fmtLiveCountdown(diff){
+function fmtLiveCountdown(diff,forceColor){
   if(diff<=0) return `<span class="vlc-unit">Sailing today!</span>`;
   const totalSec=Math.floor(diff/1000);
   const d=Math.floor(totalSec/86400);
@@ -3615,9 +3616,8 @@ function fmtLiveCountdown(diff){
   const m=Math.floor((totalSec%3600)/60);
   const s=totalSec%60;
   const pad=n=>String(n).padStart(2,"0");
-  const urgency=d===0?"now":d<=7?"soon":d<=30?"close":"far";
-  const colors={now:"#ff5a4d",soon:"#f08c4a",close:"#5ad6a0",far:"var(--brass)"};
-  const col=colors[urgency];
+  // >30 days: brass; ≤30 days: orange; ≤7 days: green (and stays green on cruise)
+  const col=forceColor||(d<=7?"#5ad6a0":d<=30?"#f08c4a":"var(--brass)");
   return `<span class="vlc-d" style="color:${col}">${d}</span><span class="vlc-sep" style="color:${col}">d</span>`
     +`<span class="vlc-h" style="color:${col}">${pad(h)}</span><span class="vlc-sep" style="color:${col}">h</span>`
     +`<span class="vlc-m" style="color:${col}">${pad(m)}</span><span class="vlc-sep" style="color:${col}">m</span>`
@@ -3636,7 +3636,7 @@ function buildCountdown(sailDate,sailDateFmt,shipName,voyageActive,endDate){
       }
       const endFmt=new Date(endDate+"T12:00:00Z").toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"});
       return `<div class="voy-card-countdown" data-urgency="close">
-        <div class="voy-live-cd" data-ts="${endTs}" style="display:flex;align-items:baseline;gap:2px;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;">${fmtLiveCountdown(diff)}</div>
+        <div class="voy-live-cd" data-ts="${endTs}" data-mode="disembark" style="display:flex;align-items:baseline;gap:2px;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;">${fmtLiveCountdown(diff,"#5ad6a0")}</div>
         <div class="voy-count-sub">Until disembarkation · ${endFmt}</div>
       </div>`;
     } else {
@@ -3756,14 +3756,14 @@ function buildVoyageCard(voy,idx){
       });
     });
   }
-  // Getting-off date selector (owner only, after voyage starts)
-  if(isOwner&&voyageActive){
+  // Getting-off date selector (owner only, any time a sail date is set)
+  if(isOwner&&voy.sailDate){
     const _eid=`ved-${voy.shareId}`;
     const endFmt=endDate?new Date(endDate+"T12:00:00Z").toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"}):"";
     card.insertAdjacentHTML("beforeend",`
       <div class="voy-enddate-row">
         <span class="voy-enddate-lbl">Getting off</span>
-        <input type="date" class="voy-enddate-input" id="${_eid}" value="${endDate||today}" min="${voy.sailDate}" max="${new Date(new Date(voy.sailDate+"T12:00:00Z").getTime()+300*864e5).toISOString().slice(0,10)}">
+        <input type="date" class="voy-enddate-input" id="${_eid}" value="${endDate||''}" min="${voy.sailDate}" max="${new Date(new Date(voy.sailDate+"T12:00:00Z").getTime()+300*864e5).toISOString().slice(0,10)}" placeholder="End date">
       </div>`);
     const endInp=card.querySelector(`#${_eid}`);
     endInp.addEventListener("click",e=>e.stopPropagation());
