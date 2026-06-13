@@ -3760,8 +3760,9 @@ function buildVoyageCard(voy,idx){
           try{
             await _SB.storage.from(_SB_BUCKET).remove([`${_sid}/${photo.name}`]);
             thumb.remove();
-            if(!strip.querySelector(".voy-photo-thumb"))
-              strip.innerHTML=`<div class="voy-photo-empty">Tap + to add your first photo</div>`;
+            const rem=strip.querySelectorAll(".voy-photo-thumb").length;
+            const pc=byId(`pc-${_sid}`);if(pc)pc.textContent=rem||"";
+            if(!rem) strip.innerHTML=`<div class="voy-photo-empty">Tap + to add your first photo</div>`;
           }catch(err){}
         });
         thumb.appendChild(delX);
@@ -3809,8 +3810,9 @@ function buildVoyageCard(voy,idx){
             try{
               await _SB.storage.from(_SB_BUCKET).remove([`${_sid}/${photo.name}`]);
               thumb.remove();
-              if(!strip.querySelector(".voy-photo-thumb"))
-                strip.innerHTML=`<div class="voy-photo-empty">Tap + to add your first photo</div>`;
+              const rem=strip.querySelectorAll(".voy-photo-thumb").length;
+              const pc=byId(`pc-${_sid}`);if(pc)pc.textContent=rem||"";
+              if(!rem) strip.innerHTML=`<div class="voy-photo-empty">Tap + to add your first photo</div>`;
             }catch(err){}
           });
           thumb.appendChild(delX);
@@ -4787,12 +4789,19 @@ byId("lbDelete").addEventListener("click",async()=>{
       _lbPhotos.forEach(url=>{ const s=document.createElement("div"); s.className="lb-slide"; const img=document.createElement("img"); img.src=url; img.alt=""; img.draggable=false; s.appendChild(img); track.appendChild(s); });
       requestAnimationFrame(()=>{ track.style.transform=`translateX(${-_lbIdx*window.innerWidth}px)`; _lbUpdateDots(); });
     }
-    // Refresh the photo strip on the card
+    // Refresh the photo strip + count on the card
     const strip=byId(`ps-${_lbShareId}`);
+    const pc=byId(`pc-${_lbShareId}`);
     if(strip){ const ph=await loadVoyagePhotos(_lbShareId); strip.innerHTML="";
+      if(pc) pc.textContent=ph.length||"";
       if(!ph.length){ strip.innerHTML=`<div class="voy-photo-empty">Tap + to add your first photo</div>`; return; }
       const allU=ph.map(p=>getPhotoPublicUrl(_lbShareId,p.name));
-      ph.forEach((photo,i)=>{ const t=document.createElement("div"); t.className="voy-photo-thumb"; t.style.backgroundImage=`url(${allU[i]})`; t.addEventListener("click",()=>openLightbox(allU,i,{shareId:_lbShareId,filenames:ph.map(p=>p.name),isOwner:true})); strip.appendChild(t); });
+      const fnms=ph.map(p=>p.name);
+      ph.forEach((photo,i)=>{ const t=document.createElement("div"); t.className="voy-photo-thumb"; t.style.backgroundImage=`url(${allU[i]})`;
+        const dx=document.createElement("button"); dx.className="voy-photo-del"; dx.innerHTML="×"; dx.title="Delete photo";
+        dx.addEventListener("click",async e=>{ e.stopPropagation(); try{ await _SB.storage.from(_SB_BUCKET).remove([`${_lbShareId}/${photo.name}`]); t.remove(); const rem=strip.querySelectorAll(".voy-photo-thumb").length; if(pc)pc.textContent=rem||""; if(!rem)strip.innerHTML=`<div class="voy-photo-empty">Tap + to add your first photo</div>`; }catch(err){} });
+        t.appendChild(dx);
+        t.addEventListener("click",()=>openLightbox(allU,i,{shareId:_lbShareId,filenames:fnms,isOwner:true})); strip.appendChild(t); });
     }
   }catch(e){ console.error("Delete failed",e); }
 });
