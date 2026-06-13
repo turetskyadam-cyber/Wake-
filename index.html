@@ -3009,6 +3009,8 @@ fetch(ITIN_URL,{cache:"no-store"}).then(r=>r.ok?r.json():Promise.reject())
     Object.values(_itinShip).forEach(arr=>arr.sort((a,b)=>a.date.localeCompare(b.date)));
     if(nearOpen) renderNear();
     if(selected) fillDetailItin(selected);
+    // If the profile modal is open, refresh just its itinerary section
+    if(_profileOpen&&selected&&!profileEl.hidden) refreshProfileItin(selected);
   }).catch(()=>{});
 
 /* ---- ship profile data (scraped monthly by GitHub Actions) ---- */
@@ -3171,6 +3173,47 @@ function renderStars(n){
   }
   return h;
 }
+function refreshProfileItin(d){
+  const today=new Date().toISOString().slice(0,10);
+  const rawCalls=(_itinShip[normShip(d.name)]||[]).filter(c=>c.date>=today);
+  const calls=withSeaDays(rawCalls,today);
+  const el=byId("profileItin");
+  if(!el) return;
+  el.innerHTML=rawCalls.length
+    ?calls.map(c=>{
+      if(c.isSeaDay){const dt=new Date(c.date+"T12:00:00Z");const lbl=dt.toLocaleDateString("en-US",{month:"short",day:"numeric"});return `<div class="profile-itin-row profile-itin-sea"><span class="profile-itin-date" style="color:var(--faint)">${lbl}</span><div class="profile-itin-main"><span class="profile-itin-port" style="color:var(--faint);font-style:italic">🌊 Day at Sea</span></div></div>`;}
+      const isToday=c.date===today;
+      const dt=new Date(c.date+"T12:00:00Z");
+      const label=isToday?"Today":dt.toLocaleDateString("en-US",{month:"short",day:"numeric"});
+      const times=[c.arr&&c.arr,c.dep&&c.dep].filter(Boolean).join("→");
+      return `<div class="profile-itin-row" data-port="${c.port}" data-date="${c.date}" data-arr="${c.arr||''}" data-dep="${c.dep||''}"><span class="profile-itin-date" style="${isToday?"color:var(--brass)":""}">${label}</span><div class="profile-itin-main"><span class="profile-itin-port">${c.port}</span><div class="profile-itin-meta">${times?`<span class="profile-itin-times">${times}</span>`:""}</div></div></div>`;
+    }).join("")
+    :`<div style="color:var(--faint);font-size:12px;padding:6px 0">No itinerary data available</div>`;
+  // Weather badges — within 16-day forecast window
+  el.querySelectorAll(".profile-itin-row[data-date]").forEach(row=>{
+    const diffDays=(new Date(row.dataset.date+"T12:00:00Z")-new Date())/864e5;
+    if(diffDays<=15&&diffDays>-1){
+      const meta=row.querySelector(".profile-itin-meta");
+      if(!meta) return;
+      const wxEl=document.createElement("span");
+      wxEl.className="profile-itin-wx";
+      meta.appendChild(wxEl);
+      fetchPortWeather(row.dataset.port,row.dataset.date,d.lat,d.lon).then(wx=>{
+        if(wx) wxEl.textContent=`${wx.icon} ${wx.tMax}°`;
+        else wxEl.remove();
+      });
+    }
+  });
+  el.querySelectorAll(".profile-itin-row[data-port]").forEach(row=>{
+    row.addEventListener("click",async e=>{
+      e.stopPropagation();
+      let pe=findPort(row.dataset.port);
+      if(!pe){ row.style.opacity="0.5"; pe=await geocodePortName(row.dataset.port); row.style.opacity=""; }
+      if(!pe) return;
+      showPortCard(pe,{date:row.dataset.date,arr:row.dataset.arr||null,dep:row.dataset.dep||null},d.color);
+    });
+  });
+}
 function openProfile(d){
   _profileOpen=true;
   _profileOpenTime=Date.now();
@@ -3230,47 +3273,7 @@ function openProfile(d){
     <div class="profile-stat-row"><span>Heading</span><span>${d.lat!=null&&d.status==="sea"?Math.round(d.hdg)+"°":"—"}</span></div>
     <div class="profile-stat-row"><span>MMSI</span><span>${d.mmsi}</span></div>
   `;
-  const today=new Date().toISOString().slice(0,10);
-  const rawCalls=(_itinShip[normShip(d.name)]||[]).filter(c=>c.date>=today);
-  const calls=withSeaDays(rawCalls,today);
-  byId("profileItin").innerHTML=rawCalls.length
-    ?calls.map(c=>{
-      if(c.isSeaDay){const dt=new Date(c.date+"T12:00:00Z");const lbl=dt.toLocaleDateString("en-US",{month:"short",day:"numeric"});return `<div class="profile-itin-row profile-itin-sea"><span class="profile-itin-date" style="color:var(--faint)">${lbl}</span><div class="profile-itin-main"><span class="profile-itin-port" style="color:var(--faint);font-style:italic">🌊 Day at Sea</span></div></div>`;}
-      const isToday=c.date===today;
-      const dt=new Date(c.date+"T12:00:00Z");
-      const label=isToday?"Today":dt.toLocaleDateString("en-US",{month:"short",day:"numeric"});
-      const times=[c.arr&&c.arr,c.dep&&c.dep].filter(Boolean).join("→");
-      return `<div class="profile-itin-row" data-port="${c.port}" data-date="${c.date}" data-arr="${c.arr||''}" data-dep="${c.dep||''}"><span class="profile-itin-date" style="${isToday?"color:var(--brass)":""}">${label}</span><div class="profile-itin-main"><span class="profile-itin-port">${c.port}</span><div class="profile-itin-meta">${times?`<span class="profile-itin-times">${times}</span>`:""}</div></div></div>`;
-    }).join("")
-    :`<div style="color:var(--faint);font-size:12px;padding:6px 0">No itinerary data available</div>`;
-  // Weather badges on deep-dive itinerary — within 16-day forecast window
-  byId("profileItin").querySelectorAll(".profile-itin-row[data-date]").forEach(row=>{
-    const diffDays=(new Date(row.dataset.date+"T12:00:00Z")-new Date())/864e5;
-    if(diffDays<=15&&diffDays>-1){
-      const meta=row.querySelector(".profile-itin-meta");
-      if(!meta) return;
-      const wxEl=document.createElement("span");
-      wxEl.className="profile-itin-wx";
-      meta.appendChild(wxEl);
-      fetchPortWeather(row.dataset.port,row.dataset.date,d.lat,d.lon).then(wx=>{
-        if(wx) wxEl.textContent=`${wx.icon} ${wx.tMax}°`;
-        else wxEl.remove();
-      });
-    }
-  });
-  byId("profileItin").querySelectorAll(".profile-itin-row[data-port]").forEach(row=>{
-    row.addEventListener("click",async e=>{
-      e.stopPropagation();
-      let pe=findPort(row.dataset.port);
-      if(!pe){
-        row.style.opacity='0.5';
-        pe=await geocodePortName(row.dataset.port);
-        row.style.opacity='';
-        if(!pe) return;
-      }
-      showPortCard(pe,{date:row.dataset.date,arr:row.dataset.arr||null,dep:row.dataset.dep||null},d.color);
-    });
-  });
+  refreshProfileItin(d);
   byId("profileLinks").innerHTML=spec.wiki
     ?`<a class="profile-wiki-link" href="${spec.wiki}" target="_blank" rel="noopener">Wikipedia ↗</a>`:
     "";
@@ -3915,18 +3918,20 @@ function buildVoyageCard(voy,idx){
       else wxSpan.remove();
     });
   });
-  // Port tap → pop-up info card (portCard floats above the voyages overlay)
+  // Port tap → close voyages overlay then show portCard on the map
   card.querySelectorAll(".voy-port-row[data-port]").forEach(row=>{
     row.addEventListener("click",async e=>{
       e.stopPropagation();
-      let pe=findPort(row.dataset.port);
+      const portName=row.dataset.port, portDate=row.dataset.date;
+      let pe=findPort(portName);
       if(!pe){
-        row.style.opacity="0.55";
-        pe=await geocodePortName(row.dataset.port);
+        row.style.opacity="0.5";
+        pe=await geocodePortName(portName);
         row.style.opacity="";
       }
       if(!pe) return;
-      showPortCard(pe,{date:row.dataset.date,arr:null,dep:null},color);
+      closeVoyages();
+      setTimeout(()=>showPortCard(pe,{date:portDate,arr:null,dep:null},color),180);
     });
   });
   card.querySelector(".voy-card-remove").addEventListener("click",e=>{
