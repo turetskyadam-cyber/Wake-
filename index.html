@@ -3767,18 +3767,16 @@ function buildVoyageCard(voy,idx){
   const wxDiv=document.createElement("div");
   wxDiv.className="voy-card-wx";
   card.appendChild(wxDiv);
-  if(!voy.sailDate){
+  if(!todayItinPort){
+    // Sea day or no port data for today — hide weather block
     wxDiv.hidden=true;
   } else {
-    const portLine=departPort?`<div class="voy-wx-port">📍 ${departPort}</div>`:"";
-    wxDiv.innerHTML=`<span class="voy-wx-icon">🌊</span><div class="voy-wx-info"><div class="voy-wx-temp" style="font-size:13px;color:var(--faint)">Loading…</div><div class="voy-wx-note">Sail date forecast</div></div>`;
+    const portLine=`<div class="voy-wx-port">📍 ${todayItinPort.port}</div>`;
+    wxDiv.innerHTML=`<span class="voy-wx-icon">🌊</span><div class="voy-wx-info"><div class="voy-wx-temp" style="font-size:13px;color:var(--faint)">Loading…</div><div class="voy-wx-note">Today's weather</div></div>`;
     if(d&&d.lat!=null){
-      fetchVoyageWeather(d,voy.sailDate).then(wx=>{
+      fetchVoyageWeather(d,today).then(wx=>{
         if(!wx){
-          const dd=(new Date(voy.sailDate+"T12:00:00Z")-new Date())/864e5;
-          wxDiv.innerHTML=dd>15
-            ?`<span class="voy-wx-icon" style="font-size:20px;opacity:.35">📅</span><div class="voy-wx-info">${portLine}<div class="voy-wx-label">Forecast not yet available</div><div class="voy-wx-note">Available within 16 days of sail date</div></div>`
-            :`<span class="voy-wx-icon" style="font-size:20px;opacity:.35">🌊</span><div class="voy-wx-info">${portLine}<div class="voy-wx-label">Forecast unavailable</div><div class="voy-wx-note">Check closer to sail date</div></div>`;
+          wxDiv.innerHTML=`<span class="voy-wx-icon" style="font-size:20px;opacity:.35">🌊</span><div class="voy-wx-info">${portLine}<div class="voy-wx-label">Weather unavailable</div></div>`;
           return;
         }
         wxDiv.innerHTML=`<span class="voy-wx-icon">${wx.icon}</span><div class="voy-wx-info"><div class="voy-wx-temp">${wx.tMax}°<span style="color:var(--faint);font-size:14px"> / ${wx.tMin}°F</span></div>${portLine}<div class="voy-wx-label">${wx.label}</div></div>`;
