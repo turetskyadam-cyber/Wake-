@@ -691,12 +691,18 @@
   ═══════════════════════════════════════════ */
   @keyframes flyHeart{
     0%  {opacity:1;transform:translate(0,0) scale(1);}
-    60% {opacity:1;transform:translate(var(--fly-x),var(--fly-y)) scale(.7) rotate(-15deg);}
-    100%{opacity:0;transform:translate(var(--fly-x2),var(--fly-y2)) scale(.22) rotate(-25deg);}
+    55% {opacity:1;transform:translate(var(--fly-x),var(--fly-y)) scale(var(--fly-smid)) rotate(var(--fly-rot));}
+    100%{opacity:0;transform:translate(var(--fly-x2),var(--fly-y2)) scale(.18) rotate(var(--fly-rot2));}
   }
-  .fly-heart{position:fixed;z-index:9999;pointer-events:none;font-size:22px;line-height:1;color:#e86d8a;animation:flyHeart .65s cubic-bezier(.2,.8,.5,1) forwards;}
-  @keyframes togglePop{0%{transform:scale(1)}40%{transform:scale(1.55)}70%{transform:scale(.85)}100%{transform:scale(1)}}
-  .toggle-pop{animation:togglePop .38s cubic-bezier(.23,1,.32,1);}
+  .fly-heart{position:fixed;z-index:9999;pointer-events:none;line-height:1;color:#e86d8a;animation:flyHeart var(--fly-dur,.65s) cubic-bezier(.18,.8,.4,1) forwards;}
+  @keyframes toggleGlow{
+    0%  {box-shadow:0 0 0 0 rgba(232,109,138,.7);}
+    40% {box-shadow:0 0 0 12px rgba(232,109,138,.3);}
+    100%{box-shadow:0 0 0 22px rgba(232,109,138,0);}
+  }
+  .toggle-glow{animation:toggleGlow .55s ease-out forwards;}
+  @keyframes togglePop{0%{transform:scale(1)}35%{transform:scale(1.6)}65%{transform:scale(.88)}100%{transform:scale(1)}}
+  .toggle-pop{animation:togglePop .42s cubic-bezier(.23,1,.32,1);}
 
   /* ═══════════════════════════════════════════
      VOYAGE DATE SHEET
@@ -715,8 +721,16 @@
   .vds-cancel:hover{background:rgba(255,255,255,.06);color:var(--ink);}
   .vds-save{flex:2;padding:12px;border-radius:12px;border:1px solid rgba(226,189,114,.4);background:rgba(226,189,114,.12);color:var(--brass);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:background .18s,border-color .18s,color .18s;touch-action:manipulation;}
   .vds-save:hover{background:rgba(226,189,114,.22);border-color:rgba(226,189,114,.65);color:var(--ink);}
-  .vds-skip{width:100%;margin-top:8px;padding:8px;border:none;background:none;cursor:pointer;color:var(--faint);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;transition:color .18s;touch-action:manipulation;}
-  .vds-skip:hover{color:var(--muted);}
+  .vds-skip{width:100%;margin-bottom:16px;padding:14px 16px;border:1px solid var(--glass-edge);border-radius:14px;background:rgba(255,255,255,.04);cursor:pointer;display:flex;align-items:center;gap:12px;text-align:left;transition:background .18s,border-color .18s;touch-action:manipulation;}
+  .vds-skip:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);}
+  .vds-skip-icon{font-size:24px;line-height:1;flex:none;}
+  .vds-skip-text{flex:1;min-width:0;}
+  .vds-skip-main{display:block;font-family:'Fraunces',serif;font-weight:600;font-size:15px;color:var(--ink);line-height:1.2;}
+  .vds-skip-sub{display:block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--faint);margin-top:3px;text-transform:uppercase;}
+  .vds-skip-arrow{color:var(--muted);font-size:20px;flex:none;}
+  .vds-divider{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .vds-divider::before,.vds-divider::after{content:"";flex:1;height:1px;background:var(--glass-edge);}
+  .vds-divider span{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);white-space:nowrap;}
 
   /* ═══════════════════════════════════════════
      MY VOYAGES OVERLAY
@@ -970,15 +984,23 @@
 <div id="voyDateSheet" aria-modal="true" role="dialog" aria-label="Set sail date">
   <div id="voyDateCard">
     <div class="vds-hd">
-      <span class="vds-title">When do you sail?</span>
+      <span class="vds-title">Save to My Voyages</span>
       <span class="vds-ship" id="vdsShipName"></span>
     </div>
+    <button class="vds-skip" id="vdsSkip">
+      <span class="vds-skip-icon">⚓</span>
+      <span class="vds-skip-text">
+        <span class="vds-skip-main">Save now, add date later</span>
+        <span class="vds-skip-sub">Track the ship without a countdown</span>
+      </span>
+      <span class="vds-skip-arrow">›</span>
+    </button>
+    <div class="vds-divider"><span>or set your sail date</span></div>
     <input type="date" id="vdsDate" class="vds-input" />
     <div class="vds-actions">
       <button class="vds-cancel" id="vdsCancel">Cancel</button>
-      <button class="vds-save" id="vdsSave">Save Voyage</button>
+      <button class="vds-save" id="vdsSave">Save with Date</button>
     </div>
-    <button class="vds-skip" id="vdsSkip">Save without a date</button>
   </div>
 </div>
 
@@ -3063,39 +3085,63 @@ vtFleet.addEventListener("click",()=>setView("fleet"));
 vtVoyages.addEventListener("click",()=>setView("voyages"));
 
 /* ---- flying heart animation ---- */
+function spawnFlyHeart(sx,sy,ex,ey,opts){
+  const el=document.createElement("span");
+  el.className="fly-heart";
+  el.textContent="♥";
+  el.style.cssText=`left:${sx}px;top:${sy}px;font-size:${opts.size||28}px;transform-origin:center;margin-left:-${(opts.size||28)/2}px;margin-top:-${(opts.size||28)/2}px;`;
+  // arc: midpoint offset creates natural curve
+  const mx=(ex-sx)*0.5+(opts.mx||0), my=(ey-sy)*0.4+(opts.my||-50);
+  el.style.setProperty("--fly-x",mx+"px");
+  el.style.setProperty("--fly-y",my+"px");
+  el.style.setProperty("--fly-x2",(ex-sx)+"px");
+  el.style.setProperty("--fly-y2",(ey-sy)+"px");
+  el.style.setProperty("--fly-smid",opts.smid||".75");
+  el.style.setProperty("--fly-rot",opts.rot||"-12deg");
+  el.style.setProperty("--fly-rot2",opts.rot2||"-22deg");
+  el.style.setProperty("--fly-dur",opts.dur||".68s");
+  document.body.appendChild(el);
+  return el;
+}
 function flyHeartToToggle(){
   const from=byId("dHeart").getBoundingClientRect();
   const to=byId("vtVoyages").getBoundingClientRect();
   const sx=from.left+from.width/2, sy=from.top+from.height/2;
   const ex=to.left+to.width/2, ey=to.top+to.height/2;
-  const el=document.createElement("span");
-  el.className="fly-heart";
-  el.textContent="♥";
-  el.style.cssText=`left:${sx}px;top:${sy}px;transform-origin:center`;
-  el.style.setProperty("--fly-x",(ex-sx)*0.55+"px");
-  el.style.setProperty("--fly-y",(ey-sy)*0.35-45+"px");
-  el.style.setProperty("--fly-x2",(ex-sx)+"px");
-  el.style.setProperty("--fly-y2",(ey-sy)+"px");
-  document.body.appendChild(el);
-  el.addEventListener("animationend",()=>{
-    el.remove();
+
+  // Lead heart — largest, arrives first
+  const lead=spawnFlyHeart(sx,sy,ex,ey,{size:36,mx:-8,my:-60,smid:".72",rot:"-14deg",rot2:"-24deg",dur:".64s"});
+  lead.addEventListener("animationend",()=>{
+    lead.remove();
+    // Glow ring at toggle destination, then pop
     const btn=byId("vtVoyages");
-    btn.classList.add("toggle-pop");
-    btn.addEventListener("animationend",()=>btn.classList.remove("toggle-pop"),{once:true});
+    btn.classList.add("toggle-glow","toggle-pop");
+    btn.addEventListener("animationend",()=>btn.classList.remove("toggle-glow","toggle-pop"),{once:true});
   },{once:true});
+
+  // Trail hearts — smaller, slight delay, drift sideways a little
+  setTimeout(()=>{
+    const t1=spawnFlyHeart(sx,sy,ex,ey,{size:20,mx:18,my:-30,smid:".6",rot:"10deg",rot2:"18deg",dur:".72s"});
+    t1.addEventListener("animationend",()=>t1.remove(),{once:true});
+  },80);
+  setTimeout(()=>{
+    const t2=spawnFlyHeart(sx,sy,ex,ey,{size:14,mx:-22,my:-20,smid:".5",rot:"-20deg",rot2:"-30deg",dur:".78s"});
+    t2.addEventListener("animationend",()=>t2.remove(),{once:true});
+  },160);
 }
 function heartPuff(){
   const from=byId("dHeart").getBoundingClientRect();
-  const el=document.createElement("span");
-  el.className="fly-heart";
-  el.textContent="♥";
-  el.style.cssText=`left:${from.left+from.width/2}px;top:${from.top+from.height/2}px`;
-  el.style.setProperty("--fly-x","0px");
-  el.style.setProperty("--fly-y","-30px");
-  el.style.setProperty("--fly-x2","0px");
-  el.style.setProperty("--fly-y2","-55px");
-  document.body.appendChild(el);
-  el.addEventListener("animationend",()=>el.remove(),{once:true});
+  const sx=from.left+from.width/2, sy=from.top+from.height/2;
+  // Two small hearts float up and fade
+  [
+    {size:18,mx:8,my:-38,rot:"12deg",dur:".55s"},
+    {size:12,mx:-10,my:-28,rot:"-16deg",dur:".6s"},
+  ].forEach((opts,i)=>{
+    setTimeout(()=>{
+      const el=spawnFlyHeart(sx,sy,sx,sy-55,opts);
+      el.addEventListener("animationend",()=>el.remove(),{once:true});
+    },i*70);
+  });
 }
 
 /* ---- heart button ---- */
@@ -3227,12 +3273,7 @@ function buildCountdown(sailDate,sailDateFmt){
   }
   const urgency=d<=0?"now":d<=7?"soon":d<=30?"close":"far";
   return `<div class="voy-card-countdown" data-urgency="${urgency}">
-    <div class="voy-count-board">
-      <div class="voy-count-ring">
-        <svg viewBox="0 0 10 10" preserveAspectRatio="none"><circle cx="50%" cy="50%" r="48%"/></svg>
-        <div class="voy-live-cd" data-ts="${ts}" style="display:flex;align-items:baseline;gap:2px;position:relative;z-index:1;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;">${fmtLiveCountdown(diff)}</div>
-      </div>
-    </div>
+    <div class="voy-live-cd" data-ts="${ts}" style="display:flex;align-items:baseline;gap:2px;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;">${fmtLiveCountdown(diff)}</div>
     <div class="voy-count-sub">${sailDateFmt}</div>
   </div>`;
 }
