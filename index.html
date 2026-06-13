@@ -916,6 +916,8 @@
   .voy-photo-thumb:active{transform:scale(.97);}
   .voy-photo-unseen::after{content:"";position:absolute;inset:0;border-radius:12px;border:2px solid #e86d8a;pointer-events:none;}
   .voy-photo-uploading{background:rgba(226,189,114,.08);border-color:rgba(226,189,114,.3);animation:uploadPulse 1.2s ease-in-out infinite;}
+  .voy-photo-del{position:absolute;top:4px;right:4px;width:19px;height:19px;border-radius:50%;background:rgba(4,14,20,.78);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.85);font-size:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;line-height:1;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);transition:background .15s,border-color .15s;z-index:2;padding:0;}
+  .voy-photo-del:hover{background:rgba(255,50,40,.82);border-color:rgba(255,50,40,.6);}
   @keyframes uploadPulse{0%,100%{opacity:.4}50%{opacity:.9}}
   .voy-photo-error{background:rgba(255,80,70,.08);border-color:rgba(255,80,70,.3);}
   .voy-photo-empty{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;color:var(--faint);padding:4px 0;}
@@ -3748,6 +3750,20 @@ function buildVoyageCard(voy,idx){
       thumb.className="voy-photo-thumb";
       thumb.style.backgroundImage=`url(${url})`;
       if(!isOwner&&!seen.includes(photo.name)) thumb.classList.add("voy-photo-unseen");
+      if(isOwner){
+        const delX=document.createElement("button");
+        delX.className="voy-photo-del"; delX.innerHTML="×"; delX.title="Delete photo";
+        delX.addEventListener("click",async e=>{
+          e.stopPropagation();
+          try{
+            await _SB.storage.from(_SB_BUCKET).remove([`${_sid}/${photo.name}`]);
+            thumb.remove();
+            if(!strip.querySelector(".voy-photo-thumb"))
+              strip.innerHTML=`<div class="voy-photo-empty">Tap + to add your first photo</div>`;
+          }catch(err){}
+        });
+        thumb.appendChild(delX);
+      }
       thumb.addEventListener("click",()=>{
         if(!isOwner) markPhotoSeen(_sid,photo.name);
         thumb.classList.remove("voy-photo-unseen");
@@ -3778,11 +3794,23 @@ function buildVoyageCard(voy,idx){
         if(!strip) continue;
         strip.innerHTML="";
         const allUrls2=photos.map(p=>getPhotoPublicUrl(_sid,p.name));
+        const fnames2=photos.map(p=>p.name);
         photos.forEach((photo,i)=>{
           const thumb=document.createElement("div");
           thumb.className="voy-photo-thumb";
           thumb.style.backgroundImage=`url(${allUrls2[i]})`;
-          const fnames2=photos.map(p=>p.name);
+          const delX=document.createElement("button");
+          delX.className="voy-photo-del"; delX.innerHTML="×"; delX.title="Delete photo";
+          delX.addEventListener("click",async e=>{
+            e.stopPropagation();
+            try{
+              await _SB.storage.from(_SB_BUCKET).remove([`${_sid}/${photo.name}`]);
+              thumb.remove();
+              if(!strip.querySelector(".voy-photo-thumb"))
+                strip.innerHTML=`<div class="voy-photo-empty">Tap + to add your first photo</div>`;
+            }catch(err){}
+          });
+          thumb.appendChild(delX);
           thumb.addEventListener("click",()=>openLightbox(allUrls2,i,{shareId:_sid,filenames:fnames2,isOwner}));
           strip.appendChild(thumb);
         });
