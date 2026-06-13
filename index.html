@@ -2136,7 +2136,6 @@ function fillDetailItin(d){
       }
       collapseDetail();
       clearItinPreview();
-      showPortCard(finalPortEntry,{date:row.dataset.date,arr:row.dataset.arr||null,dep:row.dataset.dep||null},d.color);
       if(d.lat==null){ map.flyTo([finalPortEntry.lat,finalPortEntry.lon],8,{duration:CAM_DUR}); return; }
 
       // All stops from today through (and including) the clicked port
