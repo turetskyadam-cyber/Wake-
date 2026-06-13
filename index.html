@@ -807,7 +807,8 @@
   .voy-wx-icon{font-size:28px;line-height:1;flex:none;}
   .voy-wx-info{flex:1;min-width:0;}
   .voy-wx-temp{font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--ink);line-height:1;}
-  .voy-wx-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:4px;}
+  .voy-wx-port{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--brass);letter-spacing:.06em;margin-top:3px;display:flex;align-items:center;gap:4px;}
+  .voy-wx-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:3px;}
   .voy-wx-note{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--faint);letter-spacing:.06em;}
   /* track live */
   .voy-card-foot{padding:12px 18px 16px;border-top:1px solid var(--glass-edge);}
@@ -3363,6 +3364,15 @@ function buildVoyageCard(voy,idx){
   const sailDateFmt=sailDt?sailDt.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"}):"No date set";
   const nextPort=d?(d.next||(itin[0]?itin[0].port:"—")):"—";
   const location=d?(d.portCity||d.region||(d.status==="port"?"In Port":"At Sea")):"No signal";
+  // Port the ship will be at on the sail date (from itinerary)
+  const allItin=_itinShip[normShip(voy.shipName)]||[];
+  const departPort=voy.sailDate?(()=>{
+    const exact=allItin.find(c=>c.date===voy.sailDate);
+    if(exact) return exact.port;
+    // Closest port on or before sail date
+    const before=[...allItin].filter(c=>c.date<=voy.sailDate).pop();
+    return before?before.port:null;
+  })():null;
 
   const card=document.createElement("div");
   card.className="voy-card";
@@ -3398,19 +3408,20 @@ function buildVoyageCard(voy,idx){
   wxDiv.className="voy-card-wx";
   wxDiv.innerHTML=`<span class="voy-wx-icon">🌊</span><div class="voy-wx-info"><div class="voy-wx-temp" style="font-size:13px;color:var(--faint)">Loading…</div><div class="voy-wx-note">Sail date forecast</div></div>`;
   card.appendChild(wxDiv);
+  const portLine=departPort?`<div class="voy-wx-port">📍 ${departPort}</div>`:"";
   if(d&&d.lat!=null){
     fetchVoyageWeather(d,voy.sailDate).then(wx=>{
       if(!wx){
         const dd=(new Date(voy.sailDate+"T12:00:00Z")-new Date())/864e5;
         wxDiv.innerHTML=dd>15
-          ?`<span class="voy-wx-icon" style="font-size:20px;opacity:.35">📅</span><div class="voy-wx-info"><div class="voy-wx-label">Forecast not yet available</div><div class="voy-wx-note">Available within 16 days of sail date</div></div>`
-          :`<span class="voy-wx-icon" style="font-size:20px;opacity:.35">🌊</span><div class="voy-wx-info"><div class="voy-wx-label">Forecast unavailable</div><div class="voy-wx-note">Check closer to sail date</div></div>`;
+          ?`<span class="voy-wx-icon" style="font-size:20px;opacity:.35">📅</span><div class="voy-wx-info">${portLine}<div class="voy-wx-label">Forecast not yet available</div><div class="voy-wx-note">Available within 16 days of sail date</div></div>`
+          :`<span class="voy-wx-icon" style="font-size:20px;opacity:.35">🌊</span><div class="voy-wx-info">${portLine}<div class="voy-wx-label">Forecast unavailable</div><div class="voy-wx-note">Check closer to sail date</div></div>`;
         return;
       }
-      wxDiv.innerHTML=`<span class="voy-wx-icon">${wx.icon}</span><div class="voy-wx-info"><div class="voy-wx-temp">${wx.tMax}°<span style="color:var(--faint);font-size:14px"> / ${wx.tMin}°F</span></div><div class="voy-wx-label">${wx.label}</div><div class="voy-wx-note">Sail date forecast</div></div>`;
+      wxDiv.innerHTML=`<span class="voy-wx-icon">${wx.icon}</span><div class="voy-wx-info"><div class="voy-wx-temp">${wx.tMax}°<span style="color:var(--faint);font-size:14px"> / ${wx.tMin}°F</span></div>${portLine}<div class="voy-wx-label">${wx.label}</div></div>`;
     });
   } else {
-    wxDiv.innerHTML=`<span class="voy-wx-icon" style="font-size:20px;opacity:.35">📡</span><div class="voy-wx-info"><div class="voy-wx-label">No ship position</div><div class="voy-wx-note">Awaiting AIS signal</div></div>`;
+    wxDiv.innerHTML=`<span class="voy-wx-icon" style="font-size:20px;opacity:.35">📡</span><div class="voy-wx-info">${portLine}<div class="voy-wx-label">No ship position</div><div class="voy-wx-note">Awaiting AIS signal</div></div>`;
   }
   card.insertAdjacentHTML("beforeend",`
     <div class="voy-card-foot">
