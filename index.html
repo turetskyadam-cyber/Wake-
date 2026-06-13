@@ -229,6 +229,7 @@
   .d-itin-row[data-port]:hover .d-itin-port{text-decoration:underline;text-underline-offset:2px}
   .d-itin-row.itin-loading{opacity:.5;pointer-events:none}
   .d-itin-row.itin-loading .d-itin-port::after{content:' ···'}
+  .d-itin-row.d-itin-sea{cursor:default;pointer-events:none;}
   /* itinerary route preview overlay */
   .gulf-logo{mix-blend-mode:multiply;pointer-events:none!important}
   .ipm-outer{cursor:default}
@@ -370,6 +371,7 @@
   .profile-itin-row:last-child{border-bottom:none}
   .profile-itin-row[data-port]{cursor:pointer}
   .profile-itin-row[data-port]:hover .profile-itin-port{text-decoration:underline;text-underline-offset:2px}
+  .profile-itin-row.profile-itin-sea{cursor:default;pointer-events:none;}
   .profile-itin-date{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);flex:none;width:48px;padding-top:2px;}
   .profile-itin-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;}
   .profile-itin-port{font-size:13px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2;}
@@ -814,8 +816,17 @@
   .voy-ports-hd{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:8px;}
   .voy-port-row{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:var(--muted);}
   .voy-port-row:last-child{border-bottom:none;}
+  .voy-port-row[data-port]{cursor:pointer;transition:opacity .15s;}
+  .voy-port-row[data-port]:active{opacity:.5;}
+  .voy-port-past{opacity:.38;}
   .voy-port-date{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);flex:none;width:42px;}
   .voy-port-name{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  /* getting-off row */
+  .voy-enddate-row{display:flex;align-items:center;gap:10px;padding:10px 18px;border-top:1px solid var(--glass-edge);cursor:pointer;position:relative;}
+  .voy-enddate-row:active{background:rgba(255,255,255,.03);}
+  .voy-enddate-lbl{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);flex:none;}
+  .voy-enddate-val{font-size:12px;color:var(--muted);margin-left:auto;text-align:right;}
+  .voy-enddate-edit{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:rgba(226,189,114,.6);margin-left:8px;flex:none;}
   /* weather */
   .voy-card-wx{padding:12px 18px 12px;border-top:1px solid var(--glass-edge);display:flex;align-items:center;gap:14px;}
   .voy-wx-icon{font-size:28px;line-height:1;flex:none;}
@@ -3650,19 +3661,25 @@ function buildVoyageCard(voy,idx){
   const d=byName.get(normName(voy.shipName));
   const color=d?(d.color||"#9fb4bf"):"#9fb4bf";
   const today=new Date().toISOString().slice(0,10);
-  const itin=d?(_itinShip[normShip(voy.shipName)]||[]).filter(c=>c.date>=today):[];
-  const upcomingPorts=withSeaDays(itin,today,6);
+  const allItin=d?(_itinShip[normShip(voy.shipName)]||[]):[];
+  const itin=allItin.filter(c=>c.date>=today);
+  const voyageActive=!!(voy.sailDate&&voy.sailDate<=today);
+  const endDate=voy.endDate||null;
+  const _itinFrom=voyageActive?voy.sailDate:today;
+  const displayItin=voyageActive
+    ?allItin.filter(c=>c.date>=voy.sailDate&&(!endDate||c.date<=endDate))
+    :itin;
+  const upcomingPorts=withSeaDays(displayItin,_itinFrom,voyageActive?99:6);
   const sailDt=voy.sailDate?new Date(voy.sailDate+"T12:00:00Z"):null;
   const sailDateFmt=sailDt?sailDt.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"}):"No date set";
   const diffDays=sailDt?Math.ceil((sailDt-new Date())/864e5):null;
-  const nextPort=d?(d.next||(itin[0]?itin[0].port:"—")):"—";
+  // Next port = first scheduled stop after today (skip today's departure port)
+  const nextPort=d?(allItin.find(c=>c.date>today)?.port||itin[0]?.port||d.next||"—"):"—";
   const location=d?(d.portCity||d.region||(d.status==="port"?"In Port":"At Sea")):"No signal";
   // Port the ship will be at on the sail date (from itinerary)
-  const allItin=_itinShip[normShip(voy.shipName)]||[];
   const departPort=voy.sailDate?(()=>{
     const exact=allItin.find(c=>c.date===voy.sailDate);
     if(exact) return exact.port;
-    // Closest port on or before sail date
     const before=[...allItin].filter(c=>c.date<=voy.sailDate).pop();
     return before?before.port:null;
   })():null;
@@ -3707,12 +3724,35 @@ function buildVoyageCard(voy,idx){
       });
     });
   }
+  // Getting-off date selector (owner only, after voyage starts)
+  if(isOwner&&voyageActive){
+    const _eid=`ved-${voy.shareId}`;
+    const endFmt=endDate?new Date(endDate+"T12:00:00Z").toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"}):"";
+    card.insertAdjacentHTML("beforeend",`
+      <div class="voy-enddate-row">
+        <span class="voy-enddate-lbl">Getting off</span>
+        <span class="voy-enddate-val" id="${_eid}">${endDate?endFmt:`<span style="color:var(--faint)">Tap to set</span>`}</span>
+        <span class="voy-enddate-edit">${endDate?"✎ Change":""}</span>
+        <input type="date" style="position:absolute;opacity:0;pointer-events:none;width:0;height:0" value="${endDate||""}" min="${voy.sailDate}" max="${new Date(new Date(voy.sailDate+"T12:00:00Z").getTime()+300*864e5).toISOString().slice(0,10)}">
+      </div>`);
+    const endRow=card.querySelector(".voy-enddate-row");
+    const endInp=endRow.querySelector("input[type=date]");
+    endRow.addEventListener("click",e=>{
+      e.stopPropagation();
+      try{ endInp.showPicker(); }catch(_){ endInp.click(); }
+    });
+    endInp.addEventListener("change",e=>{
+      const val=e.target.value; if(!val) return;
+      voy.endDate=val; saveVoyages(); renderVoyageCards();
+    });
+  }
   if(upcomingPorts.length){
     const portsHtml=upcomingPorts.map(c=>{
       const dt=new Date(c.date+"T12:00:00Z");
       const lbl=dt.toLocaleDateString("en-US",{month:"short",day:"numeric",timeZone:"UTC"});
-      if(c.isSeaDay) return `<div class="voy-port-row voy-port-sea"><span class="voy-port-date" style="color:var(--faint)">${lbl}</span><span class="voy-port-name" style="color:var(--faint);font-style:italic">🌊 Day at Sea</span></div>`;
-      return `<div class="voy-port-row" data-port="${c.port}" data-date="${c.date}"><span class="voy-port-date">${lbl}</span><span class="voy-port-name">${c.port}</span></div>`;
+      const isPast=c.date<today;
+      if(c.isSeaDay) return `<div class="voy-port-row voy-port-sea${isPast?" voy-port-past":""}"><span class="voy-port-date" style="color:var(--faint)">${lbl}</span><span class="voy-port-name" style="color:var(--faint);font-style:italic">🌊 Day at Sea</span></div>`;
+      return `<div class="voy-port-row${isPast?" voy-port-past":""}" data-port="${c.port}" data-date="${c.date}"><span class="voy-port-date">${lbl}</span><span class="voy-port-name">${c.port}</span></div>`;
     }).join("");
     card.insertAdjacentHTML("beforeend",`<div class="voy-card-ports"><div class="voy-ports-hd">Itinerary</div>${portsHtml}</div>`);
   }
@@ -3873,6 +3913,20 @@ function buildVoyageCard(voy,idx){
     fetchPortWeather(portData.port,portData.date,d?.lat,d?.lon).then(wx=>{
       if(wx) wxSpan.textContent=`${wx.icon} ${wx.tMax}°`;
       else wxSpan.remove();
+    });
+  });
+  // Port tap → pop-up info card (portCard floats above the voyages overlay)
+  card.querySelectorAll(".voy-port-row[data-port]").forEach(row=>{
+    row.addEventListener("click",async e=>{
+      e.stopPropagation();
+      let pe=findPort(row.dataset.port);
+      if(!pe){
+        row.style.opacity="0.55";
+        pe=await geocodePortName(row.dataset.port);
+        row.style.opacity="";
+      }
+      if(!pe) return;
+      showPortCard(pe,{date:row.dataset.date,arr:null,dep:null},color);
     });
   });
   card.querySelector(".voy-card-remove").addEventListener("click",e=>{
