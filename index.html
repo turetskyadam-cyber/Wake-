@@ -1132,6 +1132,7 @@
   <div class="voy-scroll" id="voyScroll">
     <div class="voy-header">
       <h2 class="voy-title">My Voyages</h2>
+      <button id="voyImportBtn" title="Import a shared voyage link" style="background:none;border:1px solid var(--glass-edge);border-radius:8px;padding:5px 10px;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;white-space:nowrap;margin-right:8px;transition:background .18s,color .18s;">🔗 Import</button>
       <button class="profile-close" id="voyClose">✕</button>
     </div>
     <div id="voyCards"></div>
@@ -4239,6 +4240,43 @@ function parseVoyageShare(){
     return {slug,sailDate,shareId};
   }catch(e){ return null; }
 }
+function parseVoyageShareEncoded(encoded){
+  if(!encoded) return null;
+  try{
+    const parts=encoded.split(":");
+    const last=parts[parts.length-1];
+    const hasShareId=/^[0-9a-f]{16}$/.test(last);
+    const shareId=hasShareId?last:null;
+    const rawDate=hasShareId?parts[parts.length-2]:parts[parts.length-1];
+    const sailDate=/^\d{4}-\d{2}-\d{2}$/.test(rawDate)?rawDate:null;
+    const slugParts=hasShareId?parts.slice(0,-2):parts.slice(0,-1);
+    while(slugParts.length&&slugParts[slugParts.length-1]==="") slugParts.pop();
+    const slug=slugParts.join(":");
+    if(!slug) return null;
+    return {slug,sailDate,shareId};
+  }catch(e){ return null; }
+}
+byId("voyImportBtn").addEventListener("click",async e=>{
+  e.stopPropagation();
+  let text="";
+  // Try clipboard first — user just copies the link in Safari then taps Import
+  try{ text=await navigator.clipboard.readText(); }catch(_){}
+  // Look for the voyage param anywhere in the pasted text
+  let encoded="";
+  const m=text.match(/[?&]voyage=([^&\s#]+)/);
+  if(m){ encoded=m[1]; }
+  else{
+    // Fall back to prompt
+    const input=prompt("Paste the WAKE share link:");
+    if(!input) return;
+    const m2=input.match(/[?&]voyage=([^&\s#]+)/);
+    if(m2) encoded=m2[1];
+    else encoded=input.trim(); // maybe they pasted just the encoded part
+  }
+  const share=parseVoyageShareEncoded(encoded);
+  if(!share){ alert("No valid WAKE voyage link found — make sure you copied the full share URL."); return; }
+  openVoyShareBanner(share);
+});
 function openVoyShareBanner(share){
   const el=byId("voyShareBanner");
   if(!el) return;
