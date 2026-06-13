@@ -2083,11 +2083,13 @@ function fillDetail(d){
 function fillDetailItin(d){
   const itinEl=byId("dItin");
   const today=new Date().toISOString().slice(0,10);
-  const calls=(_itinShip[normShip(d.name)]||[]).filter(c=>c.date>=today);
-  if(!calls.length){ itinEl.hidden=true; return; }
+  const rawCalls=(_itinShip[normShip(d.name)]||[]).filter(c=>c.date>=today);
+  if(!rawCalls.length){ itinEl.hidden=true; return; }
+  const calls=withSeaDays(rawCalls,today);
   itinEl.hidden=false;
-  itinEl.innerHTML=`<div class="d-itin-hd">Upcoming Ports<span class="d-itin-cnt">${calls.length}</span></div>`+
+  itinEl.innerHTML=`<div class="d-itin-hd">Upcoming Ports<span class="d-itin-cnt">${rawCalls.length}</span></div>`+
     `<div class="d-itin-list">`+calls.map(c=>{
+      if(c.isSeaDay){const dt=new Date(c.date+"T12:00:00Z");const lbl=dt.toLocaleDateString("en-US",{month:"short",day:"numeric"});return `<div class="d-itin-row d-itin-sea"><span class="d-itin-date" style="color:var(--faint)">${lbl}</span><div class="d-itin-main"><span class="d-itin-port" style="color:var(--faint);font-style:italic">🌊 Day at Sea</span></div></div>`;}
       const isToday=c.date===today;
       const dt=new Date(c.date+"T12:00:00Z");
       const label=isToday?"Today":dt.toLocaleDateString("en-US",{month:"short",day:"numeric"});
@@ -2125,8 +2127,8 @@ function fillDetailItin(d){
       if(d.lat==null){ map.flyTo([finalPortEntry.lat,finalPortEntry.lon],8,{duration:CAM_DUR}); return; }
 
       // All stops from today through (and including) the clicked port
-      const clickedIdx=calls.findIndex(c=>c.port===row.dataset.port&&c.date===row.dataset.date);
-      const routeCalls=clickedIdx>=0?calls.slice(0,clickedIdx+1):[{port:row.dataset.port,date:row.dataset.date,arr:row.dataset.arr,dep:row.dataset.dep}];
+      const clickedIdx=rawCalls.findIndex(c=>c.port===row.dataset.port&&c.date===row.dataset.date);
+      const routeCalls=clickedIdx>=0?rawCalls.slice(0,clickedIdx+1):[{port:row.dataset.port,date:row.dataset.date,arr:row.dataset.arr,dep:row.dataset.dep}];
 
       // Geocode any waypoints not already in CRUISE_PORTS or cache (parallel)
       await Promise.all(routeCalls
@@ -3218,9 +3220,11 @@ function openProfile(d){
     <div class="profile-stat-row"><span>MMSI</span><span>${d.mmsi}</span></div>
   `;
   const today=new Date().toISOString().slice(0,10);
-  const calls=(_itinShip[normShip(d.name)]||[]).filter(c=>c.date>=today);
-  byId("profileItin").innerHTML=calls.length
+  const rawCalls=(_itinShip[normShip(d.name)]||[]).filter(c=>c.date>=today);
+  const calls=withSeaDays(rawCalls,today);
+  byId("profileItin").innerHTML=rawCalls.length
     ?calls.map(c=>{
+      if(c.isSeaDay){const dt=new Date(c.date+"T12:00:00Z");const lbl=dt.toLocaleDateString("en-US",{month:"short",day:"numeric"});return `<div class="profile-itin-row profile-itin-sea"><span class="profile-itin-date" style="color:var(--faint)">${lbl}</span><div class="profile-itin-main"><span class="profile-itin-port" style="color:var(--faint);font-style:italic">🌊 Day at Sea</span></div></div>`;}
       const isToday=c.date===today;
       const dt=new Date(c.date+"T12:00:00Z");
       const label=isToday?"Today":dt.toLocaleDateString("en-US",{month:"short",day:"numeric"});
@@ -3290,6 +3294,24 @@ if(localStorage.getItem("brandMini")) brandEl.classList.add("mini");
 /* ═══════════════════════════════════════════════════════════
    MY VOYAGES
    ═══════════════════════════════════════════════════════════ */
+/* ── Sea-day gap fill ── */
+function withSeaDays(calls, fromDate, max=99){
+  const result=[];
+  let prev=fromDate;
+  for(const c of calls){
+    if(result.length>=max) break;
+    const prevD=new Date(prev+"T12:00:00Z"), portD=new Date(c.date+"T12:00:00Z");
+    const gap=Math.round((portD-prevD)/864e5);
+    for(let g=1;g<gap&&result.length<max;g++){
+      const sd=new Date(prevD.getTime()+g*864e5);
+      result.push({date:sd.toISOString().slice(0,10),port:"Day at Sea",isSeaDay:true});
+    }
+    if(result.length<max) result.push(c);
+    prev=c.date;
+  }
+  return result;
+}
+
 /* ── Supabase client ── */
 const _SB=supabase.createClient("https://veryausyjvlrxykiqlkf.supabase.co","sb_publishable_y4z-OoMuiJDuAmSUMTci4A_X0B6msGI");
 const _SB_BUCKET="voyage-photos";
@@ -3629,23 +3651,7 @@ function buildVoyageCard(voy,idx){
   const color=d?(d.color||"#9fb4bf"):"#9fb4bf";
   const today=new Date().toISOString().slice(0,10);
   const itin=d?(_itinShip[normShip(voy.shipName)]||[]).filter(c=>c.date>=today):[];
-  const upcomingPorts=(()=>{
-    // Fill sea days between port entries so gaps don't silently disappear
-    const result=[], max=6;
-    let prev=today;
-    for(const c of itin){
-      if(result.length>=max) break;
-      const prevD=new Date(prev+"T12:00:00Z"), portD=new Date(c.date+"T12:00:00Z");
-      const gap=Math.round((portD-prevD)/864e5);
-      for(let g=1;g<gap&&result.length<max;g++){
-        const sd=new Date(prevD.getTime()+g*864e5);
-        result.push({date:sd.toISOString().slice(0,10),port:"Day at Sea",isSeaDay:true});
-      }
-      if(result.length<max) result.push(c);
-      prev=c.date;
-    }
-    return result;
-  })();
+  const upcomingPorts=withSeaDays(itin,today,6);
   const sailDt=voy.sailDate?new Date(voy.sailDate+"T12:00:00Z"):null;
   const sailDateFmt=sailDt?sailDt.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"}):"No date set";
   const diffDays=sailDt?Math.ceil((sailDt-new Date())/864e5):null;
@@ -4142,11 +4148,14 @@ function openVoyShareBanner(share){
   const inviteEl=byId("vsbInvite");
   const daysTxt=diffDays>0?`in <strong>${diffDays} day${diffDays===1?"":"s"}</strong>`:"<strong>today</strong>";
   inviteEl.innerHTML=`I'm sailing on <strong>${shipName}</strong> ${daysTxt} — save the voyage below to track the ship live on WAKE!`;
-  const itin=(_itinShip[normShip(shipName)]||[]).filter(c=>c.date>=share.sailDate).slice(0,4);
+  const _itinFrom=share.sailDate||new Date().toISOString().slice(0,10);
+  const rawItin=(_itinShip[normShip(shipName)]||[]).filter(c=>c.date>=_itinFrom);
+  const itin=withSeaDays(rawItin,_itinFrom,5);
   const portsEl=byId("vsbPorts");
-  if(itin.length){
+  if(rawItin.length){
     portsEl.innerHTML=`<div class="vsb-ports-hd">Itinerary</div>`+itin.map(c=>{
       const lbl=new Date(c.date+"T12:00:00Z").toLocaleDateString("en-US",{month:"short",day:"numeric",timeZone:"UTC"});
+      if(c.isSeaDay) return `<div class="vsb-port-row" style="opacity:.5"><span class="vsb-port-date">${lbl}</span><span style="font-style:italic">🌊 Day at Sea</span></div>`;
       return `<div class="vsb-port-row"><span class="vsb-port-date">${lbl}</span><span>${c.port}</span></div>`;
     }).join("");
   } else { portsEl.innerHTML=""; }
