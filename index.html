@@ -237,6 +237,7 @@
   .ipm-card b{display:block;font-size:8.5px;font-weight:600;color:#eef4f7;margin-bottom:0}
   .ipm-card span{font-family:'JetBrains Mono',monospace;font-size:6.5px;color:#8aabb8;letter-spacing:.04em}
   /* ---- port info card ---- */
+  #portCardBackdrop{position:fixed;inset:0;z-index:4499;background:transparent;}
   #portCard{position:fixed;bottom:80px;left:18px;width:min(300px,calc(100vw - 36px));z-index:4500;background:rgba(6,18,28,.93);border:1px solid rgba(255,255,255,.13);border-radius:12px;overflow:hidden;backdrop-filter:blur(16px);box-shadow:0 12px 40px rgba(0,0,0,.65),0 2px 8px rgba(0,0,0,.4);opacity:0;transform:translateY(14px);transition:opacity .22s var(--ease-out),transform .28s var(--ease-out);pointer-events:none}
   #portCard.show{opacity:1;transform:none;pointer-events:auto}
   .pc-hero{height:127px;position:relative;background:rgba(8,26,36,.7) center/cover no-repeat;overflow:hidden}
@@ -1044,6 +1045,7 @@
   </button>
 </div>
 
+<div id="portCardBackdrop" hidden></div>
 <div id="portCard" hidden>
   <div class="pc-hero" id="pcHero">
     <div class="pc-hero-img" id="pcHeroImg"></div>
@@ -2232,6 +2234,7 @@ function clearSelection(){
 function collapseDetail(){ detail.classList.add("collapsed"); byId("dToggle").setAttribute("aria-expanded","false"); hideShipSide(); }
 byId("dClose").addEventListener("click",e=>{ e.stopPropagation(); nav={level:0,line:null,ship:null}; hoverLine=null; clearSelection(); renderNav("l"); applyVisibility(); });
 byId('pcClose').addEventListener('click', hidePortCard);
+byId('portCardBackdrop').addEventListener('click', hidePortCard);
 // Stop touch events from reaching Leaflet so the panel scrolls natively
 ["touchstart","touchmove","touchend","touchcancel"].forEach(ev=>{
   detail.addEventListener(ev,e=>e.stopPropagation(),{passive:true});
@@ -2907,6 +2910,7 @@ function showPortCard(portEntry,call,shipColor){
   hero.className='pc-hero pc-hero-skeleton';
   byId('pcDesc').textContent='';
   byId('pcWiki').hidden=true;
+  byId('portCardBackdrop').removeAttribute('hidden');
   card.removeAttribute('hidden');
   requestAnimationFrame(()=>card.classList.add('show'));
   if(portEntry.photo){
@@ -2974,7 +2978,7 @@ function showPortCard(portEntry,call,shipColor){
 function hidePortCard(){
   const card=byId('portCard');
   card.classList.remove('show');
-  setTimeout(()=>card.setAttribute('hidden',''),260);
+  setTimeout(()=>{ card.setAttribute('hidden',''); byId('portCardBackdrop').setAttribute('hidden',''); },260);
   if(_portCardAbort){ _portCardAbort.abort(); _portCardAbort=null; }
 }
 
@@ -3678,7 +3682,8 @@ function buildVoyageCard(voy,idx){
   const diffDays=sailDt?Math.ceil((sailDt-new Date())/864e5):null;
   // Next port = first scheduled stop after today (skip today's departure port)
   const nextPort=d?(allItin.find(c=>c.date>today)?.port||itin[0]?.port||d.next||"—"):"—";
-  const location=d?(d.portCity||d.region||(d.status==="port"?"In Port":"At Sea")):"No signal";
+  const todayItinPort=allItin.find(c=>c.date===today);
+  const location=d?(todayItinPort?.port||d.portCity||d.region||(d.status==="port"?"In Port":"At Sea")):"No signal";
   // Port the ship will be at on the sail date (from itinerary)
   const departPort=voy.sailDate?(()=>{
     const exact=allItin.find(c=>c.date===voy.sailDate);
@@ -3761,22 +3766,26 @@ function buildVoyageCard(voy,idx){
   }
   const wxDiv=document.createElement("div");
   wxDiv.className="voy-card-wx";
-  wxDiv.innerHTML=`<span class="voy-wx-icon">🌊</span><div class="voy-wx-info"><div class="voy-wx-temp" style="font-size:13px;color:var(--faint)">Loading…</div><div class="voy-wx-note">Sail date forecast</div></div>`;
   card.appendChild(wxDiv);
-  const portLine=departPort?`<div class="voy-wx-port">📍 ${departPort}</div>`:"";
-  if(d&&d.lat!=null){
-    fetchVoyageWeather(d,voy.sailDate).then(wx=>{
-      if(!wx){
-        const dd=(new Date(voy.sailDate+"T12:00:00Z")-new Date())/864e5;
-        wxDiv.innerHTML=dd>15
-          ?`<span class="voy-wx-icon" style="font-size:20px;opacity:.35">📅</span><div class="voy-wx-info">${portLine}<div class="voy-wx-label">Forecast not yet available</div><div class="voy-wx-note">Available within 16 days of sail date</div></div>`
-          :`<span class="voy-wx-icon" style="font-size:20px;opacity:.35">🌊</span><div class="voy-wx-info">${portLine}<div class="voy-wx-label">Forecast unavailable</div><div class="voy-wx-note">Check closer to sail date</div></div>`;
-        return;
-      }
-      wxDiv.innerHTML=`<span class="voy-wx-icon">${wx.icon}</span><div class="voy-wx-info"><div class="voy-wx-temp">${wx.tMax}°<span style="color:var(--faint);font-size:14px"> / ${wx.tMin}°F</span></div>${portLine}<div class="voy-wx-label">${wx.label}</div></div>`;
-    });
+  if(!voy.sailDate){
+    wxDiv.hidden=true;
   } else {
-    wxDiv.innerHTML=`<span class="voy-wx-icon" style="font-size:20px;opacity:.35">📡</span><div class="voy-wx-info">${portLine}<div class="voy-wx-label">No ship position</div><div class="voy-wx-note">Awaiting AIS signal</div></div>`;
+    const portLine=departPort?`<div class="voy-wx-port">📍 ${departPort}</div>`:"";
+    wxDiv.innerHTML=`<span class="voy-wx-icon">🌊</span><div class="voy-wx-info"><div class="voy-wx-temp" style="font-size:13px;color:var(--faint)">Loading…</div><div class="voy-wx-note">Sail date forecast</div></div>`;
+    if(d&&d.lat!=null){
+      fetchVoyageWeather(d,voy.sailDate).then(wx=>{
+        if(!wx){
+          const dd=(new Date(voy.sailDate+"T12:00:00Z")-new Date())/864e5;
+          wxDiv.innerHTML=dd>15
+            ?`<span class="voy-wx-icon" style="font-size:20px;opacity:.35">📅</span><div class="voy-wx-info">${portLine}<div class="voy-wx-label">Forecast not yet available</div><div class="voy-wx-note">Available within 16 days of sail date</div></div>`
+            :`<span class="voy-wx-icon" style="font-size:20px;opacity:.35">🌊</span><div class="voy-wx-info">${portLine}<div class="voy-wx-label">Forecast unavailable</div><div class="voy-wx-note">Check closer to sail date</div></div>`;
+          return;
+        }
+        wxDiv.innerHTML=`<span class="voy-wx-icon">${wx.icon}</span><div class="voy-wx-info"><div class="voy-wx-temp">${wx.tMax}°<span style="color:var(--faint);font-size:14px"> / ${wx.tMin}°F</span></div>${portLine}<div class="voy-wx-label">${wx.label}</div></div>`;
+      });
+    } else {
+      wxDiv.innerHTML=`<span class="voy-wx-icon" style="font-size:20px;opacity:.35">📡</span><div class="voy-wx-info">${portLine}<div class="voy-wx-label">No ship position</div><div class="voy-wx-note">Awaiting AIS signal</div></div>`;
+    }
   }
 
   /* ── Photo Strip ── */
