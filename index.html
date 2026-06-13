@@ -4161,9 +4161,9 @@ setTimeout(()=>{ const s=parseVoyageShare(); if(s) openVoyShareBanner(s); },2000
 function renderVoyageCards(){
   const container=byId("voyCards"),emptyEl=byId("voyEmpty");
   container.innerHTML="";
-  if(!_voyData.voyages.length){ emptyEl.hidden=false; }
+  if(!_voyData.voyages.length){ emptyEl.style.display="flex"; }
   else {
-    emptyEl.hidden=true;
+    emptyEl.style.display="none";
     container.className="voy-cards";
     _voyData.voyages.forEach((voy,idx)=>container.appendChild(buildVoyageCard(voy,idx)));
   }
