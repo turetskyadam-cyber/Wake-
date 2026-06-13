@@ -3380,9 +3380,37 @@ async function downloadLbPhoto(){
 }
 
 const VOY_KEY="wake:voyages:v1";
+const PENDING_VOY_COOKIE="wake_pv";
+function _readPendingCookie(){
+  const m=document.cookie.split(';').find(c=>c.trim().startsWith(PENDING_VOY_COOKIE+'='));
+  if(!m) return [];
+  try{ return JSON.parse(decodeURIComponent(m.trim().slice(PENDING_VOY_COOKIE.length+1)))||[]; }catch(e){ return []; }
+}
+function writePendingVoyageCookie(voy){
+  const arr=_readPendingCookie().filter(v=>!(v.shipName===voy.shipName&&v.sailDate===voy.sailDate));
+  arr.push(voy);
+  document.cookie=`${PENDING_VOY_COOKIE}=${encodeURIComponent(JSON.stringify(arr))};path=/;max-age=86400;SameSite=Strict`;
+}
+function importPendingVoyageCookie(){
+  const pending=_readPendingCookie();
+  if(!pending.length) return;
+  let changed=false;
+  for(const voy of pending){
+    if(!voy||!voy.shipName) continue;
+    if(!_voyData.voyages.some(v=>v.shipName===voy.shipName&&v.sailDate===voy.sailDate)){
+      _voyData.voyages.push(voy); changed=true;
+    }
+  }
+  if(changed){
+    _voyData.voyages.sort((a,b)=>{if(!a.sailDate&&!b.sailDate)return 0;if(!a.sailDate)return 1;if(!b.sailDate)return -1;return a.sailDate.localeCompare(b.sailDate);});
+    saveVoyages();
+  }
+  document.cookie=`${PENDING_VOY_COOKIE}=;path=/;max-age=0;SameSite=Strict`;
+}
 function loadVoyages(){ try{ const d=JSON.parse(localStorage.getItem(VOY_KEY)); return d?{voyages:d.voyages||[],archived:d.archived||[]}:{voyages:[],archived:[]}; }catch(e){ return {voyages:[],archived:[]}; } }
 function saveVoyages(){ try{ localStorage.setItem(VOY_KEY,JSON.stringify(_voyData)); }catch(e){} }
 let _voyData=loadVoyages();
+importPendingVoyageCookie();
 let _voyOpen=false,_voyOpenTime=0;
 function syncVoyageIndicator(){
   byId("vtVoyages").classList.toggle("has-voyages",_voyData.voyages.length>0);
@@ -4244,11 +4272,12 @@ function openVoyShareBanner(share){
   } else { portsEl.innerHTML=""; }
   byId("vsbSave").onclick=()=>{
     closeVoyShareBanner();
-    // Auto-save with the sail date from the link — no date sheet needed
+    const newVoy={shipName,sailDate:share.sailDate,savedAt:Date.now(),shareId:share.shareId||genShareId(),isOwner:false};
     _voyData.voyages=_voyData.voyages.filter(v=>v.shipName!==shipName);
-    _voyData.voyages.push({shipName,sailDate:share.sailDate,savedAt:Date.now(),shareId:share.shareId||genShareId(),isOwner:false});
+    _voyData.voyages.push(newVoy);
     _voyData.voyages.sort((a,b)=>a.sailDate.localeCompare(b.sailDate));
     saveVoyages(); syncVoyageIndicator();
+    writePendingVoyageCookie(newVoy); // cookies cross Safari↔PWA; localStorage does not
     // Fly heart from center of screen (where card was) to the voyage toggle
     setTimeout(()=>{
       const to=byId("vtVoyages").getBoundingClientRect();
