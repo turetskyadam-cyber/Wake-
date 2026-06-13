@@ -3761,7 +3761,7 @@ function buildVoyageCard(voy,idx){
             await _SB.storage.from(_SB_BUCKET).remove([`${_sid}/${photo.name}`]);
             thumb.remove();
             const rem=strip.querySelectorAll(".voy-photo-thumb").length;
-            const pc=byId(`pc-${_sid}`);if(pc)pc.textContent=rem||"";
+            const pc=byId(`pc-${_sid}`);if(pc)pc.textContent=rem;
             if(!rem) strip.innerHTML=`<div class="voy-photo-empty">Tap + to add your first photo</div>`;
           }catch(err){}
         });
@@ -3811,7 +3811,7 @@ function buildVoyageCard(voy,idx){
               await _SB.storage.from(_SB_BUCKET).remove([`${_sid}/${photo.name}`]);
               thumb.remove();
               const rem=strip.querySelectorAll(".voy-photo-thumb").length;
-              const pc=byId(`pc-${_sid}`);if(pc)pc.textContent=rem||"";
+              const pc=byId(`pc-${_sid}`);if(pc)pc.textContent=rem;
               if(!rem) strip.innerHTML=`<div class="voy-photo-empty">Tap + to add your first photo</div>`;
             }catch(err){}
           });
@@ -4793,13 +4793,13 @@ byId("lbDelete").addEventListener("click",async()=>{
     const strip=byId(`ps-${_lbShareId}`);
     const pc=byId(`pc-${_lbShareId}`);
     if(strip){ const ph=await loadVoyagePhotos(_lbShareId); strip.innerHTML="";
-      if(pc) pc.textContent=ph.length||"";
+      if(pc) pc.textContent=ph.length;
       if(!ph.length){ strip.innerHTML=`<div class="voy-photo-empty">Tap + to add your first photo</div>`; return; }
       const allU=ph.map(p=>getPhotoPublicUrl(_lbShareId,p.name));
       const fnms=ph.map(p=>p.name);
       ph.forEach((photo,i)=>{ const t=document.createElement("div"); t.className="voy-photo-thumb"; t.style.backgroundImage=`url(${allU[i]})`;
         const dx=document.createElement("button"); dx.className="voy-photo-del"; dx.innerHTML="×"; dx.title="Delete photo";
-        dx.addEventListener("click",async e=>{ e.stopPropagation(); try{ await _SB.storage.from(_SB_BUCKET).remove([`${_lbShareId}/${photo.name}`]); t.remove(); const rem=strip.querySelectorAll(".voy-photo-thumb").length; if(pc)pc.textContent=rem||""; if(!rem)strip.innerHTML=`<div class="voy-photo-empty">Tap + to add your first photo</div>`; }catch(err){} });
+        dx.addEventListener("click",async e=>{ e.stopPropagation(); try{ await _SB.storage.from(_SB_BUCKET).remove([`${_lbShareId}/${photo.name}`]); t.remove(); const rem=strip.querySelectorAll(".voy-photo-thumb").length; if(pc)pc.textContent=rem; if(!rem)strip.innerHTML=`<div class="voy-photo-empty">Tap + to add your first photo</div>`; }catch(err){} });
         t.appendChild(dx);
         t.addEventListener("click",()=>openLightbox(allU,i,{shareId:_lbShareId,filenames:fnms,isOwner:true})); strip.appendChild(t); });
     }
