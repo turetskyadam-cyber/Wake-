@@ -3600,6 +3600,8 @@ function tickVoyCountdowns(){
     const ts=Number(el.dataset.ts);
     if(!ts) return;
     const diff=ts-Date.now();
+    // Sail-date countdown just expired — re-render cards to switch to disembarkation view
+    if(diff<=0&&el.dataset.mode==="sail"){ renderVoyageCards(); return; }
     el.innerHTML=fmtLiveCountdown(diff);
   });
 }
@@ -3658,7 +3660,7 @@ function buildCountdown(sailDate,sailDateFmt,shipName,voyageActive,endDate){
   }
   const urgency=d<=0?"now":d<=7?"soon":d<=30?"close":"far";
   return `<div class="voy-card-countdown" data-urgency="${urgency}">
-    <div class="voy-live-cd" data-ts="${ts}" style="display:flex;align-items:baseline;gap:2px;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;">${fmtLiveCountdown(diff)}</div>
+    <div class="voy-live-cd" data-ts="${ts}" data-mode="sail" style="display:flex;align-items:baseline;gap:2px;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;">${fmtLiveCountdown(diff)}</div>
     <div class="voy-count-sub">${sailDateFmt}</div>
   </div>`;
 }
