@@ -219,7 +219,7 @@
   .d-itin-row:last-child{border-bottom:none}
   .d-itin-row:hover{color:var(--ink)}
   .d-itin-date{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);flex:none;width:42px}
-  .d-itin-port{flex:1;min-width:0}
+  .d-itin-port{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .d-itin-times{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);white-space:nowrap;flex:none;}
   .d-itin-wx{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);white-space:nowrap;flex:none;padding-left:6px;border-left:1px solid rgba(255,255,255,.08);margin-left:4px;}
   .d-itin-today .d-itin-date{color:var(--brass)}
@@ -369,8 +369,9 @@
   .profile-itin-row[data-port]{cursor:pointer}
   .profile-itin-row[data-port]:hover .profile-itin-port{text-decoration:underline;text-underline-offset:2px}
   .profile-itin-date{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);flex:none;width:48px}
-  .profile-itin-port{flex:1;min-width:0;color:var(--ink)}
-  .profile-itin-times{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);white-space:nowrap}
+  .profile-itin-port{flex:1;min-width:0;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .profile-itin-times{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);white-space:nowrap;flex:none;}
+  .profile-itin-wx{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);white-space:nowrap;flex:none;padding-left:6px;border-left:1px solid rgba(255,255,255,.08);margin-left:4px;}
   .profile-links{padding:16px 20px;border-top:1px solid var(--glass-edge);display:flex;gap:10px}
   .profile-wiki-link{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--brass);text-decoration:none;border:1px solid rgba(226,189,114,.3);padding:5px 10px;border-radius:999px;transition:background .18s}
   .profile-wiki-link:hover{background:rgba(226,189,114,.1)}
@@ -1017,7 +1018,6 @@
     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     Deep Dive
   </button>
-  <button class="ss-dive-btn ss-sm" id="shareBtn" title="Share this ship">⤴ Share</button>
   <div class="share-pop" id="sharePop" style="display:none">
     <button id="shareCopyLink">Copy Message</button>
   </div>
@@ -3049,23 +3049,7 @@ function shareMsg(d){
     :"sailing at "+d.spd.toFixed(0)+" kn"+(d.next?" bound for "+d.next:"");
   return `${d.name} (${d.line}) – ${status}. Track it live: ${link}`;
 }
-function closeSharePop(){ byId("sharePop").style.display='none'; byId("shareBtn").classList.remove("on"); }
-byId("shareBtn").addEventListener("click",e=>{
-  e.stopPropagation();
-  if(!selected) return;
-  if(navigator.share){
-    navigator.share({text:shareMsg(selected)}).catch(()=>{});
-    return;
-  }
-  const pop=byId("sharePop");
-  const opening=pop.style.display==='none';
-  pop.style.display=opening?'flex':'none';
-  byId("shareBtn").classList.toggle("on",opening);
-});
-document.addEventListener("click",e=>{
-  const pop=byId("sharePop");
-  if(pop.style.display!=='none'&&!pop.contains(e.target)&&!byId("shareBtn").contains(e.target)) closeSharePop();
-});
+function closeSharePop(){ byId("sharePop").style.display='none'; }
 byId("shareCopyLink").addEventListener("click",e=>{ if(selected) copyText(shareMsg(selected),e.target); });
 
 /* ---- ?ship= deep links (slug or MMSI) ---- */
@@ -3138,6 +3122,19 @@ function openProfile(d){
       return `<div class="profile-itin-row" data-port="${c.port}" data-date="${c.date}" data-arr="${c.arr||''}" data-dep="${c.dep||''}"><span class="profile-itin-date" style="${isToday?"color:var(--brass)":""}">${label}</span><span class="profile-itin-port">${c.port}</span>${times?`<span class="profile-itin-times">${times}</span>`:""}</div>`;
     }).join("")
     :`<div style="color:var(--faint);font-size:12px;padding:6px 0">No itinerary data available</div>`;
+  // Weather badges on deep-dive itinerary — within 16-day forecast window
+  byId("profileItin").querySelectorAll(".profile-itin-row[data-date]").forEach(row=>{
+    const diffDays=(new Date(row.dataset.date+"T12:00:00Z")-new Date())/864e5;
+    if(diffDays<=15&&diffDays>-1){
+      const wxEl=document.createElement("span");
+      wxEl.className="profile-itin-wx";
+      row.appendChild(wxEl);
+      fetchPortWeather(row.dataset.port,row.dataset.date,d.lat,d.lon).then(wx=>{
+        if(wx) wxEl.textContent=`${wx.icon} ${wx.tMax}°`;
+        else wxEl.remove();
+      });
+    }
+  });
   byId("profileItin").querySelectorAll(".profile-itin-row[data-port]").forEach(row=>{
     row.addEventListener("click",async e=>{
       e.stopPropagation();
