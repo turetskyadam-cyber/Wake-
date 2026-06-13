@@ -789,6 +789,9 @@
   @keyframes rockWave{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}}
   /* past */
   .voy-count-past{padding:10px 18px 8px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);display:flex;align-items:center;gap:10px;}
+  .voy-no-date{padding:12px 18px 8px;}
+  .voy-add-date-btn{width:100%;padding:13px 16px;border:1.5px dashed var(--glass-edge);border-radius:12px;background:rgba(255,255,255,.03);cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:8px;transition:border-color .2s,background .2s,color .2s;touch-action:manipulation;}
+  .voy-add-date-btn:hover{border-color:rgba(226,189,114,.5);background:rgba(226,189,114,.07);color:var(--brass);}
   /* live countdown */
   .vlc-d{font-family:'Fraunces',serif;font-weight:600;font-size:44px;line-height:1;font-variant-numeric:tabular-nums;}
   .vlc-h,.vlc-m,.vlc-s{font-family:'Fraunces',serif;font-weight:600;font-size:28px;line-height:1;font-variant-numeric:tabular-nums;}
@@ -3321,9 +3324,9 @@ function fmtLiveCountdown(diff){
     +`<span class="vlc-m" style="color:${col}">${pad(m)}</span><span class="vlc-sep" style="color:${col}">m</span>`
     +`<span class="vlc-s" style="color:${col}">${pad(s)}</span><span class="vlc-sep" style="color:${col}">s</span>`;
 }
-function buildCountdown(sailDate,sailDateFmt){
+function buildCountdown(sailDate,sailDateFmt,shipName){
   if(!sailDate){
-    return `<div class="voy-count-past" style="color:var(--faint)">No date set · tap ♥ to update</div>`;
+    return `<div class="voy-no-date"><button class="voy-add-date-btn" data-ship="${shipName||''}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Departure Date</button></div>`;
   }
   const ts=new Date(sailDate+"T00:00:00").getTime();
   const diff=ts-Date.now();
@@ -3398,7 +3401,13 @@ function buildVoyageCard(voy,idx){
       <button class="voy-card-remove" data-ship="${voy.shipName}">Remove</button>
     </div>
   `);
-  card.insertAdjacentHTML("beforeend",buildCountdown(voy.sailDate,sailDateFmt));
+  card.insertAdjacentHTML("beforeend",buildCountdown(voy.sailDate,sailDateFmt,voy.shipName));
+  const addDateBtn=card.querySelector(".voy-add-date-btn");
+  if(addDateBtn) addDateBtn.addEventListener("click",e=>{
+    e.stopPropagation();
+    const target=byName.get(normName(e.currentTarget.dataset.ship));
+    if(target) openDateSheet(target);
+  });
   card.insertAdjacentHTML("beforeend",`
     <div class="voy-card-grid">
       <div class="voy-cell"><div class="k">Now at</div><div class="v${!d||d.lat==null?" dim":""}">${location}</div></div>
