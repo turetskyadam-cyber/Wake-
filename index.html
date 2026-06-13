@@ -3768,7 +3768,7 @@ function buildVoyageCard(voy,idx){
     // Body-level picker avoids overflow:hidden scroll-into-view that makes iOS flash on first tap
     const endInp=document.createElement("input");
     endInp.type="date";
-    endInp.style.cssText="position:fixed;bottom:-200px;left:-200px;width:1px;height:1px;opacity:0;pointer-events:none";
+    endInp.style.cssText="position:fixed;bottom:-200px;left:-200px;width:1px;height:1px;opacity:0";
     endInp.value=endDate||"";
     endInp.min=voy.sailDate;
     endInp.max=new Date(new Date(voy.sailDate+"T12:00:00Z").getTime()+300*864e5).toISOString().slice(0,10);
