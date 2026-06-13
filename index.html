@@ -3763,7 +3763,7 @@ function buildVoyageCard(voy,idx){
     card.insertAdjacentHTML("beforeend",`
       <div class="voy-enddate-row">
         <span class="voy-enddate-lbl">Getting off</span>
-        <input type="date" class="voy-enddate-input" id="${_eid}" value="${endDate||''}" min="${voy.sailDate}" max="${new Date(new Date(voy.sailDate+"T12:00:00Z").getTime()+300*864e5).toISOString().slice(0,10)}" placeholder="End date">
+        <input type="date" class="voy-enddate-input" id="${_eid}" value="${endDate||''}" min="${voy.sailDate}" placeholder="End date">
       </div>`);
     const endInp=card.querySelector(`#${_eid}`);
     endInp.addEventListener("click",e=>e.stopPropagation());
