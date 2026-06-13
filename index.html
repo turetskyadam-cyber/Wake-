@@ -819,7 +819,7 @@
   .voy-wx-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:3px;}
   .voy-wx-note{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--faint);letter-spacing:.06em;}
   /* track live */
-  .voy-card-foot{padding:12px 18px 16px;border-top:1px solid var(--glass-edge);}
+  .voy-card-foot{padding:12px 18px 16px;border-top:1px solid var(--glass-edge);display:flex;gap:10px;}
   .voy-track-btn{width:100%;padding:11px;border-radius:12px;border:1px solid rgba(226,189,114,.35);background:rgba(226,189,114,.1);color:var(--brass);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .18s,border-color .18s,color .18s,transform .1s;touch-action:manipulation;}
   .voy-track-btn:hover{background:rgba(226,189,114,.18);border-color:rgba(226,189,114,.6);color:var(--ink);}
   .voy-track-btn:active{transform:scale(.98);}
@@ -830,6 +830,52 @@
   .voy-empty-sub{font-size:14px;color:var(--muted);line-height:1.6;max-width:280px;}
   .voy-empty-heart{color:#e86d8a;}
   @media(max-width:760px){.voy-count-digit{font-size:34px;min-width:38px;}.voy-card-name{font-size:17px;}.voy-scroll{padding:14px 14px 60px;}}
+  /* ── milestone tracker ── */
+  .voy-milestones{padding:12px 18px 14px;border-top:1px solid var(--glass-edge);}
+  .voy-ms-title{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:14px;}
+  .voy-ms-line{display:flex;align-items:flex-start;position:relative;}
+  .voy-ms-track{position:absolute;top:9px;left:calc(100% / (var(--ms-count) * 2));right:calc(100% / (var(--ms-count) * 2));height:1.5px;background:rgba(255,255,255,.09);border-radius:2px;z-index:0;overflow:hidden;}
+  .voy-ms-fill{height:100%;background:linear-gradient(90deg,var(--brass),rgba(226,189,114,.35));border-radius:2px;transition:width .7s cubic-bezier(.23,1,.32,1);}
+  .voy-ms-step{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;z-index:1;gap:5px;}
+  .voy-ms-dot{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;border:1.5px solid rgba(255,255,255,.1);background:rgba(4,16,24,.8);transition:all .35s;}
+  .voy-ms-step.ms-done .voy-ms-dot{background:rgba(226,189,114,.18);border-color:var(--brass);color:var(--brass);}
+  .voy-ms-step.ms-next .voy-ms-dot{background:rgba(226,189,114,.08);border-color:rgba(226,189,114,.55);box-shadow:0 0 10px rgba(226,189,114,.4);animation:msPulse 2.5s ease-in-out infinite;}
+  .voy-ms-step.ms-far .voy-ms-dot{background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.09);color:var(--faint);}
+  @keyframes msPulse{0%,100%{box-shadow:0 0 6px rgba(226,189,114,.25)}50%{box-shadow:0 0 14px rgba(226,189,114,.58)}}
+  .voy-ms-lbl{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);text-align:center;line-height:1.3;max-width:52px;}
+  .voy-ms-step.ms-done .voy-ms-lbl{color:rgba(226,189,114,.7);}
+  .voy-ms-step.ms-next .voy-ms-lbl{color:var(--ink);opacity:.85;}
+  .voy-ms-when{font-family:'JetBrains Mono',monospace;font-size:6.5px;color:var(--faint);text-align:center;white-space:nowrap;margin-top:1px;}
+  .voy-ms-step.ms-done .voy-ms-when{color:rgba(226,189,114,.45);}
+  .voy-ms-step.ms-next .voy-ms-when{color:rgba(226,189,114,.65);}
+  /* ── share button on voyage card ── */
+  .voy-share-btn{width:42px;height:42px;border-radius:12px;border:1px solid var(--glass-edge);background:rgba(255,255,255,.04);color:var(--muted);font-size:17px;cursor:pointer;flex:none;display:flex;align-items:center;justify-content:center;transition:background .18s,color .18s,border-color .18s;touch-action:manipulation;}
+  .voy-share-btn:hover{background:rgba(255,255,255,.1);color:var(--ink);}
+  /* ── voyage share banner ── */
+  #voyShareBanner{position:fixed;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(4,12,20,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);opacity:0;pointer-events:none;transition:opacity .35s var(--ease-out);}
+  #voyShareBanner.show{opacity:1;pointer-events:auto;}
+  #voyShareCard{background:var(--glass);border:1px solid var(--glass-edge);border-radius:22px;width:100%;max-width:400px;overflow:hidden;backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);box-shadow:0 24px 80px -20px rgba(0,0,0,.85);transform:translateY(24px) scale(.97);transition:transform .4s var(--ease-out);max-height:88vh;overflow-y:auto;}
+  #voyShareBanner.show #voyShareCard{transform:translateY(0) scale(1);}
+  .vsb-accent{height:4px;}
+  .vsb-body{padding:20px 22px 0;}
+  .vsb-eyebrow{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--brass);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+  .vsb-eyebrow::before{content:"";width:16px;height:1.5px;background:var(--brass);border-radius:2px;display:inline-block;}
+  .vsb-ship{font-family:'Fraunces',serif;font-weight:600;font-size:28px;color:var(--ink);line-height:1.08;margin-bottom:4px;}
+  .vsb-line{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:18px;}
+  .vsb-cd{display:flex;align-items:baseline;gap:8px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--glass-edge);}
+  .vsb-cd-num{font-family:'Fraunces',serif;font-weight:600;font-size:52px;color:var(--ink);line-height:1;}
+  .vsb-cd-unit{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+  .vsb-cd-date{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);margin-left:auto;}
+  .vsb-ports-hd{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:8px;}
+  .vsb-port-row{display:flex;align-items:center;gap:8px;padding:3px 0;font-size:12px;color:var(--muted);border-bottom:1px solid rgba(255,255,255,.04);}
+  .vsb-port-row:last-child{border-bottom:none;}
+  .vsb-port-date{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);flex:none;width:42px;}
+  .vsb-ports-wrap{padding-bottom:16px;}
+  .vsb-actions{padding:16px 22px 24px;display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--glass-edge);}
+  .vsb-save{width:100%;padding:14px;border-radius:14px;border:1px solid rgba(226,189,114,.45);background:rgba(226,189,114,.15);color:var(--brass);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:background .18s,border-color .18s,color .18s;}
+  .vsb-save:hover{background:rgba(226,189,114,.28);border-color:rgba(226,189,114,.7);color:var(--ink);}
+  .vsb-dismiss{width:100%;padding:10px;border-radius:12px;border:none;background:transparent;color:var(--faint);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:color .18s;}
+  .vsb-dismiss:hover{color:var(--muted);}
 </style>
 </head>
 <body>
@@ -995,6 +1041,28 @@
       <div class="voy-empty-icon">⚓</div>
       <div class="voy-empty-title">No voyages saved yet</div>
       <div class="voy-empty-sub">Tap the <span class="voy-empty-heart">♥</span> on any ship to save your next cruise</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ VOYAGE SHARE BANNER ══════════════ -->
+<div id="voyShareBanner" aria-modal="true" role="dialog" aria-label="Shared voyage invite">
+  <div id="voyShareCard">
+    <div class="vsb-accent" id="vsbAccent"></div>
+    <div class="vsb-body">
+      <div class="vsb-eyebrow">Voyage Invite</div>
+      <div class="vsb-ship" id="vsbShip">—</div>
+      <div class="vsb-line" id="vsbLine">—</div>
+      <div class="vsb-cd">
+        <span class="vsb-cd-num" id="vsbNum">—</span>
+        <span class="vsb-cd-unit" id="vsbUnit"></span>
+        <span class="vsb-cd-date" id="vsbDate"></span>
+      </div>
+      <div class="vsb-ports-wrap" id="vsbPorts"></div>
+    </div>
+    <div class="vsb-actions">
+      <button class="vsb-save" id="vsbSave">⚓ Save This Voyage</button>
+      <button class="vsb-dismiss" id="vsbDismiss">Dismiss</button>
     </div>
   </div>
 </div>
@@ -3374,6 +3442,7 @@ function buildVoyageCard(voy,idx){
   const upcomingPorts=itin.slice(0,3);
   const sailDt=voy.sailDate?new Date(voy.sailDate+"T12:00:00Z"):null;
   const sailDateFmt=sailDt?sailDt.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"}):"No date set";
+  const diffDays=sailDt?Math.ceil((sailDt-new Date())/864e5):null;
   const nextPort=d?(d.next||(itin[0]?itin[0].port:"—")):"—";
   const location=d?(d.portCity||d.region||(d.status==="port"?"In Port":"At Sea")):"No signal";
   // Port the ship will be at on the sail date (from itinerary)
@@ -3414,6 +3483,8 @@ function buildVoyageCard(voy,idx){
       <div class="voy-cell"><div class="k">Next port</div><div class="v${nextPort==="—"?" dim":""}">${nextPort}</div></div>
     </div>
   `);
+  // Milestone tracker (only when sail date is set)
+  if(voy.sailDate) card.insertAdjacentHTML("beforeend",buildMilestones(voy,d,diffDays));
   if(upcomingPorts.length){
     const portsHtml=upcomingPorts.map(c=>{
       const dt=new Date(c.date+"T12:00:00Z");
@@ -3441,12 +3512,16 @@ function buildVoyageCard(voy,idx){
   } else {
     wxDiv.innerHTML=`<span class="voy-wx-icon" style="font-size:20px;opacity:.35">📡</span><div class="voy-wx-info">${portLine}<div class="voy-wx-label">No ship position</div><div class="voy-wx-note">Awaiting AIS signal</div></div>`;
   }
+  const shareHtml=voy.sailDate
+    ?`<button class="voy-share-btn" data-ship="${voy.shipName}" data-date="${voy.sailDate}" title="Share this voyage">⤴</button>`
+    :"";
   card.insertAdjacentHTML("beforeend",`
     <div class="voy-card-foot">
-      <button class="voy-track-btn" data-ship="${voy.shipName}">
+      <button class="voy-track-btn" style="flex:1" data-ship="${voy.shipName}">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         Track Live on Map
       </button>
+      ${shareHtml}
     </div>
   `);
   card.querySelector(".voy-card-remove").addEventListener("click",e=>{
@@ -3464,8 +3539,119 @@ function buildVoyageCard(voy,idx){
     closeVoyages();
     setTimeout(()=>goShip(target),120);
   });
+  const shareBtn=card.querySelector(".voy-share-btn");
+  if(shareBtn) shareBtn.addEventListener("click",e=>{
+    e.stopPropagation();
+    const name=e.currentTarget.dataset.ship, date=e.currentTarget.dataset.date;
+    const slug=slugOf(name);
+    const url=`${SITE_ORIGIN}/?voyage=${slug}:${date}`;
+    if(navigator.share){
+      navigator.share({title:`Join me on ${name}`,text:`Track ${name} live on WAKE:`,url}).catch(()=>copyText(url,e.currentTarget));
+    } else { copyText(url,e.currentTarget); }
+  });
   return card;
 }
+
+/* ═══════════════ LINE-AWARE MILESTONE TRACKER ═══════════════ */
+const LINE_MILESTONES={
+  "Royal Caribbean": [{key:"pay",label:"Final Payment",icon:"💳",days:90},{key:"book",label:"Book Extras",icon:"🎟",days:90},{key:"cin",label:"Check-In",icon:"📋",days:60},{key:"tags",label:"Luggage Tags",icon:"🏷",days:14}],
+  "Celebrity":       [{key:"pay",label:"Final Payment",icon:"💳",days:90},{key:"book",label:"Book Extras",icon:"🎟",days:90},{key:"cin",label:"Check-In",icon:"📋",days:90},{key:"tags",label:"Luggage Tags",icon:"🏷",days:14}],
+  "Carnival":        [{key:"pay",label:"Final Payment",icon:"💳",days:90},{key:"cin",label:"Check-In",icon:"📋",days:16},{key:"tags",label:"Luggage Tags",icon:"🏷",days:21}],
+  "Disney":          [{key:"pay",label:"Final Payment",icon:"💳",days:120},{key:"book",label:"Book Extras",icon:"🎟",days:75},{key:"cin",label:"Check-In",icon:"📋",days:60},{key:"tags",label:"Luggage Tags",icon:"🏷",days:21}],
+  "Norwegian":       [{key:"book",label:"Book Extras",icon:"🎟",days:120},{key:"pay",label:"Final Payment",icon:"💳",days:120},{key:"cin",label:"Check-In",icon:"📋",days:21},{key:"tags",label:"Luggage Tags",icon:"🏷",days:21}],
+  "Virgin Voyages":  [{key:"pay",label:"Final Payment",icon:"💳",days:120},{key:"book",label:"Sailor Loot",icon:"⚓",days:45},{key:"cin",label:"Check-In",icon:"📋",days:45},{key:"tags",label:"Luggage Tags",icon:"🏷",days:21}],
+  "Holland America": [{key:"pay",label:"Final Payment",icon:"💳",days:90},{key:"cin",label:"Check-In",icon:"📋",days:50},{key:"tags",label:"Luggage Tags",icon:"🏷",days:21}],
+  "MSC":             [{key:"pay",label:"Final Payment",icon:"💳",days:90},{key:"cin",label:"Check-In",icon:"📋",days:30},{key:"tags",label:"Luggage Tags",icon:"🏷",days:21}],
+  "Princess":        [{key:"pay",label:"Final Payment",icon:"💳",days:90},{key:"cin",label:"Check-In",icon:"📋",days:75},{key:"tags",label:"Luggage Tags",icon:"🏷",days:21}],
+  "Cunard":          [{key:"pay",label:"Final Payment",icon:"💳",days:90},{key:"cin",label:"Check-In",icon:"📋",days:14},{key:"tags",label:"Luggage Tags",icon:"🏷",days:21}],
+};
+const LINE_MILESTONES_DEFAULT=[{key:"pay",label:"Final Payment",icon:"💳",days:90},{key:"cin",label:"Check-In",icon:"📋",days:30},{key:"tags",label:"Luggage Tags",icon:"🏷",days:21}];
+
+function getMilestones(lineName){
+  if(!lineName) return LINE_MILESTONES_DEFAULT;
+  for(const [k,v] of Object.entries(LINE_MILESTONES)){
+    if(lineName.toLowerCase().includes(k.toLowerCase())) return v;
+  }
+  return LINE_MILESTONES_DEFAULT;
+}
+
+function buildMilestones(voy,d,diffDays){
+  if(!voy.sailDate||diffDays==null) return "";
+  const milestones=getMilestones(d?d.line:"");
+  // Sort largest-days first (earliest on timeline = leftmost)
+  const sorted=[...milestones].sort((a,b)=>b.days-a.days);
+  const n=sorted.length;
+  const doneCount=sorted.filter(m=>diffDays<m.days).length;
+  const fillPct=n?Math.round((doneCount/n)*100):0;
+  // Index of the first not-yet-done milestone = the "next" one
+  const nextIdx=sorted.findIndex(m=>diffDays>=m.days);
+  const steps=sorted.map((m,i)=>{
+    const done=diffDays<m.days;
+    const isNext=!done&&i===nextIdx;
+    const cls=done?"ms-done":isNext?"ms-next":"ms-far";
+    const daysUntil=diffDays-m.days;
+    const whenLabel=done?"✓ Done":(daysUntil>0?`In ${daysUntil}d`:"Now");
+    return `<div class="voy-ms-step ${cls}"><div class="voy-ms-dot">${done?"✓":m.icon}</div><div class="voy-ms-lbl">${m.label}</div><div class="voy-ms-when">${whenLabel}</div></div>`;
+  }).join("");
+  return `<div class="voy-milestones"><div class="voy-ms-title">Voyage Milestones · ${d?d.line:"Cruise Line"}</div><div class="voy-ms-line" style="--ms-count:${n}"><div class="voy-ms-track"><div class="voy-ms-fill" style="width:${fillPct}%"></div></div>${steps}</div></div>`;
+}
+
+/* ═══════════════ VOYAGE SHARE LINK ═══════════════ */
+function parseVoyageShare(){
+  try{
+    const params=new URLSearchParams(location.search);
+    const encoded=params.get("voyage");
+    if(!encoded) return null;
+    const idx=encoded.lastIndexOf(":");
+    if(idx<1) return null;
+    const slug=encoded.slice(0,idx), sailDate=encoded.slice(idx+1);
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(sailDate)) return null;
+    return {slug,sailDate};
+  }catch(e){ return null; }
+}
+function openVoyShareBanner(share){
+  const el=byId("voyShareBanner");
+  if(!el) return;
+  // Resolve ship data — try bySlug, then search byName
+  const shipData=bySlug.get(share.slug);
+  const shipName=shipData?shipData.name:share.slug.split("-").map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(" ");
+  const lineName=shipData?(shipData.line||""):"";
+  const color=shipData?(shipData.color||"#4d8fdb"):"#4d8fdb";
+  byId("vsbAccent").style.background=color;
+  byId("vsbShip").textContent=shipName;
+  byId("vsbLine").textContent=lineName;
+  const sailDt=new Date(share.sailDate+"T12:00:00Z");
+  const diffDays=Math.ceil((sailDt-new Date())/864e5);
+  byId("vsbNum").textContent=diffDays>0?diffDays:"Today!";
+  byId("vsbUnit").textContent=diffDays>1?"days to go":diffDays===1?"day to go":"";
+  byId("vsbDate").textContent=sailDt.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"});
+  const itin=(_itinShip[normShip(shipName)]||[]).filter(c=>c.date>=share.sailDate).slice(0,4);
+  const portsEl=byId("vsbPorts");
+  if(itin.length){
+    portsEl.innerHTML=`<div class="vsb-ports-hd">Itinerary</div>`+itin.map(c=>{
+      const lbl=new Date(c.date+"T12:00:00Z").toLocaleDateString("en-US",{month:"short",day:"numeric",timeZone:"UTC"});
+      return `<div class="vsb-port-row"><span class="vsb-port-date">${lbl}</span><span>${c.port}</span></div>`;
+    }).join("");
+  } else { portsEl.innerHTML=""; }
+  byId("vsbSave").onclick=()=>{
+    closeVoyShareBanner();
+    if(shipData) openDateSheet(shipData);
+    else{
+      _voyData.voyages=_voyData.voyages.filter(v=>v.shipName!==shipName);
+      _voyData.voyages.push({shipName,sailDate:share.sailDate,savedAt:Date.now()});
+      _voyData.voyages.sort((a,b)=>a.sailDate.localeCompare(b.sailDate));
+      saveVoyages(); syncVoyageIndicator();
+    }
+  };
+  requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add("show")));
+}
+function closeVoyShareBanner(){
+  byId("voyShareBanner").classList.remove("show");
+}
+byId("vsbDismiss").addEventListener("click",closeVoyShareBanner);
+byId("voyShareBanner").addEventListener("click",e=>{ if(e.target===byId("voyShareBanner")) closeVoyShareBanner(); });
+// Parse share URL after fleet data loads (2s gives map time to boot)
+setTimeout(()=>{ const s=parseVoyageShare(); if(s) openVoyShareBanner(s); },2000);
 
 /* ---- render all voyage cards ---- */
 function renderVoyageCards(){
