@@ -939,7 +939,7 @@
 
   /* ── Archive swipe-to-delete ── */
   .voy-archive-card-wrap{position:relative;overflow:hidden;border-radius:14px;}
-  .voy-archive-card-trash{position:absolute;right:0;top:0;bottom:0;width:72px;background:#ff3b30;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;border-radius:0 14px 14px 0;pointer-events:none;}
+  .voy-archive-card-trash{position:absolute;right:0;top:0;bottom:0;width:72px;background:#ff3b30;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;border-radius:0 14px 14px 0;pointer-events:none;opacity:0;transition:opacity .1s;}
   .voy-archive-card{border-radius:14px;touch-action:pan-y;cursor:grab;transition:transform .22s var(--ease-out);}
   #lbDots{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:2;display:flex;gap:6px;align-items:center;min-height:16px;}
   .lb-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.28);transition:background .22s,transform .22s,width .22s;flex:none;}
@@ -3734,6 +3734,7 @@ function buildVoyageCard(voy,idx){
     const strip=byId(`ps-${_sid}`);
     if(!strip) return;
     strip.innerHTML="";
+    const countEl=byId(`pc-${_sid}`);if(countEl)countEl.textContent=photos.length;
     if(!photos.length){
       strip.innerHTML=isOwner
         ?`<div class="voy-photo-empty">Tap + to add your first photo</div>`
@@ -3743,7 +3744,6 @@ function buildVoyageCard(voy,idx){
     const seen=getSeenPhotos(_sid);
     const hasNew=!isOwner&&photos.some(p=>!seen.includes(p.name));
     if(hasNew){const b=byId(`pnb-${_sid}`);if(b)b.hidden=false;}
-    const countEl=byId(`pc-${_sid}`);if(countEl)countEl.textContent=photos.length;
     const allUrls=photos.map(p=>getPhotoPublicUrl(_sid,p.name));
     const fnames=photos.map(p=>p.name);
     photos.forEach((photo,i)=>{
