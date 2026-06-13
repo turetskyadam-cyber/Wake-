@@ -4726,6 +4726,8 @@ function openLightbox(photos,startIdx,opts){
   });
   const delBtn=byId("lbDelete");
   if(delBtn) delBtn.style.display=_lbIsOwner?"flex":"none";
+  // Mark the opening photo as seen immediately
+  if(_lbShareId&&_lbFilenames[_lbIdx]) markPhotoSeen(_lbShareId,_lbFilenames[_lbIdx]);
   const lb=byId("voyLightbox");
   lb.hidden=false;
   requestAnimationFrame(()=>lb.classList.add("lb-show"));
@@ -4744,6 +4746,20 @@ function _lbSnap(idx,animated){
   track.style.transition=animated===false?"none":"transform .38s cubic-bezier(.25,.46,.45,.94)";
   track.style.transform=`translateX(${-_lbIdx*window.innerWidth}px)`;
   _lbUpdateDots();
+  // Mark current photo as seen and clear "New" badge if all seen
+  if(_lbShareId&&_lbFilenames[_lbIdx]){
+    markPhotoSeen(_lbShareId,_lbFilenames[_lbIdx]);
+    // Remove unseen ring on the corresponding thumbnail
+    const strip=byId(`ps-${_lbShareId}`);
+    if(strip){
+      const thumbs=strip.querySelectorAll(".voy-photo-thumb");
+      if(thumbs[_lbIdx]) thumbs[_lbIdx].classList.remove("voy-photo-unseen");
+    }
+    // Hide "✦ New" badge if all photos are now seen
+    const seen=getSeenPhotos(_lbShareId);
+    const allSeen=_lbFilenames.every(f=>seen.includes(f));
+    if(allSeen){const b=byId(`pnb-${_lbShareId}`);if(b)b.hidden=true;}
+  }
 }
 
 function _lbUpdateDots(){
