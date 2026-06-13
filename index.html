@@ -674,6 +674,9 @@
   .view-toggle::before{content:"";position:absolute;width:26px;height:26px;border-radius:999px;background:var(--ink);top:3px;left:3px;transition:transform .28s var(--ease-out);pointer-events:none;}
   .view-toggle.voyages-active::before{transform:translateX(28px);}
   #brand.mini .view-toggle{display:inline-flex;}
+  /* saved voyages indicator on toggle heart */
+  #vtVoyages.has-voyages svg{fill:#e86d8a;color:#e86d8a;filter:drop-shadow(0 0 4px rgba(232,109,138,.7));transition:fill .3s,color .3s,filter .3s;}
+  #vtVoyages.has-voyages:not([aria-pressed="true"]){border-radius:999px;}
 
   /* ═══════════════════════════════════════════
      HEART BUTTON in #detail
@@ -3081,6 +3084,10 @@ function loadVoyages(){ try{ return JSON.parse(localStorage.getItem(VOY_KEY))||{
 function saveVoyages(){ try{ localStorage.setItem(VOY_KEY,JSON.stringify(_voyData)); }catch(e){} }
 let _voyData=loadVoyages();
 let _voyOpen=false,_voyOpenTime=0;
+function syncVoyageIndicator(){
+  byId("vtVoyages").classList.toggle("has-voyages",_voyData.voyages.length>0);
+}
+syncVoyageIndicator(); // restore on page load
 const voyEl=byId("voyages");
 
 /* ---- view toggle ---- */
@@ -3213,7 +3220,7 @@ dHeartBtn.addEventListener("click",e=>{
   if(!selected) return;
   if(isShipSaved(selected.name)){
     _voyData.voyages=_voyData.voyages.filter(v=>v.shipName!==selected.name);
-    saveVoyages(); updateHeartBtn(selected); heartPuff();
+    saveVoyages(); updateHeartBtn(selected); syncVoyageIndicator(); heartPuff();
     if(_voyOpen) renderVoyageCards();
   } else { openDateSheet(selected); }
 });
@@ -3244,7 +3251,7 @@ function doSaveVoyage(sailDate){
     if(!b.sailDate) return -1;
     return a.sailDate.localeCompare(b.sailDate);
   });
-  saveVoyages(); updateHeartBtn(_dateSheetTarget);
+  saveVoyages(); updateHeartBtn(_dateSheetTarget); syncVoyageIndicator();
   dHeartBtn.classList.add("pop");
   dHeartBtn.addEventListener("animationend",()=>dHeartBtn.classList.remove("pop"),{once:true});
   closeDateSheet();
@@ -3435,7 +3442,7 @@ function buildVoyageCard(voy,idx){
     e.stopPropagation();
     const name=e.currentTarget.dataset.ship;
     _voyData.voyages=_voyData.voyages.filter(v=>v.shipName!==name);
-    saveVoyages();
+    saveVoyages(); syncVoyageIndicator();
     if(selected&&selected.name===name) updateHeartBtn(selected);
     renderVoyageCards();
   });
