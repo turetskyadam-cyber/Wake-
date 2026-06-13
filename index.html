@@ -4061,19 +4061,11 @@ function buildVoyageCard(voy,idx){
     const url=date
       ?`${SITE_ORIGIN}/?voyage=${slug}:${date}:${sid}`
       :`${SITE_ORIGIN}/?voyage=${slug}::${sid}`;
-    // Generate PIN (async — show brief loading state)
-    // Use cached PIN if already generated, otherwise create one
-    let pin=voyObj?.pin||null;
-    if(!pin){
-      const origHTML=btn.innerHTML;
-      btn.textContent="Generating PIN…"; btn.disabled=true;
-      pin=await generateVoyagePin(voyObj||{shipName:name,sailDate:date||null},sid).catch(()=>null);
-      btn.innerHTML=origHTML; btn.disabled=false;
-      if(pin&&voyObj){ voyObj.pin=pin; saveVoyages(); }
-    }
+    // Use cached PIN only — PIN generation happens silently on card render (badge)
+    const pin=voyObj?.pin||null;
     const shareText=pin
       ?`I'm sailing on ${name} — join me on WAKE!\n\nTap the link to save my voyage instantly:\n${url}\n\nUsing the WAKE home screen app? Add it with PIN: ${pin}`
-      :`I'm sailing on ${name} — track it live on WAKE:\n${url}`;
+      :`I'm sailing on ${name} — join me on WAKE!\n${url}`;
     if(navigator.share){
       navigator.share({title:`Join me on ${name}!`,text:shareText,url}).catch(()=>copyText(url,btn));
     } else { copyText(url,btn); }
