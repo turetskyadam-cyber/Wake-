@@ -215,15 +215,17 @@
   .d-itin-list{max-height:168px;overflow-y:scroll;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;scrollbar-width:thin;scrollbar-color:rgba(120,170,185,.25) transparent}
   .d-itin-list::-webkit-scrollbar{width:4px}.d-itin-list::-webkit-scrollbar-thumb{background:rgba(120,170,185,.22);border-radius:2px}
   .d-itin-cnt{float:right;font-variant-numeric:tabular-nums;opacity:.5}
-  .d-itin-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:var(--muted);cursor:pointer;transition:color .15s}
+  .d-itin-row{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:var(--muted);cursor:pointer;transition:color .15s}
   .d-itin-row:last-child{border-bottom:none}
   .d-itin-row:hover{color:var(--ink)}
-  .d-itin-date{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);flex:none;width:42px}
-  .d-itin-port{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .d-itin-times{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);white-space:nowrap;flex:none;}
-  .d-itin-wx{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);white-space:nowrap;flex:none;padding-left:6px;border-left:1px solid rgba(255,255,255,.08);margin-left:4px;}
+  .d-itin-date{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);flex:none;width:42px;padding-top:2px;}
+  .d-itin-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;}
+  .d-itin-port{font-size:12.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2;}
+  .d-itin-meta{display:flex;align-items:center;gap:7px;}
+  .d-itin-times{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);white-space:nowrap;}
+  .d-itin-wx{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);white-space:nowrap;}
   .d-itin-today .d-itin-date{color:var(--brass)}
-  .d-itin-today .d-itin-port{color:var(--ink);font-weight:600}
+  .d-itin-today .d-itin-port{font-weight:600}
   .d-itin-row[data-port]:hover .d-itin-port{text-decoration:underline;text-underline-offset:2px}
   .d-itin-row.itin-loading{opacity:.5;pointer-events:none}
   .d-itin-row.itin-loading .d-itin-port::after{content:' ···'}
@@ -364,14 +366,16 @@
   .profile-stat-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;color:var(--muted)}
   .profile-stat-row:last-child{border-bottom:none}
   .profile-stat-row span:last-child{color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:11px}
-  .profile-itin-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12.5px;color:var(--muted)}
+  .profile-itin-row{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted)}
   .profile-itin-row:last-child{border-bottom:none}
   .profile-itin-row[data-port]{cursor:pointer}
   .profile-itin-row[data-port]:hover .profile-itin-port{text-decoration:underline;text-underline-offset:2px}
-  .profile-itin-date{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);flex:none;width:48px}
-  .profile-itin-port{flex:1;min-width:0;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .profile-itin-times{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);white-space:nowrap;flex:none;}
-  .profile-itin-wx{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);white-space:nowrap;flex:none;padding-left:6px;border-left:1px solid rgba(255,255,255,.08);margin-left:4px;}
+  .profile-itin-date{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);flex:none;width:48px;padding-top:2px;}
+  .profile-itin-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;}
+  .profile-itin-port{font-size:13px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2;}
+  .profile-itin-meta{display:flex;align-items:center;gap:7px;}
+  .profile-itin-times{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);white-space:nowrap;}
+  .profile-itin-wx{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);white-space:nowrap;}
   .profile-links{padding:16px 20px;border-top:1px solid var(--glass-edge);display:flex;gap:10px}
   .profile-wiki-link{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--brass);text-decoration:none;border:1px solid rgba(226,189,114,.3);padding:5px 10px;border-radius:999px;transition:background .18s}
   .profile-wiki-link:hover{background:rgba(226,189,114,.1)}
@@ -2011,16 +2015,18 @@ function fillDetailItin(d){
       const isToday=c.date===today;
       const dt=new Date(c.date+"T12:00:00Z");
       const label=isToday?"Today":dt.toLocaleDateString("en-US",{month:"short",day:"numeric"});
-      const times=[c.arr&&"Arr "+c.arr,c.dep&&"Dep "+c.dep].filter(Boolean).join(" · ");
-      return `<div class="d-itin-row${isToday?" d-itin-today":""}" data-port="${c.port}" data-date="${c.date}" data-arr="${c.arr||""}" data-dep="${c.dep||""}"><span class="d-itin-date">${label}</span><span class="d-itin-port">${c.port}</span>${times?`<span class="d-itin-times">${times}</span>`:""}</div>`;
+      const times=[c.arr&&c.arr,c.dep&&c.dep].filter(Boolean).join("→");
+      return `<div class="d-itin-row${isToday?" d-itin-today":""}" data-port="${c.port}" data-date="${c.date}" data-arr="${c.arr||""}" data-dep="${c.dep||""}"><span class="d-itin-date">${label}</span><div class="d-itin-main"><span class="d-itin-port">${c.port}</span><div class="d-itin-meta">${times?`<span class="d-itin-times">${times}</span>`:""}</div></div></div>`;
     }).join("")+`</div>`;
   // Weather badges — async, only within 16-day forecast window
   itinEl.querySelectorAll(".d-itin-row[data-date]").forEach(row=>{
     const diffDays=(new Date(row.dataset.date+"T12:00:00Z")-new Date())/864e5;
     if(diffDays<=15&&diffDays>-1){
+      const meta=row.querySelector(".d-itin-meta");
+      if(!meta) return;
       const wxEl=document.createElement("span");
       wxEl.className="d-itin-wx";
-      row.appendChild(wxEl);
+      meta.appendChild(wxEl);
       fetchPortWeather(row.dataset.port,row.dataset.date,d.lat,d.lon).then(wx=>{
         if(wx) wxEl.textContent=`${wx.icon} ${wx.tMax}°`;
         else wxEl.remove();
@@ -3118,17 +3124,19 @@ function openProfile(d){
       const isToday=c.date===today;
       const dt=new Date(c.date+"T12:00:00Z");
       const label=isToday?"Today":dt.toLocaleDateString("en-US",{month:"short",day:"numeric"});
-      const times=[c.arr&&"Arr "+c.arr,c.dep&&"Dep "+c.dep].filter(Boolean).join(" → ");
-      return `<div class="profile-itin-row" data-port="${c.port}" data-date="${c.date}" data-arr="${c.arr||''}" data-dep="${c.dep||''}"><span class="profile-itin-date" style="${isToday?"color:var(--brass)":""}">${label}</span><span class="profile-itin-port">${c.port}</span>${times?`<span class="profile-itin-times">${times}</span>`:""}</div>`;
+      const times=[c.arr&&c.arr,c.dep&&c.dep].filter(Boolean).join("→");
+      return `<div class="profile-itin-row" data-port="${c.port}" data-date="${c.date}" data-arr="${c.arr||''}" data-dep="${c.dep||''}"><span class="profile-itin-date" style="${isToday?"color:var(--brass)":""}">${label}</span><div class="profile-itin-main"><span class="profile-itin-port">${c.port}</span><div class="profile-itin-meta">${times?`<span class="profile-itin-times">${times}</span>`:""}</div></div></div>`;
     }).join("")
     :`<div style="color:var(--faint);font-size:12px;padding:6px 0">No itinerary data available</div>`;
   // Weather badges on deep-dive itinerary — within 16-day forecast window
   byId("profileItin").querySelectorAll(".profile-itin-row[data-date]").forEach(row=>{
     const diffDays=(new Date(row.dataset.date+"T12:00:00Z")-new Date())/864e5;
     if(diffDays<=15&&diffDays>-1){
+      const meta=row.querySelector(".profile-itin-meta");
+      if(!meta) return;
       const wxEl=document.createElement("span");
       wxEl.className="profile-itin-wx";
-      row.appendChild(wxEl);
+      meta.appendChild(wxEl);
       fetchPortWeather(row.dataset.port,row.dataset.date,d.lat,d.lon).then(wx=>{
         if(wx) wxEl.textContent=`${wx.icon} ${wx.tMax}°`;
         else wxEl.remove();
