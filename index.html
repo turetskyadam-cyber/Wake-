@@ -900,7 +900,57 @@
   .voy-ms-tt-when{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);margin-bottom:10px;}
   .voy-ms-tt-body{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:8px;}
   .voy-ms-tt-action{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.04em;color:var(--faint);line-height:1.5;padding:9px 11px;background:rgba(255,255,255,.04);border-radius:9px;border:1px solid var(--glass-edge);}
+
+  /* ── Voyage Photo Strip ── */
+  .voy-photo-section{padding:12px 18px 14px;border-top:1px solid var(--glass-edge);}
+  .voy-photo-hd{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+  .voy-photo-title{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);}
+  .voy-photo-new-badge{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:#e86d8a;background:rgba(232,109,138,.12);border:1px solid rgba(232,109,138,.3);border-radius:99px;padding:2px 7px;animation:pulseBadge 2s ease-in-out infinite;}
+  @keyframes pulseBadge{0%,100%{opacity:1}50%{opacity:.55}}
+  .voy-photo-add-btn{margin-left:auto;width:28px;height:28px;border-radius:9px;border:1.5px dashed var(--glass-edge);background:rgba(255,255,255,.03);color:var(--faint);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .18s,color .18s,background .18s;flex:none;}
+  .voy-photo-add-btn:hover{border-color:rgba(226,189,114,.5);color:var(--brass);background:rgba(226,189,114,.07);}
+  .voy-photo-strip{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
+  .voy-photo-strip::-webkit-scrollbar{display:none;}
+  .voy-photo-thumb{width:80px;height:80px;flex:none;border-radius:12px;background:var(--glass) center/cover;border:1px solid var(--glass-edge);cursor:pointer;transition:transform .15s var(--ease-out),box-shadow .15s;position:relative;overflow:hidden;}
+  .voy-photo-thumb:hover{transform:scale(1.04);box-shadow:0 8px 24px rgba(0,0,0,.5);}
+  .voy-photo-thumb:active{transform:scale(.97);}
+  .voy-photo-unseen::after{content:"";position:absolute;inset:0;border-radius:12px;border:2px solid #e86d8a;pointer-events:none;}
+  .voy-photo-uploading{background:rgba(226,189,114,.08);border-color:rgba(226,189,114,.3);animation:uploadPulse 1.2s ease-in-out infinite;}
+  @keyframes uploadPulse{0%,100%{opacity:.4}50%{opacity:.9}}
+  .voy-photo-error{background:rgba(255,80,70,.08);border-color:rgba(255,80,70,.3);}
+  .voy-photo-empty{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;color:var(--faint);padding:4px 0;}
+  .voy-photo-loading{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--faint);letter-spacing:.3em;padding:4px 0;animation:uploadPulse 1s ease-in-out infinite;}
+
+  /* ── Lightbox ── */
+  #voyLightbox{position:fixed;inset:0;z-index:5000;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .25s var(--ease-out);pointer-events:none;}
+  #voyLightbox.lb-show{opacity:1;pointer-events:auto;}
+  #lbBackdrop{position:absolute;inset:0;background:rgba(2,8,14,.93);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);}
+  #lbImg{position:relative;z-index:1;max-width:92vw;max-height:80vh;border-radius:18px;object-fit:contain;box-shadow:0 28px 90px rgba(0,0,0,.85);transform:scale(.95);transition:transform .3s var(--ease-out);}
+  #voyLightbox.lb-show #lbImg{transform:scale(1);}
+  #lbToolbar{position:absolute;top:16px;right:16px;z-index:2;display:flex;gap:8px;}
+  #lbClose,#lbSave{width:38px;height:38px;border-radius:50%;border:1px solid var(--glass-edge);background:rgba(4,16,24,.72);color:var(--muted);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .18s,color .18s;backdrop-filter:blur(8px);}
+  #lbClose:hover,#lbSave:hover{background:rgba(255,255,255,.13);color:var(--ink);}
+  #lbPrev,#lbNext{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:46px;height:46px;border-radius:50%;border:1px solid var(--glass-edge);background:rgba(4,16,24,.7);color:var(--ink);font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .18s;backdrop-filter:blur(8px);}
+  #lbPrev{left:14px;} #lbNext{right:14px;}
+  #lbPrev:hover,#lbNext:hover{background:rgba(255,255,255,.13);}
+  #lbCounter{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:2;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--muted);background:rgba(4,16,24,.62);border-radius:99px;padding:5px 14px;backdrop-filter:blur(8px);}
+
+  /* ── Voyage Archive ── */
+  #voyArchive{margin-top:22px;}
+  .voy-archive-toggle{width:100%;display:flex;align-items:center;gap:8px;background:none;border:1px solid var(--glass-edge);border-radius:12px;padding:10px 14px;color:var(--faint);cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;transition:background .18s,border-color .18s,color .18s;}
+  .voy-archive-toggle:hover{background:rgba(255,255,255,.04);border-color:rgba(120,170,185,.25);color:var(--muted);}
+  .voy-archive-count{background:rgba(255,255,255,.08);border-radius:99px;padding:1px 7px;font-size:8px;color:var(--muted);}
+  .voy-archive-chevron{margin-left:auto;transition:transform .22s var(--ease-out);}
+  .voy-archive-toggle.open .voy-archive-chevron{transform:rotate(90deg);}
+  #voyArchiveList{margin-top:10px;display:flex;flex-direction:column;gap:10px;}
+  .voy-archive-card{background:rgba(8,26,36,.35);border:1px solid var(--glass-edge);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;opacity:.65;}
+  .voy-archive-info{flex:1;min-width:0;}
+  .voy-archive-name{font-family:'Fraunces',serif;font-weight:600;font-size:16px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .voy-archive-date{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-top:4px;}
+  .voy-archive-restore{background:none;border:1px solid var(--glass-edge);border-radius:8px;padding:5px 10px;color:var(--faint);font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:background .18s,color .18s,border-color .18s;}
+  .voy-archive-restore:hover{background:rgba(90,214,160,.08);border-color:rgba(90,214,160,.3);color:#5ad6a0;}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
 <body>
 <div id="stage">
@@ -1066,6 +1116,21 @@
       <div class="voy-empty-sub">Tap the <span class="voy-empty-heart">♥</span> on any ship to save your next cruise</div>
     </div>
   </div>
+</div>
+
+<!-- ══════════════ LIGHTBOX ══════════════ -->
+<div id="voyLightbox" hidden>
+  <div id="lbBackdrop"></div>
+  <img id="lbImg" alt="">
+  <div id="lbToolbar">
+    <button id="lbSave" title="Save photo">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    </button>
+    <button id="lbClose">✕</button>
+  </div>
+  <button id="lbPrev" aria-label="Previous">‹</button>
+  <button id="lbNext" aria-label="Next">›</button>
+  <div id="lbCounter"></div>
 </div>
 
 <!-- ══════════════ VOYAGE SHARE BANNER ══════════════ -->
@@ -3214,8 +3279,48 @@ if(localStorage.getItem("brandMini")) brandEl.classList.add("mini");
 /* ═══════════════════════════════════════════════════════════
    MY VOYAGES
    ═══════════════════════════════════════════════════════════ */
+/* ── Supabase client ── */
+const _SB=supabase.createClient("https://veryausyjvlrxykiqlkf.supabase.co","sb_publishable_y4z-OoMuiJDuAmSUMTci4A_X0B6msGI");
+const _SB_BUCKET="voyage-photos";
+
+function genShareId(){const a=new Uint8Array(8);crypto.getRandomValues(a);return Array.from(a,b=>b.toString(16).padStart(2,"0")).join("");}
+function ensureShareId(voy){if(voy.shareId)return voy.shareId;voy.shareId=genShareId();voy.isOwner=true;saveVoyages();return voy.shareId;}
+
+async function uploadVoyagePhoto(shareId,file){
+  const ext=file.name.split(".").pop().toLowerCase()||"jpg";
+  const fname=`${crypto.randomUUID()}.${ext}`;
+  const{error}=await _SB.storage.from(_SB_BUCKET).upload(`${shareId}/${fname}`,file,{cacheControl:"3600",upsert:false,contentType:file.type});
+  if(error) throw error;
+  return fname;
+}
+async function loadVoyagePhotos(shareId){
+  const{data,error}=await _SB.storage.from(_SB_BUCKET).list(shareId,{sortBy:{column:"created_at",order:"asc"}});
+  if(error||!data) return [];
+  return data.filter(f=>f.name&&f.name!==".emptyFolderPlaceholder");
+}
+function getPhotoPublicUrl(shareId,filename){
+  return _SB.storage.from(_SB_BUCKET).getPublicUrl(`${shareId}/${filename}`).data.publicUrl;
+}
+function getSeenPhotos(shareId){try{return JSON.parse(localStorage.getItem(`wake:seen:${shareId}`))||[];}catch(e){return[];}}
+function markPhotoSeen(shareId,filename){
+  const seen=getSeenPhotos(shareId);
+  if(!seen.includes(filename)){seen.push(filename);localStorage.setItem(`wake:seen:${shareId}`,JSON.stringify(seen));}
+}
+
+async function downloadLbPhoto(){
+  const url=_lbPhotos[_lbIdx];
+  try{
+    const blob=await fetch(url).then(r=>r.blob());
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    a.download=url.split("/").pop()||"photo.jpg";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }catch(e){window.open(url,"_blank");}
+}
+
 const VOY_KEY="wake:voyages:v1";
-function loadVoyages(){ try{ return JSON.parse(localStorage.getItem(VOY_KEY))||{voyages:[]}; }catch(e){ return {voyages:[]}; } }
+function loadVoyages(){ try{ const d=JSON.parse(localStorage.getItem(VOY_KEY)); return d?{voyages:d.voyages||[],archived:d.archived||[]}:{voyages:[],archived:[]}; }catch(e){ return {voyages:[],archived:[]}; } }
 function saveVoyages(){ try{ localStorage.setItem(VOY_KEY,JSON.stringify(_voyData)); }catch(e){} }
 let _voyData=loadVoyages();
 let _voyOpen=false,_voyOpenTime=0;
@@ -3378,8 +3483,10 @@ byId("vdsCancel").addEventListener("click",closeDateSheet);
 voyDateSheet.addEventListener("click",e=>{ if(e.target===voyDateSheet) closeDateSheet(); });
 function doSaveVoyage(sailDate){
   if(!_dateSheetTarget) return;
+  const _existingVoy=_voyData.voyages.find(v=>v.shipName===_dateSheetTarget.name);
+  const _existingShareId=_existingVoy?_existingVoy.shareId:genShareId();
   _voyData.voyages=_voyData.voyages.filter(v=>v.shipName!==_dateSheetTarget.name);
-  _voyData.voyages.push({shipName:_dateSheetTarget.name,sailDate:sailDate||null,savedAt:Date.now()});
+  _voyData.voyages.push({shipName:_dateSheetTarget.name,sailDate:sailDate||null,savedAt:Date.now(),shareId:_existingShareId,isOwner:true});
   _voyData.voyages.sort((a,b)=>{
     if(!a.sailDate&&!b.sailDate) return 0;
     if(!a.sailDate) return 1;
@@ -3497,6 +3604,8 @@ async function fetchVoyageWeather(d,sailDate){
 
 /* ---- build a single voyage card ---- */
 function buildVoyageCard(voy,idx){
+  ensureShareId(voy);
+  const isOwner=voy.isOwner===true;
   const d=byName.get(normName(voy.shipName));
   const color=d?(d.color||"#9fb4bf"):"#9fb4bf";
   const today=new Date().toISOString().slice(0,10);
@@ -3584,6 +3693,90 @@ function buildVoyageCard(voy,idx){
   } else {
     wxDiv.innerHTML=`<span class="voy-wx-icon" style="font-size:20px;opacity:.35">📡</span><div class="voy-wx-info">${portLine}<div class="voy-wx-label">No ship position</div><div class="voy-wx-note">Awaiting AIS signal</div></div>`;
   }
+
+  /* ── Photo Strip ── */
+  const photoSection=document.createElement("div");
+  photoSection.className="voy-photo-section";
+  const _sid=voy.shareId;
+  photoSection.innerHTML=`
+    <div class="voy-photo-hd">
+      <span class="voy-photo-title">Photos</span>
+      <span class="voy-photo-new-badge" id="pnb-${_sid}" hidden>✦ New</span>
+      ${isOwner?`<label class="voy-photo-add-btn" title="Add photos">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <input type="file" accept="image/*" multiple style="display:none">
+      </label>`:""}
+    </div>
+    <div class="voy-photo-strip" id="ps-${_sid}"><div class="voy-photo-loading">···</div></div>`;
+  card.appendChild(photoSection);
+
+  // Async load photos
+  loadVoyagePhotos(_sid).then(photos=>{
+    const strip=byId(`ps-${_sid}`);
+    if(!strip) return;
+    strip.innerHTML="";
+    if(!photos.length){
+      strip.innerHTML=isOwner
+        ?`<div class="voy-photo-empty">Tap + to add your first photo</div>`
+        :`<div class="voy-photo-empty">No photos yet</div>`;
+      return;
+    }
+    const seen=getSeenPhotos(_sid);
+    const hasNew=!isOwner&&photos.some(p=>!seen.includes(p.name));
+    if(hasNew){const b=byId(`pnb-${_sid}`);if(b)b.hidden=false;}
+    const allUrls=photos.map(p=>getPhotoPublicUrl(_sid,p.name));
+    photos.forEach((photo,i)=>{
+      const url=allUrls[i];
+      const thumb=document.createElement("div");
+      thumb.className="voy-photo-thumb";
+      thumb.style.backgroundImage=`url(${url})`;
+      if(!isOwner&&!seen.includes(photo.name)) thumb.classList.add("voy-photo-unseen");
+      thumb.addEventListener("click",()=>{
+        if(!isOwner) markPhotoSeen(_sid,photo.name);
+        thumb.classList.remove("voy-photo-unseen");
+        openLightbox(allUrls,i);
+        const stillNew=photos.some(p=>!getSeenPhotos(_sid).includes(p.name));
+        if(!stillNew){const b=byId(`pnb-${_sid}`);if(b)b.hidden=true;}
+      });
+      strip.appendChild(thumb);
+    });
+  }).catch(()=>{
+    const strip=byId(`ps-${_sid}`);
+    if(strip) strip.innerHTML=`<div class="voy-photo-empty">Photos unavailable</div>`;
+  });
+
+  // File upload handler (owner only)
+  const fileInput=photoSection.querySelector("input[type=file]");
+  if(fileInput) fileInput.addEventListener("change",async e=>{
+    const files=Array.from(e.target.files);
+    if(!files.length) return;
+    const strip=byId(`ps-${_sid}`);
+    for(const file of files){
+      const placeholder=document.createElement("div");
+      placeholder.className="voy-photo-thumb voy-photo-uploading";
+      if(strip) strip.appendChild(placeholder);
+      try{
+        await uploadVoyagePhoto(_sid,file);
+        const photos=await loadVoyagePhotos(_sid);
+        if(!strip) continue;
+        strip.innerHTML="";
+        const allUrls2=photos.map(p=>getPhotoPublicUrl(_sid,p.name));
+        photos.forEach((photo,i)=>{
+          const thumb=document.createElement("div");
+          thumb.className="voy-photo-thumb";
+          thumb.style.backgroundImage=`url(${allUrls2[i]})`;
+          thumb.addEventListener("click",()=>openLightbox(allUrls2,i));
+          strip.appendChild(thumb);
+        });
+      }catch(err){
+        placeholder.classList.remove("voy-photo-uploading");
+        placeholder.classList.add("voy-photo-error");
+        placeholder.title="Upload failed";
+      }
+    }
+    e.target.value="";
+  });
+
   card.insertAdjacentHTML("beforeend",`
     <div class="voy-card-foot">
       <button class="voy-track-btn" data-ship="${voy.shipName}">
@@ -3611,6 +3804,12 @@ function buildVoyageCard(voy,idx){
   card.querySelector(".voy-card-remove").addEventListener("click",e=>{
     e.stopPropagation();
     const name=e.currentTarget.dataset.ship;
+    const removing=_voyData.voyages.find(v=>v.shipName===name);
+    if(removing){
+      if(!_voyData.archived) _voyData.archived=[];
+      _voyData.archived=_voyData.archived.filter(v=>v.shipName!==name);
+      _voyData.archived.push({...removing,archivedAt:Date.now()});
+    }
     _voyData.voyages=_voyData.voyages.filter(v=>v.shipName!==name);
     saveVoyages(); syncVoyageIndicator();
     if(selected&&selected.name===name) updateHeartBtn(selected);
@@ -3627,8 +3826,10 @@ function buildVoyageCard(voy,idx){
   if(shareBtn) shareBtn.addEventListener("click",e=>{
     e.stopPropagation();
     const name=e.currentTarget.dataset.ship, date=e.currentTarget.dataset.date;
+    const voyObj=_voyData.voyages.find(v=>v.shipName===name);
+    const sid=voyObj?ensureShareId(voyObj):genShareId();
     const slug=slugOf(name);
-    const url=`${SITE_ORIGIN}/?voyage=${slug}:${date}`;
+    const url=`${SITE_ORIGIN}/?voyage=${slug}:${date}:${sid}`;
     if(navigator.share){
       navigator.share({title:`Join me on ${name}!`,text:`I'm sailing on ${name} — track it live on WAKE:`,url}).catch(()=>copyText(url,e.currentTarget));
     } else { copyText(url,e.currentTarget); }
@@ -3835,11 +4036,18 @@ function parseVoyageShare(){
     const params=new URLSearchParams(location.search);
     const encoded=params.get("voyage");
     if(!encoded) return null;
-    const idx=encoded.lastIndexOf(":");
-    if(idx<1) return null;
-    const slug=encoded.slice(0,idx), sailDate=encoded.slice(idx+1);
+    const parts=encoded.split(":");
+    // shareId is optionally the last segment: exactly 16 lowercase hex chars
+    const last=parts[parts.length-1];
+    const hasShareId=/^[0-9a-f]{16}$/.test(last);
+    const shareId=hasShareId?last:null;
+    // date is second-to-last (if shareId present) or last
+    const sailDate=hasShareId?parts[parts.length-2]:parts[parts.length-1];
     if(!/^\d{4}-\d{2}-\d{2}$/.test(sailDate)) return null;
-    return {slug,sailDate};
+    const slugParts=hasShareId?parts.slice(0,-2):parts.slice(0,-1);
+    const slug=slugParts.join(":");
+    if(!slug) return null;
+    return {slug,sailDate,shareId};
   }catch(e){ return null; }
 }
 function openVoyShareBanner(share){
@@ -3874,7 +4082,7 @@ function openVoyShareBanner(share){
     closeVoyShareBanner();
     // Auto-save with the sail date from the link — no date sheet needed
     _voyData.voyages=_voyData.voyages.filter(v=>v.shipName!==shipName);
-    _voyData.voyages.push({shipName,sailDate:share.sailDate,savedAt:Date.now()});
+    _voyData.voyages.push({shipName,sailDate:share.sailDate,savedAt:Date.now(),shareId:share.shareId||genShareId(),isOwner:false});
     _voyData.voyages.sort((a,b)=>a.sailDate.localeCompare(b.sailDate));
     saveVoyages(); syncVoyageIndicator();
     // Fly heart from center of screen (where card was) to the voyage toggle
@@ -3902,10 +4110,68 @@ setTimeout(()=>{ const s=parseVoyageShare(); if(s) openVoyShareBanner(s); },2000
 function renderVoyageCards(){
   const container=byId("voyCards"),emptyEl=byId("voyEmpty");
   container.innerHTML="";
-  if(!_voyData.voyages.length){ emptyEl.hidden=false; return; }
-  emptyEl.hidden=true;
-  container.className="voy-cards";
-  _voyData.voyages.forEach((voy,idx)=>container.appendChild(buildVoyageCard(voy,idx)));
+  if(!_voyData.voyages.length){ emptyEl.hidden=false; }
+  else {
+    emptyEl.hidden=true;
+    container.className="voy-cards";
+    _voyData.voyages.forEach((voy,idx)=>container.appendChild(buildVoyageCard(voy,idx)));
+  }
+  renderArchivedSection();
+}
+
+function renderArchivedSection(){
+  let archiveEl=byId("voyArchive");
+  if(!archiveEl){
+    archiveEl=document.createElement("div");
+    archiveEl.id="voyArchive";
+    byId("voyScroll").appendChild(archiveEl);
+  }
+  const archived=_voyData.archived||[];
+  if(!archived.length){ archiveEl.hidden=true; return; }
+  archiveEl.hidden=false;
+  archiveEl.innerHTML=`
+    <button id="voyArchiveToggle" class="voy-archive-toggle">
+      <span>Recently Removed</span>
+      <span class="voy-archive-count" id="voyArchiveCount">${archived.length}</span>
+      <span class="voy-archive-chevron">›</span>
+    </button>
+    <div id="voyArchiveList" hidden></div>`;
+  const toggle=archiveEl.querySelector("#voyArchiveToggle");
+  const list=archiveEl.querySelector("#voyArchiveList");
+  archived.forEach(voy=>{
+    const item=document.createElement("div");
+    item.className="voy-archive-card";
+    const fmtDate=voy.sailDate?new Date(voy.sailDate+"T12:00:00Z").toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"}):"No date";
+    item.innerHTML=`
+      <div class="voy-archive-info">
+        <div class="voy-archive-name">${voy.shipName}</div>
+        <div class="voy-archive-date">${fmtDate}</div>
+      </div>
+      <button class="voy-archive-restore" data-ship="${voy.shipName}">Restore</button>`;
+    item.querySelector(".voy-archive-restore").addEventListener("click",e=>{
+      e.stopPropagation();
+      const name=e.currentTarget.dataset.ship;
+      const restoring=_voyData.archived.find(v=>v.shipName===name);
+      if(restoring){
+        _voyData.archived=_voyData.archived.filter(v=>v.shipName!==name);
+        _voyData.voyages=_voyData.voyages.filter(v=>v.shipName!==name);
+        const{archivedAt,...voyData}=restoring;
+        _voyData.voyages.push(voyData);
+        _voyData.voyages.sort((a,b)=>{
+          if(!a.sailDate&&!b.sailDate) return 0;
+          if(!a.sailDate) return 1; if(!b.sailDate) return -1;
+          return a.sailDate.localeCompare(b.sailDate);
+        });
+        saveVoyages(); syncVoyageIndicator(); renderVoyageCards();
+      }
+    });
+    list.appendChild(item);
+  });
+  toggle.addEventListener("click",()=>{
+    const open=list.hidden;
+    list.hidden=!open;
+    toggle.classList.toggle("open",open);
+  });
 }
 
 /* ============================================================
@@ -4345,6 +4611,48 @@ if("serviceWorker" in navigator){
 
   showBanner();
 })();
+
+/* ═══════════════════ LIGHTBOX ═══════════════════ */
+let _lbPhotos=[],_lbIdx=0;
+function openLightbox(photos,startIdx){
+  _lbPhotos=photos; _lbIdx=startIdx;
+  showLbPhoto();
+  const lb=byId("voyLightbox");
+  lb.hidden=false;
+  requestAnimationFrame(()=>lb.classList.add("lb-show"));
+  document.body.style.overflow="hidden";
+}
+function closeLightbox(){
+  const lb=byId("voyLightbox");
+  lb.classList.remove("lb-show");
+  lb.addEventListener("transitionend",()=>{lb.hidden=true;document.body.style.overflow="";},{once:true});
+}
+function showLbPhoto(){
+  byId("lbImg").src=_lbPhotos[_lbIdx];
+  byId("lbCounter").textContent=`${_lbIdx+1} / ${_lbPhotos.length}`;
+  byId("lbPrev").style.display=_lbIdx>0?"":"none";
+  byId("lbNext").style.display=_lbIdx<_lbPhotos.length-1?"":"none";
+}
+byId("lbClose").addEventListener("click",closeLightbox);
+byId("lbSave").addEventListener("click",downloadLbPhoto);
+byId("lbBackdrop").addEventListener("click",closeLightbox);
+byId("lbPrev").addEventListener("click",()=>{if(_lbIdx>0){_lbIdx--;showLbPhoto();}});
+byId("lbNext").addEventListener("click",()=>{if(_lbIdx<_lbPhotos.length-1){_lbIdx++;showLbPhoto();}});
+byId("voyLightbox").addEventListener("click",e=>{if(e.target===byId("voyLightbox"))closeLightbox();});
+let _lbTouchX=null;
+byId("lbImg").addEventListener("touchstart",e=>{_lbTouchX=e.touches[0].clientX;},{passive:true});
+byId("lbImg").addEventListener("touchend",e=>{
+  if(_lbTouchX===null)return;
+  const dx=e.changedTouches[0].clientX-_lbTouchX; _lbTouchX=null;
+  if(dx<-50&&_lbIdx<_lbPhotos.length-1){_lbIdx++;showLbPhoto();}
+  else if(dx>50&&_lbIdx>0){_lbIdx--;showLbPhoto();}
+});
+addEventListener("keydown",e=>{
+  if(byId("voyLightbox").hidden)return;
+  if(e.key==="ArrowLeft"&&_lbIdx>0){_lbIdx--;showLbPhoto();}
+  else if(e.key==="ArrowRight"&&_lbIdx<_lbPhotos.length-1){_lbIdx++;showLbPhoto();}
+  else if(e.key==="Escape")closeLightbox();
+});
 </script>
 </body>
 </html>
