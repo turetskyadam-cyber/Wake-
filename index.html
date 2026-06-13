@@ -221,7 +221,7 @@
   .d-itin-date{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);flex:none;width:42px}
   .d-itin-port{flex:1;min-width:0}
   .d-itin-times{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);white-space:nowrap;flex:none;}
-  .d-itin-wx{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted);white-space:nowrap;flex:none;margin-left:auto;}
+  .d-itin-wx{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);white-space:nowrap;flex:none;padding-left:6px;border-left:1px solid rgba(255,255,255,.08);margin-left:4px;}
   .d-itin-today .d-itin-date{color:var(--brass)}
   .d-itin-today .d-itin-port{color:var(--ink);font-weight:600}
   .d-itin-row[data-port]:hover .d-itin-port{text-decoration:underline;text-underline-offset:2px}
@@ -3610,7 +3610,7 @@ function buildVoyageCard(voy,idx){
 /* ═══════════════ PORT WEATHER ═══════════════ */
 const PORT_COORDS=new Map([
   // Caribbean
-  ["nassau",[25.0479,-77.3559]],["cococay",[25.8167,-77.7083]],["perfect day at cococay",[25.8167,-77.7083]],["castaway cay",[25.5042,-77.7583]],
+  ["nassau",[25.0479,-77.3559]],["cococay",[25.8167,-77.7083]],["coco cay",[25.8167,-77.7083]],["perfect day at cococay",[25.8167,-77.7083]],["perfect day",[25.8167,-77.7083]],["castaway cay",[25.5042,-77.7583]],
   ["cozumel",[20.5085,-86.9560]],["belize city",[17.4998,-88.1962]],["roatan",[16.3159,-86.5235]],["costa maya",[18.7297,-87.7116]],
   ["grand cayman",[19.2869,-81.3674]],["falmouth",[18.4961,-77.6530]],["montego bay",[18.4762,-77.8939]],["ocho rios",[18.4051,-77.1046]],
   ["antigua",[17.1274,-61.8468]],["st. maarten",[18.0243,-63.0528]],["sint maarten",[18.0243,-63.0528]],
