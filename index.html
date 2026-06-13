@@ -4777,6 +4777,14 @@ _lbWrap.addEventListener("touchend",()=>{
 });
 
 byId("lbBackdrop").addEventListener("click",closeLightbox);
+// Tap dark area around photo → close
+byId("lbTrackWrap").addEventListener("click",e=>{
+  const currentSlide=byId("lbTrack").querySelectorAll(".lb-slide")[_lbIdx];
+  const img=currentSlide&&currentSlide.querySelector("img");
+  if(!img){closeLightbox();return;}
+  const r=img.getBoundingClientRect();
+  if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom) closeLightbox();
+});
 byId("lbClose").addEventListener("click",closeLightbox);
 byId("lbSave").addEventListener("click",downloadLbPhoto);
 byId("lbDelete").addEventListener("click",async()=>{
