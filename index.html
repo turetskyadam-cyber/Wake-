@@ -4159,7 +4159,8 @@ function closeVoyShareBanner(){
 byId("vsbDismiss").addEventListener("click",closeVoyShareBanner);
 byId("voyShareBanner").addEventListener("click",e=>{ if(e.target===byId("voyShareBanner")) closeVoyShareBanner(); });
 // Parse share URL after fleet data loads (2s gives map time to boot)
-setTimeout(()=>{ const s=parseVoyageShare(); if(s) openVoyShareBanner(s); },2000);
+// Show voyage share banner immediately on load — don't wait for the map to settle
+(()=>{ const s=parseVoyageShare(); if(s) openVoyShareBanner(s); })();
 
 /* ---- render all voyage cards ---- */
 function renderVoyageCards(){
