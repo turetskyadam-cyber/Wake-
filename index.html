@@ -905,6 +905,7 @@
   .voy-photo-section{padding:12px 18px 14px;border-top:1px solid var(--glass-edge);}
   .voy-photo-hd{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
   .voy-photo-title{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);}
+  .voy-photo-count{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--muted);background:rgba(255,255,255,.07);border:1px solid var(--glass-edge);border-radius:99px;padding:1px 7px;letter-spacing:.06em;}
   .voy-photo-new-badge{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:#e86d8a;background:rgba(232,109,138,.12);border:1px solid rgba(232,109,138,.3);border-radius:99px;padding:2px 7px;animation:pulseBadge 2s ease-in-out infinite;}
   @keyframes pulseBadge{0%,100%{opacity:1}50%{opacity:.55}}
   .voy-photo-add-btn{margin-left:auto;width:28px;height:28px;border-radius:9px;border:1.5px dashed var(--glass-edge);background:rgba(255,255,255,.03);color:var(--faint);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .18s,color .18s,background .18s;flex:none;}
@@ -3718,7 +3719,7 @@ function buildVoyageCard(voy,idx){
   const _sid=voy.shareId;
   photoSection.innerHTML=`
     <div class="voy-photo-hd">
-      <span class="voy-photo-title">Photos</span>
+      <span class="voy-photo-title">Photos</span><span class="voy-photo-count" id="pc-${_sid}"></span>
       <span class="voy-photo-new-badge" id="pnb-${_sid}" hidden>✦ New</span>
       ${isOwner?`<label class="voy-photo-add-btn" title="Add photos">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -3742,6 +3743,7 @@ function buildVoyageCard(voy,idx){
     const seen=getSeenPhotos(_sid);
     const hasNew=!isOwner&&photos.some(p=>!seen.includes(p.name));
     if(hasNew){const b=byId(`pnb-${_sid}`);if(b)b.hidden=false;}
+    const countEl=byId(`pc-${_sid}`);if(countEl)countEl.textContent=photos.length;
     const allUrls=photos.map(p=>getPhotoPublicUrl(_sid,p.name));
     const fnames=photos.map(p=>p.name);
     photos.forEach((photo,i)=>{
@@ -3794,6 +3796,7 @@ function buildVoyageCard(voy,idx){
         if(!strip) continue;
         strip.innerHTML="";
         const allUrls2=photos.map(p=>getPhotoPublicUrl(_sid,p.name));
+        const countEl2=byId(`pc-${_sid}`);if(countEl2)countEl2.textContent=photos.length;
         const fnames2=photos.map(p=>p.name);
         photos.forEach((photo,i)=>{
           const thumb=document.createElement("div");
