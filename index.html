@@ -695,14 +695,24 @@
     100%{opacity:0;transform:translate(var(--fly-x2),var(--fly-y2)) scale(.18) rotate(var(--fly-rot2));}
   }
   .fly-heart{position:fixed;z-index:9999;pointer-events:none;line-height:1;color:#e86d8a;animation:flyHeart var(--fly-dur,.65s) cubic-bezier(.18,.8,.4,1) forwards;}
-  @keyframes toggleGlow{
-    0%  {box-shadow:0 0 0 0 rgba(232,109,138,.7);}
-    40% {box-shadow:0 0 0 12px rgba(232,109,138,.3);}
-    100%{box-shadow:0 0 0 22px rgba(232,109,138,0);}
+  /* explosion heart at toggle */
+  @keyframes boomHeart{
+    0%  {opacity:1;transform:translate(-50%,-50%) scale(.6);}
+    35% {opacity:1;transform:translate(-50%,-50%) scale(2.6);}
+    100%{opacity:0;transform:translate(-50%,-50%) scale(4.5);}
   }
-  .toggle-glow{animation:toggleGlow .55s ease-out forwards;}
-  @keyframes togglePop{0%{transform:scale(1)}35%{transform:scale(1.6)}65%{transform:scale(.88)}100%{transform:scale(1)}}
-  .toggle-pop{animation:togglePop .42s cubic-bezier(.23,1,.32,1);}
+  .boom-heart{position:fixed;z-index:9999;pointer-events:none;font-size:42px;line-height:1;color:#ff3d78;text-shadow:0 0 18px #ff6ba8,0 0 40px #ff3d78;animation:boomHeart .45s cubic-bezier(.15,.9,.3,1) forwards;}
+  /* cruise ship fireworks */
+  @keyframes shipBurst{
+    0%  {opacity:1;transform:translate(-50%,-50%) scale(1.1);}
+    75% {opacity:.85;}
+    100%{opacity:0;transform:translate(calc(-50% + var(--sdx)),calc(-50% + var(--sdy))) scale(.6);}
+  }
+  .burst-ship{position:fixed;z-index:9998;pointer-events:none;color:#ff6ba8;filter:drop-shadow(0 0 3px #ff3d78);animation:shipBurst .8s cubic-bezier(.1,.9,.35,1) forwards;}
+  /* toggle button flash when explosion hits */
+  @keyframes vtFlash{0%{background:transparent}25%{background:rgba(255,61,120,.35);border-radius:999px}100%{background:transparent}}
+  .vt-flash{animation:vtFlash .45s ease-out;}
+  .vt-flash svg{color:#ff3d78 !important;filter:drop-shadow(0 0 5px #ff6ba8);}
 
   /* ═══════════════════════════════════════════
      VOYAGE DATE SHEET
@@ -3113,10 +3123,7 @@ function flyHeartToToggle(){
   const lead=spawnFlyHeart(sx,sy,ex,ey,{size:36,mx:-8,my:-60,smid:".72",rot:"-14deg",rot2:"-24deg",dur:".64s"});
   lead.addEventListener("animationend",()=>{
     lead.remove();
-    // Glow ring at toggle destination, then pop
-    const btn=byId("vtVoyages");
-    btn.classList.add("toggle-glow","toggle-pop");
-    btn.addEventListener("animationend",()=>btn.classList.remove("toggle-glow","toggle-pop"),{once:true});
+    fireshipBurst(ex,ey);
   },{once:true});
 
   // Trail hearts — smaller, slight delay, drift sideways a little
@@ -3142,6 +3149,53 @@ function heartPuff(){
       el.addEventListener("animationend",()=>el.remove(),{once:true});
     },i*70);
   });
+}
+
+/* ---- firework burst at toggle ---- */
+function cruiseShipSvg(w){
+  const h=Math.round(w*.48);
+  // simple side-profile cruise ship: hull, two superstructure decks, funnel
+  return `<svg viewBox="0 0 30 14" width="${w}" height="${h}" fill="currentColor">
+    <path d="M1 9h28l-2.5 4.5H3.5z"/>
+    <path d="M5 9V6h20v3z"/>
+    <path d="M9 6V3h11v3z"/>
+    <rect x="15.5" y="1" width="2.5" height="2.5" rx=".4"/>
+  </svg>`;
+}
+function fireshipBurst(cx,cy){
+  // 1. Big pink heart explodes at the landing point
+  const boom=document.createElement("span");
+  boom.className="boom-heart";
+  boom.textContent="♥";
+  boom.style.cssText=`left:${cx}px;top:${cy}px;`;
+  document.body.appendChild(boom);
+  boom.addEventListener("animationend",()=>boom.remove(),{once:true});
+
+  // 2. Toggle button flashes pink
+  const btn=byId("vtVoyages");
+  btn.classList.add("vt-flash");
+  btn.addEventListener("animationend",()=>btn.classList.remove("vt-flash"),{once:true});
+
+  // 3. Cruise ships shoot outward after a short delay (timed to the explosion peak)
+  setTimeout(()=>{
+    const count=10;
+    for(let i=0;i<count;i++){
+      const angleDeg=(i/count)*360+(Math.random()*18-9);
+      const rad=angleDeg*Math.PI/180;
+      const dist=72+Math.random()*55;
+      const w=Math.round(18+Math.random()*10);
+      const delay=Math.random()*55;
+      const el=document.createElement("div");
+      el.className="burst-ship";
+      el.style.cssText=`left:${cx}px;top:${cy}px;animation-delay:${delay}ms;`;
+      el.style.setProperty("--sdx",Math.cos(rad)*dist+"px");
+      el.style.setProperty("--sdy",Math.sin(rad)*dist+"px");
+      // flip ships going left so they face direction of travel
+      el.innerHTML=`<span style="display:inline-block;transform:${angleDeg>90&&angleDeg<270?"scaleX(-1)":""}">${cruiseShipSvg(w)}</span>`;
+      document.body.appendChild(el);
+      el.addEventListener("animationend",()=>el.remove(),{once:true});
+    }
+  },145);
 }
 
 /* ---- heart button ---- */
