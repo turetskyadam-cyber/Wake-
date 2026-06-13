@@ -4072,8 +4072,8 @@ function buildVoyageCard(voy,idx){
       if(pin&&voyObj){ voyObj.pin=pin; saveVoyages(); }
     }
     const shareText=pin
-      ?`I'm sailing on ${name} — join me!\nVoyage PIN: ${pin}\n`
-      :`I'm sailing on ${name} — track it live on WAKE:\n`;
+      ?`I'm sailing on ${name} — join me on WAKE!\n\nTap the link to save my voyage instantly:\n${url}\n\nUsing the WAKE home screen app? Add it with PIN: ${pin}`
+      :`I'm sailing on ${name} — track it live on WAKE:\n${url}`;
     if(navigator.share){
       navigator.share({title:`Join me on ${name}!`,text:shareText,url}).catch(()=>copyText(url,btn));
     } else { copyText(url,btn); }
