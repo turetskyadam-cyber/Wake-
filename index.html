@@ -3093,6 +3093,30 @@ function openProfile(d){
   }else{
     hero.style.backgroundImage="none";
     hero.style.background=`linear-gradient(135deg,${d.color}22 0%,var(--glass) 100%)`;
+    // Try Wikipedia for a ship photo on-demand
+    const _wikiShipName=d.name;
+    const _tryTitles=[d.name, d.name+' (ship)', 'MS '+d.name, 'MV '+d.name, 'SS '+d.name];
+    (async()=>{
+      for(const t of _tryTitles){
+        try{
+          const data=await fetch(
+            `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(t)}`
+          ).then(r=>r.ok?r.json():null);
+          if(!data||data.type==='disambiguation') continue;
+          const src=data?.thumbnail?.source||data?.originalimage?.source;
+          if(src){
+            if(!_ships[_wikiShipName]) _ships[_wikiShipName]={};
+            _ships[_wikiShipName].photo=src;
+            // Only update the hero if this profile is still showing the same ship
+            if(_profileOpen && byId("profileShipName")?.textContent===_wikiShipName){
+              hero.style.backgroundImage='';
+              hero.style.background=`center/cover url(${src})`;
+            }
+            break;
+          }
+        }catch(e){}
+      }
+    })();
   }
   byId("profileLineBadge").textContent=d.line||spec.line||"";
   byId("profileLineBadge").style.color=d.color||"var(--brass)";
