@@ -3634,10 +3634,8 @@ function buildCountdown(sailDate,sailDateFmt,shipName,voyageActive,endDate){
       if(diff<0){
         return `<div class="voy-count-past">Voyage complete · ✓ <span style="margin-left:8px">${sailDateFmt}</span></div>`;
       }
-      const d=Math.floor(diff/864e5);
-      const urgency=d<=1?"now":d<=3?"soon":"close";
       const endFmt=new Date(endDate+"T12:00:00Z").toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"});
-      return `<div class="voy-card-countdown" data-urgency="${urgency}">
+      return `<div class="voy-card-countdown" data-urgency="close">
         <div class="voy-live-cd" data-ts="${endTs}" style="display:flex;align-items:baseline;gap:2px;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;">${fmtLiveCountdown(diff)}</div>
         <div class="voy-count-sub">Until disembarkation · ${endFmt}</div>
       </div>`;
@@ -3660,7 +3658,7 @@ function buildCountdown(sailDate,sailDateFmt,shipName,voyageActive,endDate){
   if(diff<-864e5){
     return `<div class="voy-count-past">Voyage complete · ✓ <span style="margin-left:8px">${sailDateFmt}</span></div>`;
   }
-  const urgency=d<=0?"now":d<=7?"soon":d<=30?"close":"far";
+  const urgency=d<=0?"now":d<=7?"close":"soon";
   return `<div class="voy-card-countdown" data-urgency="${urgency}">
     <div class="voy-live-cd" data-ts="${ts}" data-mode="sail" style="display:flex;align-items:baseline;gap:2px;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;">${fmtLiveCountdown(diff)}</div>
     <div class="voy-count-sub">${sailDateFmt}</div>
