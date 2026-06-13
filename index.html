@@ -922,18 +922,25 @@
   .voy-photo-loading{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--faint);letter-spacing:.3em;padding:4px 0;animation:uploadPulse 1s ease-in-out infinite;}
 
   /* ── Lightbox ── */
-  #voyLightbox{position:fixed;inset:0;z-index:5000;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .25s var(--ease-out);pointer-events:none;}
+  #voyLightbox{position:fixed;inset:0;z-index:5000;opacity:0;transition:opacity .25s var(--ease-out);pointer-events:none;}
   #voyLightbox.lb-show{opacity:1;pointer-events:auto;}
-  #lbBackdrop{position:absolute;inset:0;background:rgba(2,8,14,.93);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);}
-  #lbImg{position:relative;z-index:1;max-width:92vw;max-height:80vh;border-radius:18px;object-fit:contain;box-shadow:0 28px 90px rgba(0,0,0,.85);transform:scale(.95);transition:transform .3s var(--ease-out);}
-  #voyLightbox.lb-show #lbImg{transform:scale(1);}
+  #lbBackdrop{position:absolute;inset:0;background:rgba(2,8,14,.95);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);}
+  #lbTrackWrap{position:absolute;inset:0;overflow:hidden;display:flex;align-items:center;touch-action:pan-y;}
+  #lbTrack{display:flex;will-change:transform;transition:transform .38s cubic-bezier(.25,.46,.45,.94);}
+  .lb-slide{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;padding:72px 0 56px;box-sizing:border-box;flex:none;}
+  .lb-slide img{max-width:92vw;max-height:100%;border-radius:18px;object-fit:contain;box-shadow:0 28px 90px rgba(0,0,0,.85);user-select:none;-webkit-user-drag:none;pointer-events:none;display:block;}
   #lbToolbar{position:absolute;top:16px;right:16px;z-index:2;display:flex;gap:8px;}
-  #lbClose,#lbSave{width:38px;height:38px;border-radius:50%;border:1px solid var(--glass-edge);background:rgba(4,16,24,.72);color:var(--muted);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .18s,color .18s;backdrop-filter:blur(8px);}
+  #lbClose,#lbSave,#lbDelete{width:38px;height:38px;border-radius:50%;border:1px solid var(--glass-edge);background:rgba(4,16,24,.72);color:var(--muted);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .18s,color .18s;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
   #lbClose:hover,#lbSave:hover{background:rgba(255,255,255,.13);color:var(--ink);}
-  #lbPrev,#lbNext{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:46px;height:46px;border-radius:50%;border:1px solid var(--glass-edge);background:rgba(4,16,24,.7);color:var(--ink);font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .18s;backdrop-filter:blur(8px);}
-  #lbPrev{left:14px;} #lbNext{right:14px;}
-  #lbPrev:hover,#lbNext:hover{background:rgba(255,255,255,.13);}
-  #lbCounter{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:2;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--muted);background:rgba(4,16,24,.62);border-radius:99px;padding:5px 14px;backdrop-filter:blur(8px);}
+  #lbDelete:hover{background:rgba(255,70,60,.2);border-color:rgba(255,70,60,.4);color:#ff6058;}
+
+  /* ── Archive swipe-to-delete ── */
+  .voy-archive-card-wrap{position:relative;overflow:hidden;border-radius:14px;}
+  .voy-archive-card-trash{position:absolute;right:0;top:0;bottom:0;width:72px;background:#ff3b30;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;border-radius:0 14px 14px 0;pointer-events:none;}
+  .voy-archive-card{border-radius:14px;touch-action:pan-y;cursor:grab;transition:transform .22s var(--ease-out);}
+  #lbDots{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:2;display:flex;gap:6px;align-items:center;min-height:16px;}
+  .lb-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.28);transition:background .22s,transform .22s,width .22s;flex:none;}
+  .lb-dot.active{background:#fff;transform:scale(1.25);}
 
   /* ── Voyage Archive ── */
   #voyArchive{margin-top:22px;}
@@ -1121,16 +1128,17 @@
 <!-- ══════════════ LIGHTBOX ══════════════ -->
 <div id="voyLightbox" hidden>
   <div id="lbBackdrop"></div>
-  <img id="lbImg" alt="">
+  <div id="lbTrackWrap"><div id="lbTrack"></div></div>
   <div id="lbToolbar">
-    <button id="lbSave" title="Save photo">
+    <button id="lbDelete" title="Delete photo" style="display:none">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+    </button>
+    <button id="lbSave" title="Save to camera roll">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
     </button>
     <button id="lbClose">✕</button>
   </div>
-  <button id="lbPrev" aria-label="Previous">‹</button>
-  <button id="lbNext" aria-label="Next">›</button>
-  <div id="lbCounter"></div>
+  <div id="lbDots"></div>
 </div>
 
 <!-- ══════════════ VOYAGE SHARE BANNER ══════════════ -->
@@ -3311,12 +3319,20 @@ async function downloadLbPhoto(){
   const url=_lbPhotos[_lbIdx];
   try{
     const blob=await fetch(url).then(r=>r.blob());
+    const fname=url.split("/").pop()||"photo.jpg";
+    const file=new File([blob],fname,{type:blob.type});
+    // iOS: use Web Share API → native "Save Image" in share sheet
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      await navigator.share({files:[file],title:"Photo"});
+      return;
+    }
+    // Desktop / Android: trigger download
     const a=document.createElement("a");
     a.href=URL.createObjectURL(blob);
-    a.download=url.split("/").pop()||"photo.jpg";
-    a.click();
+    a.download=fname;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
     URL.revokeObjectURL(a.href);
-  }catch(e){window.open(url,"_blank");}
+  }catch(e){ if(e.name!=="AbortError") window.open(url,"_blank"); }
 }
 
 const VOY_KEY="wake:voyages:v1";
@@ -3725,6 +3741,7 @@ function buildVoyageCard(voy,idx){
     const hasNew=!isOwner&&photos.some(p=>!seen.includes(p.name));
     if(hasNew){const b=byId(`pnb-${_sid}`);if(b)b.hidden=false;}
     const allUrls=photos.map(p=>getPhotoPublicUrl(_sid,p.name));
+    const fnames=photos.map(p=>p.name);
     photos.forEach((photo,i)=>{
       const url=allUrls[i];
       const thumb=document.createElement("div");
@@ -3734,7 +3751,7 @@ function buildVoyageCard(voy,idx){
       thumb.addEventListener("click",()=>{
         if(!isOwner) markPhotoSeen(_sid,photo.name);
         thumb.classList.remove("voy-photo-unseen");
-        openLightbox(allUrls,i);
+        openLightbox(allUrls,i,{shareId:_sid,filenames:fnames,isOwner});
         const stillNew=photos.some(p=>!getSeenPhotos(_sid).includes(p.name));
         if(!stillNew){const b=byId(`pnb-${_sid}`);if(b)b.hidden=true;}
       });
@@ -3765,7 +3782,8 @@ function buildVoyageCard(voy,idx){
           const thumb=document.createElement("div");
           thumb.className="voy-photo-thumb";
           thumb.style.backgroundImage=`url(${allUrls2[i]})`;
-          thumb.addEventListener("click",()=>openLightbox(allUrls2,i));
+          const fnames2=photos.map(p=>p.name);
+          thumb.addEventListener("click",()=>openLightbox(allUrls2,i,{shareId:_sid,filenames:fnames2,isOwner}));
           strip.appendChild(thumb);
         });
       }catch(err){
@@ -4139,6 +4157,12 @@ function renderArchivedSection(){
   const toggle=archiveEl.querySelector("#voyArchiveToggle");
   const list=archiveEl.querySelector("#voyArchiveList");
   archived.forEach(voy=>{
+    const wrap=document.createElement("div");
+    wrap.className="voy-archive-card-wrap";
+    const trash=document.createElement("div");
+    trash.className="voy-archive-card-trash";
+    trash.innerHTML="🗑";
+    wrap.appendChild(trash);
     const item=document.createElement("div");
     item.className="voy-archive-card";
     const fmtDate=voy.sailDate?new Date(voy.sailDate+"T12:00:00Z").toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"}):"No date";
@@ -4165,7 +4189,33 @@ function renderArchivedSection(){
         saveVoyages(); syncVoyageIndicator(); renderVoyageCards();
       }
     });
-    list.appendChild(item);
+    // Swipe-to-delete (right→left reveals red trash)
+    let _stX=null,_stOff=0;
+    const THRESH=60;
+    item.addEventListener("touchstart",e=>{_stX=e.touches[0].clientX;_stOff=0;item.style.transition="none";},{passive:true});
+    item.addEventListener("touchmove",e=>{
+      if(_stX===null)return;
+      const dx=e.touches[0].clientX-_stX;
+      if(dx>0)return; // only left swipe
+      _stOff=Math.max(dx,-100);
+      item.style.transform=`translateX(${_stOff}px)`;
+      trash.style.opacity=String(Math.min(1,Math.abs(_stOff)/THRESH));
+    },{passive:true});
+    item.addEventListener("touchend",()=>{
+      if(_stX===null)return; _stX=null;
+      item.style.transition="transform .22s var(--ease-out)";
+      if(Math.abs(_stOff)>=THRESH){
+        item.style.transform="translateX(-110%)";
+        item.addEventListener("transitionend",()=>{
+          const name=voy.shipName;
+          _voyData.archived=_voyData.archived.filter(v=>v.shipName!==name);
+          saveVoyages(); renderVoyageCards();
+        },{once:true});
+      } else { item.style.transform="translateX(0)"; trash.style.opacity="0"; }
+      _stOff=0;
+    });
+    wrap.appendChild(item);
+    list.appendChild(wrap);
   });
   toggle.addEventListener("click",()=>{
     const open=list.hidden;
@@ -4612,46 +4662,114 @@ if("serviceWorker" in navigator){
   showBanner();
 })();
 
-/* ═══════════════════ LIGHTBOX ═══════════════════ */
-let _lbPhotos=[],_lbIdx=0;
-function openLightbox(photos,startIdx){
-  _lbPhotos=photos; _lbIdx=startIdx;
-  showLbPhoto();
+/* ═══════════════════ LIGHTBOX CAROUSEL ═══════════════════ */
+let _lbPhotos=[],_lbFilenames=[],_lbShareId=null,_lbIsOwner=false;
+let _lbIdx=0,_lbDragStartX=null,_lbDragging=false,_lbDragOff=0;
+
+function openLightbox(photos,startIdx,opts){
+  _lbShareId=(opts&&opts.shareId)||null;
+  _lbFilenames=(opts&&opts.filenames)||[];
+  _lbIsOwner=(opts&&opts.isOwner===true);
+  _lbPhotos=photos; _lbIdx=Math.max(0,Math.min(startIdx,photos.length-1));
+  const track=byId("lbTrack");
+  track.style.transition="none";
+  track.innerHTML="";
+  photos.forEach(url=>{
+    const slide=document.createElement("div");
+    slide.className="lb-slide";
+    const img=document.createElement("img");
+    img.src=url; img.alt=""; img.draggable=false;
+    slide.appendChild(img);
+    track.appendChild(slide);
+  });
+  requestAnimationFrame(()=>{
+    track.style.transform=`translateX(${-_lbIdx*window.innerWidth}px)`;
+    _lbUpdateDots();
+  });
+  const delBtn=byId("lbDelete");
+  if(delBtn) delBtn.style.display=_lbIsOwner?"flex":"none";
   const lb=byId("voyLightbox");
   lb.hidden=false;
   requestAnimationFrame(()=>lb.classList.add("lb-show"));
   document.body.style.overflow="hidden";
 }
+
 function closeLightbox(){
   const lb=byId("voyLightbox");
   lb.classList.remove("lb-show");
-  lb.addEventListener("transitionend",()=>{lb.hidden=true;document.body.style.overflow="";},{once:true});
+  lb.addEventListener("transitionend",()=>{lb.hidden=true;document.body.style.overflow="";byId("lbTrack").innerHTML="";},{once:true});
 }
-function showLbPhoto(){
-  byId("lbImg").src=_lbPhotos[_lbIdx];
-  byId("lbCounter").textContent=`${_lbIdx+1} / ${_lbPhotos.length}`;
-  byId("lbPrev").style.display=_lbIdx>0?"":"none";
-  byId("lbNext").style.display=_lbIdx<_lbPhotos.length-1?"":"none";
+
+function _lbSnap(idx,animated){
+  _lbIdx=Math.max(0,Math.min(idx,_lbPhotos.length-1));
+  const track=byId("lbTrack");
+  track.style.transition=animated===false?"none":"transform .38s cubic-bezier(.25,.46,.45,.94)";
+  track.style.transform=`translateX(${-_lbIdx*window.innerWidth}px)`;
+  _lbUpdateDots();
 }
+
+function _lbUpdateDots(){
+  const el=byId("lbDots"); if(!el)return;
+  el.innerHTML="";
+  if(_lbPhotos.length<2)return;
+  _lbPhotos.forEach((_,i)=>{
+    const d=document.createElement("div");
+    d.className="lb-dot"+(i===_lbIdx?" active":"");
+    el.appendChild(d);
+  });
+}
+
+// Touch — live drag on track wrap
+const _lbWrap=byId("lbTrackWrap");
+_lbWrap.addEventListener("touchstart",e=>{
+  _lbDragStartX=e.touches[0].clientX; _lbDragging=true; _lbDragOff=0;
+  byId("lbTrack").style.transition="none";
+},{passive:true});
+_lbWrap.addEventListener("touchmove",e=>{
+  if(!_lbDragging||_lbDragStartX===null)return;
+  let dx=e.touches[0].clientX-_lbDragStartX;
+  if((_lbIdx===0&&dx>0)||(_lbIdx===_lbPhotos.length-1&&dx<0)) dx*=0.22;
+  _lbDragOff=dx;
+  byId("lbTrack").style.transform=`translateX(${-_lbIdx*window.innerWidth+dx}px)`;
+},{passive:true});
+_lbWrap.addEventListener("touchend",()=>{
+  if(!_lbDragging)return; _lbDragging=false;
+  const threshold=window.innerWidth*0.22;
+  _lbSnap(_lbDragOff<-threshold?_lbIdx+1:_lbDragOff>threshold?_lbIdx-1:_lbIdx);
+  _lbDragOff=0; _lbDragStartX=null;
+});
+
+byId("lbBackdrop").addEventListener("click",closeLightbox);
 byId("lbClose").addEventListener("click",closeLightbox);
 byId("lbSave").addEventListener("click",downloadLbPhoto);
-byId("lbBackdrop").addEventListener("click",closeLightbox);
-byId("lbPrev").addEventListener("click",()=>{if(_lbIdx>0){_lbIdx--;showLbPhoto();}});
-byId("lbNext").addEventListener("click",()=>{if(_lbIdx<_lbPhotos.length-1){_lbIdx++;showLbPhoto();}});
-byId("voyLightbox").addEventListener("click",e=>{if(e.target===byId("voyLightbox"))closeLightbox();});
-let _lbTouchX=null;
-byId("lbImg").addEventListener("touchstart",e=>{_lbTouchX=e.touches[0].clientX;},{passive:true});
-byId("lbImg").addEventListener("touchend",e=>{
-  if(_lbTouchX===null)return;
-  const dx=e.changedTouches[0].clientX-_lbTouchX; _lbTouchX=null;
-  if(dx<-50&&_lbIdx<_lbPhotos.length-1){_lbIdx++;showLbPhoto();}
-  else if(dx>50&&_lbIdx>0){_lbIdx--;showLbPhoto();}
+byId("lbDelete").addEventListener("click",async()=>{
+  if(!_lbIsOwner||!_lbShareId||!_lbFilenames[_lbIdx]) return;
+  const fname=_lbFilenames[_lbIdx];
+  try{
+    await _SB.storage.from(_SB_BUCKET).remove([`${_lbShareId}/${fname}`]);
+    _lbPhotos.splice(_lbIdx,1); _lbFilenames.splice(_lbIdx,1);
+    if(!_lbPhotos.length){ closeLightbox(); }
+    else {
+      if(_lbIdx>=_lbPhotos.length) _lbIdx=_lbPhotos.length-1;
+      // Rebuild track without the deleted slide
+      const track=byId("lbTrack"); track.style.transition="none"; track.innerHTML="";
+      _lbPhotos.forEach(url=>{ const s=document.createElement("div"); s.className="lb-slide"; const img=document.createElement("img"); img.src=url; img.alt=""; img.draggable=false; s.appendChild(img); track.appendChild(s); });
+      requestAnimationFrame(()=>{ track.style.transform=`translateX(${-_lbIdx*window.innerWidth}px)`; _lbUpdateDots(); });
+    }
+    // Refresh the photo strip on the card
+    const strip=byId(`ps-${_lbShareId}`);
+    if(strip){ const ph=await loadVoyagePhotos(_lbShareId); strip.innerHTML="";
+      if(!ph.length){ strip.innerHTML=`<div class="voy-photo-empty">Tap + to add your first photo</div>`; return; }
+      const allU=ph.map(p=>getPhotoPublicUrl(_lbShareId,p.name));
+      ph.forEach((photo,i)=>{ const t=document.createElement("div"); t.className="voy-photo-thumb"; t.style.backgroundImage=`url(${allU[i]})`; t.addEventListener("click",()=>openLightbox(allU,i,{shareId:_lbShareId,filenames:ph.map(p=>p.name),isOwner:true})); strip.appendChild(t); });
+    }
+  }catch(e){ console.error("Delete failed",e); }
 });
 addEventListener("keydown",e=>{
   if(byId("voyLightbox").hidden)return;
-  if(e.key==="ArrowLeft"&&_lbIdx>0){_lbIdx--;showLbPhoto();}
-  else if(e.key==="ArrowRight"&&_lbIdx<_lbPhotos.length-1){_lbIdx++;showLbPhoto();}
-  else if(e.key==="Escape")closeLightbox();
+  if(e.key==="ArrowLeft") _lbSnap(_lbIdx-1);
+  else if(e.key==="ArrowRight") _lbSnap(_lbIdx+1);
+  else if(e.key==="Escape") closeLightbox();
 });
 </script>
 </body>
