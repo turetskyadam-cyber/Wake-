@@ -686,7 +686,7 @@
   .view-toggle.voyages-active::before{transform:translateX(28px);width:34px;}
   #brand.mini .view-toggle{display:inline-flex;}
   /* saved voyages indicator on toggle heart */
-  #vtVoyages.has-voyages svg{fill:#e86d8a;color:#e86d8a;filter:drop-shadow(0 0 4px rgba(232,109,138,.7));transition:fill .3s,color .3s,filter .3s;}
+  #vtVoyages.has-voyages svg{fill:#e86d8a;stroke:#e86d8a;color:#e86d8a;filter:drop-shadow(0 0 4px rgba(232,109,138,.7));transition:fill .3s,stroke .3s,color .3s,filter .3s;}
   #vtVoyages.has-voyages:not([aria-pressed="true"]){border-radius:999px;}
 
   /* ═══════════════════════════════════════════
@@ -1005,7 +1005,7 @@
 
 <div id="brand" class="panel">
   <div class="brand-left">
-    <div class="wordmark"><h1>WAKE</h1><span class="dot"></span><div class="view-toggle" id="viewToggle" title="Switch between Fleet and My Voyages"><button class="vt-btn" id="vtFleet" aria-pressed="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17H21M5 17V9l7-5 7 5v8M10 17v-4h4v4"/></svg></button><button class="vt-btn" id="vtVoyages" aria-pressed="false"><svg width="22" height="10" viewBox="0 0 30 14" fill="currentColor"><path d="M1 9h28l-2.5 4.5H3.5z"/><path d="M5 9V6h20v3z"/><path d="M9 6V3h11v3z"/><rect x="15.5" y="1" width="2.5" height="2.5" rx=".4"/></svg></button></div><button id="brandExpand" class="brand-expand-btn" title="Expand panel">›</button></div>
+    <div class="wordmark"><h1>WAKE</h1><span class="dot"></span><div class="view-toggle" id="viewToggle" title="Switch between Fleet and My Voyages"><button class="vt-btn" id="vtFleet" aria-pressed="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17H21M5 17V9l7-5 7 5v8M10 17v-4h4v4"/></svg></button><button class="vt-btn" id="vtVoyages" aria-pressed="false"><svg width="16" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div><button id="brandExpand" class="brand-expand-btn" title="Expand panel">›</button></div>
     <div class="sub">Live Cruise Fleet Tracker</div>
     <span class="feedpill" id="feedpill" data-state="connecting" title="Live AIS broadcasts via aisstream.io"><b></b>Connecting…</span>
     <div class="brandstats">
@@ -3485,15 +3485,8 @@ function heartPuff(){
 }
 
 /* ---- firework burst at toggle ---- */
-function cruiseShipSvg(w){
-  const h=Math.round(w*.48);
-  // simple side-profile cruise ship: hull, two superstructure decks, funnel
-  return `<svg viewBox="0 0 30 14" width="${w}" height="${h}" fill="currentColor">
-    <path d="M1 9h28l-2.5 4.5H3.5z"/>
-    <path d="M5 9V6h20v3z"/>
-    <path d="M9 6V3h11v3z"/>
-    <rect x="15.5" y="1" width="2.5" height="2.5" rx=".4"/>
-  </svg>`;
+function heartSvg(w){
+  return `<svg viewBox="0 0 24 24" width="${w}" height="${w}" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
 }
 function fireshipBurst(cx,cy){
   // 1. Big pink heart explodes at the landing point
@@ -3523,8 +3516,7 @@ function fireshipBurst(cx,cy){
       el.style.cssText=`left:${cx}px;top:${cy}px;animation-delay:${delay}ms;`;
       el.style.setProperty("--sdx",Math.cos(rad)*dist+"px");
       el.style.setProperty("--sdy",Math.sin(rad)*dist+"px");
-      // flip ships going left so they face direction of travel
-      el.innerHTML=`<span style="display:inline-block;transform:${angleDeg>90&&angleDeg<270?"scaleX(-1)":""}">${cruiseShipSvg(w)}</span>`;
+      el.innerHTML=heartSvg(w);
       document.body.appendChild(el);
       el.addEventListener("animationend",()=>el.remove(),{once:true});
     }
