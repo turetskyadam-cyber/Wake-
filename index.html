@@ -237,7 +237,7 @@
   .ipm-card b{display:block;font-size:8.5px;font-weight:600;color:#eef4f7;margin-bottom:0}
   .ipm-card span{font-family:'JetBrains Mono',monospace;font-size:6.5px;color:#8aabb8;letter-spacing:.04em}
   /* ---- port info card ---- */
-  #portCard{position:fixed;bottom:80px;left:18px;width:min(300px,calc(100vw - 36px));z-index:2100;background:rgba(6,18,28,.93);border:1px solid rgba(255,255,255,.13);border-radius:12px;overflow:hidden;backdrop-filter:blur(16px);box-shadow:0 12px 40px rgba(0,0,0,.65),0 2px 8px rgba(0,0,0,.4);opacity:0;transform:translateY(14px);transition:opacity .22s var(--ease-out),transform .28s var(--ease-out);pointer-events:none}
+  #portCard{position:fixed;bottom:80px;left:18px;width:min(300px,calc(100vw - 36px));z-index:4500;background:rgba(6,18,28,.93);border:1px solid rgba(255,255,255,.13);border-radius:12px;overflow:hidden;backdrop-filter:blur(16px);box-shadow:0 12px 40px rgba(0,0,0,.65),0 2px 8px rgba(0,0,0,.4);opacity:0;transform:translateY(14px);transition:opacity .22s var(--ease-out),transform .28s var(--ease-out);pointer-events:none}
   #portCard.show{opacity:1;transform:none;pointer-events:auto}
   .pc-hero{height:127px;position:relative;background:rgba(8,26,36,.7) center/cover no-repeat;overflow:hidden}
   .pc-hero-img{position:absolute;inset:0;background:center/cover no-repeat;opacity:0;transition:opacity .45s ease}
@@ -3918,7 +3918,7 @@ function buildVoyageCard(voy,idx){
       else wxSpan.remove();
     });
   });
-  // Port tap → close voyages overlay then show portCard on the map
+  // Port tap → show portCard floating above the voyages overlay
   card.querySelectorAll(".voy-port-row[data-port]").forEach(row=>{
     row.addEventListener("click",async e=>{
       e.stopPropagation();
@@ -3930,8 +3930,7 @@ function buildVoyageCard(voy,idx){
         row.style.opacity="";
       }
       if(!pe) return;
-      closeVoyages();
-      setTimeout(()=>showPortCard(pe,{date:portDate,arr:null,dep:null},color),180);
+      showPortCard(pe,{date:portDate,arr:null,dep:null},color);
     });
   });
   card.querySelector(".voy-card-remove").addEventListener("click",e=>{
