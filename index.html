@@ -3305,7 +3305,7 @@ async function uploadVoyagePhoto(shareId,file){
   return fname;
 }
 async function loadVoyagePhotos(shareId){
-  const{data,error}=await _SB.storage.from(_SB_BUCKET).list(shareId,{sortBy:{column:"created_at",order:"asc"}});
+  const{data,error}=await _SB.storage.from(_SB_BUCKET).list(shareId,{sortBy:{column:"created_at",order:"desc"}});
   if(error||!data) return [];
   return data.filter(f=>f.name&&f.name!==".emptyFolderPlaceholder");
 }
