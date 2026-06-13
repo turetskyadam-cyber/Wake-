@@ -828,6 +828,8 @@
   .voy-enddate-lbl{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);flex:none;}
   .voy-enddate-val{font-size:12px;color:var(--muted);margin-left:auto;text-align:right;}
   .voy-enddate-edit{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:rgba(226,189,114,.6);margin-left:8px;flex:none;}
+  .voy-enddate-input{-webkit-appearance:none;appearance:none;background:transparent;border:none;color:var(--muted);font-size:12px;font-family:inherit;cursor:pointer;outline:none;margin-left:auto;padding:0;text-align:right;color-scheme:dark;min-width:0;}
+  .voy-enddate-input::-webkit-calendar-picker-indicator{opacity:0.4;cursor:pointer;filter:invert(1);}
   /* weather */
   .voy-card-wx{padding:12px 18px 12px;border-top:1px solid var(--glass-edge);display:flex;align-items:center;gap:14px;}
   .voy-wx-icon{font-size:28px;line-height:1;flex:none;}
@@ -3763,25 +3765,12 @@ function buildVoyageCard(voy,idx){
     card.insertAdjacentHTML("beforeend",`
       <div class="voy-enddate-row">
         <span class="voy-enddate-lbl">Getting off</span>
-        <span class="voy-enddate-val" id="${_eid}">${endDate?endFmt:`<span style="color:var(--faint)">Tap to set</span>`}</span>
-        <span class="voy-enddate-edit">${endDate?"✎ Change":""}</span>
+        <input type="date" class="voy-enddate-input" id="${_eid}" value="${endDate||today}" min="${voy.sailDate}" max="${new Date(new Date(voy.sailDate+"T12:00:00Z").getTime()+300*864e5).toISOString().slice(0,10)}">
       </div>`);
-    const endRow=card.querySelector(".voy-enddate-row");
-    // Body-level picker avoids overflow:hidden scroll-into-view that makes iOS flash on first tap
-    const endInp=document.createElement("input");
-    endInp.type="date";
-    endInp.style.cssText="position:fixed;bottom:-200px;left:-200px;width:1px;height:1px;opacity:0";
-    endInp.value=endDate||"";
-    endInp.min=voy.sailDate;
-    endInp.max=new Date(new Date(voy.sailDate+"T12:00:00Z").getTime()+300*864e5).toISOString().slice(0,10);
-    document.body.appendChild(endInp);
-    endRow.addEventListener("click",e=>{
-      e.stopPropagation();
-      try{ endInp.showPicker(); }catch(_){ endInp.click(); }
-    });
+    const endInp=card.querySelector(`#${_eid}`);
+    endInp.addEventListener("click",e=>e.stopPropagation());
     endInp.addEventListener("change",e=>{
       const val=e.target.value; if(!val) return;
-      endInp.remove();
       voy.endDate=val; saveVoyages(); renderVoyageCards();
     });
   }
