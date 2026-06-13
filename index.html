@@ -663,6 +663,133 @@
   .share-pop{padding:4px 10px 12px;display:flex;flex-direction:column;gap:6px}
   .share-pop button{padding:8px 6px;cursor:pointer;background:rgba(226,189,114,.07);border:1px solid var(--glass-edge);border-radius:8px;color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;transition:background .2s}
   .share-pop button:hover{background:rgba(226,189,114,.16)}
+
+  /* ═══════════════════════════════════════════
+     VIEW TOGGLE PILL (Fleet / My Voyages)
+  ═══════════════════════════════════════════ */
+  .view-toggle{display:inline-flex;align-items:center;background:rgba(255,255,255,.06);border:1px solid var(--glass-edge);border-radius:999px;padding:3px;gap:2px;position:relative;align-self:center;margin-left:6px;flex-shrink:0;}
+  .vt-btn{width:26px;height:26px;border:none;background:transparent;border-radius:999px;cursor:pointer;color:var(--faint);display:flex;align-items:center;justify-content:center;position:relative;z-index:1;transition:color .22s var(--ease-out);flex:none;touch-action:manipulation;}
+  .vt-btn[aria-pressed="true"]{color:var(--ocean-0);}
+  .vt-btn:not([aria-pressed="true"]):hover{color:var(--muted);}
+  .view-toggle::before{content:"";position:absolute;width:26px;height:26px;border-radius:999px;background:var(--ink);top:3px;left:3px;transition:transform .28s var(--ease-out);pointer-events:none;}
+  .view-toggle.voyages-active::before{transform:translateX(28px);}
+  #brand.mini .view-toggle{display:inline-flex;}
+
+  /* ═══════════════════════════════════════════
+     HEART BUTTON in #detail
+  ═══════════════════════════════════════════ */
+  .d-heart{position:absolute;top:13px;right:44px;width:24px;height:24px;border-radius:50%;border:1px solid var(--glass-edge);background:rgba(4,16,24,.5);color:var(--muted);cursor:pointer;font-size:13px;line-height:1;display:flex;align-items:center;justify-content:center;z-index:2;transition:transform .12s var(--ease-out),color .2s,background .2s,border-color .2s;touch-action:manipulation;}
+  .d-heart:hover{color:#e86d8a;border-color:rgba(232,109,138,.4);}
+  .d-heart:active{transform:scale(.9);}
+  .d-heart.saved{color:#e86d8a;background:rgba(232,109,138,.15);border-color:rgba(232,109,138,.45);}
+  .d-heart.saved svg{fill:#e86d8a;}
+  .d-heart.pop{animation:heartPop .3s var(--ease-out);}
+  @keyframes heartPop{0%{transform:scale(1)}40%{transform:scale(1.45)}70%{transform:scale(.92)}100%{transform:scale(1)}}
+
+  /* ═══════════════════════════════════════════
+     FLYING HEART ANIMATION
+  ═══════════════════════════════════════════ */
+  @keyframes flyHeart{
+    0%  {opacity:1;transform:translate(0,0) scale(1);}
+    60% {opacity:1;transform:translate(var(--fly-x),var(--fly-y)) scale(.7) rotate(-15deg);}
+    100%{opacity:0;transform:translate(var(--fly-x2),var(--fly-y2)) scale(.22) rotate(-25deg);}
+  }
+  .fly-heart{position:fixed;z-index:9999;pointer-events:none;font-size:22px;line-height:1;color:#e86d8a;animation:flyHeart .65s cubic-bezier(.2,.8,.5,1) forwards;}
+  @keyframes togglePop{0%{transform:scale(1)}40%{transform:scale(1.55)}70%{transform:scale(.85)}100%{transform:scale(1)}}
+  .toggle-pop{animation:togglePop .38s cubic-bezier(.23,1,.32,1);}
+
+  /* ═══════════════════════════════════════════
+     VOYAGE DATE SHEET
+  ═══════════════════════════════════════════ */
+  #voyDateSheet{position:fixed;inset:0;z-index:2100;background:rgba(4,14,20,.65);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .22s var(--ease-out);}
+  #voyDateSheet.show{opacity:1;pointer-events:auto;}
+  #voyDateCard{background:var(--glass);border:1px solid var(--glass-edge);border-radius:20px 20px 0 0;padding:20px 20px 40px;width:100%;max-width:480px;backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);box-shadow:0 -12px 48px rgba(0,0,0,.6);transform:translateY(60px);transition:transform .32s var(--ease-out);}
+  #voyDateSheet.show #voyDateCard{transform:translateY(0);}
+  .vds-hd{margin-bottom:16px;}
+  .vds-title{font-family:'Fraunces',serif;font-weight:600;font-size:22px;color:var(--ink);display:block;line-height:1.1;}
+  .vds-ship{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);display:block;margin-top:6px;}
+  .vds-input{width:100%;background:rgba(4,16,24,.7);border:1px solid var(--glass-edge);border-radius:12px;color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:15px;padding:13px 14px;outline:none;transition:border-color .2s var(--ease-out),box-shadow .2s var(--ease-out);color-scheme:dark;margin-bottom:14px;box-sizing:border-box;}
+  .vds-input:focus{border-color:rgba(226,189,114,.5);box-shadow:0 0 0 3px rgba(226,189,114,.1);}
+  .vds-actions{display:flex;gap:10px;}
+  .vds-cancel{flex:1;padding:12px;border-radius:12px;border:1px solid var(--glass-edge);background:transparent;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:background .18s,color .18s;touch-action:manipulation;}
+  .vds-cancel:hover{background:rgba(255,255,255,.06);color:var(--ink);}
+  .vds-save{flex:2;padding:12px;border-radius:12px;border:1px solid rgba(226,189,114,.4);background:rgba(226,189,114,.12);color:var(--brass);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:background .18s,border-color .18s,color .18s;touch-action:manipulation;}
+  .vds-save:hover{background:rgba(226,189,114,.22);border-color:rgba(226,189,114,.65);color:var(--ink);}
+
+  /* ═══════════════════════════════════════════
+     MY VOYAGES OVERLAY
+  ═══════════════════════════════════════════ */
+  #voyages.profile-modal .voy-scroll{height:100%;overflow-y:auto;max-width:620px;margin:0 auto;padding:22px 22px 70px;scrollbar-width:thin;scrollbar-color:rgba(120,170,185,.2) transparent;}
+  #voyages.profile-modal .voy-scroll::-webkit-scrollbar{width:6px;}
+  #voyages.profile-modal .voy-scroll::-webkit-scrollbar-thumb{background:rgba(120,170,185,.22);border-radius:3px;}
+  .voy-header{display:flex;align-items:center;justify-content:space-between;padding:0 0 22px;}
+  .voy-title{font-family:'Fraunces',serif;font-weight:600;font-size:30px;color:var(--ink);margin:0;letter-spacing:.02em;}
+  .voy-cards{display:flex;flex-direction:column;gap:16px;}
+  .voy-card{background:var(--glass);border:1px solid var(--glass-edge);border-radius:18px;overflow:hidden;backdrop-filter:blur(14px) saturate(130%);-webkit-backdrop-filter:blur(14px) saturate(130%);box-shadow:0 12px 40px -16px rgba(0,0,0,.6);animation:rowIn .4s var(--ease-out) both;}
+  .voy-card-accent{height:3px;background:var(--vc-color,#4d8fdb);}
+  .voy-card-head{display:flex;align-items:flex-start;justify-content:space-between;padding:16px 18px 10px;gap:12px;}
+  .voy-card-title{flex:1;min-width:0;}
+  .voy-card-line{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--vc-color,#4d8fdb);margin-bottom:5px;display:flex;align-items:center;gap:6px;}
+  .voy-card-line i{width:6px;height:6px;border-radius:50%;background:var(--vc-color,#4d8fdb);box-shadow:0 0 8px var(--vc-color,#4d8fdb);flex:none;}
+  .voy-card-name{font-family:'Fraunces',serif;font-weight:600;font-size:21px;color:var(--ink);line-height:1.08;letter-spacing:.005em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .voy-card-remove{background:none;border:1px solid var(--glass-edge);border-radius:8px;padding:5px 8px;color:var(--faint);font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;flex:none;transition:background .18s,color .18s,border-color .18s;touch-action:manipulation;}
+  .voy-card-remove:hover{background:rgba(255,100,80,.1);border-color:rgba(255,100,80,.35);color:#ff8070;}
+  /* countdown — flap board style */
+  .voy-card-countdown{padding:12px 18px 10px;display:flex;flex-direction:column;align-items:flex-start;gap:0;}
+  .voy-count-board{display:flex;gap:4px;margin-bottom:7px;}
+  .voy-count-digit{font-family:'Fraunces',serif;font-weight:600;font-size:44px;color:var(--vc-ink,var(--ink));line-height:1;background:rgba(255,255,255,.04);border:1px solid var(--glass-edge);border-bottom:2px solid rgba(255,255,255,.1);border-radius:8px;padding:3px 10px;font-variant-numeric:tabular-nums;display:inline-block;min-width:48px;text-align:center;transition:color .4s,border-bottom-color .4s;}
+  .voy-count-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--vc-ink,var(--muted));transition:color .4s;}
+  .voy-count-sub{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);letter-spacing:.08em;margin-top:4px;}
+  .voy-card-countdown[data-urgency="close"] .voy-count-digit{--vc-ink:#5ad6a0;border-bottom-color:#5ad6a0;}
+  .voy-card-countdown[data-urgency="close"] .voy-count-label{--vc-ink:#5ad6a0;}
+  .voy-card-countdown[data-urgency="soon"]  .voy-count-digit{--vc-ink:#f08c4a;border-bottom-color:#f08c4a;}
+  .voy-card-countdown[data-urgency="soon"]  .voy-count-label{--vc-ink:#f08c4a;}
+  .voy-card-countdown[data-urgency="now"]   .voy-count-digit{--vc-ink:#ff5a4d;border-bottom-color:#ff5a4d;font-size:52px;}
+  .voy-card-countdown[data-urgency="now"]   .voy-count-label{--vc-ink:#ff5a4d;}
+  /* breathing ring */
+  .voy-count-ring{position:relative;display:inline-flex;align-items:center;justify-content:center;}
+  .voy-count-ring svg{position:absolute;inset:-8px;width:calc(100% + 16px);height:calc(100% + 16px);pointer-events:none;}
+  .voy-count-ring circle{fill:none;stroke:var(--vc-color,#4d8fdb);stroke-width:1.5;opacity:.18;animation:countPulse 3s ease-in-out infinite;}
+  @keyframes countPulse{0%,100%{opacity:.1}50%{opacity:.32}}
+  /* today shimmer */
+  .voy-count-today{width:calc(100% - 36px);margin:10px 18px 6px;padding:13px 18px;background:linear-gradient(90deg,rgba(90,214,160,.15),rgba(90,214,160,.07),rgba(90,214,160,.15));background-size:200% 100%;animation:shimmerToday 2.2s linear infinite;border-radius:12px;border:1px solid rgba(90,214,160,.35);font-family:'Fraunces',serif;font-weight:600;font-size:20px;color:#5ad6a0;text-align:center;}
+  @keyframes shimmerToday{0%{background-position:200% 0}100%{background-position:-200% 0}}
+  .voy-wave{display:inline-block;animation:rockWave 1.8s ease-in-out infinite;}
+  @keyframes rockWave{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}}
+  /* past */
+  .voy-count-past{padding:10px 18px 8px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);display:flex;align-items:center;gap:10px;}
+  /* data grid */
+  .voy-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--glass-edge);border-top:1px solid var(--glass-edge);}
+  .voy-cell{background:var(--glass);padding:11px 16px;}
+  .voy-cell .k{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:5px;}
+  .voy-cell .v{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ink);font-weight:500;}
+  .voy-cell .v.dim{color:var(--muted);}
+  /* ports */
+  .voy-card-ports{padding:12px 18px 12px;border-top:1px solid var(--glass-edge);}
+  .voy-ports-hd{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:8px;}
+  .voy-port-row{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:var(--muted);}
+  .voy-port-row:last-child{border-bottom:none;}
+  .voy-port-date{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);flex:none;width:42px;}
+  .voy-port-name{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  /* weather */
+  .voy-card-wx{padding:12px 18px 12px;border-top:1px solid var(--glass-edge);display:flex;align-items:center;gap:14px;}
+  .voy-wx-icon{font-size:28px;line-height:1;flex:none;}
+  .voy-wx-info{flex:1;min-width:0;}
+  .voy-wx-temp{font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--ink);line-height:1;}
+  .voy-wx-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:4px;}
+  .voy-wx-note{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--faint);letter-spacing:.06em;}
+  /* track live */
+  .voy-card-foot{padding:12px 18px 16px;border-top:1px solid var(--glass-edge);}
+  .voy-track-btn{width:100%;padding:11px;border-radius:12px;border:1px solid rgba(226,189,114,.35);background:rgba(226,189,114,.1);color:var(--brass);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .18s,border-color .18s,color .18s,transform .1s;touch-action:manipulation;}
+  .voy-track-btn:hover{background:rgba(226,189,114,.18);border-color:rgba(226,189,114,.6);color:var(--ink);}
+  .voy-track-btn:active{transform:scale(.98);}
+  /* empty state */
+  #voyEmpty{display:flex;flex-direction:column;align-items:center;padding:60px 20px;text-align:center;}
+  .voy-empty-icon{font-size:52px;margin-bottom:20px;opacity:.32;}
+  .voy-empty-title{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--ink);margin-bottom:10px;opacity:.7;}
+  .voy-empty-sub{font-size:14px;color:var(--muted);line-height:1.6;max-width:280px;}
+  .voy-empty-heart{color:#e86d8a;}
+  @media(max-width:760px){.voy-count-digit{font-size:34px;min-width:38px;}.voy-card-name{font-size:17px;}.voy-scroll{padding:14px 14px 60px;}}
 </style>
 </head>
 <body>
@@ -672,7 +799,7 @@
 
 <div id="brand" class="panel">
   <div class="brand-left">
-    <div class="wordmark"><h1>WAKE</h1><span class="dot"></span><button id="brandExpand" class="brand-expand-btn" title="Expand panel">›</button></div>
+    <div class="wordmark"><h1>WAKE</h1><span class="dot"></span><div class="view-toggle" id="viewToggle" title="Switch between Fleet and My Voyages"><button class="vt-btn" id="vtFleet" aria-pressed="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17H21M5 17V9l7-5 7 5v8M10 17v-4h4v4"/></svg></button><button class="vt-btn" id="vtVoyages" aria-pressed="false"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div><button id="brandExpand" class="brand-expand-btn" title="Expand panel">›</button></div>
     <div class="sub">Live Cruise Fleet Tracker</div>
     <span class="feedpill" id="feedpill" data-state="connecting" title="Live AIS broadcasts via aisstream.io"><b></b>Connecting…</span>
     <div class="brandstats">
@@ -715,6 +842,7 @@
   <div class="d-body">
     <div class="d-top">
       <button class="d-close" id="dClose">✕</button>
+      <button class="d-heart" id="dHeart" title="Save to My Voyages" aria-label="Save ship to My Voyages" aria-pressed="false"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
       <span class="d-line"><i></i><span id="dLine"></span></span>
       <h2 class="d-name" id="dName"></h2>
       <div class="d-status" id="dStatus"></div>
@@ -814,6 +942,38 @@
     </div>
   </div>
 </div>
+
+<!-- ══════════════ MY VOYAGES OVERLAY ══════════════ -->
+<div id="voyages" class="profile-modal" aria-modal="true" hidden>
+  <div class="voy-scroll" id="voyScroll">
+    <div class="voy-header">
+      <h2 class="voy-title">My Voyages</h2>
+      <button class="profile-close" id="voyClose">✕</button>
+    </div>
+    <div id="voyCards"></div>
+    <div id="voyEmpty" hidden>
+      <div class="voy-empty-icon">⚓</div>
+      <div class="voy-empty-title">No voyages saved yet</div>
+      <div class="voy-empty-sub">Tap the <span class="voy-empty-heart">♥</span> on any ship to save your next cruise</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ VOYAGE DATE SHEET ══════════════ -->
+<div id="voyDateSheet" aria-modal="true" role="dialog" aria-label="Set sail date">
+  <div id="voyDateCard">
+    <div class="vds-hd">
+      <span class="vds-title">When do you sail?</span>
+      <span class="vds-ship" id="vdsShipName"></span>
+    </div>
+    <input type="date" id="vdsDate" class="vds-input" />
+    <div class="vds-actions">
+      <button class="vds-cancel" id="vdsCancel">Cancel</button>
+      <button class="vds-save" id="vdsSave">Save Voyage</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══════════════ LIVE PORT CAMS MODAL ══════════════ -->
 <div id="cams" role="dialog" aria-modal="true" aria-label="Live Port Cameras">
   <div id="camsPanel">
@@ -1701,6 +1861,7 @@ function fillDetail(d){
   byId("dBarName").textContent=d.name;
   // upcoming itinerary — delegate to fillDetailItin so it can be called separately
   fillDetailItin(d);
+  updateHeartBtn(d);
 }
 function fillDetailItin(d){
   const itinEl=byId("dItin");
@@ -1821,7 +1982,7 @@ function clearSelection(){
   detail.classList.remove("show"); detail.classList.add("collapsed"); clearPing(); clearItinPreview(); if(nearOpen) closeNear(); applyVisibility();
   histLayer.clearLayers();
   try{ history.replaceState(null,"",location.pathname); }catch(e){}
-  hideShipSide(); if(!profileEl.hidden) closeProfile();
+  hideShipSide(); if(!profileEl.hidden) closeProfile(); updateHeartBtn(null);
 }
 function collapseDetail(){ detail.classList.add("collapsed"); byId("dToggle").setAttribute("aria-expanded","false"); hideShipSide(); }
 byId("dClose").addEventListener("click",e=>{ e.stopPropagation(); nav={level:0,line:null,ship:null}; hoverLine=null; clearSelection(); renderNav("l"); applyVisibility(); });
@@ -2870,6 +3031,268 @@ byId("brandExpand").addEventListener("click",()=>{
   localStorage.removeItem("brandMini");
 });
 if(localStorage.getItem("brandMini")) brandEl.classList.add("mini");
+
+/* ═══════════════════════════════════════════════════════════
+   MY VOYAGES
+   ═══════════════════════════════════════════════════════════ */
+const VOY_KEY="wake:voyages:v1";
+function loadVoyages(){ try{ return JSON.parse(localStorage.getItem(VOY_KEY))||{voyages:[]}; }catch(e){ return {voyages:[]}; } }
+function saveVoyages(){ try{ localStorage.setItem(VOY_KEY,JSON.stringify(_voyData)); }catch(e){} }
+let _voyData=loadVoyages();
+let _voyOpen=false,_voyOpenTime=0;
+const voyEl=byId("voyages");
+
+/* ---- view toggle ---- */
+const vtFleet=byId("vtFleet"),vtVoyages=byId("vtVoyages"),viewToggleEl=byId("viewToggle");
+function setView(mode){
+  const isV=mode==="voyages";
+  viewToggleEl.classList.toggle("voyages-active",isV);
+  vtFleet.setAttribute("aria-pressed",String(!isV));
+  vtVoyages.setAttribute("aria-pressed",String(isV));
+  if(isV) openVoyages(); else closeVoyages();
+}
+vtFleet.addEventListener("click",()=>setView("fleet"));
+vtVoyages.addEventListener("click",()=>setView("voyages"));
+
+/* ---- flying heart animation ---- */
+function flyHeartToToggle(){
+  const from=byId("dHeart").getBoundingClientRect();
+  const to=byId("vtVoyages").getBoundingClientRect();
+  const sx=from.left+from.width/2, sy=from.top+from.height/2;
+  const ex=to.left+to.width/2, ey=to.top+to.height/2;
+  const el=document.createElement("span");
+  el.className="fly-heart";
+  el.textContent="♥";
+  el.style.cssText=`left:${sx}px;top:${sy}px;transform-origin:center`;
+  el.style.setProperty("--fly-x",(ex-sx)*0.55+"px");
+  el.style.setProperty("--fly-y",(ey-sy)*0.35-45+"px");
+  el.style.setProperty("--fly-x2",(ex-sx)+"px");
+  el.style.setProperty("--fly-y2",(ey-sy)+"px");
+  document.body.appendChild(el);
+  el.addEventListener("animationend",()=>{
+    el.remove();
+    const btn=byId("vtVoyages");
+    btn.classList.add("toggle-pop");
+    btn.addEventListener("animationend",()=>btn.classList.remove("toggle-pop"),{once:true});
+  },{once:true});
+}
+function heartPuff(){
+  const from=byId("dHeart").getBoundingClientRect();
+  const el=document.createElement("span");
+  el.className="fly-heart";
+  el.textContent="♥";
+  el.style.cssText=`left:${from.left+from.width/2}px;top:${from.top+from.height/2}px`;
+  el.style.setProperty("--fly-x","0px");
+  el.style.setProperty("--fly-y","-30px");
+  el.style.setProperty("--fly-x2","0px");
+  el.style.setProperty("--fly-y2","-55px");
+  document.body.appendChild(el);
+  el.addEventListener("animationend",()=>el.remove(),{once:true});
+}
+
+/* ---- heart button ---- */
+const dHeartBtn=byId("dHeart");
+function isShipSaved(name){ return _voyData.voyages.some(v=>v.shipName===name); }
+function updateHeartBtn(d){
+  if(!d){ dHeartBtn.setAttribute("aria-pressed","false"); dHeartBtn.classList.remove("saved"); return; }
+  const saved=isShipSaved(d.name);
+  dHeartBtn.setAttribute("aria-pressed",String(saved));
+  dHeartBtn.classList.toggle("saved",saved);
+}
+dHeartBtn.addEventListener("click",e=>{
+  e.stopPropagation();
+  if(!selected) return;
+  if(isShipSaved(selected.name)){
+    _voyData.voyages=_voyData.voyages.filter(v=>v.shipName!==selected.name);
+    saveVoyages(); updateHeartBtn(selected); heartPuff();
+    if(_voyOpen) renderVoyageCards();
+  } else { openDateSheet(selected); }
+});
+
+/* ---- date sheet ---- */
+const voyDateSheet=byId("voyDateSheet"),vdsDate=byId("vdsDate"),vdsShipNameEl=byId("vdsShipName");
+let _dateSheetTarget=null;
+function openDateSheet(d){
+  _dateSheetTarget=d;
+  vdsShipNameEl.textContent=d.name+" · "+d.line;
+  const today=new Date().toISOString().slice(0,10);
+  const itin=(_itinShip[normShip(d.name)]||[]).filter(c=>c.date>=today);
+  vdsDate.value=itin.length?itin[0].date:new Date(Date.now()+30*864e5).toISOString().slice(0,10);
+  vdsDate.min=new Date(Date.now()+864e5).toISOString().slice(0,10);
+  vdsDate.max=new Date(Date.now()+3*365*864e5).toISOString().slice(0,10);
+  voyDateSheet.classList.add("show");
+}
+function closeDateSheet(){ voyDateSheet.classList.remove("show"); _dateSheetTarget=null; }
+byId("vdsCancel").addEventListener("click",closeDateSheet);
+voyDateSheet.addEventListener("click",e=>{ if(e.target===voyDateSheet) closeDateSheet(); });
+byId("vdsSave").addEventListener("click",()=>{
+  if(!_dateSheetTarget||!vdsDate.value) return;
+  _voyData.voyages=_voyData.voyages.filter(v=>v.shipName!==_dateSheetTarget.name);
+  _voyData.voyages.push({shipName:_dateSheetTarget.name,sailDate:vdsDate.value,savedAt:Date.now()});
+  _voyData.voyages.sort((a,b)=>a.sailDate.localeCompare(b.sailDate));
+  saveVoyages(); updateHeartBtn(_dateSheetTarget);
+  dHeartBtn.classList.add("pop");
+  dHeartBtn.addEventListener("animationend",()=>dHeartBtn.classList.remove("pop"),{once:true});
+  closeDateSheet();
+  flyHeartToToggle();
+  if(_voyOpen) renderVoyageCards();
+});
+
+/* ---- voyages overlay open/close ---- */
+function openVoyages(){
+  _voyOpen=true; _voyOpenTime=Date.now();
+  renderVoyageCards();
+  voyEl.hidden=false;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{ if(_voyOpen) voyEl.classList.add("show"); }));
+  document.body.style.overflow="hidden";
+}
+function closeVoyages(){
+  _voyOpen=false;
+  voyEl.classList.remove("show");
+  voyEl.addEventListener("transitionend",()=>{ if(!_voyOpen){ voyEl.hidden=true; document.body.style.overflow=""; } },{once:true});
+  viewToggleEl.classList.remove("voyages-active");
+  vtFleet.setAttribute("aria-pressed","true");
+  vtVoyages.setAttribute("aria-pressed","false");
+}
+byId("voyClose").addEventListener("click",closeVoyages);
+voyEl.addEventListener("click",e=>{ if(e.target===voyEl&&Date.now()-_voyOpenTime>350) closeVoyages(); });
+addEventListener("keydown",e=>{ if(e.key==="Escape"&&_voyOpen) closeVoyages(); });
+
+/* ---- card countdown builder ---- */
+function buildCountdown(diffDays,sailDateFmt){
+  if(diffDays===0){
+    return `<div class="voy-count-today">Sets Sail Today <span class="voy-wave">🌊</span></div>`;
+  }
+  if(diffDays<0){
+    return `<div class="voy-count-past">Voyage complete · ✓ <span style="margin-left:8px">${sailDateFmt}</span></div>`;
+  }
+  const urgency=diffDays<=1?"now":diffDays<=7?"soon":diffDays<=30?"close":"far";
+  const labels={now:"Tomorrow · ⚓",soon:"days · almost there!",close:"days · time to pack",far:"days until departure"};
+  const digits=String(diffDays).split("").map(ch=>`<span class="voy-count-digit">${ch}</span>`).join("");
+  return `<div class="voy-card-countdown" data-urgency="${urgency}">
+    <div class="voy-count-board"><div class="voy-count-ring"><svg viewBox="0 0 10 10" preserveAspectRatio="none"><circle cx="50%" cy="50%" r="48%"/></svg><div style="display:flex;gap:4px;position:relative;z-index:1">${digits}</div></div></div>
+    <div class="voy-count-label">${urgency==="now"?labels.now:labels[urgency]}</div>
+    <div class="voy-count-sub">${sailDateFmt}</div>
+  </div>`;
+}
+
+/* ---- weather fetch for voyage sail date ---- */
+async function fetchVoyageWeather(d,sailDate){
+  if(!d||d.lat==null) return null;
+  const diffDays=(new Date(sailDate+"T12:00:00Z")-new Date())/864e5;
+  if(diffDays>15) return null;
+  const key=`voy:${d.lat.toFixed(1)},${d.lon.toFixed(1)},${sailDate}`;
+  if(_wxCache[key]) return _wxCache[key];
+  try{
+    const url=`https://api.open-meteo.com/v1/forecast?latitude=${d.lat.toFixed(4)}&longitude=${d.lon.toFixed(4)}&daily=temperature_2m_max,temperature_2m_min,weather_code&wind_speed_unit=kn&temperature_unit=fahrenheit&timezone=auto&start_date=${sailDate}&end_date=${sailDate}`;
+    const r=await fetch(url).then(r=>r.json());
+    if(r.daily&&r.daily.time&&r.daily.time[0]===sailDate){
+      const code=r.daily.weather_code[0],tMax=Math.round(r.daily.temperature_2m_max[0]),tMin=Math.round(r.daily.temperature_2m_min[0]);
+      const w=(typeof WMO!=="undefined"&&WMO[code])||{e:"🌊",l:"At Sea"};
+      const result={icon:w.e,label:w.l,tMax,tMin};
+      _wxCache[key]=result; return result;
+    }
+  }catch(e){}
+  return null;
+}
+
+/* ---- build a single voyage card ---- */
+function buildVoyageCard(voy,idx){
+  const d=byName.get(normName(voy.shipName));
+  const color=d?(d.color||"#9fb4bf"):"#9fb4bf";
+  const today=new Date().toISOString().slice(0,10);
+  const itin=d?(_itinShip[normShip(voy.shipName)]||[]).filter(c=>c.date>=today):[];
+  const upcomingPorts=itin.slice(0,3);
+  const sailDt=new Date(voy.sailDate+"T12:00:00Z");
+  const todayDt=new Date(today+"T12:00:00Z");
+  const diffDays=Math.round((sailDt-todayDt)/864e5);
+  const sailDateFmt=sailDt.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"});
+  const nextPort=d?(d.next||(itin[0]?itin[0].port:"—")):"—";
+  const location=d?(d.portCity||d.region||(d.status==="port"?"In Port":"At Sea")):"No signal";
+
+  const card=document.createElement("div");
+  card.className="voy-card";
+  card.style.animationDelay=(idx*60)+"ms";
+  card.style.setProperty("--vc-color",color);
+
+  card.insertAdjacentHTML("beforeend",`<div class="voy-card-accent"></div>`);
+  card.insertAdjacentHTML("beforeend",`
+    <div class="voy-card-head">
+      <div class="voy-card-title">
+        <div class="voy-card-line"><i></i>${d?d.line:voy.shipName}</div>
+        <div class="voy-card-name">${voy.shipName}</div>
+      </div>
+      <button class="voy-card-remove" data-ship="${voy.shipName}">Remove</button>
+    </div>
+  `);
+  card.insertAdjacentHTML("beforeend",buildCountdown(diffDays,sailDateFmt));
+  card.insertAdjacentHTML("beforeend",`
+    <div class="voy-card-grid">
+      <div class="voy-cell"><div class="k">Now at</div><div class="v${!d||d.lat==null?" dim":""}">${location}</div></div>
+      <div class="voy-cell"><div class="k">Next port</div><div class="v${nextPort==="—"?" dim":""}">${nextPort}</div></div>
+    </div>
+  `);
+  if(upcomingPorts.length){
+    const portsHtml=upcomingPorts.map(c=>{
+      const dt=new Date(c.date+"T12:00:00Z");
+      const lbl=dt.toLocaleDateString("en-US",{month:"short",day:"numeric",timeZone:"UTC"});
+      return `<div class="voy-port-row"><span class="voy-port-date">${lbl}</span><span class="voy-port-name">${c.port}</span></div>`;
+    }).join("");
+    card.insertAdjacentHTML("beforeend",`<div class="voy-card-ports"><div class="voy-ports-hd">Upcoming Ports</div>${portsHtml}</div>`);
+  }
+  const wxDiv=document.createElement("div");
+  wxDiv.className="voy-card-wx";
+  wxDiv.innerHTML=`<span class="voy-wx-icon">🌊</span><div class="voy-wx-info"><div class="voy-wx-temp" style="font-size:13px;color:var(--faint)">Loading…</div><div class="voy-wx-note">Sail date forecast</div></div>`;
+  card.appendChild(wxDiv);
+  if(d&&d.lat!=null){
+    fetchVoyageWeather(d,voy.sailDate).then(wx=>{
+      if(!wx){
+        const dd=(new Date(voy.sailDate+"T12:00:00Z")-new Date())/864e5;
+        wxDiv.innerHTML=dd>15
+          ?`<span class="voy-wx-icon" style="font-size:20px;opacity:.35">📅</span><div class="voy-wx-info"><div class="voy-wx-label">Forecast not yet available</div><div class="voy-wx-note">Available within 16 days of sail date</div></div>`
+          :`<span class="voy-wx-icon" style="font-size:20px;opacity:.35">🌊</span><div class="voy-wx-info"><div class="voy-wx-label">Forecast unavailable</div><div class="voy-wx-note">Check closer to sail date</div></div>`;
+        return;
+      }
+      wxDiv.innerHTML=`<span class="voy-wx-icon">${wx.icon}</span><div class="voy-wx-info"><div class="voy-wx-temp">${wx.tMax}°<span style="color:var(--faint);font-size:14px"> / ${wx.tMin}°F</span></div><div class="voy-wx-label">${wx.label}</div><div class="voy-wx-note">Sail date forecast</div></div>`;
+    });
+  } else {
+    wxDiv.innerHTML=`<span class="voy-wx-icon" style="font-size:20px;opacity:.35">📡</span><div class="voy-wx-info"><div class="voy-wx-label">No ship position</div><div class="voy-wx-note">Awaiting AIS signal</div></div>`;
+  }
+  card.insertAdjacentHTML("beforeend",`
+    <div class="voy-card-foot">
+      <button class="voy-track-btn" data-ship="${voy.shipName}">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Track Live on Map
+      </button>
+    </div>
+  `);
+  card.querySelector(".voy-card-remove").addEventListener("click",e=>{
+    e.stopPropagation();
+    const name=e.currentTarget.dataset.ship;
+    _voyData.voyages=_voyData.voyages.filter(v=>v.shipName!==name);
+    saveVoyages();
+    if(selected&&selected.name===name) updateHeartBtn(selected);
+    renderVoyageCards();
+  });
+  card.querySelector(".voy-track-btn").addEventListener("click",e=>{
+    e.stopPropagation();
+    const target=byName.get(normName(e.currentTarget.dataset.ship));
+    if(!target) return;
+    closeVoyages();
+    setTimeout(()=>goShip(target),120);
+  });
+  return card;
+}
+
+/* ---- render all voyage cards ---- */
+function renderVoyageCards(){
+  const container=byId("voyCards"),emptyEl=byId("voyEmpty");
+  container.innerHTML="";
+  if(!_voyData.voyages.length){ emptyEl.hidden=false; return; }
+  emptyEl.hidden=true;
+  container.className="voy-cards";
+  _voyData.voyages.forEach((voy,idx)=>container.appendChild(buildVoyageCard(voy,idx)));
+}
 
 /* ============================================================
    LIVE PORT CAMS
