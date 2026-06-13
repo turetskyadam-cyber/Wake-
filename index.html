@@ -1132,7 +1132,7 @@
   <div class="voy-scroll" id="voyScroll">
     <div class="voy-header">
       <h2 class="voy-title">My Voyages</h2>
-      <button id="voyImportBtn" title="Import a shared voyage link" style="background:none;border:1px solid var(--glass-edge);border-radius:8px;padding:5px 10px;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;white-space:nowrap;margin-right:8px;transition:background .18s,color .18s;">🔗 Import</button>
+      <button id="voyPinBtn" title="Add a voyage with a 4-digit PIN" style="background:none;border:1px solid var(--glass-edge);border-radius:8px;padding:5px 10px;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;white-space:nowrap;margin-right:8px;transition:background .18s,color .18s;touch-action:manipulation;">﹟ PIN</button>
       <button class="profile-close" id="voyClose">✕</button>
     </div>
     <div id="voyCards"></div>
@@ -3336,6 +3336,28 @@ function withSeaDays(calls, fromDate, max=99){
 const _SB=supabase.createClient("https://veryausyjvlrxykiqlkf.supabase.co","sb_publishable_y4z-OoMuiJDuAmSUMTci4A_X0B6msGI");
 const _SB_BUCKET="voyage-photos";
 
+async function generateVoyagePin(voy,sid){
+  const data=JSON.stringify({shipName:voy.shipName,slug:slugOf(voy.shipName),sailDate:voy.sailDate||null,shareId:sid,isOwner:false,savedAt:Date.now(),expires:Date.now()+7*24*3600*1000});
+  for(let i=0;i<15;i++){
+    const pin=String(1000+Math.floor(Math.random()*9000));
+    const {error:ce}=await _SB.storage.from(_SB_BUCKET).download(`pins/${pin}.json`);
+    if(!ce) continue; // already exists
+    const {error:ue}=await _SB.storage.from(_SB_BUCKET).upload(`pins/${pin}.json`,new Blob([data],{type:'application/json'}),{cacheControl:'604800',upsert:false});
+    if(!ue) return pin;
+  }
+  return null;
+}
+async function redeemVoyagePin(pin){
+  if(!/^\d{4}$/.test(pin)) return null;
+  const {data,error}=await _SB.storage.from(_SB_BUCKET).download(`pins/${pin}.json`);
+  if(error||!data) return null;
+  try{
+    const obj=JSON.parse(await data.text());
+    if(obj.expires&&Date.now()>obj.expires) return null;
+    return obj;
+  }catch(e){ return null; }
+}
+
 function genShareId(){const a=new Uint8Array(8);crypto.getRandomValues(a);return Array.from(a,b=>b.toString(16).padStart(2,"0")).join("");}
 function ensureShareId(voy){if(voy.shareId)return voy.shareId;voy.shareId=genShareId();voy.isOwner=true;saveVoyages();return voy.shareId;}
 
@@ -4009,18 +4031,27 @@ function buildVoyageCard(voy,idx){
     setTimeout(()=>goShip(target),120);
   });
   const shareBtn=card.querySelector(".voy-share-big-btn");
-  if(shareBtn) shareBtn.addEventListener("click",e=>{
+  if(shareBtn) shareBtn.addEventListener("click",async e=>{
     e.stopPropagation();
-    const name=e.currentTarget.dataset.ship, date=e.currentTarget.dataset.date;
+    const btn=e.currentTarget;
+    const name=btn.dataset.ship, date=btn.dataset.date;
     const voyObj=_voyData.voyages.find(v=>v.shipName===name);
     const sid=voyObj?ensureShareId(voyObj):genShareId();
     const slug=slugOf(name);
     const url=date
       ?`${SITE_ORIGIN}/?voyage=${slug}:${date}:${sid}`
       :`${SITE_ORIGIN}/?voyage=${slug}::${sid}`;
+    // Generate PIN (async — show brief loading state)
+    const origHTML=btn.innerHTML;
+    btn.textContent="Generating PIN…"; btn.disabled=true;
+    const pin=await generateVoyagePin(voyObj||{shipName:name,sailDate:date||null},sid).catch(()=>null);
+    btn.innerHTML=origHTML; btn.disabled=false;
+    const shareText=pin
+      ?`I'm sailing on ${name} — join me!\nVoyage PIN: ${pin}\n`
+      :`I'm sailing on ${name} — track it live on WAKE:\n`;
     if(navigator.share){
-      navigator.share({title:`Join me on ${name}!`,text:`I'm sailing on ${name} — track it live on WAKE:`,url}).catch(()=>copyText(url,e.currentTarget));
-    } else { copyText(url,e.currentTarget); }
+      navigator.share({title:`Join me on ${name}!`,text:shareText,url}).catch(()=>copyText(url,btn));
+    } else { copyText(url,btn); }
   });
   return card;
 }
@@ -4256,27 +4287,58 @@ function parseVoyageShareEncoded(encoded){
     return {slug,sailDate,shareId};
   }catch(e){ return null; }
 }
-byId("voyImportBtn").addEventListener("click",async e=>{
-  e.stopPropagation();
-  let text="";
-  // Try clipboard first — user just copies the link in Safari then taps Import
-  try{ text=await navigator.clipboard.readText(); }catch(_){}
-  // Look for the voyage param anywhere in the pasted text
-  let encoded="";
-  const m=text.match(/[?&]voyage=([^&\s#]+)/);
-  if(m){ encoded=m[1]; }
-  else{
-    // Fall back to prompt
-    const input=prompt("Paste the WAKE share link:");
-    if(!input) return;
-    const m2=input.match(/[?&]voyage=([^&\s#]+)/);
-    if(m2) encoded=m2[1];
-    else encoded=input.trim(); // maybe they pasted just the encoded part
-  }
-  const share=parseVoyageShareEncoded(encoded);
-  if(!share){ alert("No valid WAKE voyage link found — make sure you copied the full share URL."); return; }
-  openVoyShareBanner(share);
+// PIN modal
+function openPinModal(){
+  const modal=byId("pinModal");
+  modal.removeAttribute("hidden");
+  byId("pinStatus").textContent="";
+  byId("pinSubmit").disabled=false;
+  const digits=[...document.querySelectorAll(".pin-d")];
+  digits.forEach(d=>{d.value="";d.style.borderColor="";});
+  digits[0].focus();
+}
+function closePinModal(){ byId("pinModal").setAttribute("hidden",""); }
+byId("voyPinBtn").addEventListener("click",e=>{ e.stopPropagation(); openPinModal(); });
+byId("pinModalClose").addEventListener("click",closePinModal);
+byId("pinModal").addEventListener("click",e=>{ if(e.target===byId("pinModal")) closePinModal(); });
+document.querySelectorAll(".pin-d").forEach((inp,i,all)=>{
+  inp.addEventListener("keydown",e=>{
+    if(e.key==="Backspace"&&!inp.value&&i>0){ e.preventDefault(); all[i-1].focus(); all[i-1].value=""; }
+  });
+  inp.addEventListener("input",e=>{
+    const v=e.target.value.replace(/\D/g,"");
+    e.target.value=v.slice(0,1);
+    if(v&&i<all.length-1) all[i+1].focus();
+    if(i===all.length-1&&v) doSubmitPin();
+  });
+  inp.addEventListener("paste",e=>{
+    e.preventDefault();
+    const t=(e.clipboardData||window.clipboardData).getData("text").replace(/\D/g,"").slice(0,4);
+    [...all].forEach((d,j)=>{ d.value=t[j]||""; });
+    if(t.length===4) doSubmitPin();
+    else all[Math.min(t.length,3)].focus();
+  });
 });
+async function doSubmitPin(){
+  const pin=[...document.querySelectorAll(".pin-d")].map(d=>d.value).join("");
+  if(pin.length!==4) return;
+  const statusEl=byId("pinStatus");
+  const submitBtn=byId("pinSubmit");
+  statusEl.textContent="Looking up voyage…";
+  statusEl.style.color="var(--faint)";
+  submitBtn.disabled=true;
+  const voyage=await redeemVoyagePin(pin);
+  submitBtn.disabled=false;
+  if(!voyage){
+    statusEl.textContent="PIN not found or expired. Double-check and try again.";
+    statusEl.style.color="#e86d8a";
+    document.querySelectorAll(".pin-d").forEach(d=>d.style.borderColor="rgba(232,109,138,.5)");
+    return;
+  }
+  closePinModal();
+  openVoyShareBanner({slug:voyage.slug,sailDate:voyage.sailDate,shareId:voyage.shareId});
+}
+byId("pinSubmit").addEventListener("click",doSubmitPin);
 function openVoyShareBanner(share){
   const el=byId("voyShareBanner");
   if(!el) return;
@@ -5017,5 +5079,21 @@ addEventListener("keydown",e=>{
   else if(e.key==="Escape") closeLightbox();
 });
 </script>
+<!-- PIN entry modal -->
+<div id="pinModal" hidden style="position:fixed;inset:0;z-index:6000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(4,12,20,.78);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);">
+  <div style="background:var(--glass);border:1px solid var(--glass-edge);border-radius:22px;width:100%;max-width:320px;padding:28px 24px 24px;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.8);">
+    <button id="pinModalClose" style="position:absolute;top:16px;right:16px;background:none;border:none;color:var(--faint);font-size:18px;cursor:pointer;line-height:1;">✕</button>
+    <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:6px;">Voyage PIN</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--faint);letter-spacing:.1em;text-transform:uppercase;margin-bottom:24px;">Enter the 4-digit PIN from the share message</div>
+    <div id="pinDigits" style="display:flex;gap:10px;justify-content:center;margin-bottom:20px;">
+      <input class="pin-d" maxlength="1" inputmode="numeric" pattern="[0-9]" style="width:54px;height:64px;text-align:center;font-family:'Fraunces',serif;font-size:30px;font-weight:600;color:var(--ink);background:rgba(255,255,255,.05);border:1px solid var(--glass-edge);border-radius:12px;outline:none;caret-color:var(--brass);-webkit-appearance:none;">
+      <input class="pin-d" maxlength="1" inputmode="numeric" pattern="[0-9]" style="width:54px;height:64px;text-align:center;font-family:'Fraunces',serif;font-size:30px;font-weight:600;color:var(--ink);background:rgba(255,255,255,.05);border:1px solid var(--glass-edge);border-radius:12px;outline:none;caret-color:var(--brass);-webkit-appearance:none;">
+      <input class="pin-d" maxlength="1" inputmode="numeric" pattern="[0-9]" style="width:54px;height:64px;text-align:center;font-family:'Fraunces',serif;font-size:30px;font-weight:600;color:var(--ink);background:rgba(255,255,255,.05);border:1px solid var(--glass-edge);border-radius:12px;outline:none;caret-color:var(--brass);-webkit-appearance:none;">
+      <input class="pin-d" maxlength="1" inputmode="numeric" pattern="[0-9]" style="width:54px;height:64px;text-align:center;font-family:'Fraunces',serif;font-size:30px;font-weight:600;color:var(--ink);background:rgba(255,255,255,.05);border:1px solid var(--glass-edge);border-radius:12px;outline:none;caret-color:var(--brass);-webkit-appearance:none;">
+    </div>
+    <div id="pinStatus" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--faint);letter-spacing:.08em;min-height:18px;margin-bottom:16px;"></div>
+    <button id="pinSubmit" style="width:100%;padding:13px;border-radius:12px;border:none;background:linear-gradient(135deg,#5ad6a0,#3ab884);color:#000;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;cursor:pointer;touch-action:manipulation;">Add Voyage</button>
+  </div>
+</div>
 </body>
 </html>
