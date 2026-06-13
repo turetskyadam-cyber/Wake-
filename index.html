@@ -668,11 +668,13 @@
      VIEW TOGGLE PILL (Fleet / My Voyages)
   ═══════════════════════════════════════════ */
   .view-toggle{display:inline-flex;align-items:center;background:rgba(255,255,255,.06);border:1px solid var(--glass-edge);border-radius:999px;padding:3px;gap:2px;position:relative;align-self:center;margin-left:6px;flex-shrink:0;}
-  .vt-btn{width:26px;height:26px;border:none;background:transparent;border-radius:999px;cursor:pointer;color:var(--faint);display:flex;align-items:center;justify-content:center;position:relative;z-index:1;transition:color .22s var(--ease-out);flex:none;touch-action:manipulation;}
+  .vt-btn{height:26px;padding:0 6px;border:none;background:transparent;border-radius:999px;cursor:pointer;color:var(--faint);display:flex;align-items:center;justify-content:center;position:relative;z-index:1;transition:color .22s var(--ease-out);flex:none;touch-action:manipulation;}
+  #vtFleet{width:26px;padding:0;}
+  #vtVoyages{width:auto;}
   .vt-btn[aria-pressed="true"]{color:var(--ocean-0);}
   .vt-btn:not([aria-pressed="true"]):hover{color:var(--muted);}
-  .view-toggle::before{content:"";position:absolute;width:26px;height:26px;border-radius:999px;background:var(--ink);top:3px;left:3px;transition:transform .28s var(--ease-out);pointer-events:none;}
-  .view-toggle.voyages-active::before{transform:translateX(28px);}
+  .view-toggle::before{content:"";position:absolute;height:26px;border-radius:999px;background:var(--ink);top:3px;left:3px;transition:transform .28s var(--ease-out),width .28s var(--ease-out);pointer-events:none;width:26px;}
+  .view-toggle.voyages-active::before{transform:translateX(28px);width:34px;}
   #brand.mini .view-toggle{display:inline-flex;}
   /* saved voyages indicator on toggle heart */
   #vtVoyages.has-voyages svg{fill:#e86d8a;color:#e86d8a;filter:drop-shadow(0 0 4px rgba(232,109,138,.7));transition:fill .3s,color .3s,filter .3s;}
@@ -834,7 +836,7 @@
 
 <div id="brand" class="panel">
   <div class="brand-left">
-    <div class="wordmark"><h1>WAKE</h1><span class="dot"></span><div class="view-toggle" id="viewToggle" title="Switch between Fleet and My Voyages"><button class="vt-btn" id="vtFleet" aria-pressed="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17H21M5 17V9l7-5 7 5v8M10 17v-4h4v4"/></svg></button><button class="vt-btn" id="vtVoyages" aria-pressed="false"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div><button id="brandExpand" class="brand-expand-btn" title="Expand panel">›</button></div>
+    <div class="wordmark"><h1>WAKE</h1><span class="dot"></span><div class="view-toggle" id="viewToggle" title="Switch between Fleet and My Voyages"><button class="vt-btn" id="vtFleet" aria-pressed="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17H21M5 17V9l7-5 7 5v8M10 17v-4h4v4"/></svg></button><button class="vt-btn" id="vtVoyages" aria-pressed="false"><svg width="22" height="10" viewBox="0 0 30 14" fill="currentColor"><path d="M1 9h28l-2.5 4.5H3.5z"/><path d="M5 9V6h20v3z"/><path d="M9 6V3h11v3z"/><rect x="15.5" y="1" width="2.5" height="2.5" rx=".4"/></svg></button></div><button id="brandExpand" class="brand-expand-btn" title="Expand panel">›</button></div>
     <div class="sub">Live Cruise Fleet Tracker</div>
     <span class="feedpill" id="feedpill" data-state="connecting" title="Live AIS broadcasts via aisstream.io"><b></b>Connecting…</span>
     <div class="brandstats">
