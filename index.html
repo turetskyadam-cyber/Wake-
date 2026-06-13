@@ -3689,8 +3689,8 @@ function buildVoyageCard(voy,idx){
       <div class="voy-cell"><div class="k">Next port</div><div class="v${nextPort==="—"?" dim":""}">${nextPort}</div></div>
     </div>
   `);
-  // Milestone tracker (only when sail date is set)
-  if(voy.sailDate){
+  // Milestone tracker (owner only)
+  if(voy.sailDate&&isOwner){
     card.insertAdjacentHTML("beforeend",buildMilestones(voy,d,diffDays));
     const lineName=d?d.line:"";
     card.querySelectorAll(".voy-ms-step").forEach(stepEl=>{
