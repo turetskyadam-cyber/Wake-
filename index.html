@@ -876,6 +876,20 @@
   .vsb-save:hover{background:rgba(226,189,114,.28);border-color:rgba(226,189,114,.7);color:var(--ink);}
   .vsb-dismiss{width:100%;padding:10px;border-radius:12px;border:none;background:transparent;color:var(--faint);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:color .18s;}
   .vsb-dismiss:hover{color:var(--muted);}
+  /* voyage invite message */
+  .vsb-invite{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;padding:12px 14px;background:rgba(255,255,255,.04);border:1px solid var(--glass-edge);border-radius:12px;font-style:italic;}
+  .vsb-invite strong{color:var(--ink);font-style:normal;}
+  /* milestone tooltip */
+  .voy-ms-step{cursor:pointer;}
+  .voy-ms-step:hover .voy-ms-dot{filter:brightness(1.3);}
+  .voy-ms-tooltip{position:fixed;z-index:4000;background:var(--glass);border:1px solid var(--glass-edge);border-radius:14px;padding:15px 16px 14px;max-width:290px;width:calc(100vw - 32px);backdrop-filter:blur(22px) saturate(145%);-webkit-backdrop-filter:blur(22px) saturate(145%);box-shadow:0 16px 52px -10px rgba(0,0,0,.75),0 0 0 1px rgba(255,255,255,.04);animation:msttIn .2s var(--ease-out);}
+  @keyframes msttIn{0%{opacity:0;transform:translateY(6px) scale(.95)}100%{opacity:1;transform:translateY(0) scale(1)}}
+  .voy-ms-tt-close{position:absolute;top:10px;right:12px;background:none;border:none;color:var(--faint);font-size:13px;cursor:pointer;line-height:1;padding:4px 6px;border-radius:6px;transition:background .15s,color .15s;}
+  .voy-ms-tt-close:hover{background:rgba(255,255,255,.08);color:var(--muted);}
+  .voy-ms-tt-title{font-family:'Fraunces',serif;font-weight:600;font-size:19px;color:var(--ink);margin-bottom:3px;padding-right:24px;line-height:1.15;}
+  .voy-ms-tt-when{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);margin-bottom:10px;}
+  .voy-ms-tt-body{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:8px;}
+  .voy-ms-tt-action{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.04em;color:var(--faint);line-height:1.5;padding:9px 11px;background:rgba(255,255,255,.04);border-radius:9px;border:1px solid var(--glass-edge);}
 </style>
 </head>
 <body>
@@ -1053,6 +1067,7 @@
       <div class="vsb-eyebrow">Voyage Invite</div>
       <div class="vsb-ship" id="vsbShip">—</div>
       <div class="vsb-line" id="vsbLine">—</div>
+      <div class="vsb-invite" id="vsbInvite"></div>
       <div class="vsb-cd">
         <span class="vsb-cd-num" id="vsbNum">—</span>
         <span class="vsb-cd-unit" id="vsbUnit"></span>
@@ -3484,7 +3499,17 @@ function buildVoyageCard(voy,idx){
     </div>
   `);
   // Milestone tracker (only when sail date is set)
-  if(voy.sailDate) card.insertAdjacentHTML("beforeend",buildMilestones(voy,d,diffDays));
+  if(voy.sailDate){
+    card.insertAdjacentHTML("beforeend",buildMilestones(voy,d,diffDays));
+    const lineName=d?d.line:"";
+    card.querySelectorAll(".voy-ms-step").forEach(stepEl=>{
+      stepEl.addEventListener("click",e=>{
+        e.stopPropagation();
+        const m={key:stepEl.dataset.msKey,label:stepEl.dataset.msLabel,days:+stepEl.dataset.msDays};
+        showMsTooltip(stepEl,m,lineName,diffDays);
+      });
+    });
+  }
   if(upcomingPorts.length){
     const portsHtml=upcomingPorts.map(c=>{
       const dt=new Date(c.date+"T12:00:00Z");
@@ -3591,10 +3616,85 @@ function buildMilestones(voy,d,diffDays){
     const cls=done?"ms-done":isNext?"ms-next":"ms-far";
     const daysUntil=diffDays-m.days;
     const whenLabel=done?"✓ Done":(daysUntil>0?`In ${daysUntil}d`:"Now");
-    return `<div class="voy-ms-step ${cls}"><div class="voy-ms-dot">${done?"✓":m.icon}</div><div class="voy-ms-lbl">${m.label}</div><div class="voy-ms-when">${whenLabel}</div></div>`;
+    return `<div class="voy-ms-step ${cls}" data-ms-key="${m.key}" data-ms-label="${m.label}" data-ms-days="${m.days}"><div class="voy-ms-dot">${done?"✓":m.icon}</div><div class="voy-ms-lbl">${m.label}</div><div class="voy-ms-when">${whenLabel}</div></div>`;
   }).join("");
   return `<div class="voy-milestones"><div class="voy-ms-title">Voyage Milestones · ${d?d.line:"Cruise Line"}</div><div class="voy-ms-line" style="--ms-count:${n}"><div class="voy-ms-track"><div class="voy-ms-fill" style="width:${fillPct}%"></div></div>${steps}</div></div>`;
 }
+
+/* ═══════════════ MILESTONE TOOLTIPS ═══════════════ */
+const MILESTONE_TIPS={
+  pay:{
+    what:"Your full cruise balance is due. After this date, cancellation penalties apply and most booking changes are locked.",
+    action:"Log in to your cruise line account and pay the remaining balance to fully secure your reservation.",
+  },
+  book:{
+    what:"Shore excursions, specialty restaurants, spa treatments, and other onboard add-ons open for pre-booking. Popular slots fill fast — especially on sea days.",
+    action:"Open the cruise line app or website and reserve your must-do activities and dining before they sell out.",
+  },
+  cin:{
+    what:"Complete your online check-in to upload travel documents, select an arrival time slot at the terminal, and generate your boarding pass.",
+    action:"Open the cruise line app or website, go to 'My Cruises', and fill in your travel document details.",
+  },
+  tags:{
+    what:"Your luggage tags with cabin number and embarkation info are ready. Every checked bag needs a tag attached before drop-off at the terminal.",
+    action:"Print your luggage tags (or save them in the app) and attach them securely to every bag you plan to check.",
+  },
+};
+// Per-line overrides for specific milestones
+const LINE_MILESTONE_TIPS={
+  "Virgin Voyages":{
+    book:{
+      what:"Virgin Voyages' Shore Things excursions and Sailor add-ons open for booking. Spots on popular sailings go quickly — especially beach clubs and private experiences.",
+      action:"Log in to the Sailor App or virginvoyages.com, browse 'Shore Things', and reserve your favorite experiences.",
+    },
+    cin:{
+      what:"Virgin Voyages' Sailor check-in opens. You'll complete travel document info and select your preferred boarding window at the terminal.",
+      action:"Use the Sailor App to complete check-in and choose your arrival slot — earlier windows mean less wait at the pier.",
+    },
+  },
+  "Norwegian":{
+    book:{
+      what:"Norwegian's Free At Sea perks and specialty dining reservations open at 120 days. Specialty restaurants fill up months in advance.",
+      action:"Log in to ncl.com or the Norwegian app and book your specialty dining nights and shore excursions.",
+    },
+  },
+  "Disney":{
+    book:{
+      what:"Disney Cruise Line online activity booking opens — Palo, Remy, Senses Spa, and shore excursions. Gold/Platinum Castaway Club members get earlier access.",
+      action:"Log in to disneycruise.com, go to 'My Reservations', and reserve specialty dining and activities early.",
+    },
+    cin:{
+      what:"Disney's online check-in opens at 60 days before sailing (earlier for Concierge guests). Completing it early gets you an earlier port arrival time.",
+      action:"Complete online check-in on disneycruise.com and choose the earliest arrival port time available.",
+    },
+  },
+};
+let _activeMsTip=null;
+function showMsTooltip(stepEl,m,lineName,diffDays){
+  closeMsTooltip();
+  const lineOvr=(LINE_MILESTONE_TIPS[lineName]||{})[m.key];
+  const tip=lineOvr||MILESTONE_TIPS[m.key]||{};
+  const done=diffDays!==null&&diffDays<m.days;
+  const daysUntil=diffDays!==null?(diffDays-m.days):null;
+  const whenTxt=done?"✓ Completed":(daysUntil!==null&&daysUntil>0?`Opens in ${daysUntil} day${daysUntil===1?"":"s"}`:"Coming up now");
+  const el=document.createElement("div");
+  el.className="voy-ms-tooltip";
+  el.innerHTML=`<button class="voy-ms-tt-close">✕</button><div class="voy-ms-tt-title">${m.label}</div><div class="voy-ms-tt-when">${whenTxt}</div>${tip.what?`<div class="voy-ms-tt-body">${tip.what}</div>`:""}${tip.action?`<div class="voy-ms-tt-action">→ ${tip.action}</div>`:""}`;
+  document.body.appendChild(el);
+  _activeMsTip=el;
+  // Position below the step, centered
+  const rect=stepEl.getBoundingClientRect();
+  const tw=el.offsetWidth;
+  let top=rect.bottom+10, left=rect.left+rect.width/2-tw/2;
+  if(left<10) left=10;
+  if(left+tw>window.innerWidth-10) left=window.innerWidth-tw-10;
+  if(top+el.offsetHeight>window.innerHeight-20) top=rect.top-el.offsetHeight-10;
+  el.style.top=top+"px"; el.style.left=left+"px";
+  el.querySelector(".voy-ms-tt-close").addEventListener("click",closeMsTooltip);
+  setTimeout(()=>document.addEventListener("click",_closeMsTipOutside,{once:true,capture:true}),0);
+}
+function closeMsTooltip(){ if(_activeMsTip){ _activeMsTip.remove(); _activeMsTip=null; } }
+function _closeMsTipOutside(e){ if(_activeMsTip&&!_activeMsTip.contains(e.target)) closeMsTooltip(); else if(_activeMsTip) setTimeout(()=>document.addEventListener("click",_closeMsTipOutside,{once:true,capture:true}),0); }
 
 /* ═══════════════ VOYAGE SHARE LINK ═══════════════ */
 function parseVoyageShare(){
@@ -3625,6 +3725,10 @@ function openVoyShareBanner(share){
   byId("vsbNum").textContent=diffDays>0?diffDays:"Today!";
   byId("vsbUnit").textContent=diffDays>1?"days to go":diffDays===1?"day to go":"";
   byId("vsbDate").textContent=sailDt.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"});
+  // Invite message
+  const inviteEl=byId("vsbInvite");
+  const daysTxt=diffDays>0?`in <strong>${diffDays} day${diffDays===1?"":"s"}</strong>`:"<strong>today</strong>";
+  inviteEl.innerHTML=`I'm sailing on <strong>${shipName}</strong> ${daysTxt} — save the voyage below to track the ship live on WAKE!`;
   const itin=(_itinShip[normShip(shipName)]||[]).filter(c=>c.date>=share.sailDate).slice(0,4);
   const portsEl=byId("vsbPorts");
   if(itin.length){
@@ -3635,13 +3739,21 @@ function openVoyShareBanner(share){
   } else { portsEl.innerHTML=""; }
   byId("vsbSave").onclick=()=>{
     closeVoyShareBanner();
-    if(shipData) openDateSheet(shipData);
-    else{
-      _voyData.voyages=_voyData.voyages.filter(v=>v.shipName!==shipName);
-      _voyData.voyages.push({shipName,sailDate:share.sailDate,savedAt:Date.now()});
-      _voyData.voyages.sort((a,b)=>a.sailDate.localeCompare(b.sailDate));
-      saveVoyages(); syncVoyageIndicator();
-    }
+    // Auto-save with the sail date from the link — no date sheet needed
+    _voyData.voyages=_voyData.voyages.filter(v=>v.shipName!==shipName);
+    _voyData.voyages.push({shipName,sailDate:share.sailDate,savedAt:Date.now()});
+    _voyData.voyages.sort((a,b)=>a.sailDate.localeCompare(b.sailDate));
+    saveVoyages(); syncVoyageIndicator();
+    // Fly heart from center of screen (where card was) to the voyage toggle
+    setTimeout(()=>{
+      const to=byId("vtVoyages").getBoundingClientRect();
+      const ex=to.left+to.width/2, ey=to.top+to.height/2;
+      const cx=window.innerWidth/2, cy=window.innerHeight*0.4;
+      const lead=spawnFlyHeart(cx,cy,ex,ey,{size:36,mx:-10,my:-70,smid:".72",rot:"-14deg",rot2:"-24deg",dur:".72s"});
+      lead.addEventListener("animationend",()=>{ lead.remove(); fireshipBurst(ex,ey); },{once:true});
+      setTimeout(()=>{ const t=spawnFlyHeart(cx,cy,ex,ey,{size:20,mx:16,my:-40,smid:".6",rot:"10deg",rot2:"18deg",dur:".78s"}); t.addEventListener("animationend",()=>t.remove(),{once:true}); },90);
+      setTimeout(()=>{ const t=spawnFlyHeart(cx,cy,ex,ey,{size:14,mx:-18,my:-28,smid:".5",rot:"-20deg",rot2:"-30deg",dur:".84s"}); t.addEventListener("animationend",()=>t.remove(),{once:true}); },170);
+    },180);
   };
   requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add("show")));
 }
