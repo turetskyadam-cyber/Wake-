@@ -3834,10 +3834,10 @@ function buildVoyageCard(voy,idx){
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         Track Live on Map
       </button>
-      ${voy.sailDate?`<button class="voy-share-big-btn" data-ship="${voy.shipName}" data-date="${voy.sailDate}">
+      <button class="voy-share-big-btn" data-ship="${voy.shipName}" data-date="${voy.sailDate||""}">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
         🌊 Share My Voyage
-      </button>`:""}
+      </button>
     </div>
   `);
   // Port weather — async fetch for upcoming ports within 16 days
@@ -3880,7 +3880,9 @@ function buildVoyageCard(voy,idx){
     const voyObj=_voyData.voyages.find(v=>v.shipName===name);
     const sid=voyObj?ensureShareId(voyObj):genShareId();
     const slug=slugOf(name);
-    const url=`${SITE_ORIGIN}/?voyage=${slug}:${date}:${sid}`;
+    const url=date
+      ?`${SITE_ORIGIN}/?voyage=${slug}:${date}:${sid}`
+      :`${SITE_ORIGIN}/?voyage=${slug}::${sid}`;
     if(navigator.share){
       navigator.share({title:`Join me on ${name}!`,text:`I'm sailing on ${name} — track it live on WAKE:`,url}).catch(()=>copyText(url,e.currentTarget));
     } else { copyText(url,e.currentTarget); }
@@ -4092,10 +4094,12 @@ function parseVoyageShare(){
     const last=parts[parts.length-1];
     const hasShareId=/^[0-9a-f]{16}$/.test(last);
     const shareId=hasShareId?last:null;
-    // date is second-to-last (if shareId present) or last
-    const sailDate=hasShareId?parts[parts.length-2]:parts[parts.length-1];
-    if(!/^\d{4}-\d{2}-\d{2}$/.test(sailDate)) return null;
+    // date is second-to-last (if shareId present) or last; may be empty string (no date set)
+    const rawDate=hasShareId?parts[parts.length-2]:parts[parts.length-1];
+    const sailDate=/^\d{4}-\d{2}-\d{2}$/.test(rawDate)?rawDate:null;
     const slugParts=hasShareId?parts.slice(0,-2):parts.slice(0,-1);
+    // remove trailing empty segment (slug::shareId case)
+    while(slugParts.length&&slugParts[slugParts.length-1]==="") slugParts.pop();
     const slug=slugParts.join(":");
     if(!slug) return null;
     return {slug,sailDate,shareId};
