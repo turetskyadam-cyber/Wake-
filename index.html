@@ -868,6 +868,8 @@
   .voy-ms-when{font-family:'JetBrains Mono',monospace;font-size:6.5px;color:var(--faint);text-align:center;white-space:nowrap;margin-top:1px;}
   .voy-ms-step.ms-done .voy-ms-when{color:rgba(226,189,114,.45);}
   .voy-ms-step.ms-next .voy-ms-when{color:rgba(226,189,114,.65);}
+  /* PIN badge in card header */
+  .voy-pin-badge{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;color:var(--brass);background:rgba(226,189,114,.1);border:1px solid rgba(226,189,114,.3);border-radius:8px;padding:4px 8px;white-space:nowrap;cursor:default;user-select:all;-webkit-user-select:all;}
   /* ── share button on voyage card ── */
   .voy-card-foot{flex-direction:column;}
   .voy-share-big-btn{width:100%;padding:13px;border-radius:12px;border:none;background:linear-gradient(135deg,#e86d8a 0%,#c4527a 100%);color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;box-shadow:0 4px 22px rgba(232,109,138,.38);transition:opacity .18s,transform .12s,box-shadow .18s;touch-action:manipulation;}
@@ -3337,7 +3339,7 @@ const _SB=supabase.createClient("https://veryausyjvlrxykiqlkf.supabase.co","sb_p
 const _SB_BUCKET="voyage-photos";
 
 async function generateVoyagePin(voy,sid){
-  const data=JSON.stringify({shipName:voy.shipName,slug:slugOf(voy.shipName),sailDate:voy.sailDate||null,shareId:sid,isOwner:false,savedAt:Date.now(),expires:Date.now()+7*24*3600*1000});
+  const data=JSON.stringify({shipName:voy.shipName,slug:slugOf(voy.shipName),sailDate:voy.sailDate||null,shareId:sid,isOwner:false,savedAt:Date.now(),expires:Date.now()+365*24*3600*1000});
   for(let i=0;i<15;i++){
     const pin=String(1000+Math.floor(Math.random()*9000));
     const {error:ce}=await _SB.storage.from(_SB_BUCKET).download(`pins/${pin}.json`);
@@ -3779,9 +3781,27 @@ function buildVoyageCard(voy,idx){
         <div class="voy-card-line"><i></i>${d?d.line:voy.shipName}</div>
         <div class="voy-card-name">${voy.shipName}</div>
       </div>
-      <button class="voy-card-remove" data-ship="${voy.shipName}">Remove</button>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex:none;">
+        <button class="voy-card-remove" data-ship="${voy.shipName}">Remove</button>
+        ${isOwner?`<div class="voy-pin-badge" id="vpb-${voy.shareId}">PIN ···</div>`:""}
+      </div>
     </div>
   `);
+  // Populate PIN badge — use cached voy.pin or generate one
+  if(isOwner){
+    const pinBadge=byId(`vpb-${voy.shareId}`);
+    if(pinBadge){
+      if(voy.pin){
+        pinBadge.textContent=`PIN ${voy.pin}`;
+      } else {
+        const _sid=voy.shareId;
+        generateVoyagePin(voy,_sid).then(pin=>{
+          if(pin){ voy.pin=pin; saveVoyages(); const b=byId(`vpb-${_sid}`); if(b) b.textContent=`PIN ${pin}`; }
+          else { const b=byId(`vpb-${_sid}`); if(b) b.hidden=true; }
+        }).catch(()=>{ const b=byId(`vpb-${_sid}`); if(b) b.hidden=true; });
+      }
+    }
+  }
   card.insertAdjacentHTML("beforeend",buildCountdown(voy.sailDate,sailDateFmt,voy.shipName,voyageActive,endDate));
   const addDateBtn=card.querySelector(".voy-add-date-btn");
   if(addDateBtn) addDateBtn.addEventListener("click",e=>{
@@ -4042,10 +4062,15 @@ function buildVoyageCard(voy,idx){
       ?`${SITE_ORIGIN}/?voyage=${slug}:${date}:${sid}`
       :`${SITE_ORIGIN}/?voyage=${slug}::${sid}`;
     // Generate PIN (async — show brief loading state)
-    const origHTML=btn.innerHTML;
-    btn.textContent="Generating PIN…"; btn.disabled=true;
-    const pin=await generateVoyagePin(voyObj||{shipName:name,sailDate:date||null},sid).catch(()=>null);
-    btn.innerHTML=origHTML; btn.disabled=false;
+    // Use cached PIN if already generated, otherwise create one
+    let pin=voyObj?.pin||null;
+    if(!pin){
+      const origHTML=btn.innerHTML;
+      btn.textContent="Generating PIN…"; btn.disabled=true;
+      pin=await generateVoyagePin(voyObj||{shipName:name,sailDate:date||null},sid).catch(()=>null);
+      btn.innerHTML=origHTML; btn.disabled=false;
+      if(pin&&voyObj){ voyObj.pin=pin; saveVoyages(); }
+    }
     const shareText=pin
       ?`I'm sailing on ${name} — join me!\nVoyage PIN: ${pin}\n`
       :`I'm sailing on ${name} — track it live on WAKE:\n`;
