@@ -220,7 +220,8 @@
   .d-itin-row:hover{color:var(--ink)}
   .d-itin-date{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);flex:none;width:42px}
   .d-itin-port{flex:1;min-width:0}
-  .d-itin-times{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);white-space:nowrap}
+  .d-itin-times{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);white-space:nowrap;flex:none;}
+  .d-itin-wx{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted);white-space:nowrap;flex:none;margin-left:auto;}
   .d-itin-today .d-itin-date{color:var(--brass)}
   .d-itin-today .d-itin-port{color:var(--ink);font-weight:600}
   .d-itin-row[data-port]:hover .d-itin-port{text-decoration:underline;text-underline-offset:2px}
@@ -849,8 +850,12 @@
   .voy-ms-step.ms-done .voy-ms-when{color:rgba(226,189,114,.45);}
   .voy-ms-step.ms-next .voy-ms-when{color:rgba(226,189,114,.65);}
   /* ── share button on voyage card ── */
-  .voy-share-btn{width:42px;height:42px;border-radius:12px;border:1px solid var(--glass-edge);background:rgba(255,255,255,.04);color:var(--muted);font-size:17px;cursor:pointer;flex:none;display:flex;align-items:center;justify-content:center;transition:background .18s,color .18s,border-color .18s;touch-action:manipulation;}
-  .voy-share-btn:hover{background:rgba(255,255,255,.1);color:var(--ink);}
+  .voy-card-foot{flex-direction:column;}
+  .voy-share-big-btn{width:100%;padding:13px;border-radius:12px;border:none;background:linear-gradient(135deg,#e86d8a 0%,#c4527a 100%);color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;box-shadow:0 4px 22px rgba(232,109,138,.38);transition:opacity .18s,transform .12s,box-shadow .18s;touch-action:manipulation;}
+  .voy-share-big-btn:hover{opacity:.9;box-shadow:0 6px 30px rgba(232,109,138,.55);}
+  .voy-share-big-btn:active{transform:scale(.98);}
+  /* port weather badges */
+  .voy-port-wx{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);white-space:nowrap;flex:none;margin-left:auto;}
   /* ── voyage share banner ── */
   #voyShareBanner{position:fixed;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(4,12,20,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);opacity:0;pointer-events:none;transition:opacity .35s var(--ease-out);}
   #voyShareBanner.show{opacity:1;pointer-events:auto;}
@@ -2009,6 +2014,19 @@ function fillDetailItin(d){
       const times=[c.arr&&"Arr "+c.arr,c.dep&&"Dep "+c.dep].filter(Boolean).join(" · ");
       return `<div class="d-itin-row${isToday?" d-itin-today":""}" data-port="${c.port}" data-date="${c.date}" data-arr="${c.arr||""}" data-dep="${c.dep||""}"><span class="d-itin-date">${label}</span><span class="d-itin-port">${c.port}</span>${times?`<span class="d-itin-times">${times}</span>`:""}</div>`;
     }).join("")+`</div>`;
+  // Weather badges — async, only within 16-day forecast window
+  itinEl.querySelectorAll(".d-itin-row[data-date]").forEach(row=>{
+    const diffDays=(new Date(row.dataset.date+"T12:00:00Z")-new Date())/864e5;
+    if(diffDays<=15&&diffDays>-1){
+      const wxEl=document.createElement("span");
+      wxEl.className="d-itin-wx";
+      row.appendChild(wxEl);
+      fetchPortWeather(row.dataset.port,row.dataset.date,d.lat,d.lon).then(wx=>{
+        if(wx) wxEl.textContent=`${wx.icon} ${wx.tMax}°`;
+        else wxEl.remove();
+      });
+    }
+  });
   itinEl.querySelectorAll(".d-itin-row[data-port]").forEach(row=>{
     row.addEventListener("click",async e=>{
       e.stopPropagation();
@@ -3537,18 +3555,30 @@ function buildVoyageCard(voy,idx){
   } else {
     wxDiv.innerHTML=`<span class="voy-wx-icon" style="font-size:20px;opacity:.35">📡</span><div class="voy-wx-info">${portLine}<div class="voy-wx-label">No ship position</div><div class="voy-wx-note">Awaiting AIS signal</div></div>`;
   }
-  const shareHtml=voy.sailDate
-    ?`<button class="voy-share-btn" data-ship="${voy.shipName}" data-date="${voy.sailDate}" title="Share this voyage">⤴</button>`
-    :"";
   card.insertAdjacentHTML("beforeend",`
     <div class="voy-card-foot">
-      <button class="voy-track-btn" style="flex:1" data-ship="${voy.shipName}">
+      <button class="voy-track-btn" data-ship="${voy.shipName}">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         Track Live on Map
       </button>
-      ${shareHtml}
+      ${voy.sailDate?`<button class="voy-share-big-btn" data-ship="${voy.shipName}" data-date="${voy.sailDate}">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+        🌊 Share My Voyage
+      </button>`:""}
     </div>
   `);
+  // Port weather — async fetch for upcoming ports within 16 days
+  card.querySelectorAll(".voy-port-row").forEach((row,i)=>{
+    const portData=upcomingPorts[i];
+    if(!portData) return;
+    const wxSpan=document.createElement("span");
+    wxSpan.className="voy-port-wx";
+    row.appendChild(wxSpan);
+    fetchPortWeather(portData.port,portData.date,d?.lat,d?.lon).then(wx=>{
+      if(wx) wxSpan.textContent=`${wx.icon} ${wx.tMax}°`;
+      else wxSpan.remove();
+    });
+  });
   card.querySelector(".voy-card-remove").addEventListener("click",e=>{
     e.stopPropagation();
     const name=e.currentTarget.dataset.ship;
@@ -3564,17 +3594,91 @@ function buildVoyageCard(voy,idx){
     closeVoyages();
     setTimeout(()=>goShip(target),120);
   });
-  const shareBtn=card.querySelector(".voy-share-btn");
+  const shareBtn=card.querySelector(".voy-share-big-btn");
   if(shareBtn) shareBtn.addEventListener("click",e=>{
     e.stopPropagation();
     const name=e.currentTarget.dataset.ship, date=e.currentTarget.dataset.date;
     const slug=slugOf(name);
     const url=`${SITE_ORIGIN}/?voyage=${slug}:${date}`;
     if(navigator.share){
-      navigator.share({title:`Join me on ${name}`,text:`Track ${name} live on WAKE:`,url}).catch(()=>copyText(url,e.currentTarget));
+      navigator.share({title:`Join me on ${name}!`,text:`I'm sailing on ${name} — track it live on WAKE:`,url}).catch(()=>copyText(url,e.currentTarget));
     } else { copyText(url,e.currentTarget); }
   });
   return card;
+}
+
+/* ═══════════════ PORT WEATHER ═══════════════ */
+const PORT_COORDS=new Map([
+  // Caribbean
+  ["nassau",[25.0479,-77.3559]],["cococay",[25.8167,-77.7083]],["perfect day at cococay",[25.8167,-77.7083]],["castaway cay",[25.5042,-77.7583]],
+  ["cozumel",[20.5085,-86.9560]],["belize city",[17.4998,-88.1962]],["roatan",[16.3159,-86.5235]],["costa maya",[18.7297,-87.7116]],
+  ["grand cayman",[19.2869,-81.3674]],["falmouth",[18.4961,-77.6530]],["montego bay",[18.4762,-77.8939]],["ocho rios",[18.4051,-77.1046]],
+  ["antigua",[17.1274,-61.8468]],["st. maarten",[18.0243,-63.0528]],["sint maarten",[18.0243,-63.0528]],
+  ["st. thomas",[18.3381,-64.9310]],["san juan",[18.4655,-66.1057]],
+  ["aruba",[12.5211,-70.0358]],["curacao",[12.1696,-68.9900]],["barbados",[13.1939,-59.5432]],["st. lucia",[13.9094,-60.9789]],
+  ["turks and caicos",[21.4655,-71.1390]],["princess cays",[23.3250,-75.0667]],["half moon cay",[24.0833,-76.1667]],
+  ["labadee",[19.7613,-72.3075]],["st. kitts",[17.3026,-62.7177]],["dominica",[15.3092,-61.3794]],
+  ["grenada",[12.1165,-61.6790]],["martinique",[14.6415,-61.0242]],["guadeloupe",[16.2650,-61.5510]],
+  ["tortola",[18.4312,-64.6235]],["bermuda",[32.3078,-64.7505]],
+  // US Ports
+  ["miami",[25.7742,-80.1728]],["port canaveral",[28.4157,-80.6297]],["galveston",[29.3013,-94.7977]],
+  ["tampa",[27.9506,-82.4572]],["new orleans",[29.9511,-90.0715]],["baltimore",[39.2693,-76.5783]],
+  ["new york",[40.7128,-74.0060]],["boston",[42.3601,-71.0589]],["charleston",[32.7765,-79.9311]],
+  ["norfolk",[36.8508,-76.2859]],["los angeles",[33.7365,-118.2763]],["san diego",[32.7224,-117.1705]],
+  ["san francisco",[37.8044,-122.2711]],["seattle",[47.6062,-122.3321]],["vancouver",[49.2827,-123.1207]],
+  // Mediterranean
+  ["barcelona",[41.3851,2.1734]],["rome",[42.0942,11.7990]],["civitavecchia",[42.0942,11.7990]],
+  ["naples",[40.8522,14.2689]],["venice",[45.4408,12.3155]],["athens",[37.9436,23.6498]],["piraeus",[37.9436,23.6498]],
+  ["santorini",[36.4072,25.4568]],["mykonos",[37.4467,25.3289]],["dubrovnik",[42.6507,18.0944]],
+  ["valletta",[35.8997,14.5147]],["palma",[39.5670,2.6483]],["marseille",[43.2965,5.3698]],
+  ["monaco",[43.7333,7.4167]],["nice",[43.7102,7.2620]],["livorno",[43.5428,10.3166]],
+  ["genoa",[44.4056,8.9463]],["istanbul",[41.0082,28.9784]],["kusadasi",[37.8560,27.2561]],
+  ["corfu",[39.6243,19.9217]],["kotor",[42.4247,18.7712]],["split",[43.5081,16.4402]],
+  ["rhodes",[36.4349,28.2176]],["heraklion",[35.3387,25.1442]],["palermo",[38.1157,13.3615]],
+  ["catania",[37.5079,15.0830]],["cagliari",[39.2238,9.1217]],["lisbon",[38.7169,-9.1399]],
+  // Northern Europe
+  ["southampton",[50.9097,-1.4044]],["copenhagen",[55.6761,12.5683]],["oslo",[59.9139,10.7522]],
+  ["bergen",[60.3929,5.3241]],["geiranger",[62.1008,7.2049]],["amsterdam",[52.3676,4.9041]],
+  ["hamburg",[53.5511,9.9937]],["stockholm",[59.3293,18.0686]],["helsinki",[60.1699,24.9384]],
+  ["tallinn",[59.4370,24.7536]],["riga",[56.9460,24.1059]],["dublin",[53.3473,-6.2297]],
+  ["reykjavik",[64.1355,-21.8954]],["le havre",[49.4938,0.1079]],["dover",[51.1279,1.3134]],
+  // Alaska
+  ["juneau",[58.3005,-134.4197]],["ketchikan",[55.3422,-131.6461]],["skagway",[59.4561,-135.3131]],
+  ["sitka",[57.0531,-135.3300]],["glacier bay",[58.6658,-136.9018]],["whittier",[60.7729,-148.6838]],
+  ["icy strait point",[58.1328,-135.4406]],["victoria",[48.4284,-123.3656]],
+  // Asia / Pacific
+  ["singapore",[1.2646,103.8198]],["sydney",[-33.8688,151.2093]],["auckland",[-36.8485,174.7633]],
+  ["yokohama",[35.4437,139.6380]],["tokyo",[35.6762,139.6503]],["hong kong",[22.3193,114.1694]],
+  ["dubai",[25.2048,55.2708]],["abu dhabi",[24.4539,54.3773]],["bali",[-8.6705,115.2126]],
+  ["penang",[5.4141,100.3288]],["colombo",[6.9271,79.8612]],["mauritius",[-20.1609,57.4981]],
+  // Caribbean private islands (various lines)
+  ["great stirrup cay",[25.8282,-77.9177]],["ocean cay",[25.1883,-77.5625]],
+  ["amber cove",[19.8319,-70.7023]],["mahogany bay",[16.3060,-86.4690]],
+]);
+
+function _portLatLon(portName){
+  const k=portName.toLowerCase().replace(/[^a-z\s]/g,"").trim();
+  if(PORT_COORDS.has(k)) return PORT_COORDS.get(k);
+  for(const [pk,pv] of PORT_COORDS){ if(k.includes(pk)||pk.includes(k)) return pv; }
+  return null;
+}
+async function fetchPortWeather(portName,date,fallbackLat,fallbackLon){
+  const diffDays=(new Date(date+"T12:00:00Z")-new Date())/864e5;
+  if(diffDays>15||diffDays<-1) return null;
+  const coords=_portLatLon(portName);
+  const lat=coords?coords[0]:fallbackLat, lon=coords?coords[1]:fallbackLon;
+  if(lat==null) return null;
+  const ck=`${lat.toFixed(1)},${lon.toFixed(1)},${date}`;
+  if(_wxCache[ck]) return _wxCache[ck];
+  try{
+    const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}&longitude=${lon.toFixed(4)}&daily=temperature_2m_max,temperature_2m_min,weather_code&temperature_unit=fahrenheit&timezone=auto&start_date=${date}&end_date=${date}`).then(r=>r.json());
+    if(r.daily&&r.daily.time&&r.daily.time[0]===date){
+      const w=WMO[r.daily.weather_code[0]]||{e:"🌤",l:""};
+      const result={icon:w.e,label:w.l,tMax:Math.round(r.daily.temperature_2m_max[0]),tMin:Math.round(r.daily.temperature_2m_min[0])};
+      _wxCache[ck]=result; return result;
+    }
+  }catch(e){}
+  return null;
 }
 
 /* ═══════════════ LINE-AWARE MILESTONE TRACKER ═══════════════ */
