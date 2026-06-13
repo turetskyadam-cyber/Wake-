@@ -3763,11 +3763,15 @@ function buildVoyageCard(voy,idx){
         <span class="voy-enddate-lbl">Getting off</span>
         <span class="voy-enddate-val" id="${_eid}">${endDate?endFmt:`<span style="color:var(--faint)">Tap to set</span>`}</span>
         <span class="voy-enddate-edit">${endDate?"✎ Change":""}</span>
-        <input type="date" style="position:absolute;inset:0;opacity:0;cursor:pointer;z-index:2;width:100%;height:100%" value="${endDate||""}" min="${voy.sailDate}" max="${new Date(new Date(voy.sailDate+"T12:00:00Z").getTime()+300*864e5).toISOString().slice(0,10)}">
+        <input type="date" style="position:absolute;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none" value="${endDate||""}" min="${voy.sailDate}" max="${new Date(new Date(voy.sailDate+"T12:00:00Z").getTime()+300*864e5).toISOString().slice(0,10)}">
       </div>`);
     const endRow=card.querySelector(".voy-enddate-row");
     const endInp=endRow.querySelector("input[type=date]");
-    endInp.addEventListener("click",e=>{ e.stopPropagation(); });
+    endRow.addEventListener("click",e=>{
+      e.stopPropagation();
+      endInp.focus();
+      requestAnimationFrame(()=>{ try{ endInp.showPicker(); }catch(_){ endInp.click(); } });
+    });
     endInp.addEventListener("change",e=>{
       const val=e.target.value; if(!val) return;
       voy.endDate=val; saveVoyages(); renderVoyageCards();
