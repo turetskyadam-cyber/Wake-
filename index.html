@@ -3688,7 +3688,7 @@ async function fetchVoyageWeather(d,sailDate){
 /* ---- build a single voyage card ---- */
 function buildVoyageCard(voy,idx){
   ensureShareId(voy);
-  const isOwner=voy.isOwner===true;
+  const isOwner=voy.isOwner!==false; // default true for locally-saved voyages; only false for viewers via share link
   const d=byName.get(normName(voy.shipName));
   const color=d?(d.color||"#9fb4bf"):"#9fb4bf";
   const today=new Date().toISOString().slice(0,10);
@@ -3763,7 +3763,7 @@ function buildVoyageCard(voy,idx){
     card.insertAdjacentHTML("beforeend",`
       <div class="voy-enddate-row">
         <span class="voy-enddate-lbl">Getting off</span>
-        <input type="date" class="voy-enddate-input" id="${_eid}" value="${endDate||''}" min="${voy.sailDate}" placeholder="End date">
+        <input type="date" class="voy-enddate-input" id="${_eid}" value="${endDate||voy.sailDate||''}" min="${voy.sailDate||''}">
       </div>`);
     const endInp=card.querySelector(`#${_eid}`);
     endInp.addEventListener("click",e=>e.stopPropagation());
