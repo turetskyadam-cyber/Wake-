@@ -35,5 +35,6 @@ jobs:
             echo "No changes to ship profiles."
           else
             git commit -m "chore: update ship profiles [skip ci]"
+            git pull --rebase origin main
             git push
           fi

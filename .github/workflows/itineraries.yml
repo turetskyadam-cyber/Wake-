@@ -42,5 +42,6 @@ jobs:
             echo "No itinerary changes to commit."
           else
             git commit -m "chore: update itineraries from CruiseDig [skip ci]"
+            git pull --rebase origin main
             git push
           fi
