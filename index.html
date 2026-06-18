@@ -1113,8 +1113,6 @@
     <div class="ss-wx-label" id="ssWxLabel">—</div>
   </div>
   <div class="ss-div"></div>
-  <button class="ss-dive-btn ss-sm" id="histBtn" title="Show this ship's actual 7-day track">〰 7-Day Track</button>
-  <div class="ss-div"></div>
   <button class="ss-dive-btn" id="profileBtn">
     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     Deep Dive
@@ -1970,7 +1968,6 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
 
 const canvasR = L.canvas({ padding:0.5 });
 const wakeLayer = L.layerGroup().addTo(map);
-const histLayer = L.layerGroup().addTo(map);   // 7-day historical track for the selected ship
 
 // Gulf of America logo overlay
 L.imageOverlay(
@@ -2230,9 +2227,8 @@ function updateDetailLive(d){
 }
 function selectShip(d){
   clearItinPreview();
-  histLayer.clearLayers(); closeSharePop();
+  closeSharePop();
   selected=d;
-  if(histOn) drawHistory(d);
   if(nearOpen){ clearNearOverlay(); renderNear(); if(d.lat!=null){ _nearCircle=L.circle([d.lat,d.lon],{radius:NEAR_MILES*KM_PER_MILE*1000,color:"rgba(226,189,114,0.5)",fill:false,dashArray:"5 8",weight:1.5}).addTo(map); } }
   fillDetail(d); detail.classList.add("show","collapsed");   // appears as a slim "Cruise info" bar; tap to expand
   byId("dToggle").setAttribute("aria-expanded","false");
@@ -2253,7 +2249,6 @@ function clearSelection(){
   const prev=selected; selected=null;
   if(prev&&prev._m) prev._m.setStyle(markerStyle(prev));
   detail.classList.remove("show"); detail.classList.add("collapsed"); clearPing(); clearItinPreview(); if(nearOpen) closeNear(); applyVisibility();
-  histLayer.clearLayers();
   try{ history.replaceState(null,"",location.pathname); }catch(e){}
   hideShipSide(); if(!profileEl.hidden) closeProfile(); updateHeartBtn(null);
 }
@@ -2791,9 +2786,6 @@ function applySnapshot(snap){
 // it refreshes without a redeploy); falls back to the bundled copy, then the embedded SEED.
 const SNAP_URL="https://raw.githubusercontent.com/turetskyadam-cyber/Wake-/main/positions.json";
 const ITIN_URL="https://raw.githubusercontent.com/turetskyadam-cyber/Wake-/main/itineraries.json";
-// History day-files are committed by the same Action (see tools/append-history.mjs).
-const DATA_BRANCH="main";
-const HIST_BASE=`https://raw.githubusercontent.com/turetskyadam-cyber/Wake-/${DATA_BRANCH}/history/`;
 
 // Sea-gate routing — strategic waypoints at real ocean passages used to route around land.
 // No API key needed; runs entirely offline.
@@ -3087,79 +3079,6 @@ function renderWeather(c){
   byId("ssWxLabel").textContent=w.l;
 }
 
-/* ---- 7-day historical wake trail (history/*.json committed by GitHub Actions) ---- */
-let histOn=false;
-function flashBtn(id,msg){
-  const b=byId(id);
-  if(b.dataset.orig==null) b.dataset.orig=b.textContent;
-  b.textContent=msg;
-  clearTimeout(b._flashT);
-  b._flashT=setTimeout(()=>{ b.textContent=b.dataset.orig; },1800);
-}
-const _histDayCache=new Map(); // dateStr -> {ts, p:Promise<json|null>}; past days are immutable
-function histDates(){ const out=[]; for(let i=7;i>=0;i--) out.push(new Date(Date.now()-i*864e5).toISOString().slice(0,10)); return out; }
-function loadHistDay(date){
-  const today=new Date().toISOString().slice(0,10);
-  const hit=_histDayCache.get(date);
-  if(hit&&(date!==today||Date.now()-hit.ts<10*60*1000)) return hit.p;
-  const p=fetch(HIST_BASE+date+".json",{cache:"no-store"}).then(r=>r.ok?r.json():null).catch(()=>null);
-  _histDayCache.set(date,{ts:Date.now(),p});
-  return p;
-}
-async function loadHistory(d){
-  const dates=histDates();
-  const days=await Promise.all(dates.map(loadHistDay));
-  const pts=[];
-  days.forEach((day,i)=>{
-    const base=Date.parse(dates[i]+"T00:00:00Z");
-    ((day&&day[d.mmsi])||[]).forEach(p=>pts.push({t:base+p[0]*60000,lat:p[1],lon:p[2]}));
-  });
-  return pts;
-}
-async function drawHistory(d,opts){
-  const my=d.mmsi;
-  const pts=await loadHistory(d);
-  if(!selected||selected.mmsi!==my||!histOn) return;       // selection changed while loading
-  histLayer.clearLayers();
-  if(pts.length<2){ if(opts&&opts.fit) flashBtn("histBtn","No track data yet"); return; }
-  const segs=[[]];                                          // split at long gaps & the antimeridian
-  for(let i=0;i<pts.length;i++){
-    const prev=pts[i-1];
-    if(prev&&(pts[i].t-prev.t>12*3600*1000||Math.abs(pts[i].lon-prev.lon)>180)) segs.push([]);
-    segs[segs.length-1].push([pts[i].lat,pts[i].lon]);
-  }
-  const drawn=segs.filter(s=>s.length>1);
-  drawn.forEach(s=>
-    L.polyline(s,{renderer:canvasR,color:d.color,weight:1.2,opacity:0.5,dashArray:"1 5",interactive:false}).addTo(histLayer));
-  const seenDays=new Set();
-  pts.forEach(p=>{
-    const day=new Date(p.t).toISOString().slice(0,10);
-    if(!seenDays.has(day)){
-      seenDays.add(day);
-      const label=new Date(p.t).toLocaleDateString("en-US",{month:"short",day:"numeric"});
-      L.circleMarker([p.lat,p.lon],{renderer:canvasR,radius:4,color:"#fff",weight:1.2,fillColor:d.color,fillOpacity:0.85})
-        .bindTooltip(label,{permanent:false,direction:"top",offset:[0,-6],className:'sea-dot-lbl'})
-        .on('click',L.DomEvent.stop)
-        .addTo(histLayer);
-    }
-  });
-  if(!drawn.length){ if(opts&&opts.fit) flashBtn("histBtn","No track data yet"); return; }
-  if(opts&&opts.fit) map.flyToBounds(L.latLngBounds(drawn.flat()),{padding:[60,60],maxZoom:9,duration:CAM_DUR});
-}
-byId("histBtn").addEventListener("click",()=>{
-  histOn=!histOn;
-  byId("histBtn").classList.toggle("on",histOn);
-  if(histOn){
-    detail.classList.add("collapsed");
-    byId("dToggle").setAttribute("aria-expanded","false");
-    hideShipSide(); collapseNav();
-    hidePortCard();
-    if(!profileEl.hidden) closeProfile();
-    if(selected) drawHistory(selected,{fit:true});
-  } else {
-    histLayer.clearLayers();
-  }
-});
 
 /* ---- share ---- */
 const SITE_ORIGIN=/^https?:/.test(location.origin)?location.origin:"https://wake-rose.vercel.app";
