@@ -15,12 +15,43 @@ OUT  = Path(__file__).parent.parent / "deckplans.json"
 
 # Map our ship names (from ships.json) → cruisedeckplans.com slug
 SHIP_SLUGS = {
+    # Windstar
     "Wind Surf":    "Wind-Surf",
     "Wind Spirit":  "Wind-Spirit",
     "Wind Star":    "Wind-Star",
     "Star Breeze":  "Star-Breeze",
     "Star Legend":  "Star-Legend",
     "Star Pride":   "Star-Pride",
+    # Royal Caribbean
+    "Adventure of the Seas":    "Adventure-of-the-Seas",
+    "Allure of the Seas":       "Allure-of-the-Seas",
+    "Anthem of the Seas":       "Anthem-of-the-Seas",
+    "Brilliance of the Seas":   "Brilliance-of-the-Seas",
+    "Enchantment of the Seas":  "Enchantment-of-the-Seas",
+    "Explorer of the Seas":     "Explorer-of-the-Seas",
+    "Freedom of the Seas":      "Freedom-of-the-Seas",
+    "Grandeur of the Seas":     "Grandeur-of-the-Seas",
+    "Harmony of the Seas":      "Harmony-of-the-Seas",
+    "Icon of the Seas":         "Icon-of-the-Seas",
+    "Independence of the Seas": "Independence-of-the-Seas",
+    "Jewel of the Seas":        "Jewel-of-the-Seas",
+    "Liberty of the Seas":      "Liberty-of-the-Seas",
+    "Mariner of the Seas":      "Mariner-of-the-Seas",
+    "Navigator of the Seas":    "Navigator-of-the-Seas",
+    "Oasis of the Seas":        "Oasis-of-the-Seas",
+    "Odyssey of the Seas":      "Odyssey-of-the-Seas",
+    "Ovation of the Seas":      "Ovation-of-the-Seas",
+    "Quantum of the Seas":      "Quantum-of-the-Seas",
+    "Radiance of the Seas":     "Radiance-of-the-Seas",
+    "Rhapsody of the Seas":     "Rhapsody-of-the-Seas",
+    "Serenade of the Seas":     "Serenade-of-the-Seas",
+    "Spectrum of the Seas":     "Spectrum-of-the-Seas",
+    "Star of the Seas":         "Star-of-the-Seas",
+    "Symphony of the Seas":     "Symphony-of-the-Seas",
+    "Utopia of the Seas":       "Utopia-of-the-Seas",
+    "Vision of the Seas":       "Vision-of-the-Seas",
+    "Voyager of the Seas":      "Voyager-of-the-Seas",
+    "Wonder of the Seas":       "Wonder-of-the-Seas",
 }
 
 HEADERS = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"}
