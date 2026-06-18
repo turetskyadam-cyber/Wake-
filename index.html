@@ -5024,9 +5024,10 @@ async function loadDeckPlans(){
 async function updateDeckPlanBtn(){
   const btn=byId("deckPlanBtn");
   const ship=selected;
-  if(!ship){ btn.hidden=true; return; }
+  btn.hidden=true; // hide immediately; show only after confirming data exists
+  if(!ship) return;
   const data=await loadDeckPlans();
-  if(selected!==ship) return; // ship changed while fetching
+  if(selected!==ship) return; // ship changed while fetching; that call will update btn
   btn.hidden=!(data&&data[ship.name]&&data[ship.name].decks&&data[ship.name].decks.length);
 }
 
