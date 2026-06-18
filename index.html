@@ -2559,7 +2559,7 @@ let _swipeY0=null, _swipeOnList=false;
 controlsEl.addEventListener("touchstart",e=>{
   _swipeY0=e.touches[0].clientY;
   const navList=controlsEl.querySelector(".nav-list");
-  _swipeOnList=!!(navList&&navList.contains(e.target)&&navList.scrollTop>4);
+  _swipeOnList=!!(navList&&navList.contains(e.target));
 },{passive:true});
 controlsEl.addEventListener("touchend",e=>{
   if(_swipeY0===null) return;
