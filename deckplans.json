@@ -8476,5 +8476,5356 @@
         "url": "https://www.cruisedeckplans.com/DP/ships/Norwegian-Viva/images/deck20.webp"
       }
     ]
+  },
+  "Pride of America": {
+    "source": "cruisedeckplans.com",
+    "slug": "Pride-of-America",
+    "decks": [
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Pride-of-America/images/deck4-2025.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Pride-of-America/images/deck5-2025.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Pride-of-America/images/deck6-2025.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Pride-of-America/images/deck7-2025.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Pride-of-America/images/deck8-2025.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Pride-of-America/images/deck9-2025.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Pride-of-America/images/deck10-2025.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Pride-of-America/images/deck11-2025.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Pride-of-America/images/deck12-2025b.webp"
+      },
+      {
+        "num": 13,
+        "name": "Deck 13",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Pride-of-America/images/deck13-2025.webp"
+      },
+      {
+        "num": 14,
+        "name": "Deck 14",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Pride-of-America/images/deck14.webp"
+      }
+    ]
+  },
+  "Celebrity Apex": {
+    "source": "cruisedeckplans.com",
+    "slug": "Celebrity-Apex",
+    "decks": [
+      {
+        "num": 2,
+        "name": "Deck 2",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Apex/images/deck2-2022.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Apex/images/deck3-2023.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Apex/images/deck4-2022.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Apex/images/deck5-2022.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Apex/images/deck6-2023.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Apex/images/deck7-2023.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Apex/images/deck8-2023.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Apex/images/deck9-2023.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Apex/images/deck10-2023.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Apex/images/deck11-2023.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Apex/images/deck12-2023.webp"
+      },
+      {
+        "num": 14,
+        "name": "Deck 14",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Apex/images/deck14-2022.webp"
+      },
+      {
+        "num": 15,
+        "name": "Deck 15",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Apex/images/deck15-2022.webp"
+      },
+      {
+        "num": 16,
+        "name": "Deck 16",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Apex/images/deck16-2022.webp"
+      }
+    ]
+  },
+  "Celebrity Ascent": {
+    "source": "cruisedeckplans.com",
+    "slug": "Celebrity-Ascent",
+    "decks": [
+      {
+        "num": 2,
+        "name": "Deck 2",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Ascent/images/deck2-2022.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Ascent/images/deck3-2023.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Ascent/images/deck4-2023.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Ascent/images/deck5-2023.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Ascent/images/deck6-2023.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Ascent/images/deck7-2023.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Ascent/images/deck8-2023.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Ascent/images/deck9-2023.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Ascent/images/deck10-2023.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Ascent/images/deck11-2023.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Ascent/images/deck12-2023.webp"
+      },
+      {
+        "num": 14,
+        "name": "Deck 14",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Ascent/images/deck14-2022.webp"
+      },
+      {
+        "num": 15,
+        "name": "Deck 15",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Ascent/images/deck15-2022.webp"
+      },
+      {
+        "num": 16,
+        "name": "Deck 16",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Ascent/images/deck16-2022.webp"
+      },
+      {
+        "num": 17,
+        "name": "Deck 17",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Ascent/images/deck17-2022.webp"
+      }
+    ]
+  },
+  "Celebrity Beyond": {
+    "source": "cruisedeckplans.com",
+    "slug": "Celebrity-Beyond",
+    "decks": [
+      {
+        "num": 2,
+        "name": "Deck 2",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Beyond/images/deck2-2022.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Beyond/images/deck3-2022.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Beyond/images/deck4-2022.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Beyond/images/deck5-2022.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Beyond/images/deck6-2023.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Beyond/images/deck7-2023.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Beyond/images/deck8-2023.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Beyond/images/deck9-2023.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Beyond/images/deck10-2023.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Beyond/images/deck11-2023.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Beyond/images/deck12-2023.webp"
+      },
+      {
+        "num": 14,
+        "name": "Deck 14",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Beyond/images/deck14-2022.webp"
+      },
+      {
+        "num": 15,
+        "name": "Deck 15",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Beyond/images/deck15-2022.webp"
+      },
+      {
+        "num": 16,
+        "name": "Deck 16",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Beyond/images/deck16-2022.webp"
+      },
+      {
+        "num": 17,
+        "name": "Deck 17",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Beyond/images/deck17-2022.webp"
+      }
+    ]
+  },
+  "Celebrity Constellation": {
+    "source": "cruisedeckplans.com",
+    "slug": "Celebrity-Constellation",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1 Medical",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Constellation/images/deck1-2022.webp"
+      },
+      {
+        "num": 2,
+        "name": "2 Continental",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Constellation/images/deck2-2022.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Plaza",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Constellation/images/deck3-2022.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Promenade",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Constellation/images/deck4-2022.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Entertainment",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Constellation/images/deck5-2022.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Penthouse",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Constellation/images/deck6-2027.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Vista",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Constellation/images/deck7-2027.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Panorama",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Constellation/images/deck8-2027.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Sky",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Constellation/images/deck9-2027.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Resort",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Constellation/images/deck10-2022.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Sunrise",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Constellation/images/deck11-2022.webp"
+      },
+      {
+        "num": 12,
+        "name": "12 Sports",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Constellation/images/deck12-2022.webp"
+      }
+    ]
+  },
+  "Celebrity Eclipse": {
+    "source": "cruisedeckplans.com",
+    "slug": "Celebrity-Eclipse",
+    "decks": [
+      {
+        "num": 2,
+        "name": "2 Medical",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Eclipse/images/deck2-2022.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Plaza",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Eclipse/images/deck3-2022.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Promenade",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Eclipse/images/deck4-2024.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Entertainment",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Eclipse/images/deck5-2025.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Continental",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Eclipse/images/deck6-2025.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Sunrise",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Eclipse/images/deck7-2022.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Vista",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Eclipse/images/deck8-2022.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Panorama",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Eclipse/images/deck9-2025.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Sky",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Eclipse/images/deck10-2023.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Penthouse",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Eclipse/images/deck11-2023.webp"
+      },
+      {
+        "num": 12,
+        "name": "12 Resort",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Eclipse/images/deck12-2022.webp"
+      },
+      {
+        "num": 14,
+        "name": "14 Lido",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Eclipse/images/deck14-2022.webp"
+      },
+      {
+        "num": 15,
+        "name": "15 Lawn",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Eclipse/images/deck15-2025.webp"
+      },
+      {
+        "num": 16,
+        "name": "16 Solstice",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Eclipse/images/deck16-2022.webp"
+      }
+    ]
+  },
+  "Celebrity Edge": {
+    "source": "cruisedeckplans.com",
+    "slug": "Celebrity-Edge",
+    "decks": [
+      {
+        "num": 2,
+        "name": "Deck 2",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Edge/images/deck2-2022.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Edge/images/deck3-2023.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Edge/images/deck4-2022.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Edge/images/deck5-2022.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Edge/images/deck6-2023.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Edge/images/deck7-2023.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Edge/images/deck8-2023.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Edge/images/deck9-2023.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Edge/images/deck10-2023.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Edge/images/deck11-2023.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Edge/images/deck12-2023.webp"
+      },
+      {
+        "num": 14,
+        "name": "Deck 14",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Edge/images/deck14-2022.webp"
+      },
+      {
+        "num": 15,
+        "name": "Deck 15",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Edge/images/deck15-2022.webp"
+      },
+      {
+        "num": 16,
+        "name": "Deck 16",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Edge/images/deck16-2022.webp"
+      }
+    ]
+  },
+  "Celebrity Equinox": {
+    "source": "cruisedeckplans.com",
+    "slug": "Celebrity-Equinox",
+    "decks": [
+      {
+        "num": 2,
+        "name": "2 Medical",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Equinox/images/deck2-2022.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Plaza",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Equinox/images/deck3-2022.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Promenade",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Equinox/images/deck4-2022.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Entertainment",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Equinox/images/deck5-2022.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Continental",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Equinox/images/deck6-2022.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Sunrise",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Equinox/images/deck7-2022.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Vista",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Equinox/images/deck8-2022.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Panorama",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Equinox/images/deck9-2022.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Sky",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Equinox/images/deck10-2022.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Penthouse",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Equinox/images/deck11-2022.webp"
+      },
+      {
+        "num": 12,
+        "name": "12 Resort",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Equinox/images/deck12-2022.webp"
+      },
+      {
+        "num": 14,
+        "name": "14 Lido",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Equinox/images/deck14-2022.webp"
+      },
+      {
+        "num": 15,
+        "name": "15 Lawn",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Equinox/images/deck15-2022.webp"
+      },
+      {
+        "num": 16,
+        "name": "16 Solstice",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Equinox/images/deck16-2022.webp"
+      }
+    ]
+  },
+  "Celebrity Infinity": {
+    "source": "cruisedeckplans.com",
+    "slug": "Celebrity-Infinity",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1 Medical",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Infinity/images/deck1-2022.webp"
+      },
+      {
+        "num": 2,
+        "name": "2 Continental",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Infinity/images/deck2-2025.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Plaza",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Infinity/images/deck3-2025.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Promenade",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Infinity/images/deck4-2025.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Entertainment",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Infinity/images/deck5-2022.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Penthouse",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Infinity/images/deck6-2025.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Vista",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Infinity/images/deck7-2025.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Panorama",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Infinity/images/deck8-2025.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Sky",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Infinity/images/deck9-2025.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Resort",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Infinity/images/deck10-2022.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Sunrise",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Infinity/images/deck11-2022.webp"
+      },
+      {
+        "num": 12,
+        "name": "12 Sports",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Infinity/images/deck12-2022.webp"
+      }
+    ]
+  },
+  "Celebrity Millennium": {
+    "source": "cruisedeckplans.com",
+    "slug": "Celebrity-Millennium",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1 Medical",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Millennium/images/deck1-2022.webp"
+      },
+      {
+        "num": 2,
+        "name": "2 Continental",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Millennium/images/deck2-2022.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Plaza",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Millennium/images/deck3-2022.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Promenade",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Millennium/images/deck4-2022.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Entertainment",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Millennium/images/deck5-2022.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Penthouse",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Millennium/images/deck6-2025.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Vista",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Millennium/images/deck7-2025.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Panorama",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Millennium/images/deck8-2025.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Sky",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Millennium/images/deck9-2025.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Resort",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Millennium/images/deck10-2022.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Sunrise",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Millennium/images/deck11-2022.webp"
+      },
+      {
+        "num": 12,
+        "name": "12 Sports",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Millennium/images/deck12-2022.webp"
+      }
+    ]
+  },
+  "Celebrity Reflection": {
+    "source": "cruisedeckplans.com",
+    "slug": "Celebrity-Reflection",
+    "decks": [
+      {
+        "num": 2,
+        "name": "2 Medical",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Reflection/images/deck2-2022.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Plaza",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Reflection/images/deck3-2022.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Promenade",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Reflection/images/deck4-2022.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Entertainment",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Reflection/images/deck5-2022.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Continental",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Reflection/images/deck6-2022.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Sunrise",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Reflection/images/deck7-2022.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Vista",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Reflection/images/deck8-2022.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Panorama",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Reflection/images/deck9-2022.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Sky",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Reflection/images/deck10-2022.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Penthouse",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Reflection/images/deck11-2022.webp"
+      },
+      {
+        "num": 12,
+        "name": "12 Resort",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Reflection/images/deck12-2022.webp"
+      },
+      {
+        "num": 14,
+        "name": "14 Lido",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Reflection/images/deck14-2022.webp"
+      },
+      {
+        "num": 15,
+        "name": "15 Lawn",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Reflection/images/deck15-2022.webp"
+      },
+      {
+        "num": 16,
+        "name": "16 Solstice",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Reflection/images/deck16-2022.webp"
+      }
+    ]
+  },
+  "Celebrity Silhouette": {
+    "source": "cruisedeckplans.com",
+    "slug": "Celebrity-Silhouette",
+    "decks": [
+      {
+        "num": 2,
+        "name": "2 Medical",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Silhouette/images/deck2-2022.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Plaza",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Silhouette/images/deck3-2022.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Promenade",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Silhouette/images/deck4-2022.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Entertainment",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Silhouette/images/deck5-2022.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Continental",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Silhouette/images/deck6-2022.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Sunrise",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Silhouette/images/deck7-2022.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Vista",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Silhouette/images/deck8-2022.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Panorama",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Silhouette/images/deck9-2022.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Sky",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Silhouette/images/deck10-2023.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Penthouse",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Silhouette/images/deck11-2023.webp"
+      },
+      {
+        "num": 12,
+        "name": "12 Resort",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Silhouette/images/deck12-2022.webp"
+      },
+      {
+        "num": 14,
+        "name": "14 Lido",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Silhouette/images/deck14-2022.webp"
+      },
+      {
+        "num": 15,
+        "name": "15 Lawn",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Silhouette/images/deck15-2022.webp"
+      },
+      {
+        "num": 16,
+        "name": "16 Solstice",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Silhouette/images/deck16-2022.webp"
+      }
+    ]
+  },
+  "Celebrity Solstice": {
+    "source": "cruisedeckplans.com",
+    "slug": "Celebrity-Solstice",
+    "decks": [
+      {
+        "num": 2,
+        "name": "2 Medical",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Solstice/images/deck2-2022.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Plaza",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Solstice/images/deck3-2022.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Promenade",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Solstice/images/deck4-2026b.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Entertainment",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Solstice/images/deck5-2026b.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Continental",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Solstice/images/deck6-2026c.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Sunrise",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Solstice/images/deck7-2026b.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Vista",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Solstice/images/deck8-2026b.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Panorama",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Solstice/images/deck9-2026b.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Sky",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Solstice/images/deck10-2026b.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Penthouse",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Solstice/images/deck11-2026b.webp"
+      },
+      {
+        "num": 12,
+        "name": "12 Resort",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Solstice/images/deck12-2026b.webp"
+      },
+      {
+        "num": 14,
+        "name": "14 Lido",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Solstice/images/deck14-2026b.webp"
+      },
+      {
+        "num": 15,
+        "name": "15 Lawn",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Solstice/images/deck15-2026b.webp"
+      },
+      {
+        "num": 16,
+        "name": "16 Solstice",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Solstice/images/deck16-2026.webp"
+      }
+    ]
+  },
+  "Celebrity Summit": {
+    "source": "cruisedeckplans.com",
+    "slug": "Celebrity-Summit",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1 Medical",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Summit/images/deck1-2022.webp"
+      },
+      {
+        "num": 2,
+        "name": "2 Continental",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Summit/images/deck2-2022.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Plaza",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Summit/images/deck3-2022.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Promenade",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Summit/images/deck4-2022.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Entertainment",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Summit/images/deck5-2022.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Penthouse",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Summit/images/deck6-2025.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Vista",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Summit/images/deck7-2025.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Panorama",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Summit/images/deck8-2025.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Sky",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Summit/images/deck9-2025.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Resort",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Summit/images/deck10-2022.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Sunrise",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Summit/images/deck11-2022.webp"
+      },
+      {
+        "num": 12,
+        "name": "12 Sports",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Celebrity-Summit/images/deck12-2022.webp"
+      }
+    ]
+  },
+  "Eurodam": {
+    "source": "cruisedeckplans.com",
+    "slug": "Eurodam",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1 Main",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Eurodam/images/deck1-2025.webp"
+      },
+      {
+        "num": 2,
+        "name": "2 Lower Prom.",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Eurodam/images/deck2-2024.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Promenade",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Eurodam/images/deck3-2024.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Upper Prom.",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Eurodam/images/deck4-2025.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Verandah",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Eurodam/images/deck5-2025.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Up Verandah",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Eurodam/images/deck6-2025.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Rotterdam",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Eurodam/images/deck7-2025.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Navigation",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Eurodam/images/deck8-2025.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Lido",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Eurodam/images/decklido-2024.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Panorama",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Eurodam/images/deck10-2025.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Observation",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Eurodam/images/deck11-2024.webp"
+      },
+      {
+        "num": 12,
+        "name": "12 Sports",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Eurodam/images/decksports.webp"
+      }
+    ]
+  },
+  "Koningsdam": {
+    "source": "cruisedeckplans.com",
+    "slug": "Koningsdam",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1. Main",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Koningsdam/images/deck1-2026.webp"
+      },
+      {
+        "num": 2,
+        "name": "2. Plaza",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Koningsdam/images/deck2-2026b.webp"
+      },
+      {
+        "num": 3,
+        "name": "3. Promenade",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Koningsdam/images/deck3-2026b.webp"
+      },
+      {
+        "num": 4,
+        "name": "4. Beethoven",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Koningsdam/images/deck4-2025.webp"
+      },
+      {
+        "num": 5,
+        "name": "5. Gershwin",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Koningsdam/images/deck5-2025.webp"
+      },
+      {
+        "num": 6,
+        "name": "6. Mozart",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Koningsdam/images/deck6-2025.webp"
+      },
+      {
+        "num": 7,
+        "name": "7. Schubert",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Koningsdam/images/deck7-2025.webp"
+      },
+      {
+        "num": 8,
+        "name": "8. Navigation",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Koningsdam/images/deck8-2025.webp"
+      },
+      {
+        "num": 9,
+        "name": "9. Lido",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Koningsdam/images/decklido.webp"
+      },
+      {
+        "num": 10,
+        "name": "10. Panorama",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Koningsdam/images/deck10-2025.webp"
+      },
+      {
+        "num": 11,
+        "name": "11. Sun",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Koningsdam/images/deck11-2025.webp"
+      },
+      {
+        "num": 12,
+        "name": "12. Observation",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Koningsdam/images/deck12-2026.webp"
+      },
+      {
+        "num": 14,
+        "name": "14. Sky",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Koningsdam/images/deck14-2018.webp"
+      }
+    ]
+  },
+  "Nieuw Amsterdam": {
+    "source": "cruisedeckplans.com",
+    "slug": "Nieuw-Amsterdam",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1 Main",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Amsterdam/images/deck1-2025.webp"
+      },
+      {
+        "num": 2,
+        "name": "2 Lower Prom.",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Amsterdam/images/deck2-2024.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Promenade",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Amsterdam/images/deck3-2024.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Upper Prom.",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Amsterdam/images/deck4-2025.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Verandah",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Amsterdam/images/deck5-2025.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Upper Ver.",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Amsterdam/images/deck6-2025.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Rotterdam",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Amsterdam/images/deck7-2025.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Navigation",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Amsterdam/images/deck8-2025.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Lido",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Amsterdam/images/decklido-2023.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Panorama",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Amsterdam/images/deck10-2025.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Observation",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Amsterdam/images/deck11-2025b.webp"
+      },
+      {
+        "num": 12,
+        "name": "12 Sports",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Amsterdam/images/decksports.webp"
+      }
+    ]
+  },
+  "Nieuw Statendam": {
+    "source": "cruisedeckplans.com",
+    "slug": "Nieuw-Statendam",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1. Main",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Statendam/images/deck1-2025.webp"
+      },
+      {
+        "num": 2,
+        "name": "2. Plaza",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Statendam/images/deck2-2024.webp"
+      },
+      {
+        "num": 3,
+        "name": "3. Promenade",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Statendam/images/deck3-2018.webp"
+      },
+      {
+        "num": 4,
+        "name": "4. Beethoven",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Statendam/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "5. Gershwin",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Statendam/images/deck5.webp"
+      },
+      {
+        "num": 6,
+        "name": "6. Mozart",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Statendam/images/deck6.webp"
+      },
+      {
+        "num": 7,
+        "name": "7. Schubert",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Statendam/images/deck7.webp"
+      },
+      {
+        "num": 8,
+        "name": "8. Navigation",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Statendam/images/deck8.webp"
+      },
+      {
+        "num": 9,
+        "name": "9. Lido",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Statendam/images/deck9-2018.webp"
+      },
+      {
+        "num": 10,
+        "name": "10. Panorama",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Statendam/images/deck10-2018.webp"
+      },
+      {
+        "num": 11,
+        "name": "11. Sun",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Statendam/images/deck11.webp"
+      },
+      {
+        "num": 12,
+        "name": "12. Observation",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Statendam/images/deck12-2024.webp"
+      },
+      {
+        "num": 13,
+        "name": "14. Sky",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nieuw-Statendam/images/deck14.webp"
+      }
+    ]
+  },
+  "Noordam": {
+    "source": "cruisedeckplans.com",
+    "slug": "Noordam",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1 Main",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Noordam/images/deck1-2025.webp"
+      },
+      {
+        "num": 2,
+        "name": "2 Lower Prom.",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Noordam/images/deck2-2024.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Promenade",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Noordam/images/deck3-2024.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Upper Prom.",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Noordam/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Verandah",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Noordam/images/deck5.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Up Verandah",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Noordam/images/deck6.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Rotterdam",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Noordam/images/deck7-2025.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Navigation",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Noordam/images/deck8.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Lido",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Noordam/images/deck9.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Observation",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Noordam/images/deck10.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Sports",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Noordam/images/deck11.webp"
+      }
+    ]
+  },
+  "Oosterdam": {
+    "source": "cruisedeckplans.com",
+    "slug": "Oosterdam",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1 Main",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oosterdam/images/deck1-2025.webp"
+      },
+      {
+        "num": 2,
+        "name": "2 Lower Prom.",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oosterdam/images/deck2-2024.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Promenade",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oosterdam/images/deck3-2024.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Upper Prom.",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oosterdam/images/deckupperpromenade-2016.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Verandah",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oosterdam/images/deckverandah-2016.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Upper Ver.",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oosterdam/images/deckupperverandah-2016.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Rotterdam",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oosterdam/images/deck7-2025.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Navigation",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oosterdam/images/decknavigation-2016.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Lido",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oosterdam/images/decklido-2016.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Observation",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oosterdam/images/deck10-2024.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Sports",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oosterdam/images/deck11-2025.webp"
+      }
+    ]
+  },
+  "Rotterdam": {
+    "source": "cruisedeckplans.com",
+    "slug": "Rotterdam",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1. Main",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Rotterdam/images/deck1-2025b.webp"
+      },
+      {
+        "num": 2,
+        "name": "2. Plaza",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Rotterdam/images/deck2-2024.webp"
+      },
+      {
+        "num": 3,
+        "name": "3. Promenade",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Rotterdam/images/deck3-2021.webp"
+      },
+      {
+        "num": 4,
+        "name": "4. Beethoven",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Rotterdam/images/deck4-2021.webp"
+      },
+      {
+        "num": 5,
+        "name": "5. Gershwin",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Rotterdam/images/deck5-2021.webp"
+      },
+      {
+        "num": 6,
+        "name": "6. Mozart",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Rotterdam/images/deck6-2021.webp"
+      },
+      {
+        "num": 7,
+        "name": "7. Schubert",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Rotterdam/images/deck7-2025.webp"
+      },
+      {
+        "num": 8,
+        "name": "8. Navigation",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Rotterdam/images/deck8-2021.webp"
+      },
+      {
+        "num": 9,
+        "name": "9. Lido",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Rotterdam/images/deck9-2021.webp"
+      },
+      {
+        "num": 10,
+        "name": "10. Panorama",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Rotterdam/images/deck10-2025.webp"
+      },
+      {
+        "num": 11,
+        "name": "11. Sun",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Rotterdam/images/deck11-2025.webp"
+      },
+      {
+        "num": 12,
+        "name": "12. Observation",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Rotterdam/images/deck12-2021.webp"
+      },
+      {
+        "num": 13,
+        "name": "14. Sky",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Rotterdam/images/deck14.webp"
+      }
+    ]
+  },
+  "Volendam": {
+    "source": "cruisedeckplans.com",
+    "slug": "Volendam",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1 Dolphin",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Volendam/images/deckdolphin.webp"
+      },
+      {
+        "num": 2,
+        "name": "2 Main",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Volendam/images/deckmain-2020.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Lower Prom.",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Volendam/images/deck3-2020.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Promenade",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Volendam/images/deck4-2025.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Upper Prom.",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Volendam/images/deck5-2025.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Verandah",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Volendam/images/deckverandah-2020.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Navigation",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Volendam/images/decknavigation.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Lido",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Volendam/images/deck8-2025.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Sports",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Volendam/images/decksports.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Sky",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Volendam/images/deck10.webp"
+      }
+    ]
+  },
+  "Westerdam": {
+    "source": "cruisedeckplans.com",
+    "slug": "Westerdam",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1 Main",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Westerdam/images/deck1-2026.webp"
+      },
+      {
+        "num": 2,
+        "name": "2 Lower Prom.",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Westerdam/images/deck2-2024.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Promenade",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Westerdam/images/deck3-2024.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Upper Prom.",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Westerdam/images/deck4-2024.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Verandah",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Westerdam/images/deck5-2024.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Upper Ver.",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Westerdam/images/deck6-2024.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Rotterdam",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Westerdam/images/deck7-2026.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Navigation",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Westerdam/images/deck8-2024.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Lido",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Westerdam/images/deck9-2024.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Observation",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Westerdam/images/deck10-2024.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Sports",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Westerdam/images/deck11-2024.webp"
+      }
+    ]
+  },
+  "Zaandam": {
+    "source": "cruisedeckplans.com",
+    "slug": "Zaandam",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1 Dolphin",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Zaandam/images/deckdolphin.webp"
+      },
+      {
+        "num": 2,
+        "name": "2 Main",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Zaandam/images/deckmain-2021.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Lower Prom.",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Zaandam/images/decklowerpromenade-2021.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Promenade",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Zaandam/images/deckpromenade-2022.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Upper Prom.",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Zaandam/images/deckupperpromenade-2022.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Verandah",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Zaandam/images/deckverandah-2021.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Navigation",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Zaandam/images/decknavigation.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Lido",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Zaandam/images/decklido-2022.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Sports",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Zaandam/images/decksports.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Sky",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Zaandam/images/decksky-2017.webp"
+      }
+    ]
+  },
+  "Zuiderdam": {
+    "source": "cruisedeckplans.com",
+    "slug": "Zuiderdam",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1 Main",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Zuiderdam/images/deck1-2025.webp"
+      },
+      {
+        "num": 2,
+        "name": "2 Lower Prom.",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Zuiderdam/images/deck2-2024.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Promenade",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Zuiderdam/images/deck3-2024.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Upper Prom.",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Zuiderdam/images/deckupperpromenadeb.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Verandah",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Zuiderdam/images/deckverandahb.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Upper Ver.",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Zuiderdam/images/deckupperverandahb.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Rotterdam",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Zuiderdam/images/deck7-2025.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Navigation",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Zuiderdam/images/decknavigationb.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Lido",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Zuiderdam/images/deck9-2024.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Observation",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Zuiderdam/images/deck10-2024.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Sports",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Zuiderdam/images/decksportsc1.webp"
+      }
+    ]
+  },
+  "Disney Adventure": {
+    "source": "cruisedeckplans.com",
+    "slug": "Disney-Adventure",
+    "decks": [
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Adventure/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Adventure/images/deck5-2026.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Adventure/images/deck6-2026.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Adventure/images/deck7-2026.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Adventure/images/deck8-2026.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Adventure/images/deck9-2026.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Adventure/images/deck10-2026.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Adventure/images/deck11-2026.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Adventure/images/deck12.webp"
+      },
+      {
+        "num": 13,
+        "name": "Deck 13",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Adventure/images/deck13.webp"
+      },
+      {
+        "num": 15,
+        "name": "Deck 15",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Adventure/images/deck15.webp"
+      },
+      {
+        "num": 16,
+        "name": "Deck 16",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Adventure/images/deck16.webp"
+      },
+      {
+        "num": 17,
+        "name": "Deck 17",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Adventure/images/deck17-2026.webp"
+      },
+      {
+        "num": 18,
+        "name": "Deck 18",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Adventure/images/deck18-2026.webp"
+      },
+      {
+        "num": 19,
+        "name": "Deck 19",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Adventure/images/deck19-2026.webp"
+      },
+      {
+        "num": 20,
+        "name": "Deck 20",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Adventure/images/deck20.webp"
+      }
+    ]
+  },
+  "Disney Dream": {
+    "source": "cruisedeckplans.com",
+    "slug": "Disney-Dream",
+    "decks": [
+      {
+        "num": 1,
+        "name": "Deck 1",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Dream/images/deck1.webp"
+      },
+      {
+        "num": 2,
+        "name": "Deck 2",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Dream/images/deck2.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Dream/images/deck3.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Dream/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Dream/images/deck5-2025.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Dream/images/deck6-2022.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Dream/images/deck7-2022.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Dream/images/deck8-2022.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Dream/images/deck9-2022.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Dream/images/deck10-2022.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Dream/images/deck11-2024.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Dream/images/deck12-2022.webp"
+      },
+      {
+        "num": 13,
+        "name": "Deck 13",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Dream/images/deck13-2024.webp"
+      },
+      {
+        "num": 14,
+        "name": "Deck 14",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Dream/images/deck14-2024.webp"
+      }
+    ]
+  },
+  "Disney Fantasy": {
+    "source": "cruisedeckplans.com",
+    "slug": "Disney-Fantasy",
+    "decks": [
+      {
+        "num": 1,
+        "name": "Deck 1",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Fantasy/images/deck1.webp"
+      },
+      {
+        "num": 2,
+        "name": "Deck 2",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Fantasy/images/deck2.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Fantasy/images/deck3-2022.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Fantasy/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Fantasy/images/deck5-2025.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Fantasy/images/deck6-2022.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Fantasy/images/deck7-2022.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Fantasy/images/deck8-2022.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Fantasy/images/deck9-2022.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Fantasy/images/deck10-2022.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Fantasy/images/deck11-2025.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Fantasy/images/deck12-2022.webp"
+      },
+      {
+        "num": 13,
+        "name": "Deck 13",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Fantasy/images/deck13-2025.webp"
+      },
+      {
+        "num": 14,
+        "name": "Deck 14",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Fantasy/images/deck14-2025.webp"
+      }
+    ]
+  },
+  "Disney Magic": {
+    "source": "cruisedeckplans.com",
+    "slug": "Disney-Magic",
+    "decks": [
+      {
+        "num": 1,
+        "name": "Deck One",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Magic/images/deck1-2022.webp"
+      },
+      {
+        "num": 2,
+        "name": "Deck Two",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Magic/images/deck2-2022.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck Three",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Magic/images/deck3-2025.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck Four",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Magic/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck Five",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Magic/images/deck5-2022.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck Six",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Magic/images/deck6-2022.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck Seven",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Magic/images/deck7-2022.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck Eight",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Magic/images/deck8-2022.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck Nine",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Magic/images/deck9.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck Ten",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Magic/images/deck10.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck Eleven",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Magic/images/deck11-2022.webp"
+      }
+    ]
+  },
+  "Disney Treasure": {
+    "source": "cruisedeckplans.com",
+    "slug": "Disney-Treasure",
+    "decks": [
+      {
+        "num": 1,
+        "name": "Deck 1",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Treasure/images/deck1-2025.webp"
+      },
+      {
+        "num": 2,
+        "name": "Deck 2",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Treasure/images/deck2-2025.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Treasure/images/deck3-2025.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Treasure/images/deck4-2025.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Treasure/images/deck5-2025.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Treasure/images/deck6-2025.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Treasure/images/deck7-2025.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Treasure/images/deck8-2025.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Treasure/images/deck9-2025.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Treasure/images/deck10-2025.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Treasure/images/deck11-2025.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Treasure/images/deck12-2025.webp"
+      },
+      {
+        "num": 13,
+        "name": "Deck 13",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Treasure/images/deck13-2025.webp"
+      },
+      {
+        "num": 14,
+        "name": "Deck 14",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Treasure/images/deck14-2025.webp"
+      },
+      {
+        "num": 15,
+        "name": "Deck 15",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Treasure/images/deck15-2025.webp"
+      }
+    ]
+  },
+  "Disney Wish": {
+    "source": "cruisedeckplans.com",
+    "slug": "Disney-Wish",
+    "decks": [
+      {
+        "num": 1,
+        "name": "Deck 1",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wish/images/deck1-2021b.webp"
+      },
+      {
+        "num": 2,
+        "name": "Deck 2",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wish/images/deck2-2021b.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wish/images/deck3-2022.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wish/images/deck4-2022.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wish/images/deck5-2022.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wish/images/deck6-2021b.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wish/images/deck7-2021b.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wish/images/deck8-2021b.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wish/images/deck9-2021b.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wish/images/deck10-2021b.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wish/images/deck11-2022.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wish/images/deck12-2022.webp"
+      },
+      {
+        "num": 13,
+        "name": "Deck 13",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wish/images/deck13-2022.webp"
+      },
+      {
+        "num": 14,
+        "name": "Deck 14",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wish/images/deck14-2021b.webp"
+      },
+      {
+        "num": 15,
+        "name": "Deck 15",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wish/images/deck15-2021b.webp"
+      }
+    ]
+  },
+  "Disney Wonder": {
+    "source": "cruisedeckplans.com",
+    "slug": "Disney-Wonder",
+    "decks": [
+      {
+        "num": 1,
+        "name": "Deck One",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wonder/images/deck1-2022.webp"
+      },
+      {
+        "num": 2,
+        "name": "Deck Two",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wonder/images/deck2-2022.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck Three",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wonder/images/deck3.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck Four",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wonder/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck Five",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wonder/images/deck5-2022.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck Six",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wonder/images/deck6-2022.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck Seven",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wonder/images/deck7-2022.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck Eight",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wonder/images/deck8-2022.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck Nine",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wonder/images/deck9.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck Ten",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wonder/images/deck10.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck Eleven",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Disney-Wonder/images/deck11.webp"
+      }
+    ]
+  },
+  "Costa Deliziosa": {
+    "source": "cruisedeckplans.com",
+    "slug": "Costa-Deliziosa",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1 Narciso",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Deliziosa/images/deck1b.webp"
+      },
+      {
+        "num": 2,
+        "name": "2 Gardenia",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Deliziosa/images/deck2b.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Azalea",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Deliziosa/images/deck3-2025.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Camelia",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Deliziosa/images/deck4b.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Giglio",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Deliziosa/images/deck5b.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Ortensia",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Deliziosa/images/deck6b.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Ibisco",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Deliziosa/images/deck7b.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Petunia",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Deliziosa/images/deck8b.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Orchidea",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Deliziosa/images/deck9b.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Magnolia",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Deliziosa/images/deck10b.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Fuxia",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Deliziosa/images/deck11b.webp"
+      },
+      {
+        "num": 12,
+        "name": "12 Girasole",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Deliziosa/images/deck12b.webp"
+      }
+    ]
+  },
+  "Costa Diadema": {
+    "source": "cruisedeckplans.com",
+    "slug": "Costa-Diadema",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1 Excelsior",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Diadema/images/deck1b.webp"
+      },
+      {
+        "num": 2,
+        "name": "2 Sara",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Diadema/images/deck2b.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Centenary",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Diadema/images/deck3b.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Perla Di Venere",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Diadema/images/deck4b.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Eldorado",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Diadema/images/deck5b.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Braganza",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Diadema/images/deck6b.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Conde",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Diadema/images/deck7b.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Star of India",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Diadema/images/deck8b.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Bizantino",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Diadema/images/deck9b.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Hortensia",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Diadema/images/deck10b.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Timur",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Diadema/images/deck11b.webp"
+      },
+      {
+        "num": 12,
+        "name": "12 Stella D'Africa",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Diadema/images/deck12b.webp"
+      },
+      {
+        "num": 14,
+        "name": "14 Millennium Star",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Diadema/images/deck14b.webp"
+      },
+      {
+        "num": 15,
+        "name": "15 La Fenice",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Diadema/images/deck15b.webp"
+      }
+    ]
+  },
+  "Costa Fascinosa": {
+    "source": "cruisedeckplans.com",
+    "slug": "Costa-Fascinosa",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1 Irma",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fascinosa/images/deck1b.webp"
+      },
+      {
+        "num": 2,
+        "name": "2 Rigoletto",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fascinosa/images/deck2b.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Gradisca",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fascinosa/images/deck3b.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Gilda",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fascinosa/images/deck4b.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Aida",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fascinosa/images/deck5b.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Tancredi",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fascinosa/images/deck6b.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Zivago",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fascinosa/images/deck7b.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Marlene",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fascinosa/images/deck8b.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Carmen",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fascinosa/images/deck9b.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Turandot",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fascinosa/images/deck10b.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Tosca",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fascinosa/images/deck11b.webp"
+      },
+      {
+        "num": 12,
+        "name": "12 Butterfly",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fascinosa/images/deck12b.webp"
+      },
+      {
+        "num": 14,
+        "name": "14 Dorothy",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fascinosa/images/deck14b.webp"
+      }
+    ]
+  },
+  "Costa Favolosa": {
+    "source": "cruisedeckplans.com",
+    "slug": "Costa-Favolosa",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1 Babilonia",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Favolosa/images/deck1c.webp"
+      },
+      {
+        "num": 2,
+        "name": "2 Alhambra",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Favolosa/images/deck2c.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Hermitage",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Favolosa/images/deck3c.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Versailles",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Favolosa/images/deck4c.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Tivoli",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Favolosa/images/deck5c.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 La Zarzuela",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Favolosa/images/deck6c.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Bobou",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Favolosa/images/deck7c.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Encelado",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Favolosa/images/deck8c.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Villa Bourghese",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Favolosa/images/deck9c.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Escorial",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Favolosa/images/deck10c.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Luxembourg",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Favolosa/images/deck11c.webp"
+      },
+      {
+        "num": 12,
+        "name": "12 El Prado",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Favolosa/images/deck12c.webp"
+      },
+      {
+        "num": 14,
+        "name": "14 Las Duenas",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Favolosa/images/deck14c.webp"
+      }
+    ]
+  },
+  "Costa Fortuna": {
+    "source": "cruisedeckplans.com",
+    "slug": "Costa-Fortuna",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1 Rio-de-Janeiro",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fortuna/images/deck1c.webp"
+      },
+      {
+        "num": 2,
+        "name": "2 Miami",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fortuna/images/deck2c.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Buenos Aires",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fortuna/images/deck3-2023.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Santos",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fortuna/images/deck4-2023.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Genova",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fortuna/images/deck5-2023.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Lisbona",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fortuna/images/deck6c.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Caracas",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fortuna/images/deck7c.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Vigo",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fortuna/images/deck8c.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Napoli",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fortuna/images/deck9c.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Barcellona",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fortuna/images/deck10c.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Cannes",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fortuna/images/deck11c.webp"
+      },
+      {
+        "num": 12,
+        "name": "12 Funchal",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Fortuna/images/deckfunchal.webp"
+      }
+    ]
+  },
+  "Costa Luminosa": {
+    "source": "cruisedeckplans.com",
+    "slug": "Costa-Luminosa",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1 Corallo",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Luminosa/images/deck1.webp"
+      },
+      {
+        "num": 2,
+        "name": "2 Zaffiro",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Luminosa/images/deck2.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Ambra",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Luminosa/images/deck3.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Agata",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Luminosa/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Avorio",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Luminosa/images/deck5.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Rubino",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Luminosa/images/deck6.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Smeraldo",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Luminosa/images/deck7.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Topazio",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Luminosa/images/deck8.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Acquamarina",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Luminosa/images/deck9.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Giada",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Luminosa/images/deck10.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Turchese",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Luminosa/images/deck11.webp"
+      },
+      {
+        "num": 12,
+        "name": "12 Pietra DiLuna",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Luminosa/images/deck12.webp"
+      }
+    ]
+  },
+  "Costa Magica": {
+    "source": "cruisedeckplans.com",
+    "slug": "Costa-Magica",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1 Giorgione",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Magica/images/deck1.webp"
+      },
+      {
+        "num": 2,
+        "name": "2 Tintoretto",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Magica/images/deck2.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Raffaello",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Magica/images/deck3.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Michelangelo",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Magica/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Leonardo",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Magica/images/deck5.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Caravaggio",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Magica/images/deck6.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Perugino",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Magica/images/deck7.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Veronese",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Magica/images/deck8.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Giotto",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Magica/images/deck9.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Tiziano",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Magica/images/deck10.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Tiepolo",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Magica/images/deck11.webp"
+      },
+      {
+        "num": 12,
+        "name": "12 Mantegna",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Magica/images/deck12.webp"
+      },
+      {
+        "num": 14,
+        "name": "14 Canaletto",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Magica/images/deck14.webp"
+      }
+    ]
+  },
+  "Costa Mediterranea": {
+    "source": "cruisedeckplans.com",
+    "slug": "Costa-Mediterranea",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1 Circe",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Mediterranea/images/deck1.webp"
+      },
+      {
+        "num": 2,
+        "name": "2 Tersicore",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Mediterranea/images/deck2.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Bacco",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Mediterranea/images/deck3.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Teseo",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Mediterranea/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Orfeo",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Mediterranea/images/deck5.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Narciso",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Mediterranea/images/deck6.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Prometeo",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Mediterranea/images/deck7.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Pagaso",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Mediterranea/images/deck8.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Armonia",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Mediterranea/images/deck9.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Cleopatra",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Mediterranea/images/deck10.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Pandora",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Mediterranea/images/deck11.webp"
+      },
+      {
+        "num": 12,
+        "name": "12 Medea",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Mediterranea/images/deck12.webp"
+      }
+    ]
+  },
+  "Costa Pacifica": {
+    "source": "cruisedeckplans.com",
+    "slug": "Costa-Pacifica",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1 Notturno",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Pacifica/images/deck1.webp"
+      },
+      {
+        "num": 2,
+        "name": "2 Adagio",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Pacifica/images/deck2.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Mood",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Pacifica/images/deck3.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Groove",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Pacifica/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Swing",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Pacifica/images/deck5.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Boheme",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Pacifica/images/deck6.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Alhambra",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Pacifica/images/deck7.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Ludwig",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Pacifica/images/deck8.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Azzuro",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Pacifica/images/deck9.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Satie",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Pacifica/images/deck10.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Feel Good",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Pacifica/images/deck11.webp"
+      },
+      {
+        "num": 12,
+        "name": "12 Summertime",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Pacifica/images/deck12.webp"
+      },
+      {
+        "num": 14,
+        "name": "14 Volare",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Pacifica/images/deck14.webp"
+      }
+    ]
+  },
+  "Costa Serena": {
+    "source": "cruisedeckplans.com",
+    "slug": "Costa-Serena",
+    "decks": [
+      {
+        "num": 1,
+        "name": "1 Andromeda",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Serena/images/deck1.webp"
+      },
+      {
+        "num": 2,
+        "name": "2 Cassiopea",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Serena/images/deck2.webp"
+      },
+      {
+        "num": 3,
+        "name": "3 Aries",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Serena/images/deck3.webp"
+      },
+      {
+        "num": 4,
+        "name": "4 Orion",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Serena/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 Gemini",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Serena/images/deck5.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 Centaurus",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Serena/images/deck6.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 Acquarius",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Serena/images/deck7.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 Perseus",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Serena/images/deck8.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 Libra",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Serena/images/deck9.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 Taurus",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Serena/images/deck10.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 Virgo",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Serena/images/deck11.webp"
+      },
+      {
+        "num": 12,
+        "name": "12 Pegasus",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Serena/images/deck12.webp"
+      },
+      {
+        "num": 14,
+        "name": "14 Vela",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Serena/images/deck14.webp"
+      }
+    ]
+  },
+  "Costa Smeralda": {
+    "source": "cruisedeckplans.com",
+    "slug": "Costa-Smeralda",
+    "decks": [
+      {
+        "num": 4,
+        "name": "4 - Palermo",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Smeralda/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 - Taormina",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Smeralda/images/deck5.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 - Matera",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Smeralda/images/deck6.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 - Positano",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Smeralda/images/deck7.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 - Capri",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Smeralda/images/deck8.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 - Napoli",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Smeralda/images/deck9.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 - Roma",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Smeralda/images/deck10.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 - Firenze",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Smeralda/images/deck11.webp"
+      },
+      {
+        "num": 12,
+        "name": "12 - Genova",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Smeralda/images/deck12.webp"
+      },
+      {
+        "num": 14,
+        "name": "14 - Venezia",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Smeralda/images/deck14.webp"
+      },
+      {
+        "num": 15,
+        "name": "15 - Milano",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Smeralda/images/deck15.webp"
+      },
+      {
+        "num": 16,
+        "name": "16 - Como",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Smeralda/images/deck16.webp"
+      },
+      {
+        "num": 17,
+        "name": "17 - Bellagio",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Smeralda/images/deck17.webp"
+      },
+      {
+        "num": 18,
+        "name": "18 - Torino",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Smeralda/images/deck18.webp"
+      },
+      {
+        "num": 19,
+        "name": "19 - Cortina",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Smeralda/images/deck19.webp"
+      },
+      {
+        "num": 20,
+        "name": "20 - Trieste",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Smeralda/images/deck20.webp"
+      }
+    ]
+  },
+  "Costa Toscana": {
+    "source": "cruisedeckplans.com",
+    "slug": "Costa-Toscana",
+    "decks": [
+      {
+        "num": 4,
+        "name": "4 - Talamone",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Toscana/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "5 - Montalcino",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Toscana/images/deck5-2023.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 - Pienza",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Toscana/images/deck6-2023.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 - Montepulciano",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Toscana/images/deck7-2023.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 - Bolgheri",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Toscana/images/deck8-2023.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 - Siena",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Toscana/images/deck9.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 - Volterra",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Toscana/images/deck10.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 - San Giminiano",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Toscana/images/deck11b.webp"
+      },
+      {
+        "num": 12,
+        "name": "12 - Arezzo",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Toscana/images/deck12.webp"
+      },
+      {
+        "num": 14,
+        "name": "14 - Livorno",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Toscana/images/deck14.webp"
+      },
+      {
+        "num": 15,
+        "name": "15 - Pisa",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Toscana/images/deck15.webp"
+      },
+      {
+        "num": 16,
+        "name": "16 - Lucca",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Toscana/images/deck16-2023.webp"
+      },
+      {
+        "num": 17,
+        "name": "17 - Montecatini",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Toscana/images/deck17-2023.webp"
+      },
+      {
+        "num": 18,
+        "name": "18 - Viareggio",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Toscana/images/deck18-2023.webp"
+      },
+      {
+        "num": 19,
+        "name": "19 - Pietrasanta",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Toscana/images/deck19-2023.webp"
+      },
+      {
+        "num": 20,
+        "name": "20 - Forte Dei",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Costa-Toscana/images/deck20.webp"
+      }
+    ]
+  },
+  "Arcadia": {
+    "source": "cruisedeckplans.com",
+    "slug": "Arcadia",
+    "decks": [
+      {
+        "num": 1,
+        "name": "Deck 1 G",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arcadia/images/deckgdeck2.webp"
+      },
+      {
+        "num": 2,
+        "name": "Deck 2 F",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arcadia/images/deckfdeck2.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck 3 Prom",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arcadia/images/deckprom2.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4 E",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arcadia/images/deckedeck2.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5 D",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arcadia/images/deckddeck2.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6 C",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arcadia/images/deckcdeck2.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7 B",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arcadia/images/deckbdeck2.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8 A",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arcadia/images/deckadeck2.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9 Lido",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arcadia/images/decklido2.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10 Sun",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arcadia/images/decksun2.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11 Sky",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arcadia/images/decksky2.webp"
+      }
+    ]
+  },
+  "Arvia": {
+    "source": "cruisedeckplans.com",
+    "slug": "Arvia",
+    "decks": [
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arvia/images/deck3-2023.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arvia/images/deck4-2023.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arvia/images/deck5-2023.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arvia/images/deck6-2023.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arvia/images/deck7-2023.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arvia/images/deck8-2023.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arvia/images/deck9-2023.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arvia/images/deck10-2023.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arvia/images/deck11-2023.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arvia/images/deck12-2023.webp"
+      },
+      {
+        "num": 14,
+        "name": "Deck 14",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arvia/images/deck14-2023.webp"
+      },
+      {
+        "num": 15,
+        "name": "Deck 15",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arvia/images/deck15-2023.webp"
+      },
+      {
+        "num": 16,
+        "name": "Deck 16",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arvia/images/deck16-2023.webp"
+      },
+      {
+        "num": 17,
+        "name": "Deck 17",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arvia/images/deck17-2023.webp"
+      },
+      {
+        "num": 18,
+        "name": "Deck 18",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arvia/images/deck18-2023.webp"
+      },
+      {
+        "num": 19,
+        "name": "Deck 19",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Arvia/images/deck19-2023.webp"
+      }
+    ]
+  },
+  "Aurora": {
+    "source": "cruisedeckplans.com",
+    "slug": "Aurora",
+    "decks": [
+      {
+        "num": 4,
+        "name": "Deck 4 G",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Aurora/images/deckgdeck.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5 F",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Aurora/images/deck5.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6 E",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Aurora/images/deck6.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7 Prom",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Aurora/images/deck7.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8 D",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Aurora/images/deck8.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9 C",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Aurora/images/deck9.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10 B",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Aurora/images/deck10.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11 A",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Aurora/images/deck11.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12 Lido",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Aurora/images/deck12.webp"
+      },
+      {
+        "num": 13,
+        "name": "Deck 13 Sun",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Aurora/images/deck13.webp"
+      }
+    ]
+  },
+  "Azura": {
+    "source": "cruisedeckplans.com",
+    "slug": "Azura",
+    "decks": [
+      {
+        "num": 5,
+        "name": "Deck 5 P",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azura/images/deckpdeck2.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6 F",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azura/images/deckfdeck2.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7 Prom",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azura/images/deckprom.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8 E",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azura/images/deckedeck2.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9 D",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azura/images/deckddeck2.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10 C",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azura/images/deckcdeck2.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11 B",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azura/images/deckbdeck2.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12 A",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azura/images/deckadeck2.webp"
+      },
+      {
+        "num": 14,
+        "name": "Deck 14 Riviera",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azura/images/deckriviera2.webp"
+      },
+      {
+        "num": 15,
+        "name": "Deck 15 Lido",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azura/images/decklido-2.webp"
+      },
+      {
+        "num": 16,
+        "name": "Deck 16 Agua",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azura/images/deckaqua-2016.webp"
+      },
+      {
+        "num": 17,
+        "name": "Deck 17 Sun",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azura/images/decksun-2.webp"
+      },
+      {
+        "num": 18,
+        "name": "Deck 18 Ocean",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azura/images/deckocean.webp"
+      },
+      {
+        "num": 19,
+        "name": "Deck 19 Sky",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azura/images/decksky.webp"
+      }
+    ]
+  },
+  "Britannia": {
+    "source": "cruisedeckplans.com",
+    "slug": "Britannia",
+    "decks": [
+      {
+        "num": 5,
+        "name": "5 - Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Britannia/images/deck5.webp"
+      },
+      {
+        "num": 6,
+        "name": "6 - Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Britannia/images/deck6.webp"
+      },
+      {
+        "num": 7,
+        "name": "7 - Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Britannia/images/deck7.webp"
+      },
+      {
+        "num": 8,
+        "name": "8 - G Deck",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Britannia/images/deckgb.webp"
+      },
+      {
+        "num": 9,
+        "name": "9 - F Deck",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Britannia/images/deckfb.webp"
+      },
+      {
+        "num": 10,
+        "name": "10 - E Deck",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Britannia/images/deckeb.webp"
+      },
+      {
+        "num": 11,
+        "name": "11 - D Deck",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Britannia/images/deckdb.webp"
+      },
+      {
+        "num": 12,
+        "name": "12 - C Deck",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Britannia/images/deckcb.webp"
+      },
+      {
+        "num": 14,
+        "name": "14 - B Deck",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Britannia/images/deckbb.webp"
+      },
+      {
+        "num": 15,
+        "name": "15 - A Deck",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Britannia/images/deckab.webp"
+      },
+      {
+        "num": 16,
+        "name": "16 - Lido",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Britannia/images/decklido.webp"
+      },
+      {
+        "num": 17,
+        "name": "17 - Sun",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Britannia/images/decksun.webp"
+      },
+      {
+        "num": 18,
+        "name": "18 - Sports",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Britannia/images/decksportsb.webp"
+      },
+      {
+        "num": 19,
+        "name": "19 - Sky",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Britannia/images/decksky.webp"
+      }
+    ]
+  },
+  "Iona": {
+    "source": "cruisedeckplans.com",
+    "slug": "Iona",
+    "decks": [
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Iona/images/deck3.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Iona/images/deck4-2026.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Iona/images/deck5-2026.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Iona/images/deck6.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Iona/images/deck7.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Iona/images/deck8-2026.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Iona/images/deck9-2026.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Iona/images/deck10-2026.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Iona/images/deck11-2026.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Iona/images/deck12-2026.webp"
+      },
+      {
+        "num": 14,
+        "name": "Deck 14",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Iona/images/deck14-2026.webp"
+      },
+      {
+        "num": 15,
+        "name": "Deck 15",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Iona/images/deck15-2026.webp"
+      },
+      {
+        "num": 16,
+        "name": "Deck 16",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Iona/images/deck16-2026.webp"
+      },
+      {
+        "num": 17,
+        "name": "Deck 17",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Iona/images/deck17-2026.webp"
+      },
+      {
+        "num": 18,
+        "name": "Deck 18",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Iona/images/deck18.webp"
+      },
+      {
+        "num": 19,
+        "name": "Deck 19",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Iona/images/deck19.webp"
+      }
+    ]
+  },
+  "Ventura": {
+    "source": "cruisedeckplans.com",
+    "slug": "Ventura",
+    "decks": [
+      {
+        "num": 5,
+        "name": "Deck 5 P",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Ventura/images/deck5-2026.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6 F",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Ventura/images/deck6-2026.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7 Prom",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Ventura/images/deck7-2018.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8 E",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Ventura/images/deck8-2026.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9 D",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Ventura/images/deck9-2026.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10 C",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Ventura/images/deck10-2026.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11 B",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Ventura/images/deck11-2026.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12 A",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Ventura/images/deck12-2026.webp"
+      },
+      {
+        "num": 14,
+        "name": "Deck 14 Riviera",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Ventura/images/deck14-2026.webp"
+      },
+      {
+        "num": 15,
+        "name": "Deck 15 Lido",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Ventura/images/deck15-2026.webp"
+      },
+      {
+        "num": 16,
+        "name": "Deck 16 Sun",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Ventura/images/deck16-2018.webp"
+      },
+      {
+        "num": 17,
+        "name": "Deck 17 Sports",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Ventura/images/deck17-2018b.webp"
+      },
+      {
+        "num": 18,
+        "name": "Deck 18 Sky",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Ventura/images/decksky.webp"
+      },
+      {
+        "num": 19,
+        "name": "Deck 19 Ocean",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Ventura/images/deckcirque.webp"
+      }
+    ]
+  },
+  "Queen Anne": {
+    "source": "cruisedeckplans.com",
+    "slug": "Queen-Anne",
+    "decks": [
+      {
+        "num": 1,
+        "name": "Deck 1",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Anne/images/deck1-2024b.webp"
+      },
+      {
+        "num": 2,
+        "name": "Deck 2",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Anne/images/deck2-2024.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Anne/images/deck3-2024.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Anne/images/deck4-2024b.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Anne/images/deck5-2024b.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Anne/images/deck6-2024b.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Anne/images/deck7-2024d.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Anne/images/deck8-2024b.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Anne/images/deck9-2024b.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Anne/images/deck10-2024b.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Anne/images/deck11-2024b.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Anne/images/deck12-2024.webp"
+      },
+      {
+        "num": 14,
+        "name": "Deck 14",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Anne/images/deck14-2024.webp"
+      }
+    ]
+  },
+  "Queen Elizabeth": {
+    "source": "cruisedeckplans.com",
+    "slug": "Queen-Elizabeth",
+    "decks": [
+      {
+        "num": 1,
+        "name": "Deck 1",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Elizabeth/images/deck1-2024.webp"
+      },
+      {
+        "num": 2,
+        "name": "Deck 2",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Elizabeth/images/deck2c.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Elizabeth/images/deck3b.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Elizabeth/images/deck4-2024.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Elizabeth/images/deck5-2025.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Elizabeth/images/deck6-2024.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Elizabeth/images/deck7-2024.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Elizabeth/images/deck8-2024.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Elizabeth/images/deck9b.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Elizabeth/images/deck10b.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Elizabeth/images/deck11b.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Elizabeth/images/deck12b.webp"
+      }
+    ]
+  },
+  "Queen Mary 2": {
+    "source": "cruisedeckplans.com",
+    "slug": "Queen-Mary-2",
+    "decks": [
+      {
+        "num": 2,
+        "name": "Deck 2",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Mary-2/images/deck2-2026.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Mary-2/images/deck3-2026.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Mary-2/images/deck4-2026.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Mary-2/images/deck5-2026.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Mary-2/images/deck6-2026.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Mary-2/images/deck7-2026.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Mary-2/images/deck8-2026.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Mary-2/images/deck9-2026.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Mary-2/images/deck10-2026.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Mary-2/images/deck11-2026.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Mary-2/images/deck12-2026.webp"
+      },
+      {
+        "num": 13,
+        "name": "Deck 13",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Mary-2/images/deck13-2026.webp"
+      },
+      {
+        "num": 14,
+        "name": "Deck 14",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Mary-2/images/deck14-2026.webp"
+      }
+    ]
+  },
+  "Queen Victoria": {
+    "source": "cruisedeckplans.com",
+    "slug": "Queen-Victoria",
+    "decks": [
+      {
+        "num": 1,
+        "name": "Deck 1",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Victoria/images/deck1-2024.webp"
+      },
+      {
+        "num": 2,
+        "name": "Deck 2",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Victoria/images/deck2-2018.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Victoria/images/deck3-2018.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Victoria/images/deck4-2024.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Victoria/images/deck5-2024.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Victoria/images/deck6-2024.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Victoria/images/deck7-2024.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Victoria/images/deck8-2024.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Victoria/images/deck9-2017.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Victoria/images/deck10b.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Victoria/images/deck11b.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Queen-Victoria/images/deck12b.webp"
+      }
+    ]
+  },
+  "Oceania Insignia": {
+    "source": "cruisedeckplans.com",
+    "slug": "Insignia",
+    "decks": [
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Insignia/images/deck3.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Insignia/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Insignia/images/deck5.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Insignia/images/deck6-2017.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Insignia/images/deck7-2017.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Insignia/images/deck8-2017.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Insignia/images/deck9.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Insignia/images/deck10.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Insignia/images/deck11c.webp"
+      }
+    ]
+  },
+  "Oceania Nautica": {
+    "source": "cruisedeckplans.com",
+    "slug": "Nautica",
+    "decks": [
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nautica/images/deck3.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nautica/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nautica/images/deck5.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nautica/images/deck6-2017.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nautica/images/deck7-2017.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nautica/images/deck8-2017.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nautica/images/deck9.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nautica/images/deck10.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Nautica/images/deck11c.webp"
+      }
+    ]
+  },
+  "Oceania Regatta": {
+    "source": "cruisedeckplans.com",
+    "slug": "Regatta",
+    "decks": [
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Regatta/images/deck3.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Regatta/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Regatta/images/deck5.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Regatta/images/deck6-2017.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Regatta/images/deck7-2017.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Regatta/images/deck8-2017.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Regatta/images/deck9.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Regatta/images/deck10.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Regatta/images/deck11c.webp"
+      }
+    ]
+  },
+  "Oceania Sirena": {
+    "source": "cruisedeckplans.com",
+    "slug": "Sirena",
+    "decks": [
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Sirena/images/deck3-2017.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Sirena/images/deck4-2022.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Sirena/images/deck5-2017.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Sirena/images/deck6-2017.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Sirena/images/deck7-2017.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Sirena/images/deck8-2017.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Sirena/images/deck9-2017.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Sirena/images/deck10-2016.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Sirena/images/deck11c.webp"
+      }
+    ]
+  },
+  "Oceania Marina": {
+    "source": "cruisedeckplans.com",
+    "slug": "Oceania-Marina",
+    "decks": [
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oceania-Marina/images/deck5-2018.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oceania-Marina/images/deck6-2018.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oceania-Marina/images/deck7-2018.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oceania-Marina/images/deck8-2018.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oceania-Marina/images/deck9-2024.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oceania-Marina/images/deck10-2024.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oceania-Marina/images/deck11-2018.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oceania-Marina/images/deck12-2024.webp"
+      },
+      {
+        "num": 14,
+        "name": "Deck 14",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oceania-Marina/images/deck14-2018.webp"
+      },
+      {
+        "num": 15,
+        "name": "Deck 15",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oceania-Marina/images/deck15-2018.webp"
+      },
+      {
+        "num": 16,
+        "name": "Deck 16",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oceania-Marina/images/deck16-2018.webp"
+      }
+    ]
+  },
+  "Oceania Riviera": {
+    "source": "cruisedeckplans.com",
+    "slug": "Oceania-Riviera",
+    "decks": [
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oceania-Riviera/images/deck5-2018.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oceania-Riviera/images/deck6-2018.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oceania-Riviera/images/deck7-2025.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oceania-Riviera/images/deck8-2018.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oceania-Riviera/images/deck9-2018.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oceania-Riviera/images/deck10-2018.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oceania-Riviera/images/deck11-2018.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oceania-Riviera/images/deck12-2018.webp"
+      },
+      {
+        "num": 14,
+        "name": "Deck 14",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oceania-Riviera/images/deck14-2018.webp"
+      },
+      {
+        "num": 15,
+        "name": "Deck 15",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oceania-Riviera/images/deck15-2018.webp"
+      },
+      {
+        "num": 16,
+        "name": "Deck 16",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Oceania-Riviera/images/deck16-2018.webp"
+      }
+    ]
+  },
+  "Seven Seas Explorer": {
+    "source": "cruisedeckplans.com",
+    "slug": "Seven-Seas-Explorer",
+    "decks": [
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Explorer/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Explorer/images/deck5-2017.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Explorer/images/deck6.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Explorer/images/deck7-2017.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Explorer/images/deck8-2017.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Explorer/images/deck9-2017.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Explorer/images/deck10-2017.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Explorer/images/deck11-2017.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Explorer/images/deck12-2017.webp"
+      },
+      {
+        "num": 14,
+        "name": "Deck 14",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Explorer/images/deck14b.webp"
+      }
+    ]
+  },
+  "Seven Seas Mariner": {
+    "source": "cruisedeckplans.com",
+    "slug": "Seven-Seas-Mariner",
+    "decks": [
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Mariner/images/deck5b.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Mariner/images/deck6b.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Mariner/images/deck7-2026.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Mariner/images/deck8-2026.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Mariner/images/deck9-2026.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Mariner/images/deck10-2026.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Mariner/images/deck11-2026.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Mariner/images/deck12b.webp"
+      }
+    ]
+  },
+  "Seven Seas Navigator": {
+    "source": "cruisedeckplans.com",
+    "slug": "Seven-Seas-Navigator",
+    "decks": [
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Navigator/images/deck5c.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Navigator/images/deck6c.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Navigator/images/deck7c.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Navigator/images/deck8c.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Navigator/images/deck9c.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Navigator/images/deck10c.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Navigator/images/deck11-2017.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Navigator/images/deck12-2017.webp"
+      }
+    ]
+  },
+  "Seven Seas Splendor": {
+    "source": "cruisedeckplans.com",
+    "slug": "Seven-Seas-Splendor",
+    "decks": [
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Splendor/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Splendor/images/deck5.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Splendor/images/deck6-2024.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Splendor/images/deck7-2024.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Splendor/images/deck8-2024.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Splendor/images/deck9-2024.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Splendor/images/deck10-2024.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Splendor/images/deck11.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Splendor/images/deck12-2024.webp"
+      },
+      {
+        "num": 14,
+        "name": "Deck 14",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Splendor/images/deck14-2024.webp"
+      }
+    ]
+  },
+  "Seven Seas Voyager": {
+    "source": "cruisedeckplans.com",
+    "slug": "Seven-Seas-Voyager",
+    "decks": [
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Voyager/images/deck4-2026.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Voyager/images/deck5-2026.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Voyager/images/deck6-2026.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Voyager/images/deck7-2026.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Voyager/images/deck8-2026.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Voyager/images/deck9-2026.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Voyager/images/deck10-2026.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Voyager/images/deck11-2026.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Seven-Seas-Voyager/images/deck12-2026.webp"
+      }
+    ]
+  },
+  "Azamara Journey": {
+    "source": "cruisedeckplans.com",
+    "slug": "Azamara-Journey",
+    "decks": [
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Journey/images/deck3.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Journey/images/deck4-2025.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Journey/images/deck5-2025.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Journey/images/deck6-2025.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Journey/images/deck7-2025.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Journey/images/deck8-2025.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Journey/images/deck9-2025.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Journey/images/deck10-2025.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Journey/images/deck11-2025.webp"
+      }
+    ]
+  },
+  "Azamara Onward": {
+    "source": "cruisedeckplans.com",
+    "slug": "Azamara-Onward",
+    "decks": [
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Onward/images/deck3.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Onward/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Onward/images/deck5.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Onward/images/deck6.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Onward/images/deck7.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Onward/images/deck8.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Onward/images/deck9.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Onward/images/deck10.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Onward/images/deck11.webp"
+      }
+    ]
+  },
+  "Azamara Pursuit": {
+    "source": "cruisedeckplans.com",
+    "slug": "Azamara-Pursuit",
+    "decks": [
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Pursuit/images/deck4-2018.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Pursuit/images/deck5-2018.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Pursuit/images/deck6-2021.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Pursuit/images/deck7-2021.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Pursuit/images/deck8-2020.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Pursuit/images/deck9-2018.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Pursuit/images/deck10-2018.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Pursuit/images/deck11-2018.webp"
+      }
+    ]
+  },
+  "Azamara Quest": {
+    "source": "cruisedeckplans.com",
+    "slug": "Azamara-Quest",
+    "decks": [
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Quest/images/deck3c1.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Quest/images/deck4-2019.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Quest/images/deck5-2019.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Quest/images/deck6-2021.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Quest/images/deck7-2021.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Quest/images/deck8-2020.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Quest/images/deck9c.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Quest/images/deck10c.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Quest/images/deck11-2026.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Azamara-Quest/images/deck12-2026.webp"
+      }
+    ]
+  },
+  "Viking Jupiter": {
+    "source": "cruisedeckplans.com",
+    "slug": "Viking-Jupiter",
+    "decks": [
+      {
+        "num": 0,
+        "name": "Deck E",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Jupiter/images/decke.webp"
+      },
+      {
+        "num": 1,
+        "name": "Deck 1",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Jupiter/images/deck1.webp"
+      },
+      {
+        "num": 2,
+        "name": "Deck 2",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Jupiter/images/deck2-2024.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Jupiter/images/deck3.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Jupiter/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Jupiter/images/deck5.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Jupiter/images/deck6.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Jupiter/images/deck7.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Jupiter/images/deck8.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Jupiter/images/deck9.webp"
+      }
+    ]
+  },
+  "Viking Octantis": {
+    "source": "cruisedeckplans.com",
+    "slug": "Viking-Octantis",
+    "decks": [
+      {
+        "num": 0,
+        "name": "Deck A",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Octantis/images/decka.webp"
+      },
+      {
+        "num": 1,
+        "name": "Deck 1",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Octantis/images/deck1.webp"
+      },
+      {
+        "num": 2,
+        "name": "Deck 2",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Octantis/images/deck2.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Octantis/images/deck3.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Octantis/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Octantis/images/deck5.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Octantis/images/deck6.webp"
+      }
+    ]
+  },
+  "Viking Polaris": {
+    "source": "cruisedeckplans.com",
+    "slug": "Viking-Polaris",
+    "decks": [
+      {
+        "num": 0,
+        "name": "Deck A",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Polaris/images/decka.webp"
+      },
+      {
+        "num": 1,
+        "name": "Deck 1",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Polaris/images/deck1.webp"
+      },
+      {
+        "num": 2,
+        "name": "Deck 2",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Polaris/images/deck2.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Polaris/images/deck3.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Polaris/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Polaris/images/deck5.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Polaris/images/deck6.webp"
+      }
+    ]
+  },
+  "Viking Sea": {
+    "source": "cruisedeckplans.com",
+    "slug": "Viking-Sea",
+    "decks": [
+      {
+        "num": 0,
+        "name": "Deck E",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Sea/images/decke.webp"
+      },
+      {
+        "num": 1,
+        "name": "Deck 1",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Sea/images/deck1.webp"
+      },
+      {
+        "num": 2,
+        "name": "Deck 2",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Sea/images/deck2-2024.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Sea/images/deck3.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Sea/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Sea/images/deck5.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Sea/images/deck6.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Sea/images/deck7.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Sea/images/deck8.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Sea/images/deck9.webp"
+      }
+    ]
+  },
+  "Viking Sky": {
+    "source": "cruisedeckplans.com",
+    "slug": "Viking-Sky",
+    "decks": [
+      {
+        "num": 0,
+        "name": "Deck E",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Sky/images/decke.webp"
+      },
+      {
+        "num": 1,
+        "name": "Deck 1",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Sky/images/deck1.webp"
+      },
+      {
+        "num": 2,
+        "name": "Deck 2",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Sky/images/deck2-2024.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Sky/images/deck3.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Sky/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Sky/images/deck5.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Sky/images/deck6.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Sky/images/deck7.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Sky/images/deck8.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Sky/images/deck9.webp"
+      }
+    ]
+  },
+  "Viking Star": {
+    "source": "cruisedeckplans.com",
+    "slug": "Viking-Star",
+    "decks": [
+      {
+        "num": 0,
+        "name": "Deck E",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Star/images/decke.webp"
+      },
+      {
+        "num": 1,
+        "name": "Deck 1",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Star/images/deck1.webp"
+      },
+      {
+        "num": 2,
+        "name": "Deck 2",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Star/images/deck2-2024.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Star/images/deck3.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Star/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Star/images/deck5.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Star/images/deck6.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Star/images/deck7.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Star/images/deck8.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Star/images/deck9.webp"
+      }
+    ]
+  },
+  "Viking Venus": {
+    "source": "cruisedeckplans.com",
+    "slug": "Viking-Venus",
+    "decks": [
+      {
+        "num": 0,
+        "name": "Deck E",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Venus/images/decke.webp"
+      },
+      {
+        "num": 1,
+        "name": "Deck 1",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Venus/images/deck1.webp"
+      },
+      {
+        "num": 2,
+        "name": "Deck 2",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Venus/images/deck2-2024.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Venus/images/deck3.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Venus/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Venus/images/deck5.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Venus/images/deck6.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Venus/images/deck7.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Venus/images/deck8.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Viking-Venus/images/deck9.webp"
+      }
+    ]
+  },
+  "Brilliant Lady": {
+    "source": "cruisedeckplans.com",
+    "slug": "Brilliant-Lady",
+    "decks": [
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Brilliant-Lady/images/deck4-2023.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Brilliant-Lady/images/deck5-2023.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Brilliant-Lady/images/deck6-2023.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Brilliant-Lady/images/deck7-2023.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Brilliant-Lady/images/deck8-2023.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Brilliant-Lady/images/deck9-2023.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Brilliant-Lady/images/deck10-2023.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Brilliant-Lady/images/deck11-2023.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Brilliant-Lady/images/deck12-2023.webp"
+      },
+      {
+        "num": 13,
+        "name": "Deck 13",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Brilliant-Lady/images/deck13-2023.webp"
+      },
+      {
+        "num": 14,
+        "name": "Deck 14",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Brilliant-Lady/images/deck14-2023.webp"
+      },
+      {
+        "num": 15,
+        "name": "Deck 15",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Brilliant-Lady/images/deck15-2023.webp"
+      },
+      {
+        "num": 16,
+        "name": "Deck 16",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Brilliant-Lady/images/deck16-2023.webp"
+      },
+      {
+        "num": 17,
+        "name": "Deck 17",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Brilliant-Lady/images/deck17-2023.webp"
+      }
+    ]
+  },
+  "Resilient Lady": {
+    "source": "cruisedeckplans.com",
+    "slug": "Resilient-Lady",
+    "decks": [
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Resilient-Lady/images/deck4-2023.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Resilient-Lady/images/deck5-2023.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Resilient-Lady/images/deck6-2023.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Resilient-Lady/images/deck7-2023.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Resilient-Lady/images/deck8-2023.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Resilient-Lady/images/deck9-2023.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Resilient-Lady/images/deck10-2023.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Resilient-Lady/images/deck11-2023.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Resilient-Lady/images/deck12-2023.webp"
+      },
+      {
+        "num": 13,
+        "name": "Deck 13",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Resilient-Lady/images/deck13-2023.webp"
+      },
+      {
+        "num": 14,
+        "name": "Deck 14",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Resilient-Lady/images/deck14-2023.webp"
+      },
+      {
+        "num": 15,
+        "name": "Deck 15",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Resilient-Lady/images/deck15-2023.webp"
+      },
+      {
+        "num": 16,
+        "name": "Deck 16",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Resilient-Lady/images/deck16-2023.webp"
+      },
+      {
+        "num": 17,
+        "name": "Deck 17",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Resilient-Lady/images/deck17-2023.webp"
+      }
+    ]
+  },
+  "Scarlet Lady": {
+    "source": "cruisedeckplans.com",
+    "slug": "Scarlet-Lady",
+    "decks": [
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Scarlet-Lady/images/deck4-2023.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Scarlet-Lady/images/deck5-2025b.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Scarlet-Lady/images/deck6-2023.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Scarlet-Lady/images/deck7-2025.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Scarlet-Lady/images/deck8-2025.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Scarlet-Lady/images/deck9-2025.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Scarlet-Lady/images/deck10-2025.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Scarlet-Lady/images/deck11-2025.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Scarlet-Lady/images/deck12-2025.webp"
+      },
+      {
+        "num": 13,
+        "name": "Deck 13",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Scarlet-Lady/images/deck13-2025.webp"
+      },
+      {
+        "num": 14,
+        "name": "Deck 14",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Scarlet-Lady/images/deck14-2025.webp"
+      },
+      {
+        "num": 15,
+        "name": "Deck 15",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Scarlet-Lady/images/deck15-2025.webp"
+      },
+      {
+        "num": 16,
+        "name": "Deck 16",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Scarlet-Lady/images/deck16-2025.webp"
+      },
+      {
+        "num": 17,
+        "name": "Deck 17",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Scarlet-Lady/images/deck17-2023.webp"
+      }
+    ]
+  },
+  "Valiant Lady": {
+    "source": "cruisedeckplans.com",
+    "slug": "Valiant-Lady",
+    "decks": [
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Valiant-Lady/images/deck4-2023.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Valiant-Lady/images/deck5-2023.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Valiant-Lady/images/deck6-2023.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Valiant-Lady/images/deck7-2023.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Valiant-Lady/images/deck8-2023.webp"
+      },
+      {
+        "num": 9,
+        "name": "Deck 9",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Valiant-Lady/images/deck9-2023.webp"
+      },
+      {
+        "num": 10,
+        "name": "Deck 10",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Valiant-Lady/images/deck10-2023.webp"
+      },
+      {
+        "num": 11,
+        "name": "Deck 11",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Valiant-Lady/images/deck11-2023.webp"
+      },
+      {
+        "num": 12,
+        "name": "Deck 12",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Valiant-Lady/images/deck12-2023.webp"
+      },
+      {
+        "num": 13,
+        "name": "Deck 13",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Valiant-Lady/images/deck13-2023.webp"
+      },
+      {
+        "num": 14,
+        "name": "Deck 14",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Valiant-Lady/images/deck14-2023.webp"
+      },
+      {
+        "num": 15,
+        "name": "Deck 15",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Valiant-Lady/images/deck15-2023.webp"
+      },
+      {
+        "num": 16,
+        "name": "Deck 16",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Valiant-Lady/images/deck16-2023.webp"
+      },
+      {
+        "num": 17,
+        "name": "Deck 17",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Valiant-Lady/images/deck17-2023.webp"
+      }
+    ]
   }
 }
