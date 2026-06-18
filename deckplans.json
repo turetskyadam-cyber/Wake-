@@ -1,0 +1,43 @@
+{
+  "Wind Surf": {
+    "source": "cruisedeckplans.com",
+    "slug": "Wind-Surf",
+    "decks": [
+      {
+        "num": 0,
+        "name": "Deck Zero",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Wind-Surf/images/deck0.webp"
+      },
+      {
+        "num": 1,
+        "name": "Deck One",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Wind-Surf/images/deck1-2019.webp"
+      },
+      {
+        "num": 2,
+        "name": "Deck Two",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Wind-Surf/images/deck2-2019.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck Three",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Wind-Surf/images/deck3-2019.webp"
+      },
+      {
+        "num": 4,
+        "name": "Main Deck",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Wind-Surf/images/deckmainb.webp"
+      },
+      {
+        "num": 5,
+        "name": "Bridge Deck",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Wind-Surf/images/deckbridge-2019.webp"
+      },
+      {
+        "num": 6,
+        "name": "Star Deck",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Wind-Surf/images/deckstarb.webp"
+      }
+    ]
+  }
+}
