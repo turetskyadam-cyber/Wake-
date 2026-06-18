@@ -2555,13 +2555,17 @@ byId("navHide").addEventListener("click",collapseNav);
 byId("navHide").addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); collapseNav(); } });
 
 /* swipe-down on controls panel to collapse */
-let _swipeY0=null;
-controlsEl.addEventListener("touchstart",e=>{ _swipeY0=e.touches[0].clientY; },{passive:true});
+let _swipeY0=null, _swipeOnList=false;
+controlsEl.addEventListener("touchstart",e=>{
+  _swipeY0=e.touches[0].clientY;
+  const navList=controlsEl.querySelector(".nav-list");
+  _swipeOnList=!!(navList&&navList.contains(e.target)&&navList.scrollTop>4);
+},{passive:true});
 controlsEl.addEventListener("touchend",e=>{
   if(_swipeY0===null) return;
   const dy=e.changedTouches[0].clientY - _swipeY0;
   _swipeY0=null;
-  if(dy>60) collapseNav();
+  if(!_swipeOnList&&dy>60) collapseNav();
 },{passive:true});
 
 /* ---- keyboard ---- */
