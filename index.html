@@ -5012,17 +5012,18 @@ let _dpData=null, _dpDecks=[], _dpIdx=0, _dpScrolling=false;
 
 async function loadDeckPlans(){
   if(_dpData) return _dpData;
-  try{ const r=await fetch('/deckplans.json'); _dpData=await r.json(); }
+  try{ const r=await fetch('/deckplans.json',{cache:'no-store'}); _dpData=await r.json(); }
   catch(e){ _dpData={}; }
   return _dpData;
 }
-loadDeckPlans(); // warm cache in background
 
 async function updateDeckPlanBtn(){
   const btn=byId("deckPlanBtn");
-  if(!selected){ btn.hidden=true; return; }
+  const ship=selected;
+  if(!ship){ btn.hidden=true; return; }
   const data=await loadDeckPlans();
-  btn.hidden=!(data&&data[selected.name]&&data[selected.name].decks&&data[selected.name].decks.length);
+  if(selected!==ship) return; // ship changed while fetching
+  btn.hidden=!(data&&data[ship.name]&&data[ship.name].decks&&data[ship.name].decks.length);
 }
 
 function _dpSetPad(){
