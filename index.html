@@ -995,6 +995,44 @@
   .pin-btn-cancel{flex:1;padding:12px;border-radius:12px;border:1px solid var(--glass-edge);background:none;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;cursor:pointer;touch-action:manipulation;}
   .pin-btn-submit{flex:2;padding:12px;border-radius:12px;border:none;background:var(--brass);color:#0a1520;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;font-weight:700;cursor:pointer;touch-action:manipulation;}
   .pin-btn-submit:disabled{opacity:.5;}
+
+  /* ── Deck Plan Overlay ── */
+  #deckPlanOverlay{position:fixed;inset:0;z-index:4000;display:flex;flex-direction:column;background:rgba(2,8,18,.97);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);opacity:0;pointer-events:none;transition:opacity .28s var(--ease-out);}
+  #deckPlanOverlay.dp-open{opacity:1;pointer-events:auto;}
+  #dpHeader{display:flex;align-items:center;gap:14px;padding:max(env(safe-area-inset-top),18px) 20px 16px;border-bottom:1px solid var(--glass-edge);flex:none;background:rgba(4,14,24,.7);}
+  #dpHeaderText{flex:1;min-width:0;}
+  .dp-ship-name{font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2;}
+  .dp-deck-name{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);margin-top:3px;transition:color .2s;}
+  #dpClose{width:34px;height:34px;border-radius:50%;border:1px solid var(--glass-edge);background:rgba(255,255,255,.05);color:var(--muted);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;transition:background .18s,color .18s;}
+  #dpClose:hover{background:rgba(255,255,255,.13);color:var(--ink);}
+  #dpBody{display:flex;flex:1;min-height:0;overflow:hidden;}
+  #dpWheelCol{width:78px;flex:none;display:flex;flex-direction:column;align-items:stretch;position:relative;background:rgba(3,11,20,.7);border-right:1px solid var(--glass-edge);}
+  #dpWheelFadeTop,#dpWheelFadeBot{position:absolute;left:0;right:0;height:90px;z-index:3;pointer-events:none;}
+  #dpWheelFadeTop{top:0;background:linear-gradient(to bottom,rgba(2,8,18,.98) 0%,transparent 100%);}
+  #dpWheelFadeBot{bottom:0;background:linear-gradient(to top,rgba(2,8,18,.98) 0%,transparent 100%);}
+  .dp-wheel-bar{position:absolute;top:50%;left:10px;right:10px;height:40px;transform:translateY(-50%);border-radius:9px;background:rgba(226,189,114,.065);border:1px solid rgba(226,189,114,.22);z-index:2;pointer-events:none;box-shadow:inset 0 1px 0 rgba(226,189,114,.08);}
+  .dp-wheel-bar::before,.dp-wheel-bar::after{content:"";position:absolute;right:7px;width:3px;height:3px;border-radius:50%;background:var(--brass);opacity:.5;}
+  .dp-wheel-bar::before{top:7px;} .dp-wheel-bar::after{bottom:7px;}
+  #dpWheelList{overflow-y:scroll;overflow-x:hidden;scrollbar-width:none;width:100%;display:flex;flex-direction:column;align-items:center;scroll-snap-type:y mandatory;position:relative;z-index:1;-webkit-overflow-scrolling:touch;}
+  #dpWheelList::-webkit-scrollbar{display:none;}
+  .dp-w-item{height:40px;flex:none;display:flex;align-items:center;justify-content:center;width:100%;cursor:pointer;scroll-snap-align:center;position:relative;}
+  .dp-w-num{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;letter-spacing:.06em;color:var(--faint);transition:color .2s,font-size .2s;}
+  .dp-w-item.dp-w-active .dp-w-num{color:var(--brass);font-size:15px;}
+  .dp-w-item::after{content:"";position:absolute;left:11px;width:5px;height:1px;background:var(--glass-edge);transition:width .2s,background .2s;}
+  .dp-w-item.dp-w-active::after{width:9px;background:rgba(226,189,114,.45);}
+  #dpImgPanel{flex:1;min-width:0;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;align-items:center;padding:24px 18px 60px;scrollbar-width:thin;scrollbar-color:var(--glass-edge) transparent;-webkit-overflow-scrolling:touch;}
+  #dpImgWrap{position:relative;display:inline-block;width:100%;max-width:360px;}
+  #dpImgWrap::before,#dpImgWrap::after{content:"";position:absolute;width:16px;height:16px;border-color:rgba(226,189,114,.38);border-style:solid;z-index:1;pointer-events:none;}
+  #dpImgWrap::before{top:-5px;left:-5px;border-width:2px 0 0 2px;border-radius:3px 0 0 0;}
+  #dpImgWrap::after{top:-5px;right:-5px;border-width:2px 2px 0 0;border-radius:0 3px 0 0;}
+  .dp-corner-bl,.dp-corner-br{position:absolute;width:16px;height:16px;border-color:rgba(226,189,114,.38);border-style:solid;pointer-events:none;}
+  .dp-corner-bl{bottom:-5px;left:-5px;border-width:0 0 2px 2px;border-radius:0 0 0 3px;}
+  .dp-corner-br{bottom:-5px;right:-5px;border-width:0 2px 2px 0;border-radius:0 0 3px 0;}
+  #dpImg{display:block;width:100%;height:auto;border-radius:4px;transition:opacity .22s var(--ease-out);}
+  #dpImg.dp-fade{opacity:.2;}
+  #dpImgLabel{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);text-align:center;margin-top:14px;}
+  #deckPlanBtn{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:7px;padding:11px 8px;cursor:pointer;background:none;border:none;border-top:1px solid var(--glass-edge);color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;width:100%;touch-action:manipulation;transition:background .2s,color .2s;}
+  #deckPlanBtn:hover{background:rgba(226,189,114,.06);color:var(--brass);}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
@@ -1113,6 +1151,10 @@
     <div class="ss-wx-label" id="ssWxLabel">—</div>
   </div>
   <div class="ss-div"></div>
+  <button id="deckPlanBtn" hidden>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="3"/></svg>
+    Deck Plans
+  </button>
   <button class="ss-dive-btn" id="profileBtn">
     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     Deep Dive
@@ -3053,8 +3095,8 @@ const WMO={
 };
 const _wxCache={};
 const shipSideEl=byId("shipSide");
-function showShipSide(){ if(selected) shipSideEl.classList.add("show"); }
-function hideShipSide(){ shipSideEl.classList.remove("show"); }
+function showShipSide(){ if(selected){ shipSideEl.classList.add("show"); updateDeckPlanBtn(); } }
+function hideShipSide(){ shipSideEl.classList.remove("show"); byId("deckPlanBtn").hidden=true; }
 async function fetchWeather(d){
   if(!d||d.lat==null) return;
   byId("ssWxIcon").textContent="🌊";
@@ -4899,6 +4941,33 @@ addEventListener("keydown",e=>{
 });
 </script>
 
+<!-- ══════════════ DECK PLAN OVERLAY ══════════════ -->
+<div id="deckPlanOverlay">
+  <div id="dpHeader">
+    <div id="dpHeaderText">
+      <div class="dp-ship-name" id="dpShipName">—</div>
+      <div class="dp-deck-name" id="dpDeckName">—</div>
+    </div>
+    <button id="dpClose">✕</button>
+  </div>
+  <div id="dpBody">
+    <div id="dpWheelCol">
+      <div id="dpWheelFadeTop"></div>
+      <div class="dp-wheel-bar"></div>
+      <div id="dpWheelList"></div>
+      <div id="dpWheelFadeBot"></div>
+    </div>
+    <div id="dpImgPanel">
+      <div id="dpImgWrap">
+        <span class="dp-corner-bl"></span>
+        <span class="dp-corner-br"></span>
+        <img id="dpImg" src="" alt="Deck plan">
+      </div>
+      <div id="dpImgLabel"></div>
+    </div>
+  </div>
+</div>
+
 <!-- ══════════════ PIN MODAL ══════════════ -->
 <div id="pinModal" hidden>
   <div id="pinModalBackdrop"></div>
@@ -4937,6 +5006,112 @@ async function redeemPin(pin){
   if(error||!data) return null;
   try{ return JSON.parse(await data.text()); }catch(e){ return null; }
 }
+
+/* ══════════════ DECK PLANS ══════════════ */
+let _dpData=null, _dpDecks=[], _dpIdx=0, _dpScrolling=false;
+
+async function loadDeckPlans(){
+  if(_dpData) return _dpData;
+  try{ const r=await fetch('/deckplans.json'); _dpData=await r.json(); }
+  catch(e){ _dpData={}; }
+  return _dpData;
+}
+loadDeckPlans(); // warm cache in background
+
+async function updateDeckPlanBtn(){
+  const btn=byId("deckPlanBtn");
+  if(!selected){ btn.hidden=true; return; }
+  const data=await loadDeckPlans();
+  btn.hidden=!(data&&data[selected.name]&&data[selected.name].decks&&data[selected.name].decks.length);
+}
+
+function _dpSetPad(){
+  const col=byId("dpWheelCol");
+  const list=byId("dpWheelList");
+  const h=col.clientHeight;
+  const pad=Math.max(0,Math.floor(h/2)-20)+"px";
+  list.style.paddingTop=pad;
+  list.style.paddingBottom=pad;
+}
+
+function _dpBuildWheel(){
+  const list=byId("dpWheelList");
+  list.innerHTML="";
+  _dpDecks.forEach((deck,i)=>{
+    const item=document.createElement("div");
+    item.className="dp-w-item"+(i===0?" dp-w-active":"");
+    const num=document.createElement("div");
+    num.className="dp-w-num";
+    num.textContent=deck.num;
+    item.appendChild(num);
+    item.addEventListener("click",()=>dpGoTo(i));
+    list.appendChild(item);
+  });
+  _dpSetPad();
+  list.scrollTop=0;
+}
+
+function _dpActivate(idx,scroll){
+  const list=byId("dpWheelList");
+  Array.from(list.children).forEach((el,i)=>el.classList.toggle("dp-w-active",i===idx));
+  const deck=_dpDecks[idx];
+  byId("dpDeckName").textContent=deck.name;
+  byId("dpImgLabel").textContent=deck.name;
+  const img=byId("dpImg");
+  img.classList.add("dp-fade");
+  img.onload=()=>img.classList.remove("dp-fade");
+  img.onerror=()=>img.classList.remove("dp-fade");
+  img.src=deck.url;
+  byId("dpImgPanel").scrollTop=0;
+  if(scroll){
+    _dpScrolling=true;
+    list.scrollTo({top:idx*40,behavior:"smooth"});
+    setTimeout(()=>{ _dpScrolling=false; },500);
+  }
+}
+
+function dpGoTo(idx){
+  if(!_dpDecks.length) return;
+  idx=Math.max(0,Math.min(idx,_dpDecks.length-1));
+  _dpIdx=idx;
+  _dpActivate(idx,true);
+}
+
+byId("dpWheelList").addEventListener("scroll",()=>{
+  if(_dpScrolling) return;
+  const list=byId("dpWheelList");
+  const idx=Math.round(list.scrollTop/40);
+  const clamped=Math.max(0,Math.min(idx,_dpDecks.length-1));
+  if(clamped!==_dpIdx){ _dpIdx=clamped; _dpActivate(clamped,false); }
+},{passive:true});
+
+async function openDeckPlans(shipName){
+  const data=await loadDeckPlans();
+  const entry=data&&data[shipName];
+  if(!entry||!entry.decks||!entry.decks.length) return;
+  _dpDecks=entry.decks;
+  _dpIdx=0;
+  byId("dpShipName").textContent=shipName;
+  _dpBuildWheel();
+  _dpActivate(0,false);
+  byId("deckPlanOverlay").classList.add("dp-open");
+  document.body.style.overflow="hidden";
+  requestAnimationFrame(()=>{ _dpSetPad(); byId("dpWheelList").scrollTop=0; });
+}
+
+function closeDeckPlans(){
+  byId("deckPlanOverlay").classList.remove("dp-open");
+  document.body.style.overflow="";
+}
+
+byId("dpClose").addEventListener("click",closeDeckPlans);
+byId("deckPlanBtn").addEventListener("click",()=>{ if(selected) openDeckPlans(selected.name); });
+addEventListener("keydown",e=>{
+  if(!byId("deckPlanOverlay").classList.contains("dp-open")) return;
+  if(e.key==="ArrowUp"||e.key==="ArrowLeft"){ e.preventDefault(); dpGoTo(_dpIdx-1); }
+  else if(e.key==="ArrowDown"||e.key==="ArrowRight"){ e.preventDefault(); dpGoTo(_dpIdx+1); }
+  else if(e.key==="Escape") closeDeckPlans();
+});
 
 /* ══════════════ PIN MODAL ══════════════ */
 function openPinModal(){
