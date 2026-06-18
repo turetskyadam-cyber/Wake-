@@ -1,6 +1,6 @@
-/* WAKE Service Worker — v6 */
-const SHELL_CACHE = "wake-shell-v6";
-const DATA_CACHE  = "wake-data-v6";
+/* WAKE Service Worker — v7 */
+const SHELL_CACHE = "wake-shell-v7";
+const DATA_CACHE  = "wake-data-v7";
 
 const SHELL_URLS = [
   "/",
