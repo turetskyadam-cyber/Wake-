@@ -1031,9 +1031,8 @@
   #dpImg{display:block;width:100%;height:auto;border-radius:4px;transition:opacity .22s var(--ease-out);}
   #dpImg.dp-fade{opacity:.2;}
   #dpImgLabel{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);text-align:center;margin-top:14px;}
-  #deckPlanBtn{display:flex;flex-direction:row;align-items:center;gap:10px;padding:12px 18px;cursor:pointer;background:rgba(226,189,114,.06);border:none;border-top:1px solid rgba(226,189,114,.18);border-bottom:1px solid rgba(226,189,114,.18);color:var(--brass);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;width:100%;touch-action:manipulation;transition:background .18s,color .18s;}
-  #deckPlanBtn:hover{background:rgba(226,189,114,.12);}
-  #deckPlanBtn svg{flex:none;opacity:.85;}
+  #deckPlanBtn{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:7px;padding:11px 8px;cursor:pointer;background:none;border:none;border-top:1px solid var(--glass-edge);color:var(--brass);font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;width:100%;touch-action:manipulation;transition:background .2s,color .2s;}
+  #deckPlanBtn:hover{background:rgba(226,189,114,.1);}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
@@ -1102,10 +1101,6 @@
     <div class="d-foot"><span id="dNext"></span><span id="dRegion"></span></div>
     <div class="d-itin" id="dItin" hidden></div>
   </div>
-  <button id="deckPlanBtn" hidden>
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="3"/></svg>
-    Deck Plans
-  </button>
   <button class="d-toggle" id="dToggle" aria-label="Show cruise info" aria-expanded="false">
     <span class="d-toggle-l"><b class="d-dot"></b>Cruise info<em id="dBarName"></em></span>
     <svg class="d-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg>
@@ -1156,6 +1151,10 @@
     <div class="ss-wx-label" id="ssWxLabel">—</div>
   </div>
   <div class="ss-div"></div>
+  <button id="deckPlanBtn" hidden>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="3"/></svg>
+    Deck Plans
+  </button>
   <button class="ss-dive-btn" id="profileBtn">
     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     Deep Dive
@@ -3101,7 +3100,7 @@ const WMO={
 const _wxCache={};
 const shipSideEl=byId("shipSide");
 function showShipSide(){ if(selected){ shipSideEl.classList.add("show"); updateDeckPlanBtn(); } }
-function hideShipSide(){ shipSideEl.classList.remove("show"); }
+function hideShipSide(){ shipSideEl.classList.remove("show"); byId("deckPlanBtn").hidden=true; }
 async function fetchWeather(d){
   if(!d||d.lat==null) return;
   byId("ssWxIcon").textContent="🌊";
