@@ -5012,7 +5012,7 @@ async function redeemPin(pin){
 }
 
 /* ══════════════ DECK PLANS ══════════════ */
-let _dpData=null, _dpDecks=[], _dpIdx=0, _dpScrolling=false;
+let _dpData=null, _dpDecks=[], _dpIdx=0;
 
 async function loadDeckPlans(){
   if(_dpData) return _dpData;
@@ -5041,7 +5041,7 @@ function _dpSetPad(){
 
 function _dpBuildWheel(){
   const list=byId("dpWheelList");
-  list.scrollTo({top:0,behavior:'instant'});
+  list.scrollTop=0;
   list.innerHTML="";
   _dpDecks.forEach((deck,i)=>{
     const item=document.createElement("div");
@@ -5054,7 +5054,7 @@ function _dpBuildWheel(){
     list.appendChild(item);
   });
   _dpSetPad();
-  list.scrollTo({top:0,behavior:'instant'});
+  list.scrollTop=0;
 }
 
 function _dpActivate(idx,scroll){
@@ -5070,9 +5070,7 @@ function _dpActivate(idx,scroll){
   img.src=deck.url;
   byId("dpImgPanel").scrollTop=0;
   if(scroll){
-    _dpScrolling=true;
-    list.scrollTo({top:idx*40,behavior:"smooth"});
-    setTimeout(()=>{ _dpScrolling=false; },500);
+    list.scrollTop=idx*40;
   }
 }
 
@@ -5084,7 +5082,6 @@ function dpGoTo(idx){
 }
 
 byId("dpWheelList").addEventListener("scroll",()=>{
-  if(_dpScrolling) return;
   const list=byId("dpWheelList");
   const idx=Math.round(list.scrollTop/40);
   const clamped=Math.max(0,Math.min(idx,_dpDecks.length-1));
@@ -5102,12 +5099,11 @@ async function openDeckPlans(shipName){
   _dpActivate(0,false);
   byId("deckPlanOverlay").classList.add("dp-open");
   document.body.style.overflow="hidden";
-  requestAnimationFrame(()=>{ _dpSetPad(); byId("dpWheelList").scrollTo({top:0,behavior:'instant'}); });
+  requestAnimationFrame(()=>{ _dpSetPad(); byId("dpWheelList").scrollTop=0; });
 }
 
 function closeDeckPlans(){
-  const list=byId("dpWheelList");
-  list.scrollTo({top:list.scrollTop,behavior:'instant'}); // cancel any in-flight smooth scroll
+  byId("dpWheelList").scrollTop=0;
   byId("deckPlanOverlay").classList.remove("dp-open");
   document.body.style.overflow="";
 }
