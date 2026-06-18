@@ -39,5 +39,175 @@
         "url": "https://www.cruisedeckplans.com/DP/ships/Wind-Surf/images/deckstarb.webp"
       }
     ]
+  },
+  "Wind Spirit": {
+    "source": "cruisedeckplans.com",
+    "slug": "Wind-Spirit",
+    "decks": [
+      {
+        "num": 1,
+        "name": "Deck One",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Wind-Spirit/images/deck1.webp"
+      },
+      {
+        "num": 2,
+        "name": "Deck Two",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Wind-Spirit/images/deck2.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck Three",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Wind-Spirit/images/deck3.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck Four",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Wind-Spirit/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "Flying Bridge",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Wind-Spirit/images/deck5.webp"
+      }
+    ]
+  },
+  "Wind Star": {
+    "source": "cruisedeckplans.com",
+    "slug": "Wind-Star",
+    "decks": [
+      {
+        "num": 1,
+        "name": "Deck One",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Wind-Star/images/deck1.webp"
+      },
+      {
+        "num": 2,
+        "name": "Deck Two",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Wind-Star/images/deck2.webp"
+      },
+      {
+        "num": 3,
+        "name": "Deck Three",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Wind-Star/images/deck3.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck Four",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Wind-Star/images/deck4.webp"
+      },
+      {
+        "num": 5,
+        "name": "Flying Bridge",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Wind-Star/images/deck5.webp"
+      }
+    ]
+  },
+  "Star Breeze": {
+    "source": "cruisedeckplans.com",
+    "slug": "Star-Breeze",
+    "decks": [
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Star-Breeze/images/deck3-2020.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Star-Breeze/images/deck4-2020.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Star-Breeze/images/deck5-2020.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Star-Breeze/images/deck6-2020.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Star-Breeze/images/deck7-2020.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Star-Breeze/images/deck8-2020.webp"
+      }
+    ]
+  },
+  "Star Legend": {
+    "source": "cruisedeckplans.com",
+    "slug": "Star-Legend",
+    "decks": [
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Star-Legend/images/deck3-2020.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Star-Legend/images/deck4-2020.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Star-Legend/images/deck5-2020.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Star-Legend/images/deck6-2020.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Star-Legend/images/deck7-2020.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Star-Legend/images/deck8-2020.webp"
+      }
+    ]
+  },
+  "Star Pride": {
+    "source": "cruisedeckplans.com",
+    "slug": "Star-Pride",
+    "decks": [
+      {
+        "num": 3,
+        "name": "Deck 3",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Star-Pride/images/deck3-2020.webp"
+      },
+      {
+        "num": 4,
+        "name": "Deck 4",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Star-Pride/images/deck4-2020.webp"
+      },
+      {
+        "num": 5,
+        "name": "Deck 5",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Star-Pride/images/deck5-2020.webp"
+      },
+      {
+        "num": 6,
+        "name": "Deck 6",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Star-Pride/images/deck6-2020.webp"
+      },
+      {
+        "num": 7,
+        "name": "Deck 7",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Star-Pride/images/deck7-2020.webp"
+      },
+      {
+        "num": 8,
+        "name": "Deck 8",
+        "url": "https://www.cruisedeckplans.com/DP/ships/Star-Pride/images/deck8-2020.webp"
+      }
+    ]
   }
 }

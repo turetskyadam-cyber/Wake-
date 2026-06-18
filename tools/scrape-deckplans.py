@@ -14,9 +14,13 @@ BASE = "https://www.cruisedeckplans.com"
 OUT  = Path(__file__).parent.parent / "deckplans.json"
 
 # Map our ship names (from ships.json) → cruisedeckplans.com slug
-# Add more as we expand beyond Wind Surf
 SHIP_SLUGS = {
-    "Wind Surf": "Wind-Surf",
+    "Wind Surf":    "Wind-Surf",
+    "Wind Spirit":  "Wind-Spirit",
+    "Wind Star":    "Wind-Star",
+    "Star Breeze":  "Star-Breeze",
+    "Star Legend":  "Star-Legend",
+    "Star Pride":   "Star-Pride",
 }
 
 HEADERS = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"}
@@ -27,24 +31,45 @@ def fetch(url):
     return urllib.request.urlopen(req, timeout=15).read().decode("utf-8", errors="replace")
 
 
+def find_nav_html(slug):
+    """Try deck numbers 0-12 until one returns a valid page with nav links."""
+    for start in range(0, 13):
+        try:
+            html = fetch(f"{BASE}/ships/deckbydeck.php?ship={slug}&deck={start}")
+            # Valid page has the slug in image paths
+            if slug in html:
+                return html
+        except Exception:
+            pass
+        time.sleep(0.2)
+    return ""
+
+
 def scrape_ship(ship_name, slug):
     print(f"\n  Scraping {ship_name} ({slug})…")
 
-    # First pass: find all deck numbers from any page's nav
-    html0 = fetch(f"{BASE}/ships/deckbydeck.php?ship={slug}&deck=1")
+    # First pass: find all deck numbers from the nav
+    html0 = find_nav_html(slug)
+    if not html0:
+        print(f"  Could not load any deck page for {slug}")
+        return []
+
     deck_nums = sorted(set(re.findall(r'deck=(\d+)', html0)), key=int)
     print(f"  Decks found in nav: {deck_nums}")
 
     decks = []
     for num in deck_nums:
         time.sleep(0.4)
-        html = fetch(f"{BASE}/ships/deckbydeck.php?ship={slug}&deck={num}")
+        try:
+            html = fetch(f"{BASE}/ships/deckbydeck.php?ship={slug}&deck={num}")
+        except Exception as e:
+            print(f"    Deck {num}: fetch failed ({e}), skipping")
+            continue
 
         # Deck name from nav link text for this number
         name_match = re.search(
             rf'deck={num}[^>]*>\s*([^<]{{2,40}})</a>', html)
         deck_name = name_match.group(1).strip() if name_match else f"Deck {num}"
-        # clean up "Deck Zero" → "Deck 0" etc.
         deck_name = re.sub(r'\s+', ' ', deck_name).strip()
 
         # Prefer webp, fall back to gif
