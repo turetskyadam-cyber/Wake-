@@ -5041,6 +5041,7 @@ function _dpSetPad(){
 
 function _dpBuildWheel(){
   const list=byId("dpWheelList");
+  list.scrollTo({top:0,behavior:'instant'});
   list.innerHTML="";
   _dpDecks.forEach((deck,i)=>{
     const item=document.createElement("div");
@@ -5053,7 +5054,7 @@ function _dpBuildWheel(){
     list.appendChild(item);
   });
   _dpSetPad();
-  list.scrollTop=0;
+  list.scrollTo({top:0,behavior:'instant'});
 }
 
 function _dpActivate(idx,scroll){
@@ -5101,10 +5102,12 @@ async function openDeckPlans(shipName){
   _dpActivate(0,false);
   byId("deckPlanOverlay").classList.add("dp-open");
   document.body.style.overflow="hidden";
-  requestAnimationFrame(()=>{ _dpSetPad(); byId("dpWheelList").scrollTop=0; });
+  requestAnimationFrame(()=>{ _dpSetPad(); byId("dpWheelList").scrollTo({top:0,behavior:'instant'}); });
 }
 
 function closeDeckPlans(){
+  const list=byId("dpWheelList");
+  list.scrollTo({top:list.scrollTop,behavior:'instant'}); // cancel any in-flight smooth scroll
   byId("deckPlanOverlay").classList.remove("dp-open");
   document.body.style.overflow="";
 }
