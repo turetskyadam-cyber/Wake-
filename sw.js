@@ -1,6 +1,6 @@
-/* WAKE Service Worker — v5 */
-const SHELL_CACHE = "wake-shell-v5";
-const DATA_CACHE  = "wake-data-v5";
+/* WAKE Service Worker — v6 */
+const SHELL_CACHE = "wake-shell-v6";
+const DATA_CACHE  = "wake-data-v6";
 
 const SHELL_URLS = [
   "/",
@@ -49,6 +49,12 @@ self.addEventListener("fetch", e => {
 
   // Serverless API routes — always network, never cache
   if (u.pathname.startsWith("/api/")) return;
+
+  // Data files that update when we push — network first so new data is seen immediately
+  if (u.pathname === "/deckplans.json") {
+    e.respondWith(networkFirstShell(e.request));
+    return;
+  }
 
   // Live positions — network first, short-lived cache fallback
   if (u.pathname === "/positions.json") {
