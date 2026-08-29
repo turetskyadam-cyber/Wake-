@@ -2010,9 +2010,13 @@ const map = L.map('map', {
   fadeAnimation:!REDUCED, zoomAnimation:!REDUCED, markerZoomAnimation:!REDUCED
 }).setView([28,-45], 3);
 
-// CARTO dark basemap — keeps the dark look but shows real coastlines, ports & city labels
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-  subdomains:'abcd', maxZoom:20, crossOrigin:true
+// Esri dark basemap — free, no API key, no rate-limit surprises. Two layers:
+// base tones/land + reference labels (borders, city/place names) on top.
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+  maxZoom:20, maxNativeZoom:16, crossOrigin:true
+}).addTo(map);
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
+  maxZoom:20, maxNativeZoom:16, crossOrigin:true
 }).addTo(map);
 
 const canvasR = L.canvas({ padding:0.5 });
